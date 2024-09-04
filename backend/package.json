@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",            
     "dev": "nodemon index.js",        
@@ -12,12 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
     "@faker-js/faker": "^8.0.2",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "express": "^4.19.2",
     "express-compression": "^1.0.2",
     "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",

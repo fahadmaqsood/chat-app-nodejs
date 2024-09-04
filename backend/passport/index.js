@@ -1,9 +1,14 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { User } from "../models/apps/auth/user.models.js";
+import { User } from "../models/auth/user.models.js";
 import { UserLoginType, UserRolesEnum } from "../constants.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Strategy as GitHubStrategy } from "passport-github2";
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "./.env",
+});
 
 try {
   passport.serializeUser((user, next) => {

@@ -1,7 +1,11 @@
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer";
-import { Product } from "../models/apps/ecommerce/product.models.js";
 import logger from "../logger/winston.logger.js";
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "./.env",
+});
 
 /**
  *
