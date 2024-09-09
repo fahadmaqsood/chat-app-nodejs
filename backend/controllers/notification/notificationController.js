@@ -1,7 +1,7 @@
-const Notification = require('../models/Notifications');
-const User = require('../models/User');
+import Notification from '../../models/notification/Notifications.js';
+import { User } from '../../models/auth/user.models.js'
 
-exports.createNotification = async (req, res) => {
+export const createNotification = async (req, res) => {
     try {
         const { user_id, title, message, payload } = req.body;
 
@@ -32,7 +32,7 @@ exports.createNotification = async (req, res) => {
     }
 };
 
-exports.getNotifications = async (req, res) => {
+export const getNotifications = async (req, res) => {
     const { user_id, start_from = 0 } = req.query;
 
     try {
