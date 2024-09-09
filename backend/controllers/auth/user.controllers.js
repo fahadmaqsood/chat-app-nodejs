@@ -15,6 +15,7 @@ import {
   forgotPasswordMailgenContent,
   sendEmail,
 } from "../../utils/mail.js";
+import LoginInfo from "../../models/auth/LoginInfo.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -37,7 +38,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password, role, religion, age, country, language} = req.body;
+  const { email, username, password, role, religion, age, country, language } = req.body;
 
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -125,10 +126,10 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(
       400,
       "You have previously registered using " +
-        user.loginType?.toLowerCase() +
-        ". Please use the " +
-        user.loginType?.toLowerCase() +
-        " login option to access your account."
+      user.loginType?.toLowerCase() +
+      ". Please use the " +
+      user.loginType?.toLowerCase() +
+      " login option to access your account."
     );
   }
 
@@ -153,6 +154,16 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
   };
+
+  // Determine IP address
+  const ip = req.headers['x-forwarded-for'] || req.ip;
+
+  // Store login information
+  const loginInfo = new LoginInfo({
+    user: user._id,
+    ip: ip
+  });
+  await loginInfo.save();
 
   return res
     .status(200)

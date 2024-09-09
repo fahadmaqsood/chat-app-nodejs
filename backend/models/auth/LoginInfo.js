@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const loginInfoSchema = new mongoose.Schema({
     ip: String,
@@ -8,4 +8,4 @@ const loginInfoSchema = new mongoose.Schema({
 
 const LoginInfo = mongoose.model('LoginInfo', loginInfoSchema);
 
-module.exports = LoginInfo;
+export default LoginInfo;

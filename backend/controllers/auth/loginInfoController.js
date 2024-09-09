@@ -1,7 +1,7 @@
-const LoginInfo = require('../models/LoginInfo');
+import LoginInfo from '../../models/auth/LoginInfo.js';
 
 // Controller to get all login information
-const getAllLoginInfo = async (req, res) => {
+export const getAllLoginInfo = async (req, res) => {
     try {
         const loginInfo = await LoginInfo.find().populate('user', 'email'); 
         res.json(loginInfo);
@@ -11,7 +11,7 @@ const getAllLoginInfo = async (req, res) => {
 };
 
 // Controller to get login information for a specific user
-const getLoginInfoByUserId = async (req, res) => {
+export const getLoginInfoByUserId = async (req, res) => {
     try {
         const { userId } = req.params;
         const loginInfo = await LoginInfo.find({ user: userId }).populate('user', 'email'); 
@@ -22,9 +22,4 @@ const getLoginInfoByUserId = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }
-};
-
-module.exports = {
-    getAllLoginInfo,
-    getLoginInfoByUserId
 };
