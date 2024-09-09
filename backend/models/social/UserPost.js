@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userPostSchema = new mongoose.Schema({
     user_id: {
@@ -25,4 +25,6 @@ const userPostSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('UserPost', userPostSchema);
+const UserPost = mongoose.model('UserPost', userPostSchema);
+
+export default UserPost;

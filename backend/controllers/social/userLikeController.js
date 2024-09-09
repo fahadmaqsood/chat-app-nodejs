@@ -1,8 +1,8 @@
-const User = require('../models/User');        
-const UserPost = require('../models/UserPost'); 
-const PostLike = require('../models/PostLikes');
+import { User }  from '../../models/auth/user.models.js';   
+import UserPost from '../../models/social/UserPost.js'; 
+import PostLike from '../../models/social/PostLikes.js';
 
-exports.likePost = async (req, res) => {
+export const likePost = async (req, res) => {
     const { user_id, post_id } = req.body;
 
     try {
@@ -25,7 +25,7 @@ exports.likePost = async (req, res) => {
     }
 };
 
-exports.getLikes = async (req, res) => {
+export const getLikes = async (req, res) => {
     const { post_id } = req.query;
 
     try {

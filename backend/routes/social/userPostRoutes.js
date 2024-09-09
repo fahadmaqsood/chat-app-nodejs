@@ -1,19 +1,20 @@
-const express = require('express');
+import express from 'express';
+import { createUserPost, getPosts } from '../../controllers/social/userPostController.js';
+import { likePost, getLikes } from '../../controllers/social/userLikeController.js';
+import { createComment, getComments } from '../../controllers/social/usercommentController.js';
+
 const router = express.Router();
-const userPostController = require('../controllers/userPostController');
-const userLikeController = require('../controllers/userLikeController');
-const userCommentController = require('../controllers/usercommentController');
 
 // Route to create a new post
-router.post('/create-post', userPostController.createUserPost);
-router.get('/get/posts', userPostController.getPosts);
+router.post('/create-post', createUserPost);
+router.get('/get/posts', getPosts);
 
 // Route to like a post
-router.post('/like-post', userLikeController.likePost);
-router.get('/get/likes', userLikeController.getLikes);
+router.post('/like-post', likePost);
+router.get('/get/likes', getLikes);
 
 // Route to comment on a post
-router.post('/create-comment', userCommentController.createComment);
-router.get('/get/comments', userCommentController.getComments);
+router.post('/create-comment', createComment);
+router.get('/get/comments', getComments);
 
-module.exports = router;
+export default router;

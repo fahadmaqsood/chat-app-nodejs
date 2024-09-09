@@ -1,8 +1,8 @@
-const User = require('../models/User');         
-const UserPost = require('../models/UserPost');  
-const UserComment = require('../models/UserComment'); 
+import { User }  from '../../models/auth/user.models.js';        
+import UserPost from '../../models/social/UserPost.js';
+import UserComment from '../../models/social/UserComment.js';
 
-exports.createComment = async (req, res) => {
+export const createComment = async (req, res) => {
     const { post_id, user_id, comment_text, comment_content } = req.body;
 
     try {
@@ -52,7 +52,7 @@ const getNestedComments = async (parentId) => {
 };
 
 // Get comments for a post
-exports.getComments = async (req, res) => {
+export const getComments = async (req, res) => {
     const { post_id, parent_comment_id } = req.query;
 
     try {

@@ -1,7 +1,7 @@
-const UserPost = require('../models/UserPost');
-const User = require('../models/User');
+import { User } from '../../models/auth/user.models.js';
+import UserPost from '../../models/social/UserPost.js';
 
-exports.createUserPost = async (req, res) => {
+export const createUserPost = async (req, res) => {
     const { user_id, content, media_url, mood_status } = req.body;
 
     try {
@@ -36,7 +36,7 @@ exports.createUserPost = async (req, res) => {
     }
 };
 
-exports.getPosts = async (req, res) => {
+export const getPosts = async (req, res) => {
     const { mood, start_from = 0 } = req.query;
     const limit = 10;
 
