@@ -36,26 +36,54 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-    },// New fields
+    },
+    mood: {
+      type: String
+    },
+    location: {
+      type: String
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other']
+    },
+    birthdate: {
+      type: Date
+    },
     religion: {
-    type: String,
-    required: true,
+      type: String,
+      required: true,
     },
     age: {
-    type: Number,
-    required: true,
+      type: Number,
+      required: true,
     },
     country: {
-    type: String,
-    required: true,
+      type: String,
+      required: true,
     },
     language: {
-    type: String,
-    required: true,
+      type: String,
+      required: true,
     },
     find_friends_points: {
-    type: Number,
-    default: 10, // Starting with 10 points for new users
+      type: Number,
+      default: 10, // Starting with 10 points for new users
+    },
+    subscription_type: {
+      type: String,
+      enum: ['monthly', 'yearly']
+    },
+    subscription_status: {
+      type: String,
+      enum: ['active', 'inactive']
+    },
+    account_creation_date: {
+      type: Date,
+      default: Date.now
+    },
+    account_termination_date: {
+      type: Date
     },
     role: {
       type: String,
