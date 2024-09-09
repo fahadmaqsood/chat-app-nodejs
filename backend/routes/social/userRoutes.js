@@ -1,7 +1,8 @@
-const express = require('express');
-const userController = require('../controllers/userController');
+import express from 'express';
+import { updateUserMood } from '../../controllers/social/userController.js';
+
 const router = express.Router();
 
-router.post('/update/user-mood', userController.updateUserMood);
+router.post('/update/user-mood', updateUserMood);
 
-module.exports = router;
+export default router;

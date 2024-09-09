@@ -1,6 +1,6 @@
-const User = require('../models/User');
+import { User } from '../../models/auth/user.models.js';
 
-exports.updateUserMood = async (req, res) => {
+export const updateUserMood = async (req, res) => {
     const { user_id, mood } = req.body;
 
     if (!user_id || !mood) {
