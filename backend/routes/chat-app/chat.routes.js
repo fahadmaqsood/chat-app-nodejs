@@ -11,6 +11,7 @@ import {
   removeParticipantFromGroupChat,
   renameGroupChat,
   searchAvailableUsers,
+  findMatchingFriends,
 } from "../../controllers/chat-app/chat.controllers.js";
 import { verifyJWT } from "../../middlewares/auth.middlewares.js";
 import {
@@ -27,6 +28,8 @@ router.use(verifyJWT);
 router.route("/").get(getAllChats);
 
 router.route("/users").get(searchAvailableUsers);
+
+router.route("/find-random-friends").get(findMatchingFriends);
 
 router
   .route("/c/:receiverId")

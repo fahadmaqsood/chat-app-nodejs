@@ -15,6 +15,7 @@ import {
   resetForgottenPassword,
   updateUserAvatar,
   verifyEmail,
+  getUserPoints
 } from "../../controllers/auth/user.controllers.js";
 import {
   verifyJWT,
@@ -32,6 +33,7 @@ import {
 import { validate } from "../../validators/validate.js";
 import { upload } from "../../middlewares/multer.middlewares.js";
 import { mongoIdPathVariableValidator } from "../../validators/common/mongodb.validators.js";
+import { get } from "mongoose";
 
 const router = Router();
 
@@ -51,6 +53,7 @@ router
     validate,
     resetForgottenPassword
   );
+  
 
 // Secured routes
 router.route("/logout").post(verifyJWT, logoutUser);
@@ -79,6 +82,9 @@ router
     validate,
     assignRole
   );
+
+// Get user find friends points
+router.route("/find-friends-points").get(verifyJWT, getUserPoints);  
 
 // SSO routes
 router.route("/google").get(

@@ -132,6 +132,61 @@ const searchAvailableUsers = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, users, "Users fetched successfully"));
 });
 
+// find frineds based on religion, age, country, language
+const findMatchingFriends = asyncHandler(async (req, res) => {
+  const { religion, age, country, language } = req.query;
+  
+  // Find the current logged-in user
+  const currentUser = await User.findById(req.user._id);
+
+  // Check if the user has enough points to perform a search
+  if (currentUser.find_friends_points <= 0) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, null, "You don't have enough points buy points to search."));
+  }
+
+  // Deduct 1 point for the search and save the user
+  currentUser.find_friends_points -= 1;
+  await currentUser.save();
+
+  // Build the query object dynamically based on provided parameters
+  const query = { _id: { $ne: currentUser._id } }; // Exclude the current user
+
+  if (religion) query.religion = religion;
+  if (age) query.age = parseInt(age); // Parse age as an integer
+  if (country) query.country = country;
+  if (language) query.language = language;
+
+  // Perform the search query with the dynamically built filters
+  const users = await User.aggregate([
+    {
+      $match: query,
+    },
+    {
+      $project: {
+        avatar: 1,
+        username: 1,
+        email: 1,
+      },
+    },
+  ]);
+
+  // Handle the case where no users are found
+  if (!users.length) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "No users found matching the given criteria."));
+  }
+
+  // Return matching users
+  return res
+    .status(200)
+    .json(new ApiResponse(200, users, "Matching users fetched successfully"));
+});
+
+
+
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
@@ -649,4 +704,5 @@ export {
   removeParticipantFromGroupChat,
   renameGroupChat,
   searchAvailableUsers,
+  findMatchingFriends,
 };

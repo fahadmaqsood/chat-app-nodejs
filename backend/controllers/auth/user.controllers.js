@@ -37,7 +37,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password, role } = req.body;
+  const { email, username, password, role, religion, age, country, language} = req.body;
 
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -50,6 +50,10 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     username,
+    age,
+    religion,
+    country,
+    language,
     isEmailVerified: false,
     role: role || UserRolesEnum.USER,
   });
@@ -496,6 +500,23 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, updatedUser, "Avatar updated successfully"));
 });
 
+// Get Find friends points
+const getUserPoints = asyncHandler(async (req, res) => {
+
+  const currentUser = await User.findById(req.user._id);
+
+  if (!currentUser) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "User not found."));
+  }
+
+  // Respond with the user's find_friends_points
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { find_friends_points: currentUser.find_friends_points }, "User points fetched successfully."));
+});
+
 export {
   assignRole,
   changeCurrentPassword,
@@ -510,4 +531,5 @@ export {
   resetForgottenPassword,
   updateUserAvatar,
   verifyEmail,
+  getUserPoints,
 };
