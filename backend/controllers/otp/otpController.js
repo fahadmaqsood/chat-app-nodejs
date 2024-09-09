@@ -1,7 +1,7 @@
-const Otp = require('../models/Otp');
+import Otp from '../../models/otp/Otp.js';
 
 // Controller for generating OTP
-exports.generateOtp = async (req, res) => {
+export const generateOtp = async (req, res) => {
     const { email, phone } = req.body;
 
     try {
@@ -23,7 +23,7 @@ exports.generateOtp = async (req, res) => {
 };
 
 // Controller for verifying OTP
-exports.verifyOtp = async (req, res) => {
+export const verifyOtp = async (req, res) => {
     const { email, phone, otp } = req.body;
 
     try {

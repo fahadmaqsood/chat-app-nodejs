@@ -93,7 +93,7 @@ import chatRouter from "./routes/chat-app/chat.routes.js";
 import messageRouter from "./routes/chat-app/message.routes.js";
 
 import loginInfoRoutes from "./routes/auth/loginInfoRoutes.js";
-// const otpRoutes = require('./routes/otp/otpRoutes.js');
+import otpRoutes from "./routes/otp/otpRoutes.js"; 
 // const notificationRoutes = require('./routes/notification/notificationRoutes.js');
 // const userRoutes = require('./routes/social/userRoutes.js');
 // const userPostRoutes = require('./routes/social/userPostRoutes.js');
@@ -105,7 +105,7 @@ app.use("/api/v1/chat-app/chats", chatRouter);
 app.use("/api/v1/chat-app/messages", messageRouter);
 
 app.use('/api/v1/logininfo', loginInfoRoutes);
-// app.use('/api/otp', otpRoutes); 
+app.use('/api/v1/otp', otpRoutes); 
 // app.use('/api/notifications', notificationRoutes);
 // app.use('/api', userRoutes);
 // app.use('/api', userPostRoutes);
