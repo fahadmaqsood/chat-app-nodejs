@@ -92,11 +92,24 @@ import userRouter from "./routes/auth/user.routes.js";
 import chatRouter from "./routes/chat-app/chat.routes.js";
 import messageRouter from "./routes/chat-app/message.routes.js";
 
+const loginInfoRoutes = require('./routes/auth/loginInfoRoutes.js');
+const otpRoutes = require('./routes/otp/otpRoutes.js');
+const notificationRoutes = require('./routes/notification/notificationRoutes.js');
+const userRoutes = require('./routes/social/userRoutes.js');
+const userPostRoutes = require('./routes/social/userPostRoutes.js');
+
+
 // * App apis
 app.use("/api/v1/users", userRouter);
-
 app.use("/api/v1/chat-app/chats", chatRouter);
 app.use("/api/v1/chat-app/messages", messageRouter);
+
+app.use('/api/logininfo', loginInfoRoutes);
+app.use('/api/otp', otpRoutes); 
+app.use('/api/notifications', notificationRoutes);
+app.use('/api', userRoutes);
+app.use('/api', userPostRoutes);
+
 
 initializeSocketIO(io);
 
