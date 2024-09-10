@@ -7,9 +7,9 @@ export let dbInstance = undefined;
 
 const connectDB = async () => {
   try {
-    const connectionInstance = await mongoose.connect(
-      `${process.env.MONGODB_URI}/${DB_NAME}`
-    );
+    const connectionInstance = await mongoose.connect(process.env.MONGODB_URI, {
+      tls: true // Ensure SSL/TLS is enabled
+    });
     dbInstance = connectionInstance;
     logger.info(
       `\n☘️  MongoDB Connected! Db host: ${connectionInstance.connection.host}\n`
