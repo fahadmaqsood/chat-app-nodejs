@@ -38,7 +38,8 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password, role, religion, age, country, language } = req.body;
+  let { email, username, password, role, religion, date_of_birth, country, language } = req.body;
+
 
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -47,11 +48,14 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists", []);
   }
+
+  date_of_birth = new Date(date_of_birth);
+
   const user = await User.create({
     email,
     password,
     username,
-    age,
+    date_of_birth,
     religion,
     country,
     language,
@@ -522,10 +526,10 @@ const getUserPoints = asyncHandler(async (req, res) => {
       .json(new ApiResponse(404, null, "User not found."));
   }
 
-  // Respond with the user's find_friends_points
+  // Respond with the user's user_points
   return res
     .status(200)
-    .json(new ApiResponse(200, { find_friends_points: currentUser.find_friends_points }, "User points fetched successfully."));
+    .json(new ApiResponse(200, { user_points: currentUser.user_points }, "User points fetched successfully."));
 });
 
 export {

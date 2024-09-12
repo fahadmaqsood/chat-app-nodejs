@@ -186,3 +186,21 @@ export const getMongoosePaginationOptions = ({
 export const getRandomNumber = (max) => {
   return Math.floor(Math.random() * max);
 };
+
+
+/**
+ * @param {string} date of birth
+ */
+export const calculateAge = (dob) => {
+  const birthDate = new Date(dob);
+  const currentDate = new Date();
+  let age = currentDate.getFullYear() - birthDate.getFullYear();
+  const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+
+  // If the current month is before the birth month, or it's the birth month but the current day is before the birth day, subtract one year from the age
+  if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
+}

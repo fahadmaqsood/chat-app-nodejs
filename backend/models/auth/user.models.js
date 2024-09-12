@@ -54,8 +54,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    age: {
-      type: Number,
+    date_of_birth: { // date of birth
+      type: Date,
       required: true,
     },
     country: {
@@ -66,7 +66,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    find_friends_points: {
+    user_points: {
       type: Number,
       default: 10, // Starting with 10 points for new users
     },
@@ -174,5 +174,28 @@ userSchema.methods.generateTemporaryToken = function () {
 
   return { unHashedToken, hashedToken, tokenExpiry };
 };
+
+
+
+
+
+// generate otp
+
+userSchema.methods.generateOTP = function () {
+  // Generate a random number between 100000 and 999999
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  // This should stay in the DB to compare at the time of verification
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(unHashedToken)
+    .digest("hex");
+
+  // This is the expiry time for the token (20 minutes)
+  const tokenExpiry = Date.now() + USER_TEMPORARY_TOKEN_EXPIRY;
+
+  return { unHashedToken, hashedToken, tokenExpiry }
+}
+
 
 export const User = mongoose.model("User", userSchema);

@@ -112,6 +112,34 @@ const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
   };
 };
 
+
+/**
+ *
+ * @param {string} username
+ * @param {string} verificationUrl
+ * @returns {Mailgen.Content}
+ * @description It designs the forgot password mail
+ */
+const forgotPasswordOTPMailgenContent = (username, otp) => {
+  return {
+    body: {
+      name: username,
+      intro: "We got a request to reset the password of our account",
+      action: {
+        instructions:
+          "To reset your password enter the following OTP in the app:",
+        button: {
+          color: "#22BC66", // Optional action button color
+          text: otp,
+          link: "#",
+        },
+      },
+      outro:
+        "Need help, or have questions? email us at the support email and we will get back to you as soon as we can.",
+    },
+  };
+};
+
 /**
  *
  * @param {string} username

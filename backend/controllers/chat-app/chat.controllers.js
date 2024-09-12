@@ -7,7 +7,7 @@ import { emitSocketEvent } from "../../socket/index.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
-import { removeLocalFile } from "../../utils/helpers.js";
+import { removeLocalFile, calculateAge } from "../../utils/helpers.js";
 
 /**
  * @description Utility function which returns the pipeline stages to structure the chat schema with common lookups
@@ -135,19 +135,21 @@ const searchAvailableUsers = asyncHandler(async (req, res) => {
 // find frineds based on religion, age, country, language
 const findMatchingFriends = asyncHandler(async (req, res) => {
   const { religion, age, country, language } = req.query;
-  
+
+  //const age = calculateAge(date_of_birth);
+
   // Find the current logged-in user
   const currentUser = await User.findById(req.user._id);
 
   // Check if the user has enough points to perform a search
-  if (currentUser.find_friends_points <= 0) {
+  if (currentUser.user_points <= 0) {
     return res
       .status(400)
       .json(new ApiResponse(400, null, "You don't have enough points buy points to search."));
   }
 
   // Deduct 1 point for the search and save the user
-  currentUser.find_friends_points -= 1;
+  currentUser.user_points -= 1;
   await currentUser.save();
 
   // Build the query object dynamically based on provided parameters
