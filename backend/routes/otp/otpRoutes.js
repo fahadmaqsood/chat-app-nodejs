@@ -11,8 +11,6 @@ router.post('/verify_forgot_password_otp', verifyOtp);
 
 
 // Route to change password
-router.post('/verify_forgot_password_otp', verifyOtp);
-
-router.post("change_password", changeCurrentPassword);
+router.post("/change_password", changeCurrentPassword);
 
 export default router;
