@@ -4,6 +4,8 @@ import { User } from "../../models/auth/user.models.js";
 
 import { forgotPasswordOTPMailgenContent } from "../../utils/mail.js"
 
+import { ApiResponse } from "../../utils/ApiResponse.js";
+
 // Controller for generating OTP
 export const generateOtp = async (req, res) => {
     const { email, phone } = req.body;
@@ -115,7 +117,9 @@ export const changeCurrentPassword = async (req, res) => {
     }
 
     if (!user) {
-        throw new ApiError(404, "User does not exists", []);
+        return res
+            .status(404)
+            .json(new ApiResponse(404, {}, "User does not exist"));
     }
 
     // assign new password in plain text
