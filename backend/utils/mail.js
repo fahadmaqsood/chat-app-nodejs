@@ -187,5 +187,6 @@ export {
   sendEmail,
   emailVerificationMailgenContent,
   forgotPasswordMailgenContent,
+  forgotPasswordOTPMailgenContent,
   orderConfirmationMailgenContent,
 };
