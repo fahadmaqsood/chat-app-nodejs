@@ -24,9 +24,11 @@ const handleChatbotSocketEvents = (socket) => {
             // Handle the chat message using the chatbot controller
             const response = await handleChatMessage({ body: data });
 
+            console.log(response);
+
             // // Emit the relevant socket events
-            // emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_RECEIVED', response.data.incomingMessage);
-            // emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_SENT', response.data.outgoingMessage);
+            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_RECEIVED', response.data.incomingMessage);
+            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_SENT', response.data.outgoingMessage);
         } catch (error) {
             console.error('Error handling chat message:', error.message);
             socket.emit('CHAT_MESSAGE_ERROR', error.message);
