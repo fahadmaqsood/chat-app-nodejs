@@ -55,8 +55,7 @@ const userSchema = new Schema(
       required: true,
     },
     date_of_birth: { // date of birth
-      type: Date,
-      required: true,
+      type: Date
     },
     country: {
       type: String,
