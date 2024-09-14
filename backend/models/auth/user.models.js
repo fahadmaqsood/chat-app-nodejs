@@ -38,7 +38,8 @@ const userSchema = new Schema(
       trim: true,
     },
     mood: {
-      type: String
+      type: String,
+      default: "happy"
     },
     location: {
       type: String
@@ -46,9 +47,6 @@ const userSchema = new Schema(
     gender: {
       type: String,
       enum: ['male', 'female', 'other']
-    },
-    birthdate: {
-      type: Date
     },
     religion: {
       type: String,
@@ -76,7 +74,8 @@ const userSchema = new Schema(
     },
     subscription_status: {
       type: String,
-      enum: ['active', 'inactive']
+      enum: ['active', 'inactive'],
+      default: 'inactive'
     },
     account_creation_date: {
       type: Date,

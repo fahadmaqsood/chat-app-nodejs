@@ -16,9 +16,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    birthdate: {
-        type: Date
-    },
     gender: {
         type: String,
         enum: ['male', 'female', 'other']
@@ -46,7 +43,7 @@ const userSchema = new mongoose.Schema({
     },
     account_termination_date: {
         type: Date
-    }  
+    }
 });
 
 // Hash password before saving
