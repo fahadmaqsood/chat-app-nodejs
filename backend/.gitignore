@@ -53,3 +53,7 @@ Thumbs.db
 # Misc
 *.sublime-workspace
 *.sublime-project
+
+
+#node
+package-lock.json

@@ -16,6 +16,9 @@ import { DB_NAME } from "./constants.js";
 import { dbInstance } from "./db/index.js";
 import morganMiddleware from "./logger/morgan.logger.js";
 import { initializeSocketIO } from "./socket/index.js";
+
+import { initializeChatbotSocket } from "./socket/chatbot.socket.js";
+
 import { ApiError } from "./utils/ApiError.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 
@@ -114,6 +117,7 @@ app.use('/api/v1/chatbot', chatbotRoutes);
 
 
 initializeSocketIO(io);
+initializeChatbotSocket(io);
 
 // Root route for the API
 app.get('/', (req, res) => {

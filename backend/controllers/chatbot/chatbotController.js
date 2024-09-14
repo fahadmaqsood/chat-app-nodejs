@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
-import { emitSocketEvent } from "../../socket/index.js"; // Import your socket utility
+import { emitSocketEvent } from "../../socket/chatbot.socket.js"; // Import your socket utility
 import ChatBot from "../../models/chatbot/chatbot.models.js";
 import { User } from "../../models/auth/user.models.js";
 import { getChatCompletion } from "../../utils/openai.js"; // Assuming you have an OpenAI utility
