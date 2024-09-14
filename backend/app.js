@@ -58,8 +58,7 @@ const limiter = rateLimit({
   handler: (_, __, ___, options) => {
     throw new ApiError(
       options.statusCode || 500,
-      `There are too many requests. You are only allowed ${
-        options.max
+      `There are too many requests. You are only allowed ${options.max
       } requests per ${options.windowMs / 60000} minutes`
     );
   },
@@ -93,10 +92,12 @@ import chatRouter from "./routes/chat-app/chat.routes.js";
 import messageRouter from "./routes/chat-app/message.routes.js";
 
 import loginInfoRoutes from "./routes/auth/loginInfoRoutes.js";
-import otpRoutes from "./routes/otp/otpRoutes.js"; 
-import notificationRoutes from "./routes/notification/notificationRoutes.js"; 
+import otpRoutes from "./routes/otp/otpRoutes.js";
+import notificationRoutes from "./routes/notification/notificationRoutes.js";
 import userRoutes from "./routes/social/userRoutes.js";
 import userPostRoutes from "./routes/social/userPostRoutes.js";
+
+import chatbotRoutes from "./routes/chatbot/chatbot.routes.js";
 
 // * App apis
 app.use("/api/v1/users", userRouter);
@@ -104,10 +105,12 @@ app.use("/api/v1/chat-app/chats", chatRouter);
 app.use("/api/v1/chat-app/messages", messageRouter);
 
 app.use('/api/v1/logininfo', loginInfoRoutes);
-app.use('/api/v1/otp', otpRoutes); 
+app.use('/api/v1/otp', otpRoutes);
 app.use('/api/v1/notification', notificationRoutes);
 app.use('/api/v1', userRoutes);
 app.use('/api/v1/post', userPostRoutes);
+
+app.use('/api/v1/chatbot', chatbotRoutes);
 
 
 initializeSocketIO(io);
