@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { emitSocketEvent } from 'index.js'; // Import your socket utility
+import { emitSocketEvent } from './index.js'; // Import your socket utility
 import { handleChatMessage } from '../controllers/chatbot/chatbot.controller.js'; // Import your chatbot controller
 
 /**
