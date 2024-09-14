@@ -60,7 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
     country,
     language,
     isEmailVerified: false,
-    role: role || UserRolesEnum.USER,
+    role: UserRolesEnum.USER,
   });
 
   /**
