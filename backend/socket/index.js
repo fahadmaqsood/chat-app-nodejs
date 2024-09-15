@@ -111,18 +111,21 @@ const initializeSocketIO = (io) => {
 const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
   let io;
 
-  // If it's an HTTP request, use req.app to access io
+  // Check if reqOrSocket is an HTTP request
   if (reqOrSocket.app) {
     io = reqOrSocket.app.get("io");
+    console.log("Using req.app to get io instance.");
   }
-  // If it's a WebSocket, use socket to access io
+  // Check if reqOrSocket is a WebSocket
   else if (reqOrSocket.handshake) {
-    io = reqOrSocket.server.of('/').sockets;  // Access Socket.IO instance via the socket
+    io = reqOrSocket.server.of('/').sockets;
+    console.log("Using socket.server to get io instance.");
   }
 
   // Emit event if io is available
   if (io) {
     io.in(roomId).emit(event, payload);
+    console.log(`Event '${event}' emitted to room ${roomId}.`);
   } else {
     console.error("Socket.IO instance not found.");
   }
