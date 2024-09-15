@@ -24,6 +24,8 @@ const handleChatbotSocketEvents = (socket, io) => {
                 // Emit the event to the user's socket ID
                 io.to(socketId).emit('CHAT_MESSAGE_RECEIVED', incomingMessage);
                 io.to(socketId).emit('CHAT_MESSAGE_SENT', outgoingMessage);
+
+                console.log(`data sent to ${userId}: ${subject}`)
             } else {
                 console.error(`No socket found for id: ${userId}: ${subject}`);
             }
