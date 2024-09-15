@@ -44,19 +44,12 @@ const handleChatbotSocketEvents = (socket, io) => {
  * @param {Server} io - The socket.io server instance.
  */
 const initializeChatbotSocket = (io) => {
+
     io.on('connection', (socket) => {
         console.log('Chatbot socket connected:', socket.id);
 
         // Pass io directly to handleChatbotSocketEvents
         handleChatbotSocketEvents(socket, io);
-
-        socket.on('disconnect', () => {
-            console.log('Chatbot socket disconnected:', socket.id);
-        });
-    });
-
-    io.on('connection', (socket) => {
-        console.log('Chatbot socket connected:', socket.id);
 
         socket.on('REGISTER_USER', (data) => {
             const { userId, subject } = data;
