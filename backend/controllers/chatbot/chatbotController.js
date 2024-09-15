@@ -17,7 +17,7 @@ const getSimilarMessages = async (message, subject) => {
 };
 
 // Function to get recent messages with pagination
-export const getRecentMessages = asyncHandler(async (req, res) => {
+export const getRecentMessages = asyncHandler(async (req, res, next) => {
     const { userId, subject, limit, skip } = req.body;
 
     if (!userId || !subject) {
@@ -37,8 +37,9 @@ export const getRecentMessages = asyncHandler(async (req, res) => {
 });
 
 // Controller for handling chatbot messages
-export const handleChatMessage = asyncHandler(async (req, res) => {
+export const handleChatMessage = asyncHandler(async (req, res, next) => {
     try {
+        console.log(req, res, next);
         const { userId, message, subject } = req.body;
 
         if (!message || !subject) {
@@ -72,9 +73,11 @@ export const handleChatMessage = asyncHandler(async (req, res) => {
             subject,
         });
 
+        console.log(req, res, next);
+
         // // Emit socket event for incoming and outgoing messages
-        // emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
-        // emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
 
         return res.status(201).json(new ApiResponse(201, { incomingMessage, outgoingMessage }, "Chat message processed successfully"));
 
