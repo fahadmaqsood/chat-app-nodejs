@@ -38,42 +38,49 @@ export const getRecentMessages = asyncHandler(async (req, res) => {
 
 // Controller for handling chatbot messages
 export const handleChatMessage = asyncHandler(async (req, res) => {
-    const { userId, message, subject } = req.body;
+    try {
+        const { userId, message, subject } = req.body;
 
-    if (!message || !subject) {
-        throw new ApiError(400, "Message and subject are required");
+        if (!message || !subject) {
+            throw new ApiError(400, "Message and subject are required");
+        }
+
+        // Save incoming message
+        const incomingMessage = await ChatBot.create({
+            user: userId,
+            message,
+            type: 'user',
+            subject,
+        });
+
+        // Get similar messages for context
+        const similarMessages = await getSimilarMessages(message, subject);
+
+        // Send context to OpenAI API
+        // const openAIResponse = await getChatCompletion({
+        //     messages: similarMessages.map(msg => ({ role: msg.type, content: msg.message })),
+        //     user_message: message,
+        // });
+
+        const openAIResponse = { data: "this is test response" };
+
+        // Save outgoing response
+        const outgoingMessage = await ChatBot.create({
+            user: new mongoose.Types.ObjectId(userId),
+            message: openAIResponse.data,
+            type: 'chatbot',
+            subject,
+        });
+
+        // Emit socket event for incoming and outgoing messages
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
+
+        return res.status(201).json(new ApiResponse(201, { incomingMessage, outgoingMessage }, "Chat message processed successfully"));
+
+    } catch (error) {
+        console.error('Error in handleChatMessage:', error);
+        // Handle error and respond appropriately
+        res.status(500).json({ error: error.message });
     }
-
-    // Save incoming message
-    const incomingMessage = await ChatBot.create({
-        user: userId,
-        message,
-        type: 'user',
-        subject,
-    });
-
-    // Get similar messages for context
-    const similarMessages = await getSimilarMessages(message, subject);
-
-    // Send context to OpenAI API
-    // const openAIResponse = await getChatCompletion({
-    //     messages: similarMessages.map(msg => ({ role: msg.type, content: msg.message })),
-    //     user_message: message,
-    // });
-
-    const openAIResponse = { data: "this is test response" };
-
-    // Save outgoing response
-    const outgoingMessage = await ChatBot.create({
-        user: new mongoose.Types.ObjectId(userId),
-        message: openAIResponse.data,
-        type: 'chatbot',
-        subject,
-    });
-
-    // Emit socket event for incoming and outgoing messages
-    emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
-    emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
-
-    return res.status(201).json(new ApiResponse(201, { incomingMessage, outgoingMessage }, "Chat message processed successfully"));
 });
