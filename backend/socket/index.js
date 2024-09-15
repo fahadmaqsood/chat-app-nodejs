@@ -131,5 +131,4 @@ const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
   }
 };
 
-
 export { initializeSocketIO, emitSocketEvent };
