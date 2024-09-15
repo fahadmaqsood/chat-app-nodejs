@@ -75,17 +75,6 @@ const initializeChatbotSocket = (io) => {
             }
         });
     });
-
-
-    socket.on('disconnect', () => {
-        for (let [user, id] of userSocketMap.entries()) {
-            if (id === socket.id) {
-                userSocketMap.delete(user);
-                console.log(`User ${user} disconnected, removed from map.`);
-                break;
-            }
-        }
-    });
 };
 
 
