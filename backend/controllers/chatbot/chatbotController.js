@@ -77,6 +77,10 @@ export const handleChatMessage = asyncHandler(async (req, res) => {
         // Process the message
         const { incomingMessage, outgoingMessage } = await processChatMessage({ userId, message, subject });
 
+        // Emit the relevant socket events, passing io directly
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
+        emitSocketEvent(req, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
+
         // Return the response
         return res.status(201).json(new ApiResponse(201, { incomingMessage, outgoingMessage }, "Chat message processed successfully"));
     } catch (error) {
