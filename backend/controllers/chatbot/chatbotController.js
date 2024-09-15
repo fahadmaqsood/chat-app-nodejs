@@ -38,7 +38,7 @@ export const getRecentMessages = asyncHandler(async (req, res) => {
 
 
 // core logic for processing message
-const processChatMessage = async ({ userId, message, subject }) => {
+export const processChatMessage = async ({ userId, message, subject }) => {
     if (!userId || !message || !subject) {
         throw new Error("userId, message, and subject are required");
     }
