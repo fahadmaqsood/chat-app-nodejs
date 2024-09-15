@@ -13,27 +13,20 @@ const handleChatbotSocketEvents = (socket) => {
      */
     const handleChatMessageEvent = async (data) => {
         try {
-            // Extract data
             const { userId, message, subject } = data;
 
-            // Ensure all necessary fields are present
-            if (!userId || !message || !subject) {
-                throw new Error('userId, message, and subject are required');
-            }
+            // Process the message
+            const { incomingMessage, outgoingMessage } = await processChatMessage({ userId, message, subject });
 
-            // Handle the chat message using the chatbot controller
-            const response = await handleChatMessage({ body: data });
-
-            console.log(response);
-
-            // // Emit the relevant socket events
-            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_RECEIVED', response.data.incomingMessage);
-            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_SENT', response.data.outgoingMessage);
+            // Emit the relevant socket events
+            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_RECEIVED', incomingMessage);
+            emitSocketEvent(socket.request, userId.toString(), 'CHAT_MESSAGE_SENT', outgoingMessage);
         } catch (error) {
             console.error('Error handling chat message:', error.message);
             socket.emit('CHAT_MESSAGE_ERROR', error.message);
         }
     };
+
 
     // Event listener for chat messages
     socket.on('CHAT_MESSAGE', handleChatMessageEvent);
