@@ -108,8 +108,25 @@ const initializeSocketIO = (io) => {
  * @param {any} payload - Data that should be sent when emitting the event
  * @description Utility function responsible to abstract the logic of socket emission via the io instance
  */
-const emitSocketEvent = (req, roomId, event, payload) => {
-  req.app.get("io").in(roomId).emit(event, payload);
+const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
+  let io;
+
+  // If it's an HTTP request, use req.app to access io
+  if (reqOrSocket.app) {
+    io = reqOrSocket.app.get("io");
+  }
+  // If it's a WebSocket, use socket to access io
+  else if (reqOrSocket.handshake) {
+    io = reqOrSocket.server.of('/').sockets;  // Access Socket.IO instance via the socket
+  }
+
+  // Emit event if io is available
+  if (io) {
+    io.in(roomId).emit(event, payload);
+  } else {
+    console.error("Socket.IO instance not found.");
+  }
 };
+
 
 export { initializeSocketIO, emitSocketEvent };
