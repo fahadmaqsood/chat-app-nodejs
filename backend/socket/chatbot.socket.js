@@ -27,7 +27,7 @@ const handleChatbotSocketEvents = (socket, io) => {
 
                 console.log(`data sent to ${userId}:${subject}`)
             } else {
-                console.error(`No socket found for id: ${userId}:${subject}`);
+                console.error(`No socket found for id: ${userId}:${subject}/${socketId}`);
             }
         } catch (error) {
             console.error('Error handling chat message:', error.message);
