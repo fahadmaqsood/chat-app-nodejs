@@ -49,6 +49,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User with email or username already exists", []);
   }
 
+  console.log(date_of_birth);
+
   date_of_birth = new Date(Date.parse(date_of_birth));
 
   const user = await User.create({
