@@ -129,7 +129,7 @@ app.get('/', (req, res) => {
 
 
 // route for auto server updates
-app.post('/pullAndRestart', (req, res) => {
+app.all('/pullAndRestart', (req, res) => {
   // Execute the script
   exec('bash ~/pullAndRestart', (error, stdout, stderr) => {
     if (error) {

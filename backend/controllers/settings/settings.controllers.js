@@ -13,7 +13,14 @@ const changeProfileSettings = async (req, res) => {
 
         // Validate and refresh tokens
         const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
-        const newAccessToken = tokenResponse?.accessToken || accessToken;
+        let newAccessToken = tokenResponse?.accessToken;
+
+        let hasNewAccessToken = true;
+
+        if (!newAccessToken) {
+            hasNewAccessToken = false;
+            newAccessToken = accessToken;
+        }
 
         // Decode access token to get user ID
         const decodedToken = jwt.decode(newAccessToken);
@@ -50,10 +57,10 @@ const changeProfileSettings = async (req, res) => {
         await user.save();
 
         // Return success response with the new access token
-        res.status(200).json(new ApiResponse(200, { accessToken: newAccessToken }, 'Profile updated successfully'));
+        res.status(200).json(new ApiResponse(200, hasNewAccessToken ? { accessToken: newAccessToken } : {}, 'Profile updated successfully'));
 
     } catch (error) {
-        res.status(error.status || 500).json(new ApiResponse(error.status || 500, {}, error.message || 'An error occurred'));
+        res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
 
@@ -66,7 +73,14 @@ const updatePrivacySettings = async (req, res) => {
 
         // Validate and refresh tokens
         const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
-        const newAccessToken = tokenResponse?.accessToken || accessToken;
+        let newAccessToken = tokenResponse?.accessToken;
+
+        let hasNewAccessToken = true;
+
+        if (!newAccessToken) {
+            hasNewAccessToken = false;
+            newAccessToken = accessToken;
+        }
 
         // Decode access token to get user ID
         const decodedToken = jwt.decode(newAccessToken);
@@ -96,10 +110,10 @@ const updatePrivacySettings = async (req, res) => {
         await user.save();
 
         // Return success response with the new access token
-        res.status(200).json(new ApiResponse(200, { accessToken: newAccessToken }, 'Privacy settings updated successfully'));
+        res.status(200).json(new ApiResponse(200, hasNewAccessToken ? { accessToken: newAccessToken } : {}, 'Privacy settings updated successfully'));
 
     } catch (error) {
-        res.status(error.status || 500).json(new ApiResponse(error.status || 500, {}, error.message || 'An error occurred'));
+        res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
 
@@ -149,7 +163,7 @@ const updateNotificationSettings = async (req, res) => {
         res.status(200).json(new ApiResponse(200, hasNewAccessToken ? { accessToken: newAccessToken } : {}, 'Notification settings updated successfully'));
 
     } catch (error) {
-        res.status(error.status || 500).json(new ApiResponse(error.status || 500, {}, error.message || 'An error occurred'));
+        res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
 

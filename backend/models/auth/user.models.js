@@ -25,6 +25,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       trim: true,
+      default: "",
       set: value => {
         if (value) {
           // Convert the first letter to uppercase and the rest to lowercase
