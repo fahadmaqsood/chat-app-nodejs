@@ -126,7 +126,7 @@ const updateNotificationSettings = async (req, res) => {
         const userId = decodedAccessToken._id;
 
         // Extract notification settings from request
-        const { general, updates } = req.body;
+        const { marketing, updates } = req.body;
         const { appUpdates, billReminder, promotionEmails, tips, offers } = marketing;
         const { messages, friendRequests, commentsOnPosts, likes } = updates;
 
