@@ -3,10 +3,8 @@ import { getProfileInfo, getProfilePosts } from '../../controllers/profile/profi
 
 const router = express.Router();
 
-// Route to generate OTP
-router.post('/info', getProfileInfo);
 
-// Route to verify OTP
+router.post('/info', getProfileInfo);
 router.post('/posts', getProfilePosts);
 
 export default router;

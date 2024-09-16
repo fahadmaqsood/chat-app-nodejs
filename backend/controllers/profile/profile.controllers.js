@@ -2,7 +2,7 @@ import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
-export const getProfileInfo = async (req, res) => {
+const getProfileInfo = async (req, res) => {
     try {
         // Extract tokens from headers
         const accessToken = req.headers['access-token'];
@@ -44,7 +44,7 @@ export const getProfileInfo = async (req, res) => {
     }
 };
 
-export const getProfilePosts = async (req, res) => {
+const getProfilePosts = async (req, res) => {
     try {
         // Extract tokens from headers
         const accessToken = req.headers['access-token'];
@@ -83,3 +83,5 @@ export const getProfilePosts = async (req, res) => {
         res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
+
+export { getProfileInfo, getProfilePosts };
