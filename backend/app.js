@@ -124,7 +124,7 @@ initializeChatbotSocket(io);
 
 // Root route for the API
 app.get('/', (req, res) => {
-  res.send('Welcome to the ChatApp!');
+  res.send('Welcome to the ChatApp! testing...');
 });
 
 
