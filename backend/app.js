@@ -4,6 +4,7 @@ import express from "express";
 import { rateLimit } from "express-rate-limit";
 import session from "express-session";
 import fs from "fs";
+const { exec } = require('child_process');
 import { createServer } from "http";
 import passport from "passport";
 import path from "path";
@@ -124,6 +125,28 @@ initializeChatbotSocket(io);
 // Root route for the API
 app.get('/', (req, res) => {
   res.send('Welcome to the ChatApp!');
+});
+
+
+// route for auto server updates
+app.get('/pullAndRestart', (req, res) => {
+  // Execute the script
+  exec('bash ~/pullAndRestart', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error.message}`);
+      res.status(500).send(`Server update failed: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Script stderr: ${stderr}`);
+      res.status(500).send(`Server update stderr: ${stderr}`);
+      return;
+    }
+
+    // Send success response
+    console.log(`Script stdout: ${stdout}`);
+    res.send(`Server updated successfully:\n${stdout}`);
+  });
 });
 
 // common error handling middleware
