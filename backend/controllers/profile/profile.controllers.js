@@ -2,6 +2,8 @@ import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
+import { UserPost } from '../../models/social/UserPost.js';
+
 const getProfileInfo = async (req, res) => {
     try {
         // Extract tokens from headers
