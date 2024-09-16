@@ -12,7 +12,8 @@ const changeProfileSettings = async (req, res) => {
         const refreshToken = req.headers['refresh-token'];
 
         // Validate and refresh tokens
-        const { accessToken: newAccessToken } = await validateAndRefreshTokens(accessToken, refreshToken);
+        const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
+        const newAccessToken = tokenResponse?.accessToken || accessToken;
 
         // Decode access token to get user ID
         const decodedToken = jwt.decode(newAccessToken);
@@ -64,7 +65,8 @@ const updatePrivacySettings = async (req, res) => {
         const refreshToken = req.headers['refresh-token'];
 
         // Validate and refresh tokens
-        const { accessToken: newAccessToken } = await validateAndRefreshTokens(accessToken, refreshToken);
+        const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
+        const newAccessToken = tokenResponse?.accessToken || accessToken;
 
         // Decode access token to get user ID
         const decodedToken = jwt.decode(newAccessToken);
