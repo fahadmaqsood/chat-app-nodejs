@@ -127,7 +127,7 @@ const updateNotificationSettings = async (req, res) => {
 
         // Extract notification settings from request
         const { general, updates } = req.body;
-        const { appUpdates, billReminder, promotionEmails, tips, offers } = general;
+        const { appUpdates, billReminder, promotionEmails, tips, offers } = marketing;
         const { messages, friendRequests, commentsOnPosts, likes } = updates;
 
         // Find user by ID
