@@ -102,7 +102,7 @@ const updatePrivacySettings = async (req, res) => {
 };
 
 // Function to update notification settings
-export const updateNotificationSettings = async (req, res) => {
+const updateNotificationSettings = async (req, res) => {
     try {
         // Extract tokens from headers
         const accessToken = req.headers['access-token'];
