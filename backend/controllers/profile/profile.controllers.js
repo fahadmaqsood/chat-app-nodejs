@@ -27,14 +27,14 @@ const getProfileInfo = async (req, res) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json(ApiResponse(false, "userId is required"));
+            return res.status(400).json(new ApiResponse(false, "userId is required"));
         }
 
         // Fetch user info from the database using userId
         const user = await User.findById(userId).select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -loginType -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
 
         if (!user) {
-            return res.status(404).json(ApiResponse(404, {}, "User not found"));
+            return res.status(404).json(new ApiResponse(404, {}, "User not found"));
         }
 
         return res
@@ -67,14 +67,14 @@ const getProfilePosts = async (req, res) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json(ApiResponse(false, "userId is required"));
+            return res.status(400).json(new ApiResponse(false, "userId is required"));
         }
 
         // Fetch user's posts from the database using userId
         const posts = await UserPost.find({ user_id: userId });
 
         if (!posts || posts.length === 0) {
-            return res.status(404).json(ApiResponse(404, {}, "No posts found for this user"));
+            return res.status(404).json(new ApiResponse(404, {}, "No posts found for this user"));
         }
 
         return res
