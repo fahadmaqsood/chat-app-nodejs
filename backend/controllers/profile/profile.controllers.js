@@ -31,7 +31,7 @@ const getProfileInfo = async (req, res) => {
         }
 
         // Fetch user info from the database using userId
-        const user = await User.findById(userId).select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -loginType -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
+        const user = await User.findById(userId).select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
 
         if (!user) {
             return res.status(404).json(new ApiResponse(404, {}, "User not found"));
