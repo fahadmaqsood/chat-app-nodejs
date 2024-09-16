@@ -17,6 +17,60 @@ import {
 } from "../../utils/mail.js";
 import LoginInfo from "../../models/auth/LoginInfo.js";
 
+
+
+// Function to validate and refresh tokens
+const validateAndRefreshTokens = async (accessToken, refreshToken) => {
+  try {
+    // Step 1: Validate both tokens with the user's model
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+
+    if (!decodedAccessToken || !decodedRefreshToken) {
+      throw new ApiError(401, "Invalid token(s)");
+    }
+
+    const user = await User.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new ApiError(401, "Invalid or mismatched tokens");
+    }
+
+    // Step 2: Verify access token
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (error) {
+      // If the access token is not valid, proceed to refresh it
+      if (error.name === 'TokenExpiredError') {
+        // Step 3: Verify refresh token and generate a new access token
+        try {
+          const newDecodedRefreshToken = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+          );
+
+          if (newDecodedRefreshToken._id !== decodedAccessToken._id) {
+            throw new ApiError(401, "Invalid refresh token");
+          }
+
+          const newAccessToken = user.generateAccessToken();
+
+          // Step 4: Save new access token in the database (if needed)
+          // No need to save the access token in the database here, but if you need to track it, implement it accordingly
+
+          return { accessToken: newAccessToken };
+
+        } catch (refreshTokenError) {
+          throw new ApiError(401, "Invalid refresh token");
+        }
+      } else {
+        throw new ApiError(401, "Invalid access token");
+      }
+    }
+  } catch (error) {
+    throw new ApiError(error.status || 500, error.message || "An error occurred");
+  }
+};
+
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -48,8 +102,6 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists", []);
   }
-
-  console.log(date_of_birth);
 
   date_of_birth = new Date(Date.parse(date_of_birth));
 
@@ -549,4 +601,5 @@ export {
   updateUserAvatar,
   verifyEmail,
   getUserPoints,
+  validateAndRefreshTokens
 };

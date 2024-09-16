@@ -22,6 +22,20 @@ const userSchema = new Schema(
         localPath: "",
       },
     },
+    name: {
+      type: String,
+      trim: true,
+      set: value => {
+        if (value) {
+          // Convert the first letter to uppercase and the rest to lowercase
+          return value
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+        }
+        return value;
+      }
+    },
     username: {
       type: String,
       required: true,
@@ -117,6 +131,39 @@ const userSchema = new Schema(
     },
     emailVerificationExpiry: {
       type: Date,
+    },
+    privacySettings: {
+      viewFollowers: {
+        type: String,
+        enum: ['everyone', 'no one', 'close friends'],
+        default: 'everyone'
+      },
+      viewFollowing: {
+        type: String,
+        enum: ['everyone', 'no one', 'close friends'],
+        default: 'everyone'
+      },
+      viewCloseFriends: {
+        type: String,
+        enum: ['everyone', 'no one', 'close friends'],
+        default: 'everyone'
+      },
+    },
+
+    notificationSettings: {
+      marketing: {
+        appUpdates: { type: Boolean, default: true },
+        promotionEmails: { type: Boolean, default: true },
+        tips: { type: Boolean, default: true },
+        offers: { type: Boolean, default: true }
+      },
+      updates: {
+        messages: { type: Boolean, default: true },
+        friendRequests: { type: Boolean, default: true },
+        commentsOnPosts: { type: Boolean, default: true },
+        likes: { type: Boolean, default: true },
+        billReminder: { type: Boolean, default: true },
+      }
     },
   },
   { timestamps: true }
