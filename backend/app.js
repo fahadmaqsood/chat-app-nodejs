@@ -4,7 +4,7 @@ import express from "express";
 import { rateLimit } from "express-rate-limit";
 import session from "express-session";
 import fs from "fs";
-const { exec } = require('child_process');
+import { exec } from 'child_process';
 import { createServer } from "http";
 import passport from "passport";
 import path from "path";
