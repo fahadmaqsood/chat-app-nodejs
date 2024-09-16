@@ -32,7 +32,7 @@ export const getProfileInfo = async (req, res) => {
         const user = await User.findById(userId).select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -loginType -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
 
         if (!user) {
-            return res.status(404).json(ApiResponse(false, "User not found"));
+            return res.status(404).json(ApiResponse(404, {}, "User not found"));
         }
 
         return res
@@ -72,7 +72,7 @@ export const getProfilePosts = async (req, res) => {
         const posts = await UserPost.find({ user_id: userId });
 
         if (!posts || posts.length === 0) {
-            return res.status(404).json(ApiResponse(false, "No posts found for this user"));
+            return res.status(404).json(ApiResponse(404, {}, "No posts found for this user"));
         }
 
         return res
