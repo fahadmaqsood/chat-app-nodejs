@@ -112,10 +112,17 @@ const updateNotificationSettings = async (req, res) => {
 
         // Validate and refresh tokens
         const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
-        const updatedAccessToken = tokenResponse.accessToken ? tokenResponse.accessToken : null;
+        let newAccessToken = tokenResponse?.accessToken;
+
+        let hasNewAccessToken = true;
+
+        if (!newAccessToken) {
+            hasNewAccessToken = false;
+            newAccessToken = accessToken;
+        }
 
         // Decode access token to get user ID
-        const decodedAccessToken = jwt.decode(tokenResponse.accessToken || accessToken);
+        const decodedAccessToken = jwt.decode(newAccessToken);
         const userId = decodedAccessToken._id;
 
         // Extract notification settings from request
@@ -139,7 +146,7 @@ const updateNotificationSettings = async (req, res) => {
         await user.save();
 
         // Return success response
-        res.status(200).json(new ApiResponse(200, updatedAccessToken ? { accessToken: updatedAccessToken } : {}, 'Notification settings updated successfully'));
+        res.status(200).json(new ApiResponse(200, hasNewAccessToken ? { accessToken: newAccessToken } : {}, 'Notification settings updated successfully'));
 
     } catch (error) {
         res.status(error.status || 500).json(new ApiResponse(error.status || 500, {}, error.message || 'An error occurred'));
