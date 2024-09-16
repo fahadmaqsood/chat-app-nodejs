@@ -40,7 +40,7 @@ export const getProfileInfo = async (req, res) => {
             .json(new ApiResponse(200, { user, ...(hasNewAccessToken ? { accessToken: newAccessToken } : {}) }, "Profile info fetched successfully"));
     } catch (err) {
         console.error("Error in getProfileInfo:", err);
-        return res.status(500).json(new ApiResponse(500, {}, "Internal server error"));
+        res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
 
@@ -80,6 +80,6 @@ export const getProfilePosts = async (req, res) => {
             .json(new ApiResponse(200, { posts, ...(hasNewAccessToken ? { accessToken: newAccessToken } : {}) }, "Profile posts fetched successfully"));
     } catch (err) {
         console.error("Error in getProfilePosts:", err);
-        return res.status(500).json(new ApiResponse(500, {}, "Internal server error"));
+        res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
