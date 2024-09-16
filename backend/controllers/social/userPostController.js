@@ -19,17 +19,17 @@ export const createUserPost = async (req, res) => {
 
         const savedPost = await newPost.save();
 
-        res.status(201).json({ 
-            success: true, 
-            message: 'Post created successfully', 
+        res.status(201).json({
+            success: true,
+            message: 'Post created successfully',
             post: {
-                post_id: savedPost._id, 
+                post_id: savedPost._id,
                 user_id: savedPost.user_id,
                 content: savedPost.content,
                 media_url: savedPost.media_url,
                 mood_status: savedPost.mood_status,
                 created_at: savedPost.created_at
-            } 
+            }
         });
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
@@ -54,8 +54,8 @@ export const getPosts = async (req, res) => {
         const userIds = users.map(user => user._id);
 
         const posts = await UserPost.find({ user_id: { $in: userIds } })
-            .sort({ created_at: -1 }) 
-            .skip(parseInt(start_from)) 
+            .sort({ created_at: -1 })
+            .skip(parseInt(start_from))
             .limit(limit);
 
         res.status(200).json({ success: true, posts });

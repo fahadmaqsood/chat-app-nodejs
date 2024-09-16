@@ -103,6 +103,7 @@ import userPostRoutes from "./routes/social/userPostRoutes.js";
 
 import chatbotRoutes from "./routes/chatbot/chatbot.routes.js";
 import settingsRoutes from "./routes/settings/settings.routes.js";
+import profileRoutes from "./routes/profile/profile.routes.js";
 
 // * App apis
 app.use("/api/v1/users", userRouter);
@@ -116,8 +117,8 @@ app.use('/api/v1', userRoutes);
 app.use('/api/v1/post', userPostRoutes);
 
 app.use('/api/v1/chatbot', chatbotRoutes);
-
 app.use('/api/v1/settings', settingsRoutes);
+app.use('/api/v1/profile', profileRoutes);
 
 initializeSocketIO(io);
 initializeChatbotSocket(io);

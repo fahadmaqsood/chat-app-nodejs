@@ -5,8 +5,8 @@ const router = express.Router();
 
 // Route for settings
 router.post('/profile', changeProfileSettings);
-router.get('/privacy', updatePrivacySettings);
-router.get('/notifications', updateNotificationSettings);
+router.post('/privacy', updatePrivacySettings);
+router.post('/notifications', updateNotificationSettings);
 
 
 export default router;

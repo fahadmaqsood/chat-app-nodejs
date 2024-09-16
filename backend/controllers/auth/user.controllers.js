@@ -204,7 +204,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // get the user document ignoring the password and refreshToken field
   const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -loginType -forgotPasswordToken -forgotPasswordExpiry"
   );
 
   // TODO: Add more options to make cookie more secure and reliable
