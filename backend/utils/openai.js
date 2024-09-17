@@ -2,7 +2,7 @@
 
 import { OpenAI } from 'openai';
 
-const openai = null;
+let openai = null;
 
 // Function to get chat completion from OpenAI
 export const getChatCompletion = async ({ messages, user_message }) => {
