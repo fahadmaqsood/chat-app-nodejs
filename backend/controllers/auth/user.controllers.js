@@ -126,8 +126,10 @@ const registerUser = asyncHandler(async (req, res) => {
     user.generateTemporaryToken();
 
   // generate access and refresh tokens
+  let accessToken = undefined;
+  let refreshToken = undefined;
   try {
-    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user._id);
+    accessToken, refreshToken = generateAccessAndRefreshTokens(user._id);
     console.log(accessToken, refreshToken);
   } catch (e) {
     console.log(e);
