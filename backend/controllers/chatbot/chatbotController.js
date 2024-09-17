@@ -62,10 +62,16 @@ export const processChatMessage = async ({ userId, message, subject }) => {
     }));
 
     // Get response from OpenAI API
-    const openAIResponse = await getChatCompletion({
-        messages: chatMessages,
-        user_message: message,
-    });
+    let openAIResponse;
+
+    try {
+        openAIResponse = await getChatCompletion({
+            messages: chatMessages,
+            user_message: message,
+        });
+    } catch (e) {
+        return res.status(500).json(new ApiResponse(500, {}, e.message));
+    }
 
     // Save outgoing response
     const outgoingMessage = await ChatBot.create({

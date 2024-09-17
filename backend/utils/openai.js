@@ -1,6 +1,7 @@
 // utils/openai.js
 
 import { OpenAI } from 'openai';
+import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const openai = null;
 
