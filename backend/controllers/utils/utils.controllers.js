@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null, 'public/uploads/images'); // Specify your upload directory
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
+        cb(null, `${Date.now()}-${req.userIdForFileName}-${file.originalname}`);
     }
 });
 
@@ -31,6 +31,12 @@ const uploadImages = async (req, res) => {
             hasNewAccessToken = false;
             newAccessToken = accessToken;
         }
+
+        // Decode access token to get user ID
+        const decodedToken = jwt.decode(newAccessToken);
+        const userId = decodedToken._id;
+
+        req.userIdForFileName = userId;
 
         // Use multer to handle file uploads
         upload(req, res, function (err) {
