@@ -25,7 +25,7 @@ export const getChatCompletion = async ({ messages, user_message }) => {
 
         console.log(response);
 
-        return response.data.choices[0].message.content;
+        return response.choices[0].message.content;
     } catch (error) {
         console.error('Error getting chat completion from OpenAI:', error);
         throw new Error('Error getting chat completion from OpenAI');
