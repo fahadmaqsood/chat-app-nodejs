@@ -95,7 +95,7 @@ export const getPaginatedPayload = (dataArray, page, limit) => {
  * @description returns the file's static path from where the server is serving the static image
  */
 export const getStaticFilePath = (req, fileName) => {
-  return `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  return `${req.protocol}://${req.get("host")}/uploads/images/${fileName}`;
 };
 
 /**
@@ -104,7 +104,7 @@ export const getStaticFilePath = (req, fileName) => {
  * @description returns the file's local path in the file system to assist future removal
  */
 export const getLocalPath = (fileName) => {
-  return `public/images/${fileName}`;
+  return `public/uploads/images/${fileName}`;
 };
 
 /**
