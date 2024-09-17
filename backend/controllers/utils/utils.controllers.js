@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage }).array('images', 10); // Handle up to 10 images
+const upload = multer({ storage }).array('image', 10); // Handle up to 10 images
 
 const uploadImages = async (req, res) => {
     try {
