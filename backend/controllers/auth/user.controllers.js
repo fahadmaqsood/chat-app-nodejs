@@ -129,7 +129,7 @@ const registerUser = asyncHandler(async (req, res) => {
   let accessToken = undefined;
   let refreshToken = undefined;
   try {
-    accessToken, refreshToken = generateAccessAndRefreshTokens(user._id);
+    accessToken, refreshToken = await generateAccessAndRefreshTokens(user._id);
     console.log(accessToken, refreshToken);
   } catch (e) {
     console.log(e);
