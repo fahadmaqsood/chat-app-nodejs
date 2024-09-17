@@ -6,7 +6,7 @@ import { emitSocketEvent } from '../../socket/index.js';
 // import { emitSocketEvent } from "../../socket/chatbot.socket.js"; // Import your socket utility
 import ChatBot from "../../models/chatbot/chatbot.models.js";
 // import { User } from "../../models/auth/user.models.js";
-// import { getChatCompletion } from "../../utils/openai.js"; // Assuming you have an OpenAI utility
+import { getChatCompletion } from "../../utils/openai.js";
 
 // Function to get similar messages for context
 const getSimilarMessages = async (message, subject) => {
@@ -54,13 +54,23 @@ export const processChatMessage = async ({ userId, message, subject }) => {
     // Get similar messages for context
     const similarMessages = await getSimilarMessages(message, subject);
 
-    // Simulating OpenAI API call
-    const openAIResponse = { data: "this is a test response" };
+
+    // Prepare messages for OpenAI API call
+    const chatMessages = similarMessages.map((msg) => ({
+        role: msg.type === 'chatbot' ? 'assistant' : 'user',
+        content: msg.message,
+    }));
+
+    // Get response from OpenAI API
+    const openAIResponse = await getChatCompletion({
+        messages: chatMessages,
+        user_message: message,
+    });
 
     // Save outgoing response
     const outgoingMessage = await ChatBot.create({
         user: new mongoose.Types.ObjectId(userId),
-        message: openAIResponse.data,
+        message: openAIResponse,
         type: 'chatbot',
         subject,
     });
