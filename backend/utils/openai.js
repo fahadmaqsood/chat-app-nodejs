@@ -23,6 +23,8 @@ export const getChatCompletion = async ({ messages, user_message }) => {
             temperature: 0.7, // Adjust as needed
         });
 
+        console.log(response);
+
         return response.data.choices[0].message.content;
     } catch (error) {
         console.error('Error getting chat completion from OpenAI:', error);
