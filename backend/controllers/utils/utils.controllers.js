@@ -32,22 +32,15 @@ const uploadImages = async (req, res) => {
             newAccessToken = accessToken;
         }
 
-        // Validate userId from the request body
-        const { userId } = req.body;
-
-        if (!userId) {
-            return res.status(400).json(new ApiResponse(false, "userId is required"));
-        }
-
         // Use multer to handle file uploads
         upload(req, res, function (err) {
             if (err) {
-                return res.status(500).json(new ApiResponse(false, {}, "Error uploading files"));
+                return res.status(500).json(new ApiResponse(500, {}, "Error uploading files"));
             }
 
             // Check if files were uploaded
             if (!req.files || req.files.length === 0) {
-                return res.status(400).json(new ApiResponse(false, {}, "No files uploaded"));
+                return res.status(400).json(new ApiResponse(400, {}, "No files uploaded"));
             }
 
             // Prepare the response array with file paths and original names

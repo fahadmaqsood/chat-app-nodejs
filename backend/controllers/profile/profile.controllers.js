@@ -27,7 +27,7 @@ const getProfileInfo = async (req, res) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json(new ApiResponse(false, "userId is required"));
+            return res.status(400).json(new ApiResponse(400, "userId is required"));
         }
 
         // Fetch user info from the database using userId
@@ -67,7 +67,7 @@ const getProfilePosts = async (req, res) => {
         const { userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json(new ApiResponse(false, "userId is required"));
+            return res.status(400).json(new ApiResponse(400, "userId is required"));
         }
 
         // Fetch user's posts from the database using userId
