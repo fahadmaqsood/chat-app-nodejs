@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import path from 'path';
 import { ApiResponse } from "../../utils/ApiResponse.js";
