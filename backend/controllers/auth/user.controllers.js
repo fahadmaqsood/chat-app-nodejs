@@ -127,6 +127,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // generate access and refresh tokens
   const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user._id);
+  console.log(accessToken, refreshToken);
 
   /**
    * assign hashedToken and tokenExpiry in DB till user clicks on email verification link
