@@ -35,6 +35,7 @@ const uploadImages = async (req, res) => {
         // Use multer to handle file uploads
         upload(req, res, function (err) {
             if (err) {
+                console.log(err);
                 return res.status(500).json(new ApiResponse(500, {}, "Error uploading files"));
             }
 
