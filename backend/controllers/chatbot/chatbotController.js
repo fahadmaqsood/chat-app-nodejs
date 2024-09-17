@@ -71,7 +71,7 @@ export const processChatMessage = async ({ userId, message, subject }) => {
 
     try {
         openAIResponse = await getChatCompletion({
-            messages: [instructionMessage, chatMessages],
+            messages: [instructionMessage, ...chatMessages],
             user_message: message,
         });
     } catch (e) {
