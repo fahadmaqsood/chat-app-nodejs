@@ -70,7 +70,7 @@ export const processChatMessage = async ({ userId, message, subject }) => {
             user_message: message,
         });
     } catch (e) {
-        return res.status(500).json(new ApiResponse(500, {}, e.message));
+        throw new ApiResponse(500, {}, e.message);
     }
 
     // Save outgoing response
