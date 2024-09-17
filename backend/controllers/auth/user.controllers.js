@@ -125,6 +125,9 @@ const registerUser = asyncHandler(async (req, res) => {
   const { unHashedToken, hashedToken, tokenExpiry } =
     user.generateTemporaryToken();
 
+  // generate access and refresh tokens
+  const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user._id);
+
   /**
    * assign hashedToken and tokenExpiry in DB till user clicks on email verification link
    * The email verification is handled by {@link verifyEmail}
@@ -157,7 +160,7 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user: createdUser },
+        { user: createdUser, accessToken: accessToken, refreshToken: refreshToken },
         "Users registered successfully and verification email has been sent on your email."
       )
     );
