@@ -537,39 +537,86 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
   // Check if user has uploaded an avatar
-  if (!req.file?.filename) {
-    throw new ApiError(400, "Avatar image is required");
+  if (!req.body.premade && !req.body.customAvatar) {
+    throw new ApiError(400, "Neither pre-made nor custom Avatar was provided");
   }
 
-  // get avatar file system url and local path
-  const avatarUrl = getStaticFilePath(req, req.file?.filename);
-  const avatarLocalPath = getLocalPath(req.file?.filename);
+  try {
+    // Extract tokens from headers
+    const accessToken = req.headers['access-token'];
+    const refreshToken = req.headers['refresh-token'];
 
-  const user = await User.findById(req.user._id);
+    // Validate and refresh tokens
+    const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
+    let newAccessToken = tokenResponse?.accessToken;
 
-  let updatedUser = await User.findByIdAndUpdate(
-    req.user._id,
+    let hasNewAccessToken = true;
 
-    {
-      $set: {
-        // set the newly uploaded avatar
-        avatar: {
-          url: avatarUrl,
-          localPath: avatarLocalPath,
-        },
-      },
-    },
-    { new: true }
-  ).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
-  );
+    if (!newAccessToken) {
+      hasNewAccessToken = false;
+      newAccessToken = accessToken;
+    }
 
-  // remove the old avatar
-  removeLocalFile(user.avatar.localPath);
+    // Decode access token to get user ID
+    const decodedToken = jwt.decode(newAccessToken);
+    const userId = decodedToken._id;
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, updatedUser, "Avatar updated successfully"));
+
+    let updateData;
+
+    if (req.body.premade) {
+      // Get the enum values for the premade avatar from the Mongoose schema
+      const validPremadeAvatars = User.schema.path('avatar.premade').enumValues;
+
+      // If premadeAvatar is provided, use the premade avatar
+      if (!validPremadeAvatars.includes(req.body.premade)) {
+        return res.status(400).json(new ApiResponse(400, {}, 'Invalid premade avatar selection.'));
+      }
+
+      updateData = {
+        'avatar.premade': req.body.premade,       // Set premade avatar
+        'avatar.customAvatar.using': false     // Disable custom avatar
+      };
+    } else if (req.body.customAvatar) {
+      let customAvatar = req.body.customAvatar;
+
+      updateData = {
+        'avatar.customAvatar.using': true,     // Enable custom avatar
+        'avatar.customAvatar.top': customAvatar.top || "NoHair",
+        'avatar.customAvatar.accessories': customAvatar.accessories || "Blank",
+        'avatar.customAvatar.hatColor': customAvatar.hatColor || "Black",
+        'avatar.customAvatar.hairColor': customAvatar.hairColor || "Black",
+        'avatar.customAvatar.facialHairType': customAvatar.facialHairType || "Blank",
+        'avatar.customAvatar.facialHairColor': customAvatar.facialHairColor || "Black",
+        'avatar.customAvatar.clotheType': customAvatar.clotheType || "BlazerShirt",
+        'avatar.customAvatar.clotheColor': customAvatar.clotheColor || "Black",
+        'avatar.customAvatar.graphicType': customAvatar.graphicType || "Skull",
+        'avatar.customAvatar.eyeType': customAvatar.eyeType || "Default",
+        'avatar.customAvatar.eyebrowType': customAvatar.eyebrowType || "Default",
+        'avatar.customAvatar.mouthType': customAvatar.mouthType || "Default",
+        'avatar.customAvatar.skinColor': customAvatar.skinColor || "Tanned"
+      };
+    } else {
+      throw new ApiError(400, "Neither pre-made nor custom Avatar was provided");
+    }
+
+
+    let updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true }
+    ).select(
+      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+    );
+
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { user: updatedUser, ...(hasNewAccessToken ? { accessToken: newAccessToken } : {}) }, "Avatar updated successfully"));
+  } catch (error) {
+    console.log(error);
+    res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+  }
 });
 
 // Get Find friends points

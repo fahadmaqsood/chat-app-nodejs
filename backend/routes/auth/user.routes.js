@@ -53,13 +53,13 @@ router
     validate,
     resetForgottenPassword
   );
-  
+
 
 // Secured routes
 router.route("/logout").post(verifyJWT, logoutUser);
 router
-  .route("/avatar")
-  .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
+  .route("/update-avatar")
+  .patch(validate, updateUserAvatar);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 router
   .route("/change-password")
@@ -84,7 +84,7 @@ router
   );
 
 // Get user find friends points
-router.route("/find-friends-points").get(verifyJWT, getUserPoints);  
+router.route("/find-friends-points").get(verifyJWT, getUserPoints);
 
 // SSO routes
 router.route("/google").get(

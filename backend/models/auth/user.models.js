@@ -13,14 +13,28 @@ import {
 const userSchema = new Schema(
   {
     avatar: {
-      type: {
-        url: String,
-        localPath: String,
+      premade: {
+        type: String,
+        enum: ['boy-listening-music-eyes-open', 'girl-eyes-closed', 'boy-with-face-mask', 'bald-boy-in-glasses', 'nerd-girl-in-glasses', 'schoolgirl-with-pony-hair', 'boy-listening-music-eyes-closed', 'angry-guy', 'middle-aged-guy', 'medieval-lord'],
+        default: 'boy-listening-music-eyes-open'
       },
-      default: {
-        url: `https://via.placeholder.com/200x200.png`,
-        localPath: "",
-      },
+
+      customAvatar: {
+        using: { type: Boolean, default: false },
+        top: { type: String, default: "NoHair" },
+        accessories: { type: String, default: "Blank" },
+        hatColor: { type: String, default: "Black" },
+        hairColor: { type: String, default: "Black" },
+        facialHairType: { type: String, default: "Blank" },
+        facialHairColor: { type: String, default: "Black" },
+        clotheType: { type: String, default: "BlazerShirt" },
+        clotheColor: { type: String, default: "Black" },
+        graphicType: { type: String, default: "Skull" },
+        eyeType: { type: String, default: "Default" },
+        eyebrowType: { type: String, default: "Default" },
+        mouthType: { type: String, default: "Default" },
+        skinColor: { type: String, default: "Tanned" },
+      }
     },
     name: {
       type: String,
