@@ -67,7 +67,7 @@ const validateAndRefreshTokens = async (accessToken, refreshToken) => {
       }
     }
   } catch (error) {
-    throw new ApiError(error.status || 500, error.message || "An error occurred");
+    throw new ApiError(error.statusCode || error.status || 500, error.message || "An error occurred");
   }
 };
 
