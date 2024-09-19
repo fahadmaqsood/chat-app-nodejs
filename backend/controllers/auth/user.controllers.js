@@ -612,7 +612,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
     return res
       .status(200)
-      .json(new ApiResponse(200, { user: updatedUser, refreshToken, ...(hasNewAccessToken ? { accessToken: newAccessToken } : {}) }, "Avatar updated successfully"));
+      .json(new ApiResponse(200, { user: updatedUser, refreshToken, ...(hasNewAccessToken ? { accessToken: newAccessToken } : { accessToken }) }, "Avatar updated successfully"));
   } catch (error) {
     console.log(error);
     res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
