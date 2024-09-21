@@ -12,4 +12,5 @@ router.post('/posts', validateTokensMiddleware, getProfilePosts);
 router.post('/follow-user', validateTokensMiddleware, followUser);
 router.post('/unfollow-user', validateTokensMiddleware, unfollowUser);
 
+
 export default router;

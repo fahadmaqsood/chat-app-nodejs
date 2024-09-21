@@ -99,6 +99,9 @@ const userSchema = new Schema(
     },
     followers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     following: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+    closeFriends: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+    closeFriendRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] }, // Store incoming requests
+    sentCloseFriendRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] }, // Outgoing requests
     subscription_type: {
       type: String,
       enum: ['monthly', 'yearly']
