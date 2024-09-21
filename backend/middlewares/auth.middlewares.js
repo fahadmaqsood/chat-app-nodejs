@@ -1,8 +1,11 @@
 import { AvailableUserRoles } from "../constants.js";
 import { User } from "../models/auth/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
+
+import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
   const token =
@@ -84,3 +87,37 @@ export const avoidInProduction = asyncHandler(async (req, res, next) => {
     );
   }
 });
+
+
+export const validateTokensMiddleware = async (req, res, next) => {
+  try {
+    const accessToken = req.headers['access-token'];
+    const refreshToken = req.headers['refresh-token'];
+
+    if (!accessToken || !refreshToken) {
+      return res.status(403).json(new ApiResponse(403, {}, 'Access and refresh tokens are required'));
+    }
+
+    // Validate and refresh tokens
+    const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
+    let newAccessToken = tokenResponse?.accessToken;
+
+    // If new access token is generated, pass it to the next middleware
+    if (newAccessToken) {
+      req.hasNewAccessToken = true;
+      req.headers['access-token'] = newAccessToken; // Attach the new token to the request
+    }
+
+    // Decode access token to get user ID
+    const decodedAccessToken = jwt.decode(newAccessToken || accessToken);
+    const userId = decodedAccessToken._id;
+
+    req.user = {};
+    req.user._id = userId;
+
+    next(); // Proceed to the next middleware/route handler
+  } catch (err) {
+    console.error("Error in validateTokensMiddleware:", err);
+    return res.status(403).json(new ApiResponse(403, {}, 'Invalid or expired tokens'));
+  }
+};

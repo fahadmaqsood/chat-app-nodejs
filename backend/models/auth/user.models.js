@@ -34,7 +34,7 @@ const userSchema = new Schema(
         eyebrowType: { type: String, default: "Default" },
         mouthType: { type: String, default: "Default" },
         skinColor: { type: String, default: "Tanned" },
-      }
+      },
     },
     name: {
       type: String,
@@ -97,6 +97,8 @@ const userSchema = new Schema(
       type: Number,
       default: 10, // Starting with 10 points for new users
     },
+    followers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+    following: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     subscription_type: {
       type: String,
       enum: ['monthly', 'yearly']
@@ -181,7 +183,9 @@ const userSchema = new Schema(
       }
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 userSchema.pre("save", async function (next) {

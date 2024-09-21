@@ -106,6 +106,8 @@ import settingsRoutes from "./routes/settings/settings.routes.js";
 import profileRoutes from "./routes/profile/profile.routes.js";
 import utilsRoutes from "./routes/utils/utils.routes.js";
 
+import homeRoutes from "./routes/home/home.routes.js";
+
 // * App apis
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat-app/chats", chatRouter);
@@ -121,6 +123,8 @@ app.use('/api/v1/chatbot', chatbotRoutes);
 app.use('/api/v1/settings', settingsRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/utils', utilsRoutes);
+
+app.use('/api/v1/home', homeRoutes);
 
 initializeSocketIO(io);
 initializeChatbotSocket(io);
