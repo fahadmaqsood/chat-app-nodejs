@@ -20,6 +20,8 @@ const getSelectiveProfileInfo = async (req, res) => {
         const returnFollowerCount = fields.includes("followerCount");
         const returnFollowingCount = fields.includes("followingCount");
 
+        const returnFollowersDetails = fields.includes("followers");
+        const returnFollowingDetails = fields.includes("following");
 
         // Define sensitive fields that should always be excluded
         const sensitiveFields = ['password', 'refreshToken', 'emailVerificationToken', 'emailVerificationExpiry', 'forgotPasswordToken', 'forgotPasswordExpiry'];
@@ -42,21 +44,18 @@ const getSelectiveProfileInfo = async (req, res) => {
             selectedFields = sensitiveFields.map(field => `-${field}`).join(' ');
         }
 
-        console.log(selectedFields);
-
         // Fetch user info, including the selected fields but excluding sensitive fields
         const user = await User.findById(userId).lean().select(selectedFields);
-
-        console.log(user);
 
 
         if (!user) {
             return res.status(404).json(new ApiResponse(404, {}, "User not found"));
         }
 
-        if (returnFollowerCount || returnFollowingCount) {
+        if (returnFollowerCount || returnFollowingCount || returnFollowersDetails || returnFollowingDetails) {
             // Count followers and following using lengths of the arrays from the original user object
-            const originalUser = await User.findById(userId).lean(); // Fetch original document to access followers/following
+            const originalUser = await User.findById(userId).populate('followers', 'name username avatar').populate('following', 'name username avatar').lean(); // Fetch original document to access followers/following
+
 
             if (returnFollowerCount) {
                 user.followerCount = originalUser.followers ? originalUser.followers.length : 0;
@@ -64,6 +63,13 @@ const getSelectiveProfileInfo = async (req, res) => {
 
             if (returnFollowingCount) {
                 user.followingCount = originalUser.following ? originalUser.following.length : 0;
+            }
+
+            if (returnFollowersDetails) {
+                user.followers = originalUser.followers || [];
+            }
+            if (returnFollowingDetails) {
+                user.following = originalUser.following || [];
             }
         }
 
@@ -147,4 +153,88 @@ const getProfilePosts = async (req, res) => {
     }
 };
 
-export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts };
+const followUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { userId } = req.body; // User ID to follow
+
+        if (!userId) {
+            return res.status(400).json(new ApiResponse(400, "userId is required"));
+        }
+
+        // Check if the current user is trying to follow themselves
+        if (currentUserId.toString() === userId) {
+            return res.status(400).json(new ApiResponse(400, "You cannot follow yourself"));
+        }
+
+        // Fetch the current user and the user to be followed
+        const currentUser = await User.findById(currentUserId);
+        const targetUser = await User.findById(userId);
+
+        if (!targetUser) {
+            return res.status(404).json(new ApiResponse(404, {}, "User to follow not found"));
+        }
+
+        // Check if the current user is already following the target user
+        if (currentUser.following.includes(userId)) {
+            return res.status(400).json(new ApiResponse(400, "You are already following this user"));
+        }
+
+        // Update the following array for the current user
+        currentUser.following.push(userId);
+        await currentUser.save();
+
+        // Update the followers array for the target user
+        targetUser.followers.push(currentUserId);
+        await targetUser.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Successfully followed the user"));
+    } catch (error) {
+        console.error("Error in followUser:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+const unfollowUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { userId } = req.body; // User ID to unfollow
+
+        if (!userId) {
+            return res.status(400).json(new ApiResponse(400, "userId is required"));
+        }
+
+        // Check if the current user is trying to unfollow themselves
+        if (currentUserId.toString() === userId) {
+            return res.status(400).json(new ApiResponse(400, "You cannot unfollow yourself"));
+        }
+
+        // Fetch the current user and the user to be unfollowed
+        const currentUser = await User.findById(currentUserId);
+        const targetUser = await User.findById(userId);
+
+        if (!targetUser) {
+            return res.status(404).json(new ApiResponse(404, {}, "User to unfollow not found"));
+        }
+
+        // Check if the current user is not following the target user
+        if (!currentUser.following.includes(userId)) {
+            return res.status(400).json(new ApiResponse(400, "You are not following this user"));
+        }
+
+        // Update the following array for the current user
+        currentUser.following = currentUser.following.filter(id => id.toString() !== userId);
+        await currentUser.save();
+
+        // Update the followers array for the target user
+        targetUser.followers = targetUser.followers.filter(id => id.toString() !== currentUserId);
+        await targetUser.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Successfully unfollowed the user"));
+    } catch (error) {
+        console.error("Error in unfollowUser:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, followUser, unfollowUser };
