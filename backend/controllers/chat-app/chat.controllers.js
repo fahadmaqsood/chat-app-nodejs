@@ -225,10 +225,23 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   ]);
 
   if (chat.length) {
-    // if we find the chat that means user already has created a chat
+    // Fetch recent messages if the chat exists
+    const recentMessages = await ChatMessage.find({
+      chat: chat[0]._id,
+    })
+      .sort({ createdAt: -1 }) // Sort messages by creation time, newest first
+      .limit(10);               // Limit to the last 10 messages
+
+    console.log(recentMessages);
+    const responsePayload = {
+      chat: chat[0],
+      recentMessages,
+    };
+
+    // Return chat with recent messages
     return res
       .status(200)
-      .json(new ApiResponse(200, chat[0], "Chat retrieved successfully"));
+      .json(new ApiResponse(200, responsePayload, "Chat and recent messages retrieved successfully"));
   }
 
   // if not we need to create a new one on one chat
@@ -253,6 +266,8 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   if (!payload) {
     throw new ApiError(500, "Internal server error");
   }
+
+  payload.recentMessages = [];
 
   // logic to emit socket event about the new chat added to the participants
   payload?.participants?.forEach((participant) => {

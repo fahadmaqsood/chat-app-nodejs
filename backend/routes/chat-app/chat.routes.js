@@ -21,9 +21,12 @@ import {
 import { mongoIdPathVariableValidator } from "../../validators/common/mongodb.validators.js";
 import { validate } from "../../validators/validate.js";
 
+import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
+
+
 const router = Router();
 
-router.use(verifyJWT);
+//router.use(verifyJWT);
 
 router.route("/").get(getAllChats);
 
@@ -36,6 +39,7 @@ router
   .post(
     mongoIdPathVariableValidator("receiverId"),
     validate,
+    validateTokensMiddleware,
     createOrGetAOneOnOneChat
   );
 
