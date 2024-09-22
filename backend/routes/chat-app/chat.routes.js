@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addNewParticipantInGroupChat,
   createAGroupChat,
+  getListOfUserOneOnOneChats,
   createOrGetAOneOnOneChat,
   deleteGroupChat,
   deleteOneOnOneChat,
@@ -33,6 +34,8 @@ router.route("/").get(getAllChats);
 router.route("/users").get(searchAvailableUsers);
 
 router.route("/find-random-friends").get(findMatchingFriends);
+
+router.route("/get-user-chats").post(validateTokensMiddleware, getListOfUserOneOnOneChats);
 
 router
   .route("/c/:receiverId")

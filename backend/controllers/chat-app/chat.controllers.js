@@ -189,6 +189,51 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
 
 
 
+const getListOfUserOneOnOneChats = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // Get the logged-in user's ID
+
+  const chats = await Chat.aggregate([
+    {
+      $match: {
+        isGroupChat: false, // Only one-on-one chats
+        participants: { $elemMatch: { $eq: userId } }, // User must be a participant
+      },
+    },
+    {
+      // Lookup the last message for each chat
+      $lookup: {
+        from: "chatmessages",
+        localField: "_id",
+        foreignField: "chat",
+        as: "lastMessage",
+        pipeline: [
+          {
+            $sort: { createdAt: -1 }, // Sort messages by creation time
+          },
+          {
+            $limit: 1, // Limit to the most recent message regardless of sender
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        lastMessage: { $first: "$lastMessage" }, // Get the most recent message
+      },
+    },
+    {
+      $sort: {
+        "lastMessage.createdAt": -1, // Sort chats by the most recent message
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, chats, "One-on-one chats fetched successfully"));
+});
+
+
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
@@ -712,6 +757,7 @@ const getAllChats = asyncHandler(async (req, res) => {
 export {
   addNewParticipantInGroupChat,
   createAGroupChat,
+  getListOfUserOneOnOneChats,
   createOrGetAOneOnOneChat,
   deleteGroupChat,
   deleteOneOnOneChat,
