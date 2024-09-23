@@ -339,9 +339,11 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     ]);             // Limit to the last 10 messages
 
     console.log(messages);
+
+    chat["recentMessages"] = messages;
+
     const responsePayload = {
-      chat: chat[0],
-      recentMessages: messages,
+      chat: chat[0]
     };
 
     // Return chat with recent messages
@@ -353,8 +355,8 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   // if not we need to create a new one on one chat
   const newChatInstance = await Chat.create({
     name: "One on one chat",
-    participants: [req.user._id, new mongoose.Types.ObjectId(receiverId)], // add receiver and logged in user as participants
-    admin: req.user._id,
+    participants: [new mongoose.Types.ObjectId(req.user._id.toString()), new mongoose.Types.ObjectId(receiverId)], // add receiver and logged in user as participants
+    admin: new mongoose.Types.ObjectId(req.user._id.toString()),
   });
 
   // structure the chat as per the common aggregation to keep the consistency
@@ -367,13 +369,13 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     ...chatCommonAggregation(),
   ]);
 
-  const payload = createdChat[0]; // store the aggregation result
+  const payload = { chat: createdChat[0] }; // store the aggregation result
 
   if (!payload) {
     throw new ApiError(500, "Internal server error");
   }
 
-  payload.recentMessages = [];
+  payload["chat"]["recentMessages"] = [];
 
   // logic to emit socket event about the new chat added to the participants
   payload?.participants?.forEach((participant) => {
