@@ -324,10 +324,9 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     let messages = await ChatMessage.aggregate([
       {
         $match: {
-          chat: new mongoose.Types.ObjectId(chat[0]._id),
+          chat: new mongoose.Types.ObjectId(chat[0]._id.toString()),
         },
       },
-      ...chatMessageCommonAggregation(), // Apply the common aggregation pipeline
       {
         $sort: {
           createdAt: -1, // Sort by creation time, newest first
@@ -340,7 +339,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
 
     console.log(messages);
 
-    chat["recentMessages"] = messages;
+    chat[0]["recentMessages"] = messages;
 
     const responsePayload = {
       chat: chat[0]
