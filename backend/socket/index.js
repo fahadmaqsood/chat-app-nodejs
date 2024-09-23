@@ -46,24 +46,25 @@ const mountParticipantStoppedTypingEvent = (socket) => {
 const initializeSocketIO = (io) => {
   return io.on("connection", async (socket) => {
     try {
-      // parse the cookies from the handshake headers (This is only possible if client has `withCredentials: true`)
-      const cookies = cookie.parse(socket.handshake.headers?.cookie || "");
 
-      let token = cookies?.accessToken; // get the accessToken
+      // If there is no access token in cookies. Check inside the handshake auth
+      let accessToken = socket.handshake.auth?.accessToken;
+      let refreshToken = socket.handshake.auth?.refreshToken;
 
-      if (!token) {
-        // If there is no access token in cookies. Check inside the handshake auth
-        token = socket.handshake.auth?.token;
-      }
 
-      if (!token) {
+      if (!accessToken || !refreshToken) {
         // Token is required for the socket to work
-        throw new ApiError(401, "Un-authorized handshake. Token is missing");
+        throw new ApiError(401, "Un-authorized handshake. Token(s) are missing");
       }
 
-      const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // decode the token
+      const tokenResponse = await validateAndRefreshTokens(accessToken, refreshToken);
+      let newAccessToken = tokenResponse?.accessToken;
 
-      const user = await User.findById(decodedToken?._id).select(
+      // Decode access token to get user ID
+      const decodedToken = jwt.decode(newAccessToken || accessToken);
+      const userId = decodedToken._id;
+
+      const user = await User.findById(userId).select(
         "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
       );
 
@@ -71,7 +72,7 @@ const initializeSocketIO = (io) => {
       if (!user) {
         throw new ApiError(401, "Un-authorized handshake. Token is invalid");
       }
-      socket.user = user; // mount te user object to the socket
+      socket.user = user; // mount the user object to the socket
 
       // We are creating a room with user id so that if user is joined but does not have any active chat going on.
       // still we want to emit some socket events to the user.
@@ -92,6 +93,7 @@ const initializeSocketIO = (io) => {
         }
       });
     } catch (error) {
+      console.log(error);
       socket.emit(
         ChatEventEnum.SOCKET_ERROR_EVENT,
         error?.message || "Something went wrong while connecting to the socket."
