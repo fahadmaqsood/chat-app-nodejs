@@ -232,4 +232,4 @@ const deleteMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, message, "Message deleted successfully"));
 });
 
-export { getAllMessages, sendMessage, deleteMessage };
+export { chatMessageCommonAggregation, getAllMessages, sendMessage, deleteMessage };

@@ -9,6 +9,8 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { removeLocalFile, calculateAge } from "../../utils/helpers.js";
 
+import { chatMessageCommonAggregation } from '../../controllers/chat-app/message.controllers.js';
+
 /**
  * @description Utility function which returns the pipeline stages to structure the chat schema with common lookups
  * @returns {mongoose.PipelineStage[]}
@@ -318,17 +320,28 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   ]);
 
   if (chat.length) {
-    // Fetch recent messages if the chat exists
-    const recentMessages = await ChatMessage.find({
-      chat: chat[0]._id,
-    })
-      .sort({ createdAt: -1 }) // Sort messages by creation time, newest first
-      .limit(10);               // Limit to the last 10 messages
+    // Use aggregation pipeline to fetch messages
+    let messages = await ChatMessage.aggregate([
+      {
+        $match: {
+          chat: new mongoose.Types.ObjectId(chatId),
+        },
+      },
+      ...chatMessageCommonAggregation(), // Apply the common aggregation pipeline
+      {
+        $sort: {
+          createdAt: -1, // Sort by creation time, newest first
+        },
+      },
+      {
+        $limit: 10, // Limit to the last 10 messages
+      },
+    ]);             // Limit to the last 10 messages
 
-    console.log(recentMessages);
+    console.log(messages);
     const responsePayload = {
       chat: chat[0],
-      recentMessages,
+      messages,
     };
 
     // Return chat with recent messages
