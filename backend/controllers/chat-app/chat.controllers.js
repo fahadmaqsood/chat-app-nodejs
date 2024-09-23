@@ -287,6 +287,9 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
+  console.log(receiverId);
+  console.log(req.user._id.toString());
+
   // Check if it's a valid receiver
   const receiver = await User.findById(receiverId);
 
@@ -302,22 +305,19 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const chat = await Chat.aggregate([
     {
       $match: {
-        isGroupChat: false, // avoid group chats. This controller is responsible for one on one chats
-        // Also, filter chats with participants having receiver and logged in user only
-        $and: [
-          {
-            participants: { $elemMatch: { $eq: req.user._id } },
-          },
-          {
-            participants: {
-              $elemMatch: { $eq: new mongoose.Types.ObjectId(receiverId) },
-            },
-          },
-        ],
+        isGroupChat: false, // Ensure it's a one-on-one chat (not a group chat)
+        participants: {
+          $all: [  // Use $all to ensure both participants are in the chat
+            new mongoose.Types.ObjectId(req.user._id.toString()),  // Current user
+            new mongoose.Types.ObjectId(receiverId.toString()),  // Receiver
+          ],
+        },
       },
     },
     ...chatCommonAggregation(),
   ]);
+
+  console.log(chat.length);
 
   if (chat.length) {
     // Use aggregation pipeline to fetch messages
@@ -341,7 +341,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     console.log(messages);
     const responsePayload = {
       chat: chat[0],
-      messages,
+      recentMessages: messages,
     };
 
     // Return chat with recent messages
