@@ -189,13 +189,12 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
 
 
 
-const getListOfUserOneOnOneChats = asyncHandler(async (req, res) => {
+const getListOfUserChats = asyncHandler(async (req, res) => {
   const userId = req.user._id; // Get the logged-in user's ID
 
   const chats = await Chat.aggregate([
     {
       $match: {
-        isGroupChat: false, // Only one-on-one chats
         participants: { $elemMatch: { $eq: userId } }, // User must be a participant
       },
     },
@@ -219,6 +218,54 @@ const getListOfUserOneOnOneChats = asyncHandler(async (req, res) => {
     {
       $addFields: {
         lastMessage: { $first: "$lastMessage" }, // Get the most recent message
+        numberOfParticipants: { $size: "$participants" }, // Add the number of participants
+      },
+    },
+    {
+      // Lookup participant details from the 'users' collection
+      $lookup: {
+        from: "users", // Assuming 'users' is the user collection
+        localField: "participants",
+        foreignField: "_id", // Match user IDs in participants array
+        as: "participantDetails",
+      },
+    },
+    {
+      $addFields: {
+        participantDetails: {
+          $cond: {
+            if: { $eq: ["$isGroupChat", false] }, // Only include participant details if it's not a group chat
+            then: {
+              $filter: {
+                input: "$participantDetails",
+                as: "participant",
+                cond: { $ne: ["$$participant._id", userId] }, // Exclude the current user
+              },
+            },
+            else: "$participantDetails", // Keep details for group chats
+          },
+        },
+      },
+    },
+    {
+      // Optional: project only the needed fields
+      $project: {
+        _id: 1,
+        isGroupChat: 1,
+        lastMessage: 1,
+        numberOfParticipants: 1,
+        participantDetails: {
+          $map: {
+            input: "$participantDetails",
+            as: "participant",
+            in: {
+              _id: "$$participant._id",
+              name: "$$participant.name",
+              username: "$$participant.username",
+              avatar: "$$participant.avatar",
+            },
+          },
+        },
       },
     },
     {
@@ -230,8 +277,9 @@ const getListOfUserOneOnOneChats = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, chats, "One-on-one chats fetched successfully"));
+    .json(new ApiResponse(200, chats, "Chats fetched successfully"));
 });
+
 
 
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
@@ -757,7 +805,7 @@ const getAllChats = asyncHandler(async (req, res) => {
 export {
   addNewParticipantInGroupChat,
   createAGroupChat,
-  getListOfUserOneOnOneChats,
+  getListOfUserChats,
   createOrGetAOneOnOneChat,
   deleteGroupChat,
   deleteOneOnOneChat,
