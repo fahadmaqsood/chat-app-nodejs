@@ -5,7 +5,7 @@ import { AvailableChatEvents, ChatEventEnum } from "../constants.js";
 import { User } from "../models/auth/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 
-import { validateAndRefreshTokens } from "../middlewares/auth.middlewares.js";
+import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
 
 /**
  * @description This function is responsible to allow user to join the chat represented by chatId (chatId). event happens when user switches between the chats
