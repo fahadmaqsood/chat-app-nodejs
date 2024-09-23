@@ -324,7 +324,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     let messages = await ChatMessage.aggregate([
       {
         $match: {
-          chat: new mongoose.Types.ObjectId(chatId),
+          chat: new mongoose.Types.ObjectId(chat[0]._id),
         },
       },
       ...chatMessageCommonAggregation(), // Apply the common aggregation pipeline
