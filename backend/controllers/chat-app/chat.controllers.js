@@ -255,6 +255,7 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
         _id: 1,
         isGroupChat: 1,
         lastMessage: 1,
+        name: 1,
         numberOfParticipants: 1,
         participantDetails: {
           $map: {
