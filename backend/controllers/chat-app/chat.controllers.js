@@ -197,7 +197,7 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
   const chats = await Chat.aggregate([
     {
       $match: {
-        participants: { $elemMatch: { $eq: userId } }, // User must be a participant
+        participants: { $elemMatch: { $eq: new mongoose.Types.ObjectId(userId.toString()) } }, // User must be a participant
       },
     },
     {
