@@ -45,6 +45,9 @@ const chatMessageCommonAggregation = () => {
 
 const getAllMessages = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
+  const { limit, skip } = req.query;
+
+  console.log(req.params, req.query);
 
   const selectedChat = await Chat.findById(chatId);
 
@@ -69,7 +72,10 @@ const getAllMessages = asyncHandler(async (req, res) => {
         createdAt: -1,
       },
     },
-  ]);
+  ])
+    .skip(Number(skip || 0))
+    .limit(Number(limit || 25))
+    .sort({ createdAt: 1 }).exec();
 
   return res
     .status(200)

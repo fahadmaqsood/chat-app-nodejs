@@ -288,8 +288,6 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
-  const { recentMessagesLimit, recentMessagesSkip } = req.body;
-
   console.log(receiverId);
   console.log(req.user._id.toString());
 
@@ -335,10 +333,10 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
           createdAt: -1, // Sort by creation time, newest first
         },
       },
-    ])
-      .skip(Number(recentMessagesSkip || 0))
-      .limit(Number(recentMessagesLimit || 25))
-      .sort({ createdAt: 1 }).exec();
+      {
+        $limit: 20, // Limit to the last 20 messages
+      },
+    ]).sort({ createdAt: 1 }).exec();             // Limit to the last 10 messages
 
     console.log(messages);
 
