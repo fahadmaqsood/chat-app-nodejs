@@ -336,7 +336,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
       {
         $limit: 20, // Limit to the last 20 messages
       },
-    ]).sort({ createdAt: 1 }).exec();             // Limit to the last 10 messages
+    ]).sort({ createdAt: 1 }).exec();
 
     console.log(messages);
 

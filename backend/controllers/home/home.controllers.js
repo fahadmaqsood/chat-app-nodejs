@@ -9,33 +9,26 @@ export const searchUsers = async (req, res) => {
         const hasNewAccessToken = req.hasNewAccessToken;
 
         // Get search fields from request body
-        const { name, username, email, phone } = req.body;
+        const { searchText } = req.body;
 
         // Check if at least one search field is provided
-        if (!name && !username && !email && !phone) {
+        if (!searchText) {
             return res.status(400).json(new ApiResponse(400, "Nothing was provided to search"));
         }
 
         // Build the search criteria based on the provided fields
-        const searchCriteria = { _id: { $ne: req.user._id } }; // Avoid logged-in user
-
-        if (name) {
-            searchCriteria.name = { $regex: new RegExp(name, 'i') }; // Case-insensitive regex search
-        }
-        if (username) {
-            searchCriteria.username = { $regex: new RegExp(username, 'i') };
-        }
-        if (email) {
-            searchCriteria.email = { $regex: new RegExp(email, 'i') };
-        }
-        if (phone) {
-            searchCriteria.phone = { $regex: new RegExp(phone, 'i') };
-        }
+        const searchCriteria = [
+            { name: { $regex: new RegExp(searchText, 'i') } }, // Case-insensitive regex search
+            { username: { $regex: new RegExp(searchText, 'i') } },
+            { email: { $regex: new RegExp(searchText, 'i') } },
+        ];
 
         // Perform the aggregation query
         const users = await User.aggregate([
             {
-                $match: searchCriteria, // Match users based on search criteria
+                $match: {
+                    $or: searchCriteria, // Match users based on search criteria
+                },
             },
             {
                 $project: {
