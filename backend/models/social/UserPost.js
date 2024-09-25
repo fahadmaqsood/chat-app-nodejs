@@ -15,7 +15,7 @@ const userPostSchema = new mongoose.Schema({
     attachments: [{  // Array of URLs for attachments
         type: String
     }],
-    mood_status: {
+    mood: {
         type: String
     },
     topics: [{  // Array of references to related topics

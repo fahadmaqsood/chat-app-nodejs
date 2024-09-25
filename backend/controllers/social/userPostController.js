@@ -48,7 +48,7 @@ const topicRetrievalInstructionMsg = (topics, text) => {
 
 
 export const createUserPost = async (req, res) => {
-    let { content, attachments, mood_status, poll } = req.body;
+    let { content, attachments, mood, poll } = req.body;
 
     const user_id = req.user._id;
 
@@ -89,8 +89,8 @@ export const createUserPost = async (req, res) => {
         console.log("topic ids", topicIds);
 
 
-        if (!mood_status || mood_status == "") {
-            mood_status = _sentimentAnalysis.performAnalysis(content)["category"].toLowerCase();
+        if (!mood || mood == "") {
+            mood = _sentimentAnalysis.performAnalysis(content)["category"].toLowerCase();
         }
 
 
@@ -110,21 +110,21 @@ export const createUserPost = async (req, res) => {
             user_id: user_id,
             content: content,
             attachments: attachments,
-            mood_status: mood_status,
+            mood: mood,
             topics: topicIds, // Add references to related topics
             poll: pollData
         });
 
         const savedPost = await newPost.save();
 
-        res.status(201).json(ApiResponse(201, savedPost, "Post created successfully"));
+        res.status(201).json(new ApiResponse(201, savedPost, "Post created successfully"));
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
     }
 };
 
 export const getPosts = async (req, res) => {
-    const { mood, start_from = 0 } = req.query;
+    const { mood, topics, start_from = 0 } = req.query;
     const limit = 10;
 
     try {
@@ -133,20 +133,42 @@ export const getPosts = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Mood is required' });
         }
 
-        const users = await User.find({ mood }).select('_id');
-        if (users.length === 0) {
-            return res.status(404).json({ success: false, message: 'No users found with the specified mood' });
+        // Create a base query object
+        const query = { mood_status: mood }; // Filter by mood_status
+
+
+
+        if (topics) {
+            const allTopics = await getCachedTopicNames();
+            console.log(allTopics);
+            const topicNames = allTopics.map(topic => topic.name);
+            console.log(topicNames);
+
+            // Check if topics is provided and is an array
+            if (topics && Array.isArray(topics)) {
+                query.topics = { $in: topics }; // Filter by specific topics if provided
+            }
         }
-
-        const userIds = users.map(user => user._id);
-
-        const posts = await UserPost.find({ user_id: { $in: userIds } })
+        const posts = await UserPost.find(query)
+            .populate({
+                path: 'user_id', // The field to populate
+                select: 'avatar username name email privacySettings' // Fields to select from the User model
+            })
             .sort({ created_at: -1 })
             .skip(parseInt(start_from))
             .limit(limit);
 
-        res.status(200).json({ success: true, posts });
+
+        const formattedPosts = posts.map(post => {
+            const postObject = post.toObject();
+            postObject.user = postObject.user_id; // Add user info under user key
+            delete postObject.user_id; // Remove user_id field
+            return postObject;
+        });
+
+
+        res.status(200).json(new ApiResponse(200, formattedPosts));
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Server error', error: err.message });
+        res.status(500).json(new ApiResponse(500, {}, err.message));
     }
 };
