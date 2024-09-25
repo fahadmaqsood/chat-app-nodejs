@@ -134,7 +134,7 @@ export const getPosts = async (req, res) => {
         }
 
         // Create a base query object
-        const query = { mood_status: mood }; // Filter by mood_status
+        const query = { mood: mood }; // Filter by mood_status
 
 
 
@@ -153,6 +153,10 @@ export const getPosts = async (req, res) => {
             .populate({
                 path: 'user_id', // The field to populate
                 select: 'avatar username name email privacySettings' // Fields to select from the User model
+            })
+            .populate({
+                path: 'topics', // The field to populate
+                select: 'name description' // Fields to select from the User model
             })
             .sort({ created_at: -1 })
             .skip(parseInt(start_from))
