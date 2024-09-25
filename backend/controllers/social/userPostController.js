@@ -149,7 +149,7 @@ export const getPosts = async (req, res) => {
                 query.topics = { $in: topics }; // Filter by specific topics if provided
             }
         }
-        const posts = await UserPost.find(query)
+        let posts = await UserPost.find(query)
             .populate({
                 path: 'user_id', // The field to populate
                 select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
@@ -162,6 +162,46 @@ export const getPosts = async (req, res) => {
             .skip(parseInt(start_from))
             .limit(limit);
 
+
+        // If we have fewer posts than requested, try to fill in with related moods
+        if (posts.length < limit) {
+            const currentMoodScore = _sentimentAnalysis.moodScores[mood] || 0;
+            const moodKeys = Object.keys(_sentimentAnalysis.moodScores);
+            let relatedMoods = [];
+
+            // Find related moods based on proximity
+            for (let i = 0; i < moodKeys.length; i++) {
+                const moodKey = moodKeys[i];
+                const moodScore = _sentimentAnalysis.moodScores[moodKey];
+
+                // Check if the mood is within 20 points (you can adjust this threshold)
+                if (Math.abs(currentMoodScore - moodScore) <= 20) {
+                    relatedMoods.push(moodKey);
+                }
+            }
+
+            // Fetch additional posts from related moods if needed
+            while (posts.length < limit && relatedMoods.length > 0) {
+                const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
+                const additionalPosts = await UserPost.find({ mood: randomMood })
+                    .populate({
+                        path: 'user_id',
+                        select: 'avatar username name email privacySettings notificationSettings'
+                    })
+                    .populate({
+                        path: 'topics',
+                        select: 'name description'
+                    })
+                    .sort({ created_at: -1 })
+                    .limit(limit - posts.length); // Limit to what is needed
+
+
+                posts = posts.concat(additionalPosts);
+
+                // Remove the used mood from the relatedMoods array
+                relatedMoods.pop(randomMood);
+            }
+        }
 
         const formattedPosts = posts.map(post => {
             const postObject = post.toObject();
