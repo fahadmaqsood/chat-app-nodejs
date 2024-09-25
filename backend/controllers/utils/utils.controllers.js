@@ -4,6 +4,10 @@ import path from 'path';
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
+import { SentimentAnalysis } from "./SentimentAnalysis.js";
+
+const _sentimentAnalysis = new SentimentAnalysis();
+
 // Multer setup for image storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -67,4 +71,20 @@ const uploadImages = async (req, res) => {
     }
 };
 
-export { uploadImages };
+
+const sentimentAnalysis = async (req, res) => {
+
+    if (req.body.text) {
+
+        const response = _sentimentAnalysis.performAnalysis(req.body.text);
+
+
+        return res
+            .status(200)
+            .json(new ApiResponse(200, { category: response.category }, "Performed Sentiment Analysis Successfully"));
+    } else {
+        return res.status(500).json(new ApiResponse(500, {}, "No text was provided"));
+    }
+};
+
+export { uploadImages, sentimentAnalysis };

@@ -3,11 +3,13 @@ import { createUserPost, getPosts } from '../../controllers/social/userPostContr
 import { likePost, getLikes } from '../../controllers/social/userLikeController.js';
 import { createComment, getComments } from '../../controllers/social/usercommentController.js';
 
+import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
+
 const router = express.Router();
 
 // Route to create a new post
-router.post('/create-post', createUserPost);
-router.get('/get/posts', getPosts);
+router.post('/create-post', validateTokensMiddleware, createUserPost);
+router.get('/get/posts', validateTokensMiddleware, getPosts);
 
 // Route to like a post
 router.post('/like-post', likePost);

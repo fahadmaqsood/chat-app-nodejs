@@ -8,7 +8,8 @@ export let dbInstance = undefined;
 const connectDB = async () => {
   try {
     const connectionInstance = await mongoose.connect(process.env.MONGODB_URI, {
-      tls: true // Ensure SSL/TLS is enabled
+      tls: true, // Ensure SSL/TLS is enabled
+      serverSelectionTimeoutMS: 30000
     });
     dbInstance = connectionInstance;
     logger.info(
