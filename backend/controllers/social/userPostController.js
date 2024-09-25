@@ -152,7 +152,7 @@ export const getPosts = async (req, res) => {
         const posts = await UserPost.find(query)
             .populate({
                 path: 'user_id', // The field to populate
-                select: 'avatar username name email privacySettings' // Fields to select from the User model
+                select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
             })
             .populate({
                 path: 'topics', // The field to populate
