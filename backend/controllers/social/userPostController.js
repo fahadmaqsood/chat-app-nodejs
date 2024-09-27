@@ -183,7 +183,9 @@ export const getPosts = async (req, res) => {
             // Fetch additional posts from related moods if needed
             while (posts.length < limit && relatedMoods.length > 0) {
                 const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
-                const additionalPosts = await UserPost.find({ mood: randomMood })
+                query.mood = randomMood;
+
+                const additionalPosts = await UserPost.find(query)
                     .populate({
                         path: 'user_id',
                         select: 'avatar username name email privacySettings notificationSettings'

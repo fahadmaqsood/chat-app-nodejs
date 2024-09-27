@@ -159,12 +159,12 @@ const followUser = async (req, res) => {
         const { userId } = req.body; // User ID to follow
 
         if (!userId) {
-            return res.status(400).json(new ApiResponse(400, "userId is required"));
+            return res.status(400).json(new ApiResponse(400, {}, "userId is required"));
         }
 
         // Check if the current user is trying to follow themselves
         if (currentUserId.toString() === userId) {
-            return res.status(400).json(new ApiResponse(400, "You cannot follow yourself"));
+            return res.status(400).json(new ApiResponse(400, {}, "You cannot follow yourself"));
         }
 
         // Fetch the current user and the user to be followed
@@ -177,7 +177,7 @@ const followUser = async (req, res) => {
 
         // Check if the current user is already following the target user
         if (currentUser.following.includes(userId)) {
-            return res.status(400).json(new ApiResponse(400, "You are already following this user"));
+            return res.status(400).json(new ApiResponse(400, {}, "You are already following this user"));
         }
 
         // Update the following array for the current user
@@ -201,12 +201,12 @@ const unfollowUser = async (req, res) => {
         const { userId } = req.body; // User ID to unfollow
 
         if (!userId) {
-            return res.status(400).json(new ApiResponse(400, "userId is required"));
+            return res.status(400).json(new ApiResponse(400, {}, "userId is required"));
         }
 
         // Check if the current user is trying to unfollow themselves
         if (currentUserId.toString() === userId) {
-            return res.status(400).json(new ApiResponse(400, "You cannot unfollow yourself"));
+            return res.status(400).json(new ApiResponse(400, {}, "You cannot unfollow yourself"));
         }
 
         // Fetch the current user and the user to be unfollowed
@@ -219,7 +219,7 @@ const unfollowUser = async (req, res) => {
 
         // Check if the current user is not following the target user
         if (!currentUser.following.includes(userId)) {
-            return res.status(400).json(new ApiResponse(400, "You are not following this user"));
+            return res.status(400).json(new ApiResponse(400, {}, "You are not following this user"));
         }
 
         // Update the following array for the current user
