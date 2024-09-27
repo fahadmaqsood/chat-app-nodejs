@@ -2,6 +2,7 @@ import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
 import UserPost from '../../models/social/UserPost.js';
+import mongoose from "mongoose";
 
 
 const getSelectiveProfileInfo = async (req, res) => {
@@ -108,6 +109,10 @@ const getProfileInfo = async (req, res) => {
         // Count followers and following using lengths of the arrays from the original user object
         user.followerCount = user.followers ? user.followers.length : 0;
         user.followingCount = user.following ? user.following.length : 0;
+
+        user.isFollowingTheUser = user.following.map(id => id.toString()).includes(req.user._id.toString());
+        user.isUserFollowingHim = user.followers.map(id => id.toString()).includes(req.user._id.toString());
+
 
         delete user.followers;
         delete user.following;
