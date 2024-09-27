@@ -47,8 +47,8 @@ router
   );
 
 router
-  .route("/group")
-  .post(createAGroupChatValidator(), validate, createAGroupChat);
+  .route("/create-group")
+  .post(validateTokensMiddleware, createAGroupChatValidator(), validate, createAGroupChat);
 
 router
   .route("/group/:chatId")
