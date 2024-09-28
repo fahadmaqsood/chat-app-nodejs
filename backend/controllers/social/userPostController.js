@@ -126,6 +126,41 @@ export const createUserPost = async (req, res) => {
     }
 };
 
+export const voteInPoll = async (req, res) => {
+    const { postId, optionId } = req.body; // Get postId and optionId from the request body
+    const userId = req.user._id; // Get user ID from the authenticated user
+
+    try {
+        // Find the post by its ID
+        const post = await UserPost.findById(postId);
+        if (!post) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        // Find the poll option that corresponds to the given optionId
+        const option = post.poll.options.id(optionId);
+        if (!option) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Poll option not found'));
+        }
+
+        // Check if the user has already voted
+        if (option.votedBy.includes(userId)) {
+            return res.status(400).json(new ApiResponse(400, {}, 'User has already voted for this option'));
+        }
+
+        // Add the user ID to the votedBy array of the selected option
+        option.votedBy.push(userId);
+
+        // Save the updated post
+        const savedPost = await post.save();
+
+        return res.status(200).json(new ApiResponse(200, savedPost, 'Vote recorded successfully'));
+    } catch (err) {
+        return res.status(500).json(new ApiResponse(500, {}, 'Server error', err.message));
+    }
+};
+
+
 export const getPosts = async (req, res) => {
     const { mood, topics, start_from = 0 } = req.query;
     const limit = 10;
@@ -196,12 +231,14 @@ export const getPosts = async (req, res) => {
                 }
             }
 
-            let relatedMoods = relevantMoods;
-
             // Fetch additional posts from related moods if needed
-            while (posts.length < limit && relatedMoods.length > 0) {
-                const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
-                query.mood = randomMood;
+
+            while (posts.length < limit && relevantMoods.length > 0) {
+                // const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
+                // query.mood = randomMood;
+
+                query.mood = relevantMoods[0];
+
 
                 const additionalPosts = await UserPost.find(query)
                     .populate({
@@ -218,8 +255,10 @@ export const getPosts = async (req, res) => {
 
                 posts = posts.concat(additionalPosts);
 
+
+
                 // Remove the used mood from the relatedMoods array
-                relatedMoods.pop(randomMood);
+                relevantMoods.splice(relevantMoods.indexOf(query.mood), 1);
             }
         }
 
@@ -241,6 +280,18 @@ export const getPosts = async (req, res) => {
             postObject.numComments = numComments; // Add numComments to the post object
 
             postObject.hasUserLiked = !!hasUserLiked;
+
+            // handling polls
+            if (post.poll && Array.isArray(post.poll.options)) {
+                postObject.poll.options = post.poll.options.map((option) => {
+                    return {
+                        _id: option._id,
+                        option: option.option,
+                        numVotes: option.votedBy.length,
+                        isVotedByUser: option.votedBy.includes(req.user._id)
+                    };
+                });
+            }
 
             return postObject;
         });
