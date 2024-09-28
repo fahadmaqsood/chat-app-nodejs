@@ -187,7 +187,7 @@ const getProfilePosts = async (req, res) => {
 
         return res
             .status(200)
-            .json(new ApiResponse(200, { formattedPosts, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Profile posts fetched successfully"));
+            .json(new ApiResponse(200, { posts: formattedPosts, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Profile posts fetched successfully"));
     } catch (error) {
         console.error("Error in getProfilePosts:", error);
         return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
