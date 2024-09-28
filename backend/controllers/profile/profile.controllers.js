@@ -149,9 +149,45 @@ const getProfilePosts = async (req, res) => {
             return res.status(404).json(new ApiResponse(404, {}, "No posts found for this user"));
         }
 
+        // Prepare the response with numLikes and numComments
+        const postPromises = posts.map(async (post) => {
+            const postObject = post.toObject();
+            postObject.user = postObject.user_id; // Add user info under user key
+            delete postObject.user_id; // Remove user_id field
+
+            // Count likes and comments
+            const numLikes = await PostLike.countDocuments({ post_id: post._id });
+            const numComments = await UserComment.countDocuments({ post_id: post._id });
+
+
+            const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
+
+            postObject.numLikes = numLikes; // Add numLikes to the post object
+            postObject.numComments = numComments; // Add numComments to the post object
+
+            postObject.hasUserLiked = !!hasUserLiked;
+
+            // handling polls
+            if (post.poll && Array.isArray(post.poll.options)) {
+                postObject.poll.options = post.poll.options.map((option) => {
+                    return {
+                        _id: option._id,
+                        option: option.option,
+                        numVotes: option.votedBy.length,
+                        isVotedByUser: option.votedBy.includes(req.user._id)
+                    };
+                });
+            }
+
+            return postObject;
+        });
+
+
+        const formattedPosts = await Promise.all(postPromises);
+
         return res
             .status(200)
-            .json(new ApiResponse(200, { posts, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Profile posts fetched successfully"));
+            .json(new ApiResponse(200, { formattedPosts, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Profile posts fetched successfully"));
     } catch (error) {
         console.error("Error in getProfilePosts:", error);
         return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
