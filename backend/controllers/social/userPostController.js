@@ -1,5 +1,8 @@
 import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
+import PostLike from '../../models/social/PostLikes.js';
+import UserComment from '../../models/social/UserComment.js';
+
 import { PostTopics, getAllTopicNames } from '../../models/social/PostTopics.js';
 import { getChatCompletion } from "../../utils/openai.js";
 
@@ -165,20 +168,35 @@ export const getPosts = async (req, res) => {
 
         // If we have fewer posts than requested, try to fill in with related moods
         if (posts.length < limit) {
-            const currentMoodScore = _sentimentAnalysis.moodScores[mood] || 0;
+            const currentMoodScore = _sentimentAnalysis.moodScores[mood] ?? 61;
             const moodKeys = Object.keys(_sentimentAnalysis.moodScores);
-            let relatedMoods = [];
+            const moodScores = Object.values(_sentimentAnalysis.moodScores);
 
-            // Find related moods based on proximity
-            for (let i = 0; i < moodKeys.length; i++) {
-                const moodKey = moodKeys[i];
-                const moodScore = _sentimentAnalysis.moodScores[moodKey];
+            // Find the index of the current mood score
+            const currentMoodIndex = moodScores.findIndex(score => score === currentMoodScore);
 
-                // Check if the mood is within 20 points (you can adjust this threshold)
-                if (Math.abs(currentMoodScore - moodScore) <= 20) {
-                    relatedMoods.push(moodKey);
+            let relevantMoods = [];
+
+            // Collect relevant moods, prioritizing right neighbors first
+            let leftIndex = currentMoodIndex + 1; // Start from the right neighbor
+            let rightIndex = currentMoodIndex - 1; // Then check the left neighbor
+
+            // Keep fetching until we have enough relevant moods
+            while (relevantMoods.length < moodKeys.length && (leftIndex < moodScores.length || rightIndex >= 0)) {
+                // First try to get from the right side (higher scores)
+                if (leftIndex < moodScores.length) {
+                    relevantMoods.push(moodKeys[leftIndex]);
+                    leftIndex++;
+                }
+
+                // Then check the left side (lower scores)
+                if (rightIndex >= 0 && relevantMoods.length < limit) {
+                    relevantMoods.push(moodKeys[rightIndex]);
+                    rightIndex--;
                 }
             }
+
+            let relatedMoods = relevantMoods;
 
             // Fetch additional posts from related moods if needed
             while (posts.length < limit && relatedMoods.length > 0) {
@@ -205,12 +223,36 @@ export const getPosts = async (req, res) => {
             }
         }
 
-        const formattedPosts = posts.map(post => {
+
+        // Prepare the response with numLikes and numComments
+        const postPromises = posts.map(async (post) => {
             const postObject = post.toObject();
             postObject.user = postObject.user_id; // Add user info under user key
             delete postObject.user_id; // Remove user_id field
+
+            // Count likes and comments
+            const numLikes = await PostLike.countDocuments({ post_id: post._id });
+            const numComments = await UserComment.countDocuments({ post_id: post._id });
+
+
+            const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
+
+            postObject.numLikes = numLikes; // Add numLikes to the post object
+            postObject.numComments = numComments; // Add numComments to the post object
+
+            postObject.hasUserLiked = !!hasUserLiked;
+
             return postObject;
         });
+
+        // const formattedPosts = posts.map(post => {
+        //     const postObject = post.toObject();
+        //     postObject.user = postObject.user_id; // Add user info under user key
+        //     delete postObject.user_id; // Remove user_id field
+        //     return postObject;
+        // });
+
+        const formattedPosts = await Promise.all(postPromises);
 
 
         res.status(200).json(new ApiResponse(200, formattedPosts));
