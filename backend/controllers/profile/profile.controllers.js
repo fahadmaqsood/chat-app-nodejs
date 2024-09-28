@@ -4,6 +4,8 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import UserPost from '../../models/social/UserPost.js';
 import mongoose from "mongoose";
 
+import PostLike from '../../models/social/PostLikes.js';
+import UserComment from '../../models/social/UserComment.js';
 
 const getSelectiveProfileInfo = async (req, res) => {
     try {
