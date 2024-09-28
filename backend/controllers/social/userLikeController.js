@@ -1,6 +1,7 @@
 import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
 import PostLike from '../../models/social/PostLikes.js';
+import { ApiResponse } from '../../utils/ApiResponse.js';
 
 export const likePost = async (req, res) => {
     const { post_id } = req.body;
@@ -16,7 +17,7 @@ export const likePost = async (req, res) => {
         const newLike = new PostLike({ user_id: req.user._id, post_id });
         await newLike.save();
 
-        res.status(200).json({ success: true });
+        res.status(200).json(new ApiResponse(200, {}, "Successfully liked the post"));
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).json({ success: false, message: 'Post already liked by this user' });
@@ -45,11 +46,12 @@ export const unlikePost = async (req, res) => {
 
         // Check if the like was found and removed
         if (!result) {
-            return res.status(404).json({ success: false, message: 'Like not found' });
+
+            return res.status(404).json(new ApiResponse(404, {}, "Like not found"));
         }
 
 
-        res.status(200).json({ success: true });
+        res.status(200).json(new ApiResponse(200, {}, "Successfully unliked the post"));
     } catch (err) {
         if (err.code === 11000) {
             return res.status(400).json({ success: false, message: 'Post already unliked by this user' });
