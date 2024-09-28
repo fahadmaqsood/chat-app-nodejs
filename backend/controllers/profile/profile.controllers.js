@@ -145,7 +145,13 @@ const getProfilePosts = async (req, res) => {
         }
 
         // Fetch user's posts from the database using userId
-        const posts = await UserPost.find({ user_id: userId });
+        const posts = await UserPost.find({ user_id: userId }).populate({
+            path: 'user_id', // The field to populate
+            select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
+        }).populate({
+            path: 'topics', // The field to populate
+            select: 'name description' // Fields to select from the User model
+        }).sort({ created_at: -1 });
 
         if (!posts || posts.length === 0) {
             return res.status(404).json(new ApiResponse(404, {}, "No posts found for this user"));
