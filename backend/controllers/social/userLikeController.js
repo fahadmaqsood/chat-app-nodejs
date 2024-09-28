@@ -11,7 +11,7 @@ export const likePost = async (req, res) => {
         const postExists = await UserPost.findById(post_id);
 
         if (!userExists || !postExists) {
-            return res.status(404).json({ success: false, message: 'User or post not found' });
+            return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
         }
 
         const newLike = new PostLike({ user_id: req.user._id, post_id });
@@ -20,7 +20,7 @@ export const likePost = async (req, res) => {
         res.status(200).json(new ApiResponse(200, {}, "Successfully liked the post"));
     } catch (err) {
         if (err.code === 11000) {
-            return res.status(400).json({ success: false, message: 'Post already liked by this user' });
+            return res.status(400).json(new ApiResponse(400, {}, "Post already liked by this user"));
         }
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
     }
@@ -36,7 +36,7 @@ export const unlikePost = async (req, res) => {
         const postExists = await UserPost.findById(post_id);
 
         if (!userExists || !postExists) {
-            return res.status(404).json({ success: false, message: 'User or post not found' });
+            return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
         }
 
         const result = await PostLike.findOneAndDelete({
