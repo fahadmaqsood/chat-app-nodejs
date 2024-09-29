@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUserPost, getPosts, voteInPoll } from '../../controllers/social/userPostController.js';
+import { createUserPost, getPosts, voteInPoll, getSpecificPost } from '../../controllers/social/userPostController.js';
 import { likePost, unlikePost, getLikes } from '../../controllers/social/userLikeController.js';
 import { createComment, getComments } from '../../controllers/social/usercommentController.js';
 
@@ -10,6 +10,8 @@ const router = express.Router();
 // Route to create a new post
 router.post('/create-post', validateTokensMiddleware, createUserPost);
 router.get('/get/posts', validateTokensMiddleware, getPosts);
+
+router.get('/get/:postId', validateTokensMiddleware, getSpecificPost);
 
 // poll
 router.post('/vote-in-poll', validateTokensMiddleware, voteInPoll);

@@ -50,6 +50,11 @@ const topicRetrievalInstructionMsg = (topics, text) => {
 };
 
 
+const moodRecognitionInstructionMsg = (topics, text) => {
+    return `Following are the moods or emotions we have for user posts, you have to categorize user post into only one of the moods: ${topics}. \n\n This is the user text: ${text}. Now categorize this text into the above moods and only output one word and that should be from the moods, you should not output anything else only one word.`;
+};
+
+
 export const createUserPost = async (req, res) => {
     let { content, attachments, mood, poll } = req.body;
 
@@ -93,9 +98,27 @@ export const createUserPost = async (req, res) => {
 
 
         if (!mood || mood == "") {
-            mood = _sentimentAnalysis.performAnalysis(content)["category"].toLowerCase();
-        }
 
+
+            // categorizing post into topics
+            let openAIResponse2;
+            try {
+                openAIResponse2 = await getChatCompletion({
+                    messages: [],
+                    user_message: moodRecognitionInstructionMsg(Object.keys(_sentimentAnalysis.moodScores), content),
+                });
+            } catch (e) {
+                throw new ApiResponse(500, {}, e.message);
+            }
+
+            // console.log(openAIResponse2);
+
+            if (!openAIResponse2) {
+                mood = _sentimentAnalysis.performAnalysis(content)["category"].toLowerCase();
+            } else {
+                mood = openAIResponse2.toLowerCase();
+            }
+        }
 
         // Build poll structure if provided
         let pollData = null;
@@ -307,5 +330,34 @@ export const getPosts = async (req, res) => {
         res.status(200).json(new ApiResponse(200, formattedPosts));
     } catch (err) {
         res.status(500).json(new ApiResponse(500, {}, err.message));
+    }
+};
+
+
+export const getSpecificPost = async (req, res) => {
+    const { postId } = req.params; // Get postId from the URL params
+
+    try {
+        // Validate postId
+        if (!postId) {
+            return res.status(400).json(new ApiResponse(400, {}, 'Post ID is required'));
+        }
+
+        // Query the specific post by ID
+        const post = await UserPost.findById(postId);
+
+        // If post is not found, return a 404 response
+        if (!post) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        // Populate the post and format it if needed
+        const formattedPost = await populateAndFormatPost(req, post);
+
+        // Return the specific post
+        return res.status(200).json(new ApiResponse(200, { post: formattedPost }));
+    } catch (err) {
+        // Handle errors
+        return res.status(500).json(new ApiResponse(500, {}, err.message));
     }
 };
