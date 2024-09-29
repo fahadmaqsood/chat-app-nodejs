@@ -10,7 +10,13 @@ const userPostSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        required: true
+        required: function () {
+            // Content is required if there are no poll options and no attachments
+            return !(
+                (this.poll && this.poll.options && this.poll.options.length > 0) ||
+                (this.attachments && this.attachments.length > 0)
+            );
+        }
     },
     attachments: [{  // Array of URLs for attachments
         type: String
