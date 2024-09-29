@@ -23,7 +23,7 @@ getAllTopicNames().then((result) => {
 });
 
 
-async function getCachedTopicNames() {
+export async function getCachedTopicNames() {
     const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
     const currentTime = Date.now();
 

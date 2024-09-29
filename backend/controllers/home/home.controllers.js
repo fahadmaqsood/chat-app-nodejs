@@ -1,6 +1,7 @@
 import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
+import { PostTopics } from "../../models/social/PostTopics.js";
 
 export const searchUsers = async (req, res) => {
     try {
@@ -39,14 +40,22 @@ export const searchUsers = async (req, res) => {
             },
         ]);
 
-        if (!users || users.length === 0) {
-            return res.status(404).json(new ApiResponse(404, {}, "No users found"));
-        }
+        // if (!users || users.length === 0) {
+        //     return res.status(404).json(new ApiResponse(404, {}, "No users found"));
+        // }
+
+        // Filter topics based on the search text
+        const filteredTopics = await PostTopics.find({
+            name: { $regex: new RegExp(searchText, 'i') } // Case-insensitive regex search for topics
+        }).select('_id name'); // Select only the required fields
+
+        const topics = filteredTopics.map(topic => ({ id: topic._id, name: topic.name }));
+
 
         // Return the matched users
         return res
             .status(200)
-            .json(new ApiResponse(200, { users, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Users fetched successfully"));
+            .json(new ApiResponse(200, { users, topics, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Users fetched successfully"));
     } catch (error) {
         console.error("Error in searchUsers:", error);
         return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
