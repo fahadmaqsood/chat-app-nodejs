@@ -120,7 +120,9 @@ export const createUserPost = async (req, res) => {
 
         const savedPost = await newPost.save();
 
-        res.status(201).json(new ApiResponse(201, savedPost, "Post created successfully"));
+        const post = populateAndFormatPost(req, savedPost);
+
+        res.status(201).json(new ApiResponse(201, { post: post }, "Post created successfully"));
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
     }
@@ -161,6 +163,48 @@ export const voteInPoll = async (req, res) => {
 };
 
 
+async function populateAndFormatPost(req, _post) {
+    let post = await UserPost.findById(_post._id).populate({
+        path: 'user_id', // The field to populate
+        select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
+    }).populate({
+        path: 'topics', // The field to populate
+        select: 'name description' // Fields to select from the User model
+    });
+
+
+    const postObject = post.toObject();
+    postObject.user = postObject.user_id; // Add user info under user key
+    delete postObject.user_id; // Remove user_id field
+
+    // Count likes and comments
+    const numLikes = await PostLike.countDocuments({ post_id: post._id });
+    const numComments = await UserComment.countDocuments({ post_id: post._id });
+
+
+    const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
+
+    postObject.numLikes = numLikes; // Add numLikes to the post object
+    postObject.numComments = numComments; // Add numComments to the post object
+
+    postObject.hasUserLiked = !!hasUserLiked;
+
+    // handling polls
+    if (post.poll && Array.isArray(post.poll.options)) {
+        postObject.poll.options = post.poll.options.map((option) => {
+            return {
+                _id: option._id,
+                option: option.option,
+                numVotes: option.votedBy.length,
+                isVotedByUser: option.votedBy.includes(req.user._id)
+            };
+        });
+    }
+
+    return postObject;
+
+}
+
 export const getPosts = async (req, res) => {
     const { mood, topics, start_from = 0 } = req.query;
     const limit = 10;
@@ -188,14 +232,6 @@ export const getPosts = async (req, res) => {
             }
         }
         let posts = await UserPost.find(query)
-            .populate({
-                path: 'user_id', // The field to populate
-                select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
-            })
-            .populate({
-                path: 'topics', // The field to populate
-                select: 'name description' // Fields to select from the User model
-            })
             .sort({ created_at: -1 })
             .skip(parseInt(start_from))
             .limit(limit);
@@ -241,14 +277,7 @@ export const getPosts = async (req, res) => {
 
 
                 const additionalPosts = await UserPost.find(query)
-                    .populate({
-                        path: 'user_id',
-                        select: 'avatar username name email privacySettings notificationSettings'
-                    })
-                    .populate({
-                        path: 'topics',
-                        select: 'name description'
-                    })
+
                     .sort({ created_at: -1 })
                     .limit(limit - posts.length); // Limit to what is needed
 
@@ -265,43 +294,11 @@ export const getPosts = async (req, res) => {
 
         // Prepare the response with numLikes and numComments
         const postPromises = posts.map(async (post) => {
-            const postObject = post.toObject();
-            postObject.user = postObject.user_id; // Add user info under user key
-            delete postObject.user_id; // Remove user_id field
 
-            // Count likes and comments
-            const numLikes = await PostLike.countDocuments({ post_id: post._id });
-            const numComments = await UserComment.countDocuments({ post_id: post._id });
+            return await populateAndFormatPost(req, post);
 
-
-            const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
-
-            postObject.numLikes = numLikes; // Add numLikes to the post object
-            postObject.numComments = numComments; // Add numComments to the post object
-
-            postObject.hasUserLiked = !!hasUserLiked;
-
-            // handling polls
-            if (post.poll && Array.isArray(post.poll.options)) {
-                postObject.poll.options = post.poll.options.map((option) => {
-                    return {
-                        _id: option._id,
-                        option: option.option,
-                        numVotes: option.votedBy.length,
-                        isVotedByUser: option.votedBy.includes(req.user._id)
-                    };
-                });
-            }
-
-            return postObject;
         });
 
-        // const formattedPosts = posts.map(post => {
-        //     const postObject = post.toObject();
-        //     postObject.user = postObject.user_id; // Add user info under user key
-        //     delete postObject.user_id; // Remove user_id field
-        //     return postObject;
-        // });
 
         const formattedPosts = await Promise.all(postPromises);
 
