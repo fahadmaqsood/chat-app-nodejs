@@ -3,6 +3,7 @@ import {
   deleteMessage,
   getAllMessages,
   sendMessage,
+  sendMessageToMany,
 } from "../../controllers/chat-app/message.controllers.js";
 import { validateTokensMiddleware } from "../../middlewares/auth.middlewares.js";
 import { upload } from "../../middlewares/multer.middlewares.js";
@@ -16,6 +17,18 @@ const router = Router();
 
 router.use(validateTokensMiddleware);
 
+
+
+router
+  .route("/send-messages-to-many")
+  .post(
+    upload.fields([{ name: "attachments", maxCount: 5 }]),
+    sendMessageValidator(),
+    sendMessageToMany
+  );
+
+
+
 router
   .route("/:chatId")
   .get(mongoIdPathVariableValidator("chatId"), validate, getAllMessages)
@@ -26,6 +39,7 @@ router
     validate,
     sendMessage
   );
+
 
 //Delete message route based on Message id
 

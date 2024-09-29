@@ -165,6 +165,105 @@ const sendMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, receivedMessage, "Message saved successfully"));
 });
 
+
+
+const sendMessageToMany = asyncHandler(async (req, res) => {
+  const { chatIds, content } = req.body; // Expecting chatIds to be an array in the request body
+
+  // Validate input
+  if (!content && !req.files?.attachments?.length) {
+    throw new ApiError(400, "Message content or attachment is required");
+  }
+
+  // Check if chatIds is an array and has at least one chat ID
+  if (!Array.isArray(chatIds) || chatIds.length === 0) {
+    throw new ApiError(400, "Chat IDs are required");
+  }
+
+  // Convert chatIds to ObjectId
+  const chatIdArray = chatIds.map(id => new mongoose.Types.ObjectId(id));
+
+  // Find all chats based on chatIds
+  const selectedChats = await Chat.find({ _id: { $in: chatIdArray } });
+
+  if (selectedChats.length === 0) {
+    throw new ApiError(404, "No chats exist with the provided chat IDs");
+  }
+
+  const messageFiles = [];
+
+  if (req.files && req.files.attachments?.length > 0) {
+    req.files.attachments.map((attachment) => {
+      messageFiles.push({
+        url: getStaticFilePath(req, attachment.filename),
+        localPath: getLocalPath(attachment.filename),
+      });
+    });
+  }
+
+  // Store received messages for emitting later
+  const receivedMessages = [];
+
+  // Iterate through each chat ID and create a message for each
+  for (const chatId of chatIdArray) {
+    const message = await ChatMessage.create({
+      sender: new mongoose.Types.ObjectId(req.user._id),
+      content: content || "",
+      chat: chatId, // Associate message with the current chat ID
+      attachments: messageFiles,
+    });
+
+    // Update each chat's last message
+    await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        $set: {
+          lastMessage: message._id,
+        },
+      },
+      { new: true }
+    );
+
+    // Structure the message for each chat
+    const messages = await ChatMessage.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(message._id),
+        },
+      },
+      ...chatMessageCommonAggregation(),
+    ]);
+
+    // Store the aggregation result
+    const receivedMessage = messages[0];
+
+    if (!receivedMessage) {
+      throw new ApiError(500, "Internal server error");
+    }
+
+    receivedMessages.push(receivedMessage);
+
+    // Logic to emit socket event about the new message created to all chat participants
+    selectedChats.forEach(chat => {
+      chat.participants.forEach((participantObjectId) => {
+        // Avoid emitting event to the user who is sending the message
+        if (participantObjectId.toString() === req.user._id.toString()) return;
+
+        // Emit the receive message event to the other participants with received message as the payload
+        emitSocketEvent(
+          req,
+          participantObjectId.toString(),
+          ChatEventEnum.MESSAGE_RECEIVED_EVENT,
+          receivedMessage
+        );
+      });
+    });
+  }
+
+  res.status(200).json(new ApiResponse(200, { messages: receivedMessages }, "Message sent to all specified chats"));
+});
+
+
 const deleteMessage = asyncHandler(async (req, res) => {
   //controller to delete chat messages and attachments
 
@@ -238,4 +337,4 @@ const deleteMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, message, "Message deleted successfully"));
 });
 
-export { chatMessageCommonAggregation, getAllMessages, sendMessage, deleteMessage };
+export { chatMessageCommonAggregation, getAllMessages, sendMessage, sendMessageToMany, deleteMessage };
