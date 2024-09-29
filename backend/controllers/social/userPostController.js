@@ -103,8 +103,8 @@ export const createUserPost = async (req, res) => {
             pollData = {
                 question: poll.question,
                 options: poll.options.map(option => ({
-                    option: option.option,
-                    votedBy: [] // Initialize with an empty array
+                    option: option, // Each string becomes the value for the "option" field
+                    votedBy: []     // Initialize the "votedBy" field as an empty array
                 }))
             };
         }
@@ -120,7 +120,8 @@ export const createUserPost = async (req, res) => {
 
         const savedPost = await newPost.save();
 
-        const post = populateAndFormatPost(req, savedPost);
+        const post = await populateAndFormatPost(req, savedPost);
+
 
         res.status(201).json(new ApiResponse(201, { post: post }, "Post created successfully"));
     } catch (err) {
