@@ -135,6 +135,12 @@ export const getComments = async (req, res) => {
             delete commentObject.user_id; // Remove user_id field
 
 
+            // Count the number of replies for each comment
+            const repliesCount = await UserComment.countDocuments({ parent_comment_id: comment._id });
+            commentObject.repliesCount = repliesCount; // Add repliesCount field
+
+
+
             commentObject.numLikes = commentObject.likes.length;
             commentObject.hasUserLiked = commentObject.likes.includes(new mongoose.Types.ObjectId(req.user._id.toString()));
             delete commentObject.likes;
