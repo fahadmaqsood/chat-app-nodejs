@@ -134,6 +134,7 @@ export const getComments = async (req, res) => {
 
 
             commentObject.numLikes = commentObject.likes.length;
+            commentObject.hasUserLiked = commentObject.likes.includes(new mongoose.Types.ObjectId(req.user._id.toString()));
             delete commentObject.likes;
 
 
@@ -151,5 +152,93 @@ export const getComments = async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
+    }
+};
+
+
+
+
+
+export const likeComment = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { post_id, comment_id } = req.body; // Post and comment IDs
+
+        // Validate post_id and comment_id
+        if (!post_id) {
+            return res.status(400).json(new ApiResponse(400, {}, "Post ID is required"));
+        }
+
+        if (!comment_id) {
+            return res.status(400).json(new ApiResponse(400, {}, "Comment ID is required"));
+        }
+
+        // Check if the post exists
+        const postExists = await UserPost.findById(post_id);
+        if (!postExists) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        // Check if the comment exists
+        const commentExists = await UserComment.findById(comment_id);
+        if (!commentExists || commentExists.post_id.toString() !== post_id) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+        }
+
+        // Check if the user has already liked the comment
+        if (commentExists.likes.includes(currentUserId)) {
+            return res.status(400).json(new ApiResponse(400, {}, 'You have already liked this comment'));
+        }
+
+        // Add the current user's ID to the likes array
+        commentExists.likes.push(currentUserId);
+        await commentExists.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Comment liked successfully"));
+    } catch (error) {
+        console.error("Error in likeComment:", error);
+        return res.status(500).json(new ApiResponse(500, {}, error.message || 'An error occurred'));
+    }
+}
+
+export const unlikeComment = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { post_id, comment_id } = req.body; // Post and comment IDs
+
+        // Validate post_id and comment_id
+        if (!post_id) {
+            return res.status(400).json(new ApiResponse(400, {}, "Post ID is required"));
+        }
+
+        if (!comment_id) {
+            return res.status(400).json(new ApiResponse(400, {}, "Comment ID is required"));
+        }
+
+        // Check if the post exists
+        const postExists = await UserPost.findById(post_id);
+        if (!postExists) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        // Check if the comment exists
+        const commentExists = await UserComment.findById(comment_id);
+        if (!commentExists || commentExists.post_id.toString() !== post_id) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+        }
+
+        // Check if the user has already liked the comment
+        if (commentExists.likes.includes(currentUserId)) {
+            return res.status(400).json(new ApiResponse(400, {}, 'You have already liked this comment'));
+        }
+
+        // Add the current user's ID to the likes array
+        commentExists.likes.pull(currentUserId);
+        await commentExists.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Comment unLiked successfully"));
+    } catch (error) {
+        console.error("Error in unlikeComment:", error);
+        return res.status(500).json(new ApiResponse(500, {}, error.message || 'An error occurred'));
     }
 };

@@ -1,7 +1,7 @@
 import express from 'express';
 import { createUserPost, getPosts, voteInPoll, getSpecificPost } from '../../controllers/social/userPostController.js';
 import { likePost, unlikePost, getLikes } from '../../controllers/social/userLikeController.js';
-import { createComment, getComments } from '../../controllers/social/usercommentController.js';
+import { createComment, getComments, likeComment, unlikeComment } from '../../controllers/social/usercommentController.js';
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 
@@ -24,5 +24,8 @@ router.get('/get/likes', validateTokensMiddleware, getLikes);
 // Route to comment on a post
 router.post('/create-comment', validateTokensMiddleware, createComment);
 router.post('/get-comments', validateTokensMiddleware, getComments);
+
+router.post('/like-comment', validateTokensMiddleware, likeComment);
+router.post('/unlike-comment', validateTokensMiddleware, unlikeComment);
 
 export default router;
