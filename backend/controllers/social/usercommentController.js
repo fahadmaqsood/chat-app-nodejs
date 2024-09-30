@@ -142,7 +142,7 @@ export const getComments = async (req, res) => {
 
 
             commentObject.numLikes = commentObject.likes.length;
-            commentObject.hasUserLiked = commentObject.likes.includes(new mongoose.Types.ObjectId(req.user._id.toString()));
+            commentObject.hasUserLiked = commentObject.likes.includes(req.user._id);
             delete commentObject.likes;
 
 
