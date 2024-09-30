@@ -154,7 +154,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     // emit the receive message event to the other participants with received message as the payload
     emitSocketEvent(
       req,
-      participantObjectId.toString(),
+      `${chat._id}/${participantObjectId.toString()}`,
       ChatEventEnum.MESSAGE_RECEIVED_EVENT,
       receivedMessage
     );
@@ -257,7 +257,7 @@ const sendMessageToMany = asyncHandler(async (req, res) => {
       // Emit the receive message event to the other participants with received message as the payload
       emitSocketEvent(
         req,
-        participantObjectId.toString(),
+        `${chat._id}/${participantObjectId.toString()}`,
         ChatEventEnum.MESSAGE_RECEIVED_EVENT,
         receivedMessage
       );
@@ -332,7 +332,7 @@ const deleteMessage = asyncHandler(async (req, res) => {
     // emit the delete message event to the other participants frontend with delete messageId as the payload
     emitSocketEvent(
       req,
-      participantObjectId.toString(),
+      `${chat._id}/${participantObjectId.toString()}`,
       ChatEventEnum.MESSAGE_DELETE_EVENT,
       message
     );
