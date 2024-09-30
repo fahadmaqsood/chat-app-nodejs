@@ -236,8 +236,8 @@ export const unlikeComment = async (req, res) => {
         }
 
         // Check if the user has already liked the comment
-        if (commentExists.likes.includes(currentUserId)) {
-            return res.status(400).json(new ApiResponse(400, {}, 'You have already liked this comment'));
+        if (!commentExists.likes.includes(currentUserId)) {
+            return res.status(400).json(new ApiResponse(400, {}, "You haven't liked this comment"));
         }
 
         // Add the current user's ID to the likes array
