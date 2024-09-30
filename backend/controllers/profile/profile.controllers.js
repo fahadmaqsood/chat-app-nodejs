@@ -138,20 +138,33 @@ const getProfilePosts = async (req, res) => {
         const hasNewAccessToken = req.hasNewAccessToken;
 
         // Getting userId from request body
-        const { userId } = req.body;
+        const { userId, _limit, _skip } = req.body;
 
         if (!userId) {
             return res.status(400).json(new ApiResponse(400, "userId is required"));
         }
 
+        let limit = _limit;
+        let skip = _skip;
+        if (!_limit) {
+            limit = 10;
+        }
+
+        if (!_skip) {
+            skip = 0;
+        }
+
         // Fetch user's posts from the database using userId
-        const posts = await UserPost.find({ user_id: userId }).sort({ created_at: -1 }).populate({
-            path: 'user_id', // The field to populate
-            select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
-        }).populate({
-            path: 'topics', // The field to populate
-            select: 'name description' // Fields to select from the User model
-        });
+        const posts = await UserPost.find({ user_id: userId })
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(limit).populate({
+                path: 'user_id', // The field to populate
+                select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
+            }).populate({
+                path: 'topics', // The field to populate
+                select: 'name description' // Fields to select from the User model
+            }).exec();
 
         if (!posts || posts.length === 0) {
             return res.status(404).json(new ApiResponse(404, {}, "No posts found for this user"));
