@@ -243,21 +243,27 @@ const sendMessageToMany = asyncHandler(async (req, res) => {
 
     receivedMessages.push(receivedMessage);
 
-    // Logic to emit socket event about the new message created to all chat participants
-    selectedChats.forEach(chat => {
-      chat.participants.forEach((participantObjectId) => {
-        // Avoid emitting event to the user who is sending the message
-        if (participantObjectId.toString() === req.user._id.toString()) return;
 
-        // Emit the receive message event to the other participants with received message as the payload
-        emitSocketEvent(
-          req,
-          participantObjectId.toString(),
-          ChatEventEnum.MESSAGE_RECEIVED_EVENT,
-          receivedMessage
-        );
-      });
+    // Logic to emit socket event about the new message created to all chat participants
+    const chat = selectedChats.find(c => c._id.equals(chatId));
+
+
+    // Logic to emit socket event about the new message created to all chat participants
+
+    chat.participants.forEach((participantObjectId) => {
+      // Avoid emitting event to the user who is sending the message
+      if (participantObjectId.toString() === req.user._id.toString()) return;
+
+      // Emit the receive message event to the other participants with received message as the payload
+      emitSocketEvent(
+        req,
+        participantObjectId.toString(),
+        ChatEventEnum.MESSAGE_RECEIVED_EVENT,
+        receivedMessage
+      );
+
     });
+
   }
 
   res.status(200).json(new ApiResponse(200, { messages: receivedMessages }, "Message sent to all specified chats"));
