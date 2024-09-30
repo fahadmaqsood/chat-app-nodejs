@@ -1,9 +1,13 @@
-import { User }  from '../../models/auth/user.models.js';        
+import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
 import UserComment from '../../models/social/UserComment.js';
+import { ApiResponse } from '../../utils/ApiResponse.js';
 
 export const createComment = async (req, res) => {
-    const { post_id, user_id, comment_text, comment_content } = req.body;
+    const { post_id, parent_comment_id, comment_text } = req.body;
+
+
+    let user_id = req.user._id;
 
     try {
         if (!post_id || !user_id) {
@@ -23,15 +27,15 @@ export const createComment = async (req, res) => {
         const newComment = new UserComment({
             post_id,
             user_id,
-            comment_text,
-            comment_content
+            parent_comment_id: (parent_comment_id == undefined || parent_comment_id == null) ? null : parent_comment_id,
+            comment_text
         });
 
         await newComment.save();
 
-        res.status(201).json({ success: true });
+        res.status(201).json(new ApiResponse(201, {}, "Comment posted successfully."));
     } catch (err) {
-        res.status(500).json({ success: false, message: 'Server error', error: err.message });
+        res.status(500).json(new ApiResponse(500, { error: err.message }, "Server error"));
     }
 };
 
@@ -52,41 +56,94 @@ const getNestedComments = async (parentId) => {
 };
 
 // Get comments for a post
+// export const getComments = async (req, res) => {
+//     const { post_id, parent_comment_id } = req.query;
+
+//     try {
+//         if (!post_id) {
+//             return res.status(400).json({ success: false, message: 'Post ID is required' });
+//         }
+
+//         const postExists = await UserPost.findById(post_id);
+//         if (!postExists) {
+//             return res.status(404).json({ success: false, message: 'Post not found' });
+//         }
+
+//         // Build query for comments
+//         const query = { post_id };
+//         if (parent_comment_id) {
+//             query.parent_comment_id = parent_comment_id;
+//         } else {
+//             query.parent_comment_id = null; // Only top-level comments if parent_comment_id is null
+//         }
+
+//         const comments = await UserComment.find(query).populate('user_id', 'username email');
+
+//         if (parent_comment_id) {
+//             const nestedComments = await getNestedComments(parent_comment_id);
+//             res.status(200).json({ success: true, data: { comments: nestedComments } });
+//         } else {
+//             const commentsWithReplies = await Promise.all(
+//                 comments.map(async (comment) => {
+//                     const replies = await getNestedComments(comment._id);
+//                     return { ...comment._doc, replies };
+//                 })
+//             );
+
+//             res.status(200).json({ success: true, data: { comments: commentsWithReplies } });
+//         }
+//     } catch (err) {
+//         res.status(500).json({ success: false, message: 'Server error', error: err.message });
+//     }
+// };
+
+
+
+// Get comments for a post
 export const getComments = async (req, res) => {
-    const { post_id, parent_comment_id } = req.query;
+    const { post_id, parent_comment_id } = req.body;
 
     try {
         if (!post_id) {
-            return res.status(400).json({ success: false, message: 'Post ID is required' });
+            return res.status(400).json(new ApiResponse(400, {}, 'Post ID is required'));
         }
 
         const postExists = await UserPost.findById(post_id);
         if (!postExists) {
-            return res.status(404).json({ success: false, message: 'Post not found' });
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
         }
 
         // Build query for comments
         const query = { post_id };
+
         if (parent_comment_id) {
+            // If parent_comment_id is provided, get immediate children of that comment
             query.parent_comment_id = parent_comment_id;
         } else {
-            query.parent_comment_id = null; // Only top-level comments if parent_comment_id is null
+            // If no parent_comment_id, get top-level comments (i.e., those with null parent_comment_id)
+            query.parent_comment_id = null;
         }
 
-        const comments = await UserComment.find(query).populate('user_id', 'username email');
+        const comments = await UserComment.find(query).populate('user_id', 'name username avatar');
 
+
+        const commentPromises = comments.map(async (comment) => {
+            const commentObject = comment.toObject();
+            commentObject.user = commentObject.user_id; // Add user info under user key
+            delete commentObject.user_id; // Remove user_id field
+
+
+            return commentObject;
+        });
+
+        const formattedComments = await Promise.all(commentPromises);
+
+        // If parent_comment_id is provided, send only the immediate children
         if (parent_comment_id) {
-            const nestedComments = await getNestedComments(parent_comment_id);
-            res.status(200).json({ success: true, data: { comments: nestedComments } });
+            res.status(200).json({ success: true, data: { comments: formattedComments } });
         } else {
-            const commentsWithReplies = await Promise.all(
-                comments.map(async (comment) => {
-                    const replies = await getNestedComments(comment._id);
-                    return { ...comment._doc, replies }; 
-                })
-            );
-
-            res.status(200).json({ success: true, data: { comments: commentsWithReplies } });
+            // If parent_comment_id is not provided, send top-level comments without nesting
+            res.status(200).json({ success: true, data: { comments: formattedComments } });
         }
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });

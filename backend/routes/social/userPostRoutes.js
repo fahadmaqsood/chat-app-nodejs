@@ -23,6 +23,6 @@ router.get('/get/likes', validateTokensMiddleware, getLikes);
 
 // Route to comment on a post
 router.post('/create-comment', validateTokensMiddleware, createComment);
-router.get('/get/comments', validateTokensMiddleware, getComments);
+router.post('/get-comments', validateTokensMiddleware, getComments);
 
 export default router;
