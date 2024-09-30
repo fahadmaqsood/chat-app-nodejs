@@ -132,9 +132,10 @@ export const getComments = async (req, res) => {
             commentObject.user = commentObject.user_id; // Add user info under user key
             delete commentObject.user_id; // Remove user_id field
 
-            // Count the number of replies for each comment
-            const repliesCount = await UserComment.countDocuments({ parent_comment_id: comment._id });
-            commentObject.repliesCount = repliesCount; // Add repliesCount field
+
+            commentObject.numLikes = commentObject.likes.length;
+            delete commentObject.likes;
+
 
             return commentObject;
         });

@@ -19,7 +19,14 @@ const userCommentSchema = new mongoose.Schema({
     comment_text: {
         type: String,
         required: true
-    }
+    },
+
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ] // Array to store user IDs who liked the comment
 }, { timestamps: true });
 
 const UserComment = mongoose.model('UserComment', userCommentSchema);
