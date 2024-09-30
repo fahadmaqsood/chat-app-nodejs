@@ -258,7 +258,7 @@ export const getPosts = async (req, res) => {
         let posts = await UserPost.find(query)
             .sort({ created_at: -1 })
             .skip(parseInt(start_from))
-            .limit(limit);
+            .limit(limit).sort({ createdAt: 1 }).exec();
 
 
         // If we have fewer posts than requested, try to fill in with related moods
