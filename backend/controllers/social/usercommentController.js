@@ -3,6 +3,8 @@ import UserPost from '../../models/social/UserPost.js';
 import UserComment from '../../models/social/UserComment.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
+import mongoose from "mongoose";
+
 export const createComment = async (req, res) => {
     const { post_id, parent_comment_id, comment_text } = req.body;
 
