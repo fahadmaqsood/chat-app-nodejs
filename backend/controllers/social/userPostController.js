@@ -245,10 +245,10 @@ export const getPosts = async (req, res) => {
 
 
         if (topics) {
-            const allTopics = await getCachedTopicNames();
-            console.log(allTopics);
-            const topicNames = allTopics.map(topic => topic.name);
-            console.log(topicNames);
+            // const allTopics = await getCachedTopicNames();
+            // console.log(allTopics);
+            // const topicNames = allTopics.map(topic => topic.name);
+            // console.log(topicNames);
 
             // Check if topics is provided and is an array
             if (topics && Array.isArray(topics)) {
@@ -298,6 +298,9 @@ export const getPosts = async (req, res) => {
                 // query.mood = randomMood;
 
                 query.mood = relevantMoods[0];
+                if (topics && Array.isArray(topics)) {
+                    query.topics = { $in: topics }; // Filter by specific topics if provided
+                }
 
 
                 const additionalPosts = await UserPost.find(query)
