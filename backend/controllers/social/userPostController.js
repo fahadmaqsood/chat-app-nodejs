@@ -9,10 +9,6 @@ import { getChatCompletion } from "../../utils/openai.js";
 import { SentimentAnalysis } from "../utils/SentimentAnalysis.js";
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
-
-import mongoose from 'mongoose';
-
-
 const _sentimentAnalysis = new SentimentAnalysis();
 
 
@@ -249,16 +245,32 @@ export const getPosts = async (req, res) => {
 
 
         if (topics) {
-            // const allTopics = await getCachedTopicNames();
-            // console.log(allTopics);
-            // const topicNames = allTopics.map(topic => topic.name);
-            // console.log(topicNames);
+            const allTopics = await getCachedTopicNames();
+            console.log(allTopics);
+            const topicNames = allTopics.map(topic => topic.name);
+            console.log(topicNames);
+            const topicIDs = allTopics.map(topic => topic.id);
+            console.log(topicIDs);
 
             // Check if topics is provided and is an array
             if (topics && Array.isArray(topics)) {
-                query.topics = { $in: topics.map(topic => new mongoose.Types.ObjectId(topic)) }; // Filter by specific topics if provided
+
+                const topicIdsFromRequest = topics
+                    .filter(topic => topicNames.includes(topic)) // Filter only valid topic names
+                    .map(topic => {
+                        const index = topicNames.indexOf(topic);
+                        return topicIDs[index]; // Get corresponding ID
+                    });
+
+
+                query.topics = { $in: topicIdsFromRequest }; // Filter by specific topics if provided
             } else if (topics && typeof topics === "string") {
-                query.topics = { $in: [new mongoose.Types.ObjectId(topics)] };
+                const filteredTopic = allTopics.filter((topic) => topic.name == topics);
+
+
+                if (filteredTopic.length !== 0) {
+                    query.topics = { $in: [filteredTopic[0]["id"]] };
+                }
             }
         }
         let posts = await UserPost.find(query)
@@ -304,10 +316,36 @@ export const getPosts = async (req, res) => {
                 // query.mood = randomMood;
 
                 query.mood = relevantMoods[0];
-                if (topics && Array.isArray(topics)) {
-                    query.topics = { $in: topics.map(topic => new mongoose.Types.ObjectId(topic)) }; // Filter by specific topics if provided
-                } else if (topics && typeof topics === "string") {
-                    query.topics = { $in: [new mongoose.Types.ObjectId(topics)] };
+
+
+                if (topics) {
+                    const allTopics = await getCachedTopicNames();
+                    console.log(allTopics);
+                    const topicNames = allTopics.map(topic => topic.name);
+                    console.log(topicNames);
+                    const topicIDs = allTopics.map(topic => topic.id);
+                    console.log(topicIDs);
+
+                    // Check if topics is provided and is an array
+                    if (topics && Array.isArray(topics)) {
+
+                        const topicIdsFromRequest = topics
+                            .filter(topic => topicNames.includes(topic)) // Filter only valid topic names
+                            .map(topic => {
+                                const index = topicNames.indexOf(topic);
+                                return topicIDs[index]; // Get corresponding ID
+                            });
+
+
+                        query.topics = { $in: topicIdsFromRequest }; // Filter by specific topics if provided
+                    } else if (topics && typeof topics === "string") {
+                        const filteredTopic = allTopics.filter((topic) => topic.name == topics);
+
+
+                        if (filteredTopic.length !== 0) {
+                            query.topics = { $in: [filteredTopic[0]["id"]] };
+                        }
+                    }
                 }
 
 
@@ -340,7 +378,7 @@ export const getPosts = async (req, res) => {
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
     } catch (err) {
-        res.status(500).json(new ApiResponse(500, { posts: [] }, err.message));
+        res.status(500).json(new ApiResponse(500, {}, err.message));
     }
 };
 
