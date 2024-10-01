@@ -252,9 +252,9 @@ export const getPosts = async (req, res) => {
 
             // Check if topics is provided and is an array
             if (topics && Array.isArray(topics)) {
-                query.topics = { $in: topics }; // Filter by specific topics if provided
+                query.topics = { $in: topics.map(topic => mongoose.Types.ObjectId(topic)) }; // Filter by specific topics if provided
             } else if (topics && typeof topics === "string") {
-                query.topics = { $in: [topics] };
+                query.topics = { $in: [mongoose.Types.ObjectId(topics)] };
             }
         }
         let posts = await UserPost.find(query)
@@ -301,9 +301,9 @@ export const getPosts = async (req, res) => {
 
                 query.mood = relevantMoods[0];
                 if (topics && Array.isArray(topics)) {
-                    query.topics = { $in: topics }; // Filter by specific topics if provided
+                    query.topics = { $in: topics.map(topic => mongoose.Types.ObjectId(topic)) }; // Filter by specific topics if provided
                 } else if (topics && typeof topics === "string") {
-                    query.topics = { $in: [topics] };
+                    query.topics = { $in: [mongoose.Types.ObjectId(topics)] };
                 }
 
 
