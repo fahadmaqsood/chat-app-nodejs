@@ -361,3 +361,12 @@ export const getSpecificPost = async (req, res) => {
         return res.status(500).json(new ApiResponse(500, {}, err.message));
     }
 };
+
+
+
+export const getAllTopics = async (req, res) => {
+    const topics = await getCachedTopicNames();
+
+
+    return res.status(200).json(new ApiResponse(200, { topics }, "Topics retrieved successfully"));
+}
