@@ -9,6 +9,10 @@ import { getChatCompletion } from "../../utils/openai.js";
 import { SentimentAnalysis } from "../utils/SentimentAnalysis.js";
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
+
+import mongoose from 'mongoose';
+
+
 const _sentimentAnalysis = new SentimentAnalysis();
 
 
