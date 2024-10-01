@@ -253,6 +253,8 @@ export const getPosts = async (req, res) => {
             // Check if topics is provided and is an array
             if (topics && Array.isArray(topics)) {
                 query.topics = { $in: topics }; // Filter by specific topics if provided
+            } else if (topics && typeof topics === "string") {
+                query.topics = { $in: [topics] };
             }
         }
         let posts = await UserPost.find(query)
@@ -300,6 +302,8 @@ export const getPosts = async (req, res) => {
                 query.mood = relevantMoods[0];
                 if (topics && Array.isArray(topics)) {
                     query.topics = { $in: topics }; // Filter by specific topics if provided
+                } else if (topics && typeof topics === "string") {
+                    query.topics = { $in: [topics] };
                 }
 
 
@@ -330,9 +334,9 @@ export const getPosts = async (req, res) => {
         const formattedPosts = await Promise.all(postPromises);
 
 
-        res.status(200).json(new ApiResponse(200, formattedPosts));
+        res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
     } catch (err) {
-        res.status(500).json(new ApiResponse(500, {}, err.message));
+        res.status(500).json(new ApiResponse(500, { posts: [] }, err.message));
     }
 };
 
