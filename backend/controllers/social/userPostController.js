@@ -246,11 +246,8 @@ export const getPosts = async (req, res) => {
 
         if (topics) {
             const allTopics = await getCachedTopicNames();
-            console.log(allTopics);
             const topicNames = allTopics.map(topic => topic.name);
-            console.log(topicNames);
             const topicIDs = allTopics.map(topic => topic.id);
-            console.log(topicIDs);
 
             // Check if topics is provided and is an array
             if (topics && Array.isArray(topics)) {
@@ -352,7 +349,8 @@ export const getPosts = async (req, res) => {
                 const additionalPosts = await UserPost.find(query)
 
                     .sort({ createdAt: -1 })
-                    .limit(limit - posts.length); // Limit to what is needed
+                    .skip(parseInt(start_from))
+                    .limit(limit - posts.length).exec(); // Limit to what is needed
 
 
                 posts = posts.concat(additionalPosts);
