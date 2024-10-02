@@ -20,8 +20,8 @@ const notificationSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'sent', 'read'],
-        default: 'pending'
+        enum: ['sent', 'read'],
+        default: 'sent'
     },
     created_at: {
         type: Date,

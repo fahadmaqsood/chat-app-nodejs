@@ -112,8 +112,18 @@ export const validateTokensMiddleware = async (req, res, next) => {
     const decodedAccessToken = jwt.decode(newAccessToken || accessToken);
     const userId = decodedAccessToken._id;
 
-    req.user = {};
-    req.user._id = userId;
+
+    const user = await User.findById(userId).select(
+      "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
+    );
+    if (!user) {
+      // Client should make a request to /api/v1/users/refresh-token if they have refreshToken present in their cookie
+      // Then they will get a new access token which will allow them to refresh the access token without logging out the user
+      throw new ApiError(401, "Invalid access token");
+    }
+    req.user = user;
+
+    req.user.nameElseUsername = (req.user.name == null || req.user.name == "") ? req.user.username.trim() : req.user.name.trim();
 
     next(); // Proceed to the next middleware/route handler
   } catch (err) {

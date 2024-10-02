@@ -3,6 +3,8 @@ import UserPost from '../../models/social/UserPost.js';
 import UserComment from '../../models/social/UserComment.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
+import { addNotification } from '../notification/notificationController.js';
+
 import mongoose from "mongoose";
 
 export const createComment = async (req, res) => {
@@ -34,6 +36,12 @@ export const createComment = async (req, res) => {
         });
 
         await newComment.save();
+
+        console.log(req.user._id, postExists.user_id);
+
+        if (!req.user._id.equals(postExists.user_id)) {
+            addNotification(postExists.user_id, `${req.user.nameElseUsername} commented on your post!`, newComment.comment_text, newComment._id);
+        }
 
         res.status(201).json(new ApiResponse(201, {}, "Comment posted successfully."));
     } catch (err) {
@@ -201,6 +209,10 @@ export const likeComment = async (req, res) => {
         // Add the current user's ID to the likes array
         commentExists.likes.push(currentUserId);
         await commentExists.save();
+
+        if (!req.user._id.equals(commentExists.user_id)) {
+            addNotification(commentExists.user_id, `❤ ${req.user.nameElseUsername} liked your comment!`, commentExists.comment_text, commentExists._id);
+        }
 
         return res.status(200).json(new ApiResponse(200, {}, "Comment liked successfully"));
     } catch (error) {

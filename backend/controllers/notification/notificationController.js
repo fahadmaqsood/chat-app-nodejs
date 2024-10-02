@@ -1,6 +1,26 @@
 import Notification from '../../models/notification/Notifications.js';
 import { User } from '../../models/auth/user.models.js'
 
+import { ApiResponse } from '../../utils/ApiResponse.js';
+
+export const addNotification = async (user_id, title, message, payload) => {
+    try {
+        const newNotification = new Notification({
+            user_id,
+            title,
+            message,
+            payload
+        });
+
+        await newNotification.save();
+
+        return newNotification;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export const createNotification = async (req, res) => {
     try {
         const { user_id, title, message, payload } = req.body;
@@ -11,21 +31,11 @@ export const createNotification = async (req, res) => {
 
         const userExists = await User.findById(user_id);
         if (!userExists) return res.status(404).json({ success: false, message: 'User not found' });
-        
-        const newNotification = new Notification({
-            user_id,
-            title,
-            message,
-            payload
-        });
 
-        await newNotification.save();
+        let newNotification = addNotification(user_id, title, message, payload);
 
-        res.status(201).json({
-            success: true,
-            message: 'Notification created successfully',
-            notification: newNotification
-        });
+        res.status(201).json(new ApiResponse(201, newNotification, "Notification created successfully"));
+
     } catch (error) {
         console.error('Error creating notification:', error);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -33,21 +43,21 @@ export const createNotification = async (req, res) => {
 };
 
 export const getNotifications = async (req, res) => {
-    const { user_id, start_from = 0 } = req.query;
+    const { start_from = 0 } = req.query;
+
+    let user_id = req.user._id;
 
     try {
-        const userExists = await User.findById(user_id);
-        if (!userExists) return res.status(404).json({ success: false, message: 'User not found' });
+        // const userExists = await User.findById(user_id);
+        // if (!userExists) return res.status(404).json({ success: false, message: 'User not found' });
 
         const notifications = await Notification.find({ user_id })
             .skip(parseInt(start_from))
             .limit(10)
             .sort({ created_at: -1 });
 
-        res.status(200).json({
-            success: true,
-            notifications
-        });
+        res.status(201).json(new ApiResponse(201, { notifications }, ""));
+
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
     }
