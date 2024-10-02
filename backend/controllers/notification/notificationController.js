@@ -43,7 +43,7 @@ export const createNotification = async (req, res) => {
 };
 
 export const getNotifications = async (req, res) => {
-    const { start_from = 0 } = req.query;
+    const { limit = 10, start_from = 0 } = req.query;
 
     let user_id = req.user._id;
 
@@ -53,7 +53,7 @@ export const getNotifications = async (req, res) => {
 
         const notifications = await Notification.find({ user_id })
             .skip(parseInt(start_from))
-            .limit(10)
+            .limit(limit)
             .sort({ created_at: -1 });
 
         res.status(201).json(new ApiResponse(201, { notifications }, ""));
