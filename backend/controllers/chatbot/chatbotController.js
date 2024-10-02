@@ -6,7 +6,7 @@ import { emitSocketEvent } from '../../socket/index.js';
 // import { emitSocketEvent } from "../../socket/chatbot.socket.js"; // Import your socket utility
 import ChatBot from "../../models/chatbot/chatbot.models.js";
 // import { User } from "../../models/auth/user.models.js";
-import { getChatCompletion } from "../../utils/openai.js";
+import { getChatCompletion, generateImagesFromText } from "../../utils/openai.js";
 
 // Function to get similar messages for context
 const getSimilarMessages = async (message, subject) => {
@@ -110,3 +110,29 @@ export const handleChatMessage = asyncHandler(async (req, res) => {
     }
 });
 
+
+
+
+export const handleGenerativeAiImages = async (req, res) => {
+
+    const { description } = req.query;
+
+
+    if (!description) {
+        return res.status(404).json(new ApiResponse(404, {}, "Description is required."));
+    }
+
+    try {
+
+
+        const imageUrls = await generateImagesFromText({ description });
+
+        return res.status(201).json(new ApiResponse(201, { images: imageUrls }, "Images generated successfully"));
+
+
+    } catch (err) {
+        console.error('Error in handleGenerativeAiImages:', err);
+        res.status(500).json(new ApiResponse(500, {}, err.message));
+
+    }
+}
