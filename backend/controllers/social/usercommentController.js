@@ -28,6 +28,15 @@ export const createComment = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
+        let parentCommentExists;
+        if (parent_comment_id) {
+            // Check if the comment exists
+            parentCommentExists = await UserComment.findById(parent_comment_id);
+            if (!parentCommentExists || parentCommentExists.post_id.toString() !== post_id) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Parent comment not found for this post'));
+            }
+        }
+
         const newComment = new UserComment({
             post_id,
             user_id,
@@ -39,8 +48,18 @@ export const createComment = async (req, res) => {
 
         console.log(req.user._id, postExists.user_id);
 
-        if (!req.user._id.equals(postExists.user_id)) {
-            addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", id: newComment._id } });
+        if (!parent_comment_id) {
+            if (!req.user._id.equals(postExists.user_id)) {
+                addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, id: newComment._id } });
+            }
+        } else {
+            if (!req.user._id.equals(postExists.user_id)) {
+                addNotification(postExists.user_id, `Replied to a comment on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id } });
+            }
+
+            if (!req.user._id.equals(parentCommentExists.user_id)) {
+                addNotification(parentCommentExists.user_id, `Replied to your comment!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id } });
+            }
         }
 
         res.status(201).json(new ApiResponse(201, {}, "Comment posted successfully."));
