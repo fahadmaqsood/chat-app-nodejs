@@ -53,7 +53,7 @@ export const createComment = async (req, res) => {
                 addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, id: newComment._id } });
             }
         } else {
-            if (!req.user._id.equals(postExists.user_id)) {
+            if (!req.user._id.equals(postExists.user_id) && !postExists.user_id.equals(parentCommentExists.user_id)) {
                 addNotification(postExists.user_id, `Replied to a comment on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id } });
             }
 
@@ -230,7 +230,7 @@ export const likeComment = async (req, res) => {
         await commentExists.save();
 
         if (!req.user._id.equals(commentExists.user_id)) {
-            addNotification(commentExists.user_id, `❤ liked your comment!`, commentExists.comment_text, { doer: req.user._id, additionalData: { open: "comment", id: commentExists._id } });
+            addNotification(commentExists.user_id, `❤ liked your comment!`, commentExists.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: post_id, post_author_id: postExists.user_id, id: commentExists._id } });
         }
 
         return res.status(200).json(new ApiResponse(200, {}, "Comment liked successfully"));
