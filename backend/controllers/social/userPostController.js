@@ -164,7 +164,7 @@ export const voteInPoll = async (req, res) => {
         }
 
         // Find the poll option that corresponds to the given optionId
-        const option = post.poll.options.id(optionId);
+        const option = post.poll.options.find(opt => opt._id.toString() === optionId.toString());
         if (!option) {
             return res.status(404).json(new ApiResponse(404, {}, 'Poll option not found'));
         }
@@ -179,6 +179,10 @@ export const voteInPoll = async (req, res) => {
 
         // Save the updated post
         const savedPost = await post.save();
+
+        if (!req.user._id.equals(post.user_id)) {
+            addNotification(post.user_id, `voted on your poll!`, option.option, { doer: req.user._id, additionalData: { open: "post", post_id: postId, option_id: optionId } });
+        }
 
         return res.status(200).json(new ApiResponse(200, savedPost, 'Vote recorded successfully'));
     } catch (err) {
