@@ -57,6 +57,6 @@ export const generateImagesFromText = async ({ description }) => {
         return response.data.map(image => image.url);
     } catch (error) {
         console.error('Error generating images from text:', error);
-        throw new Error('Error generating images from text');
+        throw new Error('Error generating images from text ' + error.message);
     }
 };
