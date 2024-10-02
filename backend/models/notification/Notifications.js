@@ -15,7 +15,11 @@ const notificationSchema = new mongoose.Schema({
         required: true
     },
     payload: {
-        type: mongoose.Schema.Types.Mixed, // Additional data associated with the notification, e.g., links
+        doer: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User' // This references the User model
+        },
+        additionalData: mongoose.Schema.Types.Mixed, // Additional data associated with the notification, e.g., links
         default: {}
     },
     status: {
@@ -28,7 +32,8 @@ const notificationSchema = new mongoose.Schema({
         default: Date.now
     },
     sent_at: {
-        type: Date
+        type: Date,
+        default: Date.now
     },
     read_at: {
         type: Date

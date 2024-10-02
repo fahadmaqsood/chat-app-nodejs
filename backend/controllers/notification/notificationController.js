@@ -54,7 +54,8 @@ export const getNotifications = async (req, res) => {
         const notifications = await Notification.find({ user_id })
             .skip(parseInt(start_from))
             .limit(limit)
-            .sort({ created_at: -1 });
+            .sort({ created_at: -1 })
+            .populate('payload.doer', 'name username avatar');
 
         res.status(201).json(new ApiResponse(201, { notifications }, ""));
 
