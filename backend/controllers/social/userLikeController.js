@@ -2,6 +2,7 @@ import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
 import PostLike from '../../models/social/PostLikes.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
+import { addNotification } from '../notification/notificationController.js';
 
 export const likePost = async (req, res) => {
     const { post_id } = req.body;
@@ -16,6 +17,11 @@ export const likePost = async (req, res) => {
 
         const newLike = new PostLike({ user_id: req.user._id, post_id });
         await newLike.save();
+
+
+        if (!req.user._id.equals(postExists.user_id)) {
+            addNotification(postExists.user_id, `liked your post!`, (!postExists.content || postExists.content.trim() == "") ? "" : postExists.content, { doer: req.user._id, additionalData: { open: "post", post_id: postExists._id } });
+        }
 
         res.status(200).json(new ApiResponse(200, {}, "Successfully liked the post"));
     } catch (err) {

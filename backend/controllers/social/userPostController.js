@@ -9,6 +9,8 @@ import { getChatCompletion } from "../../utils/openai.js";
 import { SentimentAnalysis } from "../utils/SentimentAnalysis.js";
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
+import { addNotification } from '../notification/notificationController.js';
+
 const _sentimentAnalysis = new SentimentAnalysis();
 
 
