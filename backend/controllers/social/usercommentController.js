@@ -40,7 +40,7 @@ export const createComment = async (req, res) => {
         console.log(req.user._id, postExists.user_id);
 
         if (!req.user._id.equals(postExists.user_id)) {
-            addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, payload: { open: "comment", id: newComment._id } });
+            addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", id: newComment._id } });
         }
 
         res.status(201).json(new ApiResponse(201, {}, "Comment posted successfully."));
@@ -211,7 +211,7 @@ export const likeComment = async (req, res) => {
         await commentExists.save();
 
         if (!req.user._id.equals(commentExists.user_id)) {
-            addNotification(commentExists.user_id, `❤ liked your comment!`, commentExists.comment_text, { doer: req.user._id, payload: { open: "comment", id: commentExists._id } });
+            addNotification(commentExists.user_id, `❤ liked your comment!`, commentExists.comment_text, { doer: req.user._id, additionalData: { open: "comment", id: commentExists._id } });
         }
 
         return res.status(200).json(new ApiResponse(200, {}, "Comment liked successfully"));
