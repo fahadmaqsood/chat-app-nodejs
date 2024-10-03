@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const quizResultSchema = new mongoose.Schema({
     quiz_id: {
@@ -11,6 +11,10 @@ const quizResultSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    answers: {
+        type: mongoose.Schema.Types.Mixed, // json of which options user selected for each question
+        required: true
+    },
     score: {
         type: Number,
         required: true
@@ -19,6 +23,9 @@ const quizResultSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('QuizResult', quizResultSchema);
+const QuizResult = mongoose.model('QuizResult', quizResultSchema);
+
+
+export default QuizResult;

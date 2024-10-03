@@ -1,14 +1,26 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const quizSchema = new mongoose.Schema({
-    quiz_title: {
+    title: {
         type: String,
         required: true
     },
-    created_at: {
-        type: Date,
-        default: Date.now
+    topic: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'QuizTopics',
+        required: true
+    },
+    difficulty: {
+        type: String,
+        required: true,
+        enum: ['easy', 'medium', 'hard', 'extra hard'] // Allowed values
+    },
+    num_questions: {
+        type: Number,
+        required: true,
     }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Quiz', quizSchema);
+const Quiz = mongoose.model('Quiz', quizSchema);
+
+export default Quiz;
