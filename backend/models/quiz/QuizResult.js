@@ -15,6 +15,14 @@ const quizResultSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Mixed, // json of which options user selected for each question
         required: true
     },
+    timeTaken: {
+        type: String,
+        required: true,
+    },
+    correctAnswers: {
+        type: Number,
+        required: true
+    },
     score: {
         type: Number,
         required: true

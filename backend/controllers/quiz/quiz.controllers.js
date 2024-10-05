@@ -99,13 +99,13 @@ export const getQuizListByTopic = async (req, res) => {
 
 export const saveQuizResult = async (req, res) => {
     try {
-        const { quiz_id, score, answers } = req.body;
+        const { quiz_id, score, timeTaken, correctAnswers, answers } = req.body;
 
         const user_id = req.user.id; // Assuming user ID is coming from the authenticated request
 
         // Validate input
-        if (!quiz_id || score === undefined || !answers) {
-            return res.status(400).json(new ApiResponse(400, {}, 'Quiz ID, Score, and Answers are required.'));
+        if (!quiz_id || score === undefined || !timeTaken || !correctAnswers || !answers) {
+            return res.status(400).json(new ApiResponse(400, {}, 'Quiz ID, Score, Time Taken, Correct Answers, and Answers are required.'));
         }
 
         // Check if the quiz exists
@@ -118,6 +118,8 @@ export const saveQuizResult = async (req, res) => {
         const quizResult = new QuizResult({
             quiz_id,
             user_id,
+            correctAnswers,
+            timeTaken,
             answers, // Include the user's answers
             score,
         });
