@@ -16,7 +16,7 @@ const quizResultSchema = new mongoose.Schema({
         required: true
     },
     timeTaken: {
-        type: int, // time in seconds
+        type: Number, // time in seconds
         required: true,
     },
     correctAnswers: {
