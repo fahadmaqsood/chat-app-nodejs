@@ -149,6 +149,9 @@ export const getLeaderboard = async (req, res) => {
             const today = moment().startOf('day'); // Start of today
             const lastSunday = today.day(0).startOf('day'); // Get last Sunday at 12:00 AM
 
+            console.log(lastSunday);
+            console.log(lastSunday.toDate());
+
             // Set the filter to include only results after last Sunday midnight
             dateFilter = {
                 createdAt: { $gte: lastSunday.toDate() }
