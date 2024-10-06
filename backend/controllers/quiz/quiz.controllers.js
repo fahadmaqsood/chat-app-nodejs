@@ -188,6 +188,7 @@ export const getLeaderboard = async (req, res) => {
                     name: '$userDetails.name',
                     username: '$userDetails.username',
                     avatar: '$userDetails.avatar',
+                    country: '$userDetails.country',
                 }
             },
             {
