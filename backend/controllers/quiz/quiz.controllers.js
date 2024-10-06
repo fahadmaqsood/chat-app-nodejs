@@ -158,17 +158,48 @@ export const getLeaderboard = async (req, res) => {
             };
         }
 
-        // Query the quiz results with the optional date filter, limit, and skip
-        const leaderboardResults = await QuizResult.find(dateFilter)
-            .populate({
-                path: 'user_id',
-                model: User,
-                select: 'name username avatar', // Customize the fields you need
-            })
-            .sort({ score: -1 }) // Sort by score in descending order
-            .skip(Number(skip)) // Skip for pagination
-            .limit(Number(limit)) // Limit results
-            .exec();
+        // Aggregate scores by user
+        const leaderboardResults = await QuizResult.aggregate([
+            {
+                $match: dateFilter // Filter by date if specified
+            },
+            {
+                $group: {
+                    _id: '$user_id', // Group by user_id
+                    totalScore: { $sum: '$score' }, // Sum the scores
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users', // Ensure this matches your User model collection name
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
+                $unwind: '$userDetails' // Unwind user details
+            },
+            {
+                $project: {
+                    _id: 0,
+                    userId: '$_id',
+                    totalScore: 1,
+                    name: '$userDetails.name',
+                    username: '$userDetails.username',
+                    avatar: '$userDetails.avatar',
+                }
+            },
+            {
+                $sort: { totalScore: -1 } // Sort by totalScore in descending order
+            },
+            {
+                $skip: Number(skip) // Skip for pagination
+            },
+            {
+                $limit: Number(limit) // Limit results
+            }
+        ]).exec();
 
         return res.status(200).json(new ApiResponse(200, leaderboardResults, 'Leaderboard fetched successfully'));
     } catch (error) {
