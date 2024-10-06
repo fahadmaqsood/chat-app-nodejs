@@ -257,11 +257,16 @@ export const getMostPopularQuizzes = async (req, res) => {
                     completionsInWeek: 1, // Show completions in the past week
                     totalCompletions: 1,  // Show total completions
                     title: 1,              // Include quiz name or other fields you want to display
-                    description: 1,
+                    topic: 1,
+                    difficulty: 1,
+                    num_questions: 1,
                     createdAt: 1
                 }
             }
-        ]).exec();
+        ]).populate({
+            path: 'topic', // The field to populate
+            select: 'name description' // Fields to select from the topic model
+        }).exec();
 
         // Check if any quizzes were found
         if (popularQuizzes.length === 0) {
