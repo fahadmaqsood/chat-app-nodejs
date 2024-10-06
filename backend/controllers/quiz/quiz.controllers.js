@@ -263,10 +263,7 @@ export const getMostPopularQuizzes = async (req, res) => {
                     createdAt: 1
                 }
             }
-        ]).populate({
-            path: 'topic', // The field to populate
-            select: 'name description' // Fields to select from the topic model
-        }).exec();
+        ]).exec();
 
         // Check if any quizzes were found
         if (popularQuizzes.length === 0) {
