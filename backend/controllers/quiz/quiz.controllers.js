@@ -346,3 +346,94 @@ export const searchQuizTopics = async (req, res) => {
         return res.status(500).json(new ApiResponse(500, {}, "Server encountered an error"));
     }
 };
+
+
+
+
+export const getFriendsByScore = async (req, res) => {
+    try {
+        const userId = req.user._id; // Extract userId from route params
+        const { limit = 15, skip = 0 } = req.query; // Pagination values from query params
+
+        // Get the current date and calculate the last Sunday at 12:00 AM
+        const today = moment().startOf('day'); // Start of today
+        const lastSunday = today.day(0).startOf('day'); // Last Sunday at 12:00 AM
+
+        // Fetch the user's followers and following lists
+        const user = await User.findById(userId)
+            .populate('followers', 'name username avatar') // Populate followers
+            .populate('following', 'name username avatar') // Populate following
+            .lean()
+            .exec();
+
+        if (!user) {
+            return res.status(404).json(new ApiResponse(404, {}, 'User not found'));
+        }
+
+        // Create a Set of the user's following IDs
+        const followingIds = new Set(user.following.map(follow => follow._id.toString()));
+
+        // Find mutual friends (people who follow you and you follow them back)
+        const mutualFriends = user.followers.filter(follower => {
+            return followingIds.has(follower._id.toString());
+        });
+
+        if (mutualFriends.length === 0) {
+            return res.status(200).json(new ApiResponse(200, [], 'No mutual friends found.'));
+        }
+
+        // Get mutual friend IDs
+        const mutualFriendIds = mutualFriends.map(friend => friend._id);
+
+        // Query the quiz results to get the total scores of mutual friends this week
+        const friendsLeaderboard = await QuizResult.aggregate([
+            {
+                $match: {
+                    user_id: { $in: mutualFriendIds }, // Only include mutual friends
+                    createdAt: { $gte: lastSunday.toDate() } // Filter by scores from the past week
+                }
+            },
+            {
+                $group: {
+                    _id: '$user_id', // Group by user_id (friend)
+                    totalScore: { $sum: '$score' }, // Sum their quiz scores
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users', // Reference the 'users' collection
+                    localField: '_id', // Match friend _id
+                    foreignField: '_id',
+                    as: 'userDetails' // Fetch user details
+                }
+            },
+            {
+                $unwind: '$userDetails' // Unwind user details for easier access
+            },
+            {
+                $project: {
+                    _id: 0,
+                    userId: '$_id',
+                    totalScore: 1,
+                    name: '$userDetails.name',
+                    username: '$userDetails.username',
+                    avatar: '$userDetails.avatar',
+                }
+            },
+            {
+                $sort: { totalScore: -1 } // Sort by score in descending order
+            },
+            {
+                $skip: Number(skip), // Skip for pagination
+            },
+            {
+                $limit: Number(limit), // Limit the results
+            }
+        ]).exec();
+
+        return res.status(200).json(new ApiResponse(200, friendsLeaderboard, 'Friends leaderboard fetched successfully'));
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(new ApiResponse(500, {}, 'Something went wrong while fetching friends leaderboard.'));
+    }
+};
