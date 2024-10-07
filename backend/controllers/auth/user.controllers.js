@@ -71,6 +71,52 @@ const validateAndRefreshTokens = async (accessToken, refreshToken) => {
   }
 };
 
+
+const getUserFriends = async (userId, limit, skip) => {
+  try {
+    // Fetch the user's followers and following lists
+    const user = await User.findById(userId)
+      .populate('followers', 'name username avatar') // Populate followers
+      .populate('following', 'name username avatar') // Populate following
+      .lean()
+      .exec();
+
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+
+    // Apply skip and limit manually on followers or following
+    const startIndex = Number(skip || 0);
+    const endIndex = startIndex + Number(limit || 15);
+
+
+
+    const followingIds = new Set(user.following.map(follow => follow._id.toString()));
+
+    // Find mutual friends (people who follow you and you follow them back)
+    const mutualFriends = user.followers.filter(follower => {
+      return followingIds.has(follower._id.toString());
+    });
+
+    mutualFriends.reverse();
+
+
+    // Slice the arrays for pagination
+    const paginatedFriends = mutualFriends.slice(startIndex, endIndex);
+
+
+    return paginatedFriends; // Return the list of mutual friends
+
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(
+      500,
+      "Something went wrong while fetching user friend list"
+    );
+  }
+}
+
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -651,5 +697,6 @@ export {
   updateUserAvatar,
   verifyEmail,
   getUserPoints,
-  validateAndRefreshTokens
+  validateAndRefreshTokens,
+  getUserFriends
 };

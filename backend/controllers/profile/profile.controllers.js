@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import PostLike from '../../models/social/PostLikes.js';
 import UserComment from '../../models/social/UserComment.js';
 
+import { getUserFriends } from "../auth/user.controllers.js";
+
 const getSelectiveProfileInfo = async (req, res) => {
     try {
         // Extract token from headers
@@ -118,6 +120,9 @@ const getProfileInfo = async (req, res) => {
 
         delete user.followers;
         delete user.following;
+
+
+        // user.friends = await getUserFriends(userId);
 
 
         return res
@@ -301,4 +306,20 @@ const unfollowUser = async (req, res) => {
 
 
 
-export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, followUser, unfollowUser };
+const getFriends = async (req, res) => {
+    try {
+        const { userId, limit = 15, skip = 0 } = req.body;
+
+
+        const userFriends = await getUserFriends(userId, limit, skip);
+
+
+        return res.status(200).json(new ApiResponse(200, { friends: userFriends }, "Successfully fetched user friends"));
+    } catch (error) {
+        console.error("Error in getFriends:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, followUser, unfollowUser, getFriends };
