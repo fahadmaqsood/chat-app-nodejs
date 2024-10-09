@@ -47,7 +47,7 @@ export const generateImagesFromText = async ({ description }) => {
         // Request to generate images based on text description
         const response = await openai.images.generate({
             prompt: description, // Text description for generating the images
-            n: 2, // Number of images to generate
+            n: 1, // Number of images to generate
             size: '256x256', // Image size (can be '256x256', '512x512', or '1024x1024')
         });
 

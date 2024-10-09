@@ -665,7 +665,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   }
 });
 
-// Get Find friends points
+// Get user points
 const getUserPoints = asyncHandler(async (req, res) => {
 
   const currentUser = await User.findById(req.user._id);
@@ -680,6 +680,61 @@ const getUserPoints = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, { user_points: currentUser.user_points }, "User points fetched successfully."));
+});
+
+
+// decrease user points
+const decreaseUserPoints = asyncHandler(async (req, res) => {
+
+  const { by_points } = req.body;
+
+  const currentUser = await User.findById(req.user._id);
+
+  if (!currentUser) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "User not found."));
+  }
+
+  let updatedUser = await User.findByIdAndUpdate(
+    currentUser._id,
+    { user_points: ((currentUser.user_points - by_points) < 0) ? 0 : (currentUser.user_points - by_points) },
+    { new: true }
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+  );
+
+  // Respond with the user's user_points
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user: updatedUser }, "User points fetched successfully."));
+});
+
+// add user points
+const addUserPoints = asyncHandler(async (req, res) => {
+
+  const { by_points } = req.body;
+
+  const currentUser = await User.findById(req.user._id);
+
+  if (!currentUser) {
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "User not found."));
+  }
+
+  let updatedUser = await User.findByIdAndUpdate(
+    currentUser._id,
+    { user_points: currentUser.user_points + by_points },
+    { new: true }
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+  );
+
+  // Respond with the user's user_points
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user: updatedUser }, "User points fetched successfully."));
 });
 
 export {
@@ -697,6 +752,8 @@ export {
   updateUserAvatar,
   verifyEmail,
   getUserPoints,
+  addUserPoints,
+  decreaseUserPoints,
   validateAndRefreshTokens,
   getUserFriends
 };

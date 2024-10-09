@@ -15,7 +15,9 @@ import {
   resetForgottenPassword,
   updateUserAvatar,
   verifyEmail,
-  getUserPoints
+  getUserPoints,
+  addUserPoints,
+  decreaseUserPoints
 } from "../../controllers/auth/user.controllers.js";
 import {
   verifyJWT,
@@ -34,6 +36,8 @@ import { validate } from "../../validators/validate.js";
 import { upload } from "../../middlewares/multer.middlewares.js";
 import { mongoIdPathVariableValidator } from "../../validators/common/mongodb.validators.js";
 import { get } from "mongoose";
+
+import { validateTokensMiddleware } from "../../middlewares/auth.middlewares.js";
 
 const router = Router();
 
@@ -83,8 +87,10 @@ router
     assignRole
   );
 
-// Get user find friends points
-router.route("/find-friends-points").get(verifyJWT, getUserPoints);
+// Get user points
+router.route("/get-user-points").get(validateTokensMiddleware, getUserPoints);
+router.route("/decrease-user-points").post(validateTokensMiddleware, decreaseUserPoints);
+router.route("/add-user-points").post(validateTokensMiddleware, addUserPoints);
 
 // SSO routes
 router.route("/google").get(
