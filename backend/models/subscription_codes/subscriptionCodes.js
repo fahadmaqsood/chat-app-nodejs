@@ -30,10 +30,27 @@ const subscriptionCodesSchema = new mongoose.Schema({
         default: 1
     }, // Number of free subscription months
 
+    price_paid: {
+        type: Number,  // Mongoose uses 'Number' type to represent floating-point values
+        required: true // Make it a required field
+    }, // Price paid for the subscription
+
     isUsed: {
         type: Boolean,
         default: false
-    } // Field to track if the subscription is currently active or expired
+    }, // Field to track if the subscription is currently active or expired
+
+
+    redemption_date: {
+        type: Date,
+        default: null
+    }, // Field to store the date of redemption (if redeemed)
+
+    redeemed_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    }
 
 }, { timestamps: true });
 

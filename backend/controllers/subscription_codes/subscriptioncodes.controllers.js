@@ -18,11 +18,15 @@ const generateUniqueCode = async (prefix) => {
 // Generate Subscription Code
 export const generateSubscriptionCode = async (req, res) => {
     try {
-        const { months, referral_code } = req.body;
+        const { months, referral_code, price_paid } = req.body;
 
         // Validate months
         if (!months) {
             return res.status(400).json(new ApiResponse(400, {}, "Missing 'months' parameter"));
+        }
+
+        if (!price_paid) {
+            return res.status(400).json(new ApiResponse(400, {}, "Missing 'price_paid' parameter"));
         }
 
         const parsedMonths = parseInt(months, 10);
@@ -41,7 +45,8 @@ export const generateSubscriptionCode = async (req, res) => {
             referrals: [],
 
             subscription_code: user_subscription_code,
-            referral_code: user_referral_code
+            referral_code: user_referral_code,
+            price_paid: price_paid
         });
 
 
@@ -150,3 +155,46 @@ export const getReferralsBySubscription = async (req, res) => {
     }
 };
 
+
+
+
+
+
+export const redeemSubscriptionCode = async (req, res) => {
+    try {
+        const { subscription_code } = req.body; // Get subscription code and user ID from request body
+
+        const user_id = req.user._id;
+
+        // Find the subscription by code
+        const subscription = await SubscriptionCodes.findOne({ subscription_code });
+
+        if (!subscription) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Invalid subscription code'));
+        }
+
+        // Check if the subscription code has already been used
+        if (subscription.isUsed) {
+            return res.status(400).json(new ApiResponse(400, {}, 'This subscription code has already been redeemed'));
+        }
+
+        // Mark the subscription code as used, set the redemption date, and store the user who redeemed it
+        subscription.isUsed = true;
+        subscription.redemption_date = new Date(); // Set current date as the redemption date
+        subscription.redeemed_by = user_id; // Set the user who redeemed the code
+        await subscription.save();
+
+        // Return success response
+        res.status(200).json(new ApiResponse(200, {
+            subscription_code: subscription.subscription_code,
+            months: subscription.months,
+            price_paid: subscription.price_paid,
+            redemption_date: subscription.redemption_date,
+            redeemed_by: subscription.redeemed_by
+        }, 'Subscription code redeemed successfully.'));
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(new ApiResponse(500, {}, 'Server error while redeeming subscription code'));
+    }
+};
