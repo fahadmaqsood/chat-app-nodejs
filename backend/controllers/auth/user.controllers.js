@@ -682,6 +682,19 @@ const getUserPoints = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user_points: currentUser.user_points }, "User points fetched successfully."));
 });
 
+const _decreaseUserPoints = async (user_id, current_points, by_points) => {
+  let after_decrease = current_points - by_points;
+
+  let updatedUser = await User.findByIdAndUpdate(
+    user_id,
+    { user_points: (after_decrease < 0) ? 0 : after_decrease },
+    { new: true }
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+  );
+
+  return updatedUser;
+}
 
 // decrease user points
 const decreaseUserPoints = asyncHandler(async (req, res) => {
@@ -696,13 +709,7 @@ const decreaseUserPoints = asyncHandler(async (req, res) => {
       .json(new ApiResponse(404, null, "User not found."));
   }
 
-  let updatedUser = await User.findByIdAndUpdate(
-    currentUser._id,
-    { user_points: ((currentUser.user_points - by_points) < 0) ? 0 : (currentUser.user_points - by_points) },
-    { new: true }
-  ).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
-  );
+  let updatedUser = await _decreaseUserPoints(currentUser._id, currentUser.user_points, by_points);
 
   // Respond with the user's user_points
   return res
@@ -755,5 +762,8 @@ export {
   addUserPoints,
   decreaseUserPoints,
   validateAndRefreshTokens,
-  getUserFriends
+  getUserFriends,
+
+
+  _decreaseUserPoints
 };

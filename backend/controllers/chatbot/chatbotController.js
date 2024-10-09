@@ -8,6 +8,10 @@ import ChatBot from "../../models/chatbot/chatbot.models.js";
 // import { User } from "../../models/auth/user.models.js";
 import { getChatCompletion, generateImagesFromText } from "../../utils/openai.js";
 
+import { _decreaseUserPoints } from "../auth/user.controllers.js";
+
+import { Prices } from "../../settings/prices/prices.js";
+
 // Function to get similar messages for context
 const getSimilarMessages = async (message, subject) => {
     return ChatBot.find({
@@ -126,6 +130,8 @@ export const handleGenerativeAiImages = async (req, res) => {
 
 
         const imageUrls = await generateImagesFromText({ description });
+
+        _decreaseUserPoints(req.user._id, req.user.user_points, Prices.GENERATE_AI_ART_PRICE);
 
         return res.status(201).json(new ApiResponse(201, { images: imageUrls }, "Images generated successfully"));
 

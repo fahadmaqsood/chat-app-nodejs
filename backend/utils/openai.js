@@ -2,6 +2,7 @@
 
 import { OpenAI } from 'openai';
 
+
 let openai = null;
 
 // Function to get chat completion from OpenAI
@@ -50,6 +51,7 @@ export const generateImagesFromText = async ({ description }) => {
             n: 1, // Number of images to generate
             size: '256x256', // Image size (can be '256x256', '512x512', or '1024x1024')
         });
+
 
         console.log(response);
 
