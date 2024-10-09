@@ -126,6 +126,10 @@ export const handleGenerativeAiImages = async (req, res) => {
         return res.status(404).json(new ApiResponse(404, {}, "Description is required."));
     }
 
+    if (req.user.user_points - Prices.GENERATE_AI_ART_PRICE < 0) {
+        return res.status(402).json(new ApiResponse(402, {}, "User doesn't have enough coins to use this feature"));
+    }
+
     try {
 
 
