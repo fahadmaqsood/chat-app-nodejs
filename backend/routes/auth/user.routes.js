@@ -17,7 +17,8 @@ import {
   verifyEmail,
   getUserPoints,
   addUserPoints,
-  decreaseUserPoints
+  decreaseUserPoints,
+  refreshUser
 } from "../../controllers/auth/user.controllers.js";
 import {
   verifyJWT,
@@ -86,6 +87,9 @@ router
     validate,
     assignRole
   );
+
+// refresh user
+router.route("/refresh-user").post(validateTokensMiddleware, refreshUser);
 
 // Get user points
 router.route("/get-user-points").get(validateTokensMiddleware, getUserPoints);

@@ -285,6 +285,29 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
+
+const refreshUser = asyncHandler(async (req, res) => {
+
+  // get the user document ignoring the password and refreshToken field
+  const loggedInUser = await User.findById(req.user._id).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+  );
+
+  const accessToken = req.headers['access-token'];
+  const refreshToken = req.headers['refresh-token'];
+
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { user: loggedInUser, accessToken, refreshToken }, // send access and refresh token in response if client decides to save them by themselves
+        "User logged in successfully"
+      )
+    );
+});
+
 const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
@@ -765,5 +788,7 @@ export {
   getUserFriends,
 
 
-  _decreaseUserPoints
+  _decreaseUserPoints,
+
+  refreshUser
 };
