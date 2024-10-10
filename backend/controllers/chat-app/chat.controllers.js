@@ -147,15 +147,16 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
   if (currentUser.user_points <= 0) {
     return res
       .status(400)
-      .json(new ApiResponse(400, null, "You don't have enough points buy points to search."));
+      .json(new ApiResponse(400, null, "You don't have enough coins to use this feature."));
   }
 
-  // Deduct 1 point for the search and save the user
-  currentUser.user_points -= 1;
-  await currentUser.save();
-
   // Build the query object dynamically based on provided parameters
-  const query = { _id: { $ne: currentUser._id } }; // Exclude the current user
+  const query = {
+    _id: {
+      $ne: currentUser._id,
+      $nin: [...currentUser.followers, ...currentUser.following]
+    }
+  }; // Exclude the current user
 
   if (religion) query.religion = religion;
   if (age) query.age = parseInt(age); // Parse age as an integer
@@ -170,9 +171,13 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
     {
       $project: {
         avatar: 1,
+        name: 1,
         username: 1,
         email: 1,
       },
+    },
+    {
+      $limit: 5, // Limit the result to 5 users
     },
   ]);
 
@@ -182,6 +187,10 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
       .status(404)
       .json(new ApiResponse(404, null, "No users found matching the given criteria."));
   }
+
+  // Deduct 1 point for the search and save the user
+  currentUser.user_points -= 1;
+  await currentUser.save();
 
   // Return matching users
   return res

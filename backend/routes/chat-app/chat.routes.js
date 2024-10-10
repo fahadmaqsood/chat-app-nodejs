@@ -33,7 +33,7 @@ router.route("/").get(getAllChats);
 
 router.route("/users").get(searchAvailableUsers);
 
-router.route("/find-random-friends").get(findMatchingFriends);
+router.route("/find-random-friends").get(validateTokensMiddleware, findMatchingFriends);
 
 router.route("/get-user-chats").post(validateTokensMiddleware, getListOfUserChats);
 
@@ -64,12 +64,14 @@ router
 router
   .route("/group/:chatId/:participantId")
   .post(
+    validateTokensMiddleware,
     mongoIdPathVariableValidator("chatId"),
     mongoIdPathVariableValidator("participantId"),
     validate,
     addNewParticipantInGroupChat
   )
   .delete(
+    validateTokensMiddleware,
     mongoIdPathVariableValidator("chatId"),
     mongoIdPathVariableValidator("participantId"),
     validate,
@@ -78,10 +80,10 @@ router
 
 router
   .route("/leave/group/:chatId")
-  .delete(mongoIdPathVariableValidator("chatId"), validate, leaveGroupChat);
+  .delete(mongoIdPathVariableValidator("chatId"), validate, validateTokensMiddleware, leaveGroupChat);
 
 router
   .route("/remove/:chatId")
-  .delete(mongoIdPathVariableValidator("chatId"), validate, deleteOneOnOneChat);
+  .delete(mongoIdPathVariableValidator("chatId"), validate, validateTokensMiddleware, deleteOneOnOneChat);
 
 export default router;

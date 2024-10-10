@@ -12,6 +12,22 @@ import { _decreaseUserPoints } from "../auth/user.controllers.js";
 
 import { Prices } from "../../settings/prices/prices.js";
 
+
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid'; // For generating unique filenames
+
+
+// If using ES modules, resolve __dirname manually
+const __filename = fileURLToPath(import.meta.url); // Get the current file path
+const __dirname = path.dirname(__filename); // Get the directory name
+
+console.log(__dirname);
+
+
+
 // Function to get similar messages for context
 const getSimilarMessages = async (message, subject) => {
     return ChatBot.find({
@@ -135,9 +151,34 @@ export const handleGenerativeAiImages = async (req, res) => {
 
         const imageUrls = await generateImagesFromText({ description });
 
+        // Download and save images locally
+        const localImagePaths = await Promise.all(
+            imageUrls.map(async (imageUrl) => {
+                const imageName = `${uuidv4()}.jpg`; // Generate a unique name for each image
+                const imagePath = path.join(__dirname, '..', '..', 'public', 'generated-images', imageName); // Save path
+
+                const writer = fs.createWriteStream(imagePath); // Create a stream to save the image
+
+                // Download image using axios and pipe to local file
+                const response = await axios({
+                    url: imageUrl,
+                    method: 'GET',
+                    responseType: 'stream',
+                });
+
+                response.data.pipe(writer);
+
+                // Return a promise that resolves when the image is fully written
+                return new Promise((resolve, reject) => {
+                    writer.on('finish', () => resolve(`/generated-images/${imageName}`)); // Resolve with the local URL
+                    writer.on('error', reject);
+                });
+            })
+        );
+
         _decreaseUserPoints(req.user._id, req.user.user_points, Prices.GENERATE_AI_ART_PRICE);
 
-        return res.status(201).json(new ApiResponse(201, { images: imageUrls }, "Images generated successfully"));
+        return res.status(200).json(new ApiResponse(200, { images: localImagePaths }, "Images generated successfully"));
 
 
     } catch (err) {
