@@ -145,7 +145,7 @@ app.get('/', (req, res) => {
 
 
 // route for auto server updates
-app.all('/pullAndRestart', (req, res) => {
+app.post('/pullAndRestart', (req, res) => {
   // Execute the script
   exec('bash ~/pullAndRestart', (error, stdout, stderr) => {
     if (error) {
