@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTopics, createUserPost, getPosts, voteInPoll, getSpecificPost } from '../../controllers/social/userPostController.js';
+import { getAllTopics, createUserPost, getPosts, voteInPoll, getSpecificPost, deletePost } from '../../controllers/social/userPostController.js';
 import { likePost, unlikePost, getLikes } from '../../controllers/social/userLikeController.js';
 import { createComment, getComments, likeComment, unlikeComment } from '../../controllers/social/usercommentController.js';
 
@@ -27,6 +27,8 @@ router.post('/get-comments', validateTokensMiddleware, getComments);
 
 router.post('/like-comment', validateTokensMiddleware, likeComment);
 router.post('/unlike-comment', validateTokensMiddleware, unlikeComment);
+
+router.post('/delete-post', validateTokensMiddleware, deletePost);
 
 
 router.get("/get-all-topics", getAllTopics);

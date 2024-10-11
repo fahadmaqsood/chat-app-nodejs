@@ -413,6 +413,41 @@ export const getSpecificPost = async (req, res) => {
 };
 
 
+export const deletePost = async (req, res) => {
+    const { postId } = req.body; // Get postId from the URL params
+    const { userId } = req.user._id.toString();   // Assume userId is extracted from the request, e.g., via authentication middleware
+
+    try {
+        // Validate postId
+        if (!postId) {
+            return res.status(400).json(new ApiResponse(400, {}, 'Post ID is required'));
+        }
+
+        // Find the post by ID
+        const post = await UserPost.findById(postId);
+
+        // If post is not found, return a 404 response
+        if (!post) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        // Check if the user is authorized to delete the post
+        if (post.user_id.toString() !== userId) {
+            return res.status(400).json(new ApiResponse(400, {}, 'You can only delete your own posts'));
+        }
+
+        // Delete the post
+        await post.remove();
+
+        // Return success response
+        return res.status(200).json(new ApiResponse(200, {}, 'Post deleted successfully'));
+    } catch (err) {
+        // Handle errors
+        return res.status(500).json(new ApiResponse(500, {}, err.message));
+    }
+};
+
+
 
 export const getAllTopics = async (req, res) => {
     const topics = await getCachedTopicNames();
