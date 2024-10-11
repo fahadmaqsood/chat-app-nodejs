@@ -285,7 +285,7 @@ const unfollowUser = async (req, res) => {
         }
 
         // Check if the current user is not following the target user
-        if (!currentUser.following.includes(userId)) {
+        if (!currentUser.following.includes(userId) && !targetUser.followers.includes(currentUser._id)) {
             return res.status(400).json(new ApiResponse(400, {}, "You are not following this user"));
         }
 

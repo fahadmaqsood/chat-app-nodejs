@@ -347,7 +347,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
       },
     ]).sort({ createdAt: 1 }).exec();
 
-    console.log(messages);
+    // console.log(messages);
 
     chat[0]["recentMessages"] = messages;
 

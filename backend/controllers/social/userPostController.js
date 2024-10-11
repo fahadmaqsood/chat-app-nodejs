@@ -31,11 +31,11 @@ export async function getCachedTopicNames() {
 
     // Check if cache is older than 5 minutes
     if (currentTime - cache.cached_time > fiveMinutes) {
-        console.log("Cache is stale, reloading topic names...");
+        // console.log("Cache is stale, reloading topic names...");
         cache.topicNames = await getAllTopicNames(); // Reload topic names
         cache.cached_time = currentTime; // Update cache time
     } else {
-        console.log("Using cached topic names.");
+        // console.log("Using cached topic names.");
     }
 
     return cache.topicNames;
