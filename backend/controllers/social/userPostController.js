@@ -415,7 +415,7 @@ export const getSpecificPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     const { postId } = req.body; // Get postId from the URL params
-    const { userId } = req.user._id.toString();   // Assume userId is extracted from the request, e.g., via authentication middleware
+    const userId = req.user._id;   // Assume userId is extracted from the request, e.g., via authentication middleware
 
     try {
         // Validate postId
@@ -432,8 +432,8 @@ export const deletePost = async (req, res) => {
         }
 
         // Check if the user is authorized to delete the post
-        if (post.user_id.toString() !== userId) {
-            return res.status(400).json(new ApiResponse(400, {}, 'You can only delete your own posts'));
+        if (post.user_id.toString() !== userId.toString()) {
+            return res.status(400).json(new ApiResponse(400, {}, 'You can only delete your own posts.;'));
         }
 
         // Delete the post
