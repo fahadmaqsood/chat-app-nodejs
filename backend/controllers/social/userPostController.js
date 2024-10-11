@@ -437,7 +437,7 @@ export const deletePost = async (req, res) => {
         }
 
         // Delete the post
-        await post.remove();
+        await UserPost.findByIdAndDelete(postId);
 
         // Return success response
         return res.status(200).json(new ApiResponse(200, {}, 'Post deleted successfully'));
