@@ -66,6 +66,11 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+    about: {
+      type: String,
+      trim: true,
+      default: "Just a teen trying to figure out life one meme at a time! 😎✨ Lover of late-night convos, spontaneous adventures, and anything that makes me laugh until my stomach hurts. 😂"
+    },
     mood: {
       type: String,
       default: "happy"
@@ -155,17 +160,17 @@ const userSchema = new Schema(
     privacySettings: {
       viewFollowers: {
         type: String,
-        enum: ['everyone', 'no one', 'close friends'],
+        enum: ['everyone', 'no one', 'followers', 'friends'],
         default: 'everyone'
       },
       viewFollowing: {
         type: String,
-        enum: ['everyone', 'no one', 'close friends'],
+        enum: ['everyone', 'no one', 'followers', 'friends'],
         default: 'everyone'
       },
       viewCloseFriends: {
         type: String,
-        enum: ['everyone', 'no one', 'close friends'],
+        enum: ['everyone', 'no one', 'followers', 'friends'],
         default: 'everyone'
       },
     },
