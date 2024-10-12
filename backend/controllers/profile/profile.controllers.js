@@ -294,7 +294,7 @@ const unfollowUser = async (req, res) => {
         await currentUser.save();
 
         // Update the followers array for the target user
-        targetUser.followers = targetUser.followers.filter(id => id.toString() !== currentUserId);
+        targetUser.followers = targetUser.followers.filter(id => id.toString() !== currentUserId.toString());
         await targetUser.save();
 
         return res.status(200).json(new ApiResponse(200, {}, "Successfully unfollowed the user"));
