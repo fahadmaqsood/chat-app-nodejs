@@ -44,9 +44,16 @@ const getSessionsByDate = async (req, res) => {
         }
 
         // Fetch sessions for the given date
-        const sessions = await UserSchedule.find({ date: new Date(date), organizer: currentUserId })
+        const sessions = await UserSchedule.find({
+            date: new Date(date),
+            $or: [
+                { organizer: currentUserId }, // Check if currentUserId is the organizer
+                { participants: currentUserId } // Check if currentUserId is in participants
+            ]
+        })
             .populate('participants', 'name username avatar email') // Populate participant details
             .lean();
+
 
         if (!sessions || sessions.length === 0) {
             return res.status(200).json(new ApiResponse(200, { sessions: [] }, "No sessions found for this date"));
