@@ -27,7 +27,7 @@ const changeProfileSettings = async (req, res) => {
         const userId = decodedToken._id;
 
         // Extract user data from request
-        const { name, username, email, country, language, religion } = req.body;
+        const { name, username, about, email, country, language, religion } = req.body;
 
         // Check if email or username already exists
         const existingEmail = await User.findOne({ email });
@@ -50,6 +50,7 @@ const changeProfileSettings = async (req, res) => {
         user.name = name || user.name;
         user.username = username || user.username;
         user.email = email || user.email;
+        user.about = about || user.about;
         user.country = country || user.country;
         user.language = language || user.language;
         user.religion = religion || user.religion;
