@@ -113,6 +113,8 @@ import subscriptionCodesRoutes from "./routes/subscription_codes/subscriptionCod
 
 import quizRoutes from "./routes/quiz/quiz.routes.js";
 
+import userSessionRoutes from "./routes/user-sessions/userSessions.routes.js";
+
 // * App apis
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat-app/chats", chatRouter);
@@ -134,6 +136,8 @@ app.use('/api/v1/home', homeRoutes);
 app.use('/api/v1/subscription-codes/', subscriptionCodesRoutes);
 
 app.use('/api/v1/quiz/', quizRoutes);
+
+app.use('/api/v1/sessions/', userSessionRoutes);
 
 initializeSocketIO(io);
 initializeChatbotSocket(io);

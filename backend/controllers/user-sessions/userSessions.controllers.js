@@ -44,7 +44,7 @@ const getSessionsByDate = async (req, res) => {
         }
 
         // Fetch sessions for the given date
-        const sessions = await UserSchedule.find({ date: new Date(date), organizer: currentuserId })
+        const sessions = await UserSchedule.find({ date: new Date(date), organizer: currentUserId })
             .populate('participants', 'name username avatar email') // Populate participant details
             .lean();
 
