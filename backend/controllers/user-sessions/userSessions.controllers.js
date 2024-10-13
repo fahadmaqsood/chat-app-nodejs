@@ -6,11 +6,11 @@ import mongoose from "mongoose";
 // Schedule a session
 const scheduleSession = async (req, res) => {
     try {
-        const { title, description, participants, date, startTime, slots } = req.body;
+        const { title, description, participants, startTime, slots } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
-        if (!date || !startTime || !slots) {
-            return res.status(400).json(new ApiResponse(400, {}, "Date, startTime, and slots are required"));
+        if (!startTime || !slots) {
+            return res.status(400).json(new ApiResponse(400, {}, "startTime, and slots are required"));
         }
 
         // Create new session
@@ -18,8 +18,7 @@ const scheduleSession = async (req, res) => {
             title,
             description,
             participants: [...participants, currentUserId], // Include the current user as a participant
-            date,
-            startTime,
+            date: new Date(startTime),
             slots,
             organizer: currentUserId
         });

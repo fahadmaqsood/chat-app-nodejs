@@ -20,11 +20,6 @@ const userScheduleSchema = new mongoose.Schema({
         required: true
     }, // Date of the session
 
-    startTime: {
-        type: String,
-        required: true
-    }, // Start time of the session (in 24-hour format or other format as required)
-
     slots: {
         type: Number,
         required: true,
