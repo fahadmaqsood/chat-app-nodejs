@@ -385,46 +385,49 @@ export const getFriendsByScore = async (req, res) => {
         // Get mutual friend IDs
         const mutualFriendIds = mutualFriends.map(friend => friend._id);
 
-        // Query the quiz results to get the total scores of mutual friends this week
-        const friendsLeaderboard = await QuizResult.aggregate([
+        const friendsLeaderboard = await User.aggregate([
             {
-                $match: {
-                    user_id: { $in: mutualFriendIds }, // Only include mutual friends
-                    createdAt: { $gte: lastSunday.toDate() } // Filter by scores from the past week
-                }
-            },
-            {
-                $group: {
-                    _id: '$user_id', // Group by user_id (friend)
-                    totalScore: { $sum: '$score' }, // Sum their quiz scores
-                }
+                $match: { _id: { $in: mutualFriendIds } } // Match mutual friends
             },
             {
                 $lookup: {
-                    from: 'users', // Reference the 'users' collection
-                    localField: '_id', // Match friend _id
-                    foreignField: '_id',
-                    as: 'userDetails' // Fetch user details
+                    from: 'quizresults', // Reference the 'quizresults' collection
+                    let: { userId: '$_id' }, // Use user ID
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$user_id', '$$userId'] }, // Match user ID
+                                createdAt: { $gte: lastSunday.toDate() } // Only get scores from the past week
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalScore: { $sum: '$score' } // Sum scores
+                            }
+                        }
+                    ],
+                    as: 'quizResults' // Save results here
                 }
             },
             {
-                $unwind: '$userDetails' // Unwind user details for easier access
+                $unwind: { path: '$quizResults', preserveNullAndEmptyArrays: true } // Unwind, but keep those without scores
             },
             {
                 $project: {
                     _id: 0,
                     userId: '$_id',
-                    totalScore: 1,
-                    name: '$userDetails.name',
-                    username: '$userDetails.username',
-                    avatar: '$userDetails.avatar',
+                    name: '$name',
+                    username: '$username',
+                    avatar: '$avatar',
+                    totalScore: { $ifNull: ['$quizResults.totalScore', 0] } // Default score of 0 if no quiz
                 }
             },
             {
-                $sort: { totalScore: -1 } // Sort by score in descending order
+                $sort: { totalScore: -1 } // Sort by total score in descending order
             },
             {
-                $skip: Number(skip), // Skip for pagination
+                $skip: Number(skip), // Pagination
             },
             {
                 $limit: Number(limit), // Limit the results

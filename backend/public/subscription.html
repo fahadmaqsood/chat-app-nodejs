@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal Subscription</title>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AXhH4H-6HWnfNI1VibOK4ATMVXTZt3P1FT9cQr_vdKzPMPjBupNVJk2AZ0UHNdc9TOgvl3i0YWiTmwcO&vault=true&intent=subscription"
+        data-sdk-integration-source="button-factory"></script>
+</head>
+
+<body>
+
+    <div id="paypal-button-container-P-3JP97424FK586314NM4F3ZJQ"></div>
+    <script>
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'subscribe'
+            },
+            createSubscription: function (data, actions) {
+                return actions.subscription.create({
+                    /* Creates the subscription */
+                    plan_id: 'P-3JP97424FK586314NM4F3ZJQ'
+                });
+            },
+            onApprove: function (data, actions) {
+                // alert(data.subscriptionID); // You can add optional success message for the subscriber here
+
+                // Send the subscriptionID to your server
+                fetch('/api/v1/paypal/log-subscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ subscriptionID: data.subscriptionID }), // Send the subscription ID in request body
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log('Subscription logged successfully:', result);
+                        alert('Subscription successful!'); // Notify the user
+                    })
+                    .catch(error => {
+                        console.error('Error logging subscription:', error);
+                    });
+            }
+        }).render('#paypal-button-container-P-3JP97424FK586314NM4F3ZJQ'); // Renders the PayPal button
+    </script>
+
+
+
+</body>
+
+</html>

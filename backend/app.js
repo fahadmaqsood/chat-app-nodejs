@@ -114,6 +114,7 @@ import subscriptionCodesRoutes from "./routes/subscription_codes/subscriptionCod
 import quizRoutes from "./routes/quiz/quiz.routes.js";
 
 import userSessionRoutes from "./routes/user-sessions/userSessions.routes.js";
+import paypalRoutes from "./routes/paypal/paypal.routes.js";
 
 // * App apis
 app.use("/api/v1/users", userRouter);
@@ -139,6 +140,9 @@ app.use('/api/v1/quiz/', quizRoutes);
 
 app.use('/api/v1/sessions/', userSessionRoutes);
 
+app.use('/api/v1/paypal/', paypalRoutes);
+
+
 initializeSocketIO(io);
 initializeChatbotSocket(io);
 
@@ -146,6 +150,20 @@ initializeChatbotSocket(io);
 app.get('/', (req, res) => {
   res.send('Welcome to the ChatApp! testing...');
 });
+
+
+// Manually define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+app.get('/test/subscribe', (req, res) => {
+  // Route to serve the HTML file
+  // Send the subscription.html file located in the "public" folder
+  res.sendFile(path.join(__dirname, 'public', 'subscription.html'));
+
+});
+
 
 
 // route for auto server updates

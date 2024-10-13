@@ -3,7 +3,7 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes.js';
 
 
-const generateUniqueCode = async (prefix) => {
+export const generateUniqueCode = async (prefix) => {
     let code;
     let isUnique = false;
     while (!isUnique) {
@@ -18,7 +18,7 @@ const generateUniqueCode = async (prefix) => {
 // Generate Subscription Code
 export const generateSubscriptionCode = async (req, res) => {
     try {
-        const { months, referral_code, price_paid } = req.body;
+        const { months, referral_code, price_paid, full_name, email, subscription_date, next_billing_date } = req.body;
 
         // Validate months
         if (!months) {
@@ -27,6 +27,14 @@ export const generateSubscriptionCode = async (req, res) => {
 
         if (!price_paid) {
             return res.status(400).json(new ApiResponse(400, {}, "Missing 'price_paid' parameter"));
+        }
+
+        if (!subscription_date) {
+            return res.status(400).json(new ApiResponse(400, {}, "Missing 'subscription_date' parameter"));
+        }
+
+        if (!next_billing_date) {
+            return res.status(400).json(new ApiResponse(400, {}, "Missing 'next_billing_date' parameter"));
         }
 
         const parsedMonths = parseInt(months, 10);
@@ -46,7 +54,12 @@ export const generateSubscriptionCode = async (req, res) => {
 
             subscription_code: user_subscription_code,
             referral_code: user_referral_code,
-            price_paid: price_paid
+            price_paid: price_paid,
+
+            full_name,
+            email,
+            subscription_date,
+            next_billing_date
         });
 
 
