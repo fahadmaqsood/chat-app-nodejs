@@ -52,14 +52,15 @@ router
 
 router
   .route("/group/:chatId")
-  .get(mongoIdPathVariableValidator("chatId"), validate, getGroupChatDetails)
+  .get(validateTokensMiddleware, mongoIdPathVariableValidator("chatId"), validate, getGroupChatDetails)
   .patch(
+    validateTokensMiddleware,
     mongoIdPathVariableValidator("chatId"),
     updateGroupChatNameValidator(),
     validate,
     renameGroupChat
   )
-  .delete(mongoIdPathVariableValidator("chatId"), validate, deleteGroupChat);
+  .delete(validateTokensMiddleware, mongoIdPathVariableValidator("chatId"), validate, deleteGroupChat);
 
 router
   .route("/group/:chatId/:participantId")
