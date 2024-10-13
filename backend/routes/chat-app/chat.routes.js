@@ -29,7 +29,7 @@ const router = Router();
 
 //router.use(verifyJWT);
 
-router.route("/").get(getAllChats);
+router.route("/").get(validateTokensMiddleware, getAllChats);
 
 router.route("/users").get(searchAvailableUsers);
 
