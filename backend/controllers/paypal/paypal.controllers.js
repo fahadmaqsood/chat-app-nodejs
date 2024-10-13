@@ -9,8 +9,8 @@ import { generateUniqueCode } from '../subscription_codes/subscriptioncodes.cont
 
 
 // Your PayPal client credentials
-const PAYPAL_CLIENT_ID = 'AXhH4H-6HWnfNI1VibOK4ATMVXTZt3P1FT9cQr_vdKzPMPjBupNVJk2AZ0UHNdc9TOgvl3i0YWiTmwcO';
-const PAYPAL_CLIENT_SECRET = 'EOMSSJZg2xXwiSu8oLCgPdOpZQQXWoH-teAzKMRL-t2PoKtyay0dPZ0380tiuNq8wC-yF-2WdoYfGcm7';
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 
 
 const planIDs = {
