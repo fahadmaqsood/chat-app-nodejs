@@ -42,9 +42,17 @@ const getSessionsByDate = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, {}, "Date is required"));
         }
 
+
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0); // Set to the start of the day
+
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999); // Set to the end of the day
+
+
         // Fetch sessions for the given date
         const sessions = await UserSchedule.find({
-            date: new Date(date),
+            date: { $gte: startOfDay, $lte: endOfDay },
             $or: [
                 { organizer: currentUserId }, // Check if currentUserId is the organizer
                 { participants: currentUserId } // Check if currentUserId is in participants
