@@ -187,3 +187,51 @@ export const handleGenerativeAiImages = async (req, res) => {
 
     }
 }
+
+
+
+
+
+
+
+
+export const handleMathSolvingSteps = async (req, res) => {
+
+    const { method, problem, solution } = req.body;
+
+
+    if (!problem || !solution || !method) {
+        return res.status(404).json(new ApiResponse(404, {}, "Method, problem, and solution are required."));
+    }
+
+    try {
+
+        const instructionMessage = {
+            role: "system",
+            content: "I will give you a math problem, its solution and the method with which you will solve the problem. I want you to answer line by line with first line being problem_solution_description followed by: step name (the method by which you are solving, or what formula you used?), step description (why was this step necessary?), result (the result of operation), resultant_equation (the equation or the total result we get after this operation) and so on for other steps."
+        };
+
+
+
+        // Get response from OpenAI API
+        let openAIResponse;
+
+        try {
+            openAIResponse = await getChatCompletion({
+                messages: [instructionMessage],
+                user_message: `Problem: ${problem}\nMethod of Solution: ${method}\nSolution: ${solution}`,
+            });
+        } catch (e) {
+            throw new ApiResponse(500, {}, e.message);
+        }
+
+
+        return res.status(200).json(new ApiResponse(200, { steps: openAIResponse }, "Steps generated successfully."));
+
+
+    } catch (err) {
+        console.error('Error in handleGenerativeAiImages:', err);
+        res.status(500).json(new ApiResponse(500, {}, err.message));
+
+    }
+}
