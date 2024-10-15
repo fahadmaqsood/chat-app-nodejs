@@ -5,31 +5,42 @@ import { OpenAI } from 'openai';
 
 let openai = null;
 
-// Function to get chat completion from OpenAI
 export const getChatCompletion = async ({ messages, user_message }) => {
     try {
         if (!openai) {
             openai = new OpenAI({
-                apiKey: process.env.OPENAI_API_KEY, // Make sure to set this in your environment variables
+                apiKey: process.env.OPENAI_API_KEY,
             });
         }
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo', // or another model if you prefer
-            messages: [
-                ...messages,
-                { role: 'user', content: user_message },
-            ],
-            max_tokens: 150, // Adjust as needed
-            temperature: 0.7, // Adjust as needed
-        });
+        let allMessages = [...messages, { role: 'user', content: user_message }];
+        let totalResponse = '';
+        let finishReason = '';
 
-        return response.choices[0].message.content;
+        do {
+            const response = await openai.chat.completions.create({
+                model: 'gpt-3.5-turbo',
+                messages: allMessages,
+                max_tokens: 300, // Increase this limit for longer responses
+                temperature: 0.7,
+            });
+
+            const completion = response.choices[0].message.content;
+            totalResponse += completion;
+            finishReason = response.choices[0].finish_reason;
+
+            // Append the assistant's message to continue the conversation
+            allMessages.push({ role: 'assistant', content: completion });
+
+        } while (finishReason === 'length'); // If the response was cut off due to max_tokens, continue the loop
+
+        return totalResponse;
     } catch (error) {
         console.error('Error getting chat completion from OpenAI:', error);
         throw new Error('Error getting chat completion from OpenAI');
     }
 };
+
 
 
 

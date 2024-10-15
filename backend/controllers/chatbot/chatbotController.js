@@ -208,7 +208,7 @@ export const handleMathSolvingSteps = async (req, res) => {
 
         const instructionMessage = {
             role: "system",
-            content: "I will give you a math problem, its solution and the method with which you will solve the problem. I want you to answer line by line with first line being problem_solution_description followed by: step name (the method by which you are solving, or what formula you used?), step description (why was this step necessary?), result (the result of operation), resultant_equation (the equation or the total result we get after this operation) and so on for other steps."
+            content: "I will give you a math problem, its solution and the method with which you will solve the problem. I want you to answer as a json string with fields problem_solution_description and array of steps with fields: step name (the method by which you are solving, or what formula you used?), step description (why was this step necessary?), result (the result of operation), resultant_equation (the equation or the total result we get after this operation). Reply with only json, nothing else and that json should be valid."
         };
 
 
@@ -221,6 +221,8 @@ export const handleMathSolvingSteps = async (req, res) => {
                 messages: [instructionMessage],
                 user_message: `Problem: ${problem}\nMethod of Solution: ${method}\nSolution: ${solution}`,
             });
+
+            openAIResponse = JSON.parse(openAIResponse);
         } catch (e) {
             throw new ApiResponse(500, {}, e.message);
         }
