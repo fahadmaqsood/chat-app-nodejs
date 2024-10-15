@@ -7,6 +7,7 @@ import Quiz from "../../models/quiz/Quiz.js";
 
 import moment from "moment"; // For easier date manipulation
 
+import mongoose from "mongoose";
 
 export const getTopicList = async (req, res) => {
     try {
@@ -271,7 +272,33 @@ export const getMostPopularQuizzes = async (req, res) => {
                             }
                         }
                     },
-                    totalCompletions: { $size: '$completions' } // Total completions for the quiz
+                    totalCompletions: { $size: '$completions' }, // Total completions for the quiz
+
+                    userHasCompleted: {
+                        $cond: {
+                            if: {
+                                $gt: [
+                                    {
+                                        $size: {
+                                            $filter: {
+                                                input: '$completions',
+                                                as: 'completion',
+                                                cond: {
+                                                    $and: [
+                                                        { $eq: ['$$completion.user_id', new mongoose.Types.ObjectId(req.user._id)] }, // Match userId
+                                                        { $eq: ['$$completion.quiz_id', '$_id'] }  // Match quizId
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    },
+                                    0
+                                ]
+                            },
+                            then: true,
+                            else: false
+                        }
+                    }
                 }
             },
             {
@@ -279,6 +306,7 @@ export const getMostPopularQuizzes = async (req, res) => {
                     completionsInWeek: -1, // First, sort by the number of completions in the past week (descending)
                     totalCompletions: -1,  // Then sort by total completions (descending) for overall popularity
                     createdAt: -1          // Finally, sort by the creation date to break ties
+
                 }
             },
             {
@@ -295,6 +323,7 @@ export const getMostPopularQuizzes = async (req, res) => {
                     topic: 1,
                     difficulty: 1,
                     num_questions: 1,
+                    userHasCompleted: 1,   // Show whether the user has completed the quiz
                     createdAt: 1
                 }
             }
@@ -438,5 +467,43 @@ export const getFriendsByScore = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json(new ApiResponse(500, {}, 'Something went wrong while fetching friends leaderboard.'));
+    }
+};
+
+
+
+
+export const checkIfUserCompletedQuiz = async (req, res) => {
+    try {
+        const { quizId } = req.body;
+
+        // Find the quiz result for the user and quiz
+        const result = await QuizResult.findOne({
+            user_id: mongoose.Types.ObjectId(req.user._id),
+            quiz_id: mongoose.Types.ObjectId(quizId)
+        });
+
+        // If a result is found, return the quiz result data
+        if (result) {
+            return {
+                status: 200,
+                data: result,
+                message: "User has completed the quiz."
+            };
+        } else {
+            // If no result is found, return a message indicating the user hasn't completed the quiz
+            return {
+                status: 404,
+                data: {},
+                message: "User has not completed the quiz."
+            };
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            status: 500,
+            data: {},
+            message: "Server error while checking quiz completion."
+        };
     }
 };
