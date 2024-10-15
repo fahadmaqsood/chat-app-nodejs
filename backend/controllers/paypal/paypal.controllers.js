@@ -13,9 +13,15 @@ const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 
 
+// const planIDs = {
+//     "P-3JP97424FK586314NM4F3ZJQ": 1 //monthly subscription
+// };
+
+
 const planIDs = {
-    "P-3JP97424FK586314NM4F3ZJQ": 1 //monthly subscription
-};
+    "P-3TT806721S364024MM4CW7AY": 12, // annual
+    "P-09626795MH982183KM3SL7IY": 1, // monthly
+}
 
 
 // Function to get PayPal access token
@@ -146,4 +152,231 @@ export const logSubscription = async (req, res) => {
         console.error('Error:', error.message);
         res.status(500).json({ error: 'Failed to validate subscription.' });
     }
+}
+
+
+
+
+const PAYPAL_SANDBOX_WEBHOOK_ID = process.env.PAYPAL_SANDBOX_WEBHOOK_ID;
+const PAYPAL_LIVE_WEBHOOK_ID = process.env.PAYPAL_LIVE_WEBHOOK_ID;
+
+export const sandboxSubscriptionWebhook = async (req, res) => {
+    const webhookEvent = req.body;
+
+    // Verify webhook signature (optional but recommended)
+    const transmissionId = req.headers['paypal-transmission-id'];
+    const transmissionTime = req.headers['paypal-transmission-time'];
+    const certUrl = req.headers['paypal-cert-url'];
+    const authAlgo = req.headers['paypal-auth-algo'];
+    const transmissionSig = req.headers['paypal-transmission-sig'];
+    const webhookId = PAYPAL_SANDBOX_WEBHOOK_ID; // Replace with the Webhook ID from PayPal dashboard
+
+    const expectedSignature = {
+        transmissionId,
+        transmissionTime,
+        certUrl,
+        authAlgo,
+        transmissionSig,
+        webhookId,
+        eventBody: req.body
+    };
+
+    paypal.notification.webhookEvent.verify(expectedSignature, function (error, response) {
+        if (error) {
+            console.error('Webhook signature verification failed:', error);
+            return res.sendStatus(400); // Bad Request if verification fails
+        }
+
+        if (response.verification_status === 'SUCCESS') {
+            console.log('Webhook Verified Successfully:', webhookEvent);
+
+            const subscriptionId = webhookEvent.resource.id;
+
+
+            // Handle the webhook event here, e.g., updating your order status in the database
+            switch (webhookEvent.event_type) {
+
+                case 'BILLING.SUBSCRIPTION.CREATED':
+                    const planId = webhookEvent.resource.plan_id;
+                    const startTime = webhookEvent.resource.start_time;
+
+                    console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.ACTIVATED':
+                    // Handle subscription activation
+                    console.log('Subscription activated:', resource);
+                    // Mark subscription as active in your system, grant access to the user
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.CANCELLED':
+                    const cancellationTime = webhookEvent.resource.update_time;
+
+                    console.log(`Subscription cancelled: ${subscriptionId}, Time: ${cancellationTime}`);
+                    // Update subscription status in your database
+
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.EXPIRED':
+                    const subscriptionId = webhookEvent.resource.id;
+                    console.log(`Subscription expired: ${subscriptionId}`);
+
+                    break;
+
+                case 'PAYMENT.SALE.COMPLETED':
+                    const paymentAmount = webhookEvent.resource.amount.total;
+                    const paymentCurrency = webhookEvent.resource.amount.currency;
+                    console.log(`Payment completed: ${paymentAmount} ${paymentCurrency}`);
+                    // Extend subscription period, save payment info
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
+                    // Handle failed subscription payment
+                    console.log('Payment failed:', resource);
+                    // Notify user of failed payment, retry payment, offer alternative methods
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.RE-ACTIVATED':
+                    // Handle subscription re-activation
+                    console.log('Subscription re-activated:', resource);
+                    // Mark subscription as active again, restore access, notify the user
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.SUSPENDED':
+                    // Handle subscription suspension
+                    console.log('Subscription suspended:', resource);
+                    // Temporarily suspend access, notify the user, guide them on reactivation
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.UPDATED':
+                    // Handle subscription updates (e.g., plan change)
+                    console.log('Subscription updated:', resource);
+                    // Update subscription details in your system, notify the user
+                    break;
+
+                default:
+                    // Handle unknown or other events
+                    console.log('Unhandled event type:', event_type);
+                    break;
+            }
+
+            res.status(200).send('Webhook received');
+        } else {
+            console.error('Webhook signature verification failed');
+            res.status(400).send('Webhook verification failed');
+        }
+    });
+}
+
+
+
+
+export const liveSubscriptionWebhook = async (req, res) => {
+    const webhookEvent = req.body;
+
+    // Verify webhook signature (optional but recommended)
+    const transmissionId = req.headers['paypal-transmission-id'];
+    const transmissionTime = req.headers['paypal-transmission-time'];
+    const certUrl = req.headers['paypal-cert-url'];
+    const authAlgo = req.headers['paypal-auth-algo'];
+    const transmissionSig = req.headers['paypal-transmission-sig'];
+    const webhookId = PAYPAL_LIVE_WEBHOOK_ID; // Replace with the Webhook ID from PayPal dashboard
+
+    const expectedSignature = {
+        transmissionId,
+        transmissionTime,
+        certUrl,
+        authAlgo,
+        transmissionSig,
+        webhookId,
+        eventBody: req.body
+    };
+
+    paypal.notification.webhookEvent.verify(expectedSignature, function (error, response) {
+        if (error) {
+            console.error('Webhook signature verification failed:', error);
+            return res.sendStatus(400); // Bad Request if verification fails
+        }
+
+        if (response.verification_status === 'SUCCESS') {
+            console.log('Webhook Verified Successfully:', webhookEvent);
+
+            const subscriptionId = webhookEvent.resource.id;
+
+
+            // Handle the webhook event here, e.g., updating your order status in the database
+            switch (webhookEvent.event_type) {
+
+                case 'BILLING.SUBSCRIPTION.CREATED':
+                    const planId = webhookEvent.resource.plan_id;
+                    const startTime = webhookEvent.resource.start_time;
+
+                    console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.ACTIVATED':
+                    // Handle subscription activation
+                    console.log('Subscription activated:', resource);
+                    // Mark subscription as active in your system, grant access to the user
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.CANCELLED':
+                    const cancellationTime = webhookEvent.resource.update_time;
+
+                    console.log(`Subscription cancelled: ${subscriptionId}, Time: ${cancellationTime}`);
+                    // Update subscription status in your database
+
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.EXPIRED':
+                    const subscriptionId = webhookEvent.resource.id;
+                    console.log(`Subscription expired: ${subscriptionId}`);
+
+                    break;
+
+                case 'PAYMENT.SALE.COMPLETED':
+                    const paymentAmount = webhookEvent.resource.amount.total;
+                    const paymentCurrency = webhookEvent.resource.amount.currency;
+                    console.log(`Payment completed: ${paymentAmount} ${paymentCurrency}`);
+                    // Extend subscription period, save payment info
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
+                    // Handle failed subscription payment
+                    console.log('Payment failed:', resource);
+                    // Notify user of failed payment, retry payment, offer alternative methods
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.RE-ACTIVATED':
+                    // Handle subscription re-activation
+                    console.log('Subscription re-activated:', resource);
+                    // Mark subscription as active again, restore access, notify the user
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.SUSPENDED':
+                    // Handle subscription suspension
+                    console.log('Subscription suspended:', resource);
+                    // Temporarily suspend access, notify the user, guide them on reactivation
+                    break;
+
+                case 'BILLING.SUBSCRIPTION.UPDATED':
+                    // Handle subscription updates (e.g., plan change)
+                    console.log('Subscription updated:', resource);
+                    // Update subscription details in your system, notify the user
+                    break;
+
+                default:
+                    // Handle unknown or other events
+                    console.log('Unhandled event type:', event_type);
+                    break;
+            }
+
+            res.status(200).send('Webhook received');
+        } else {
+            console.error('Webhook signature verification failed');
+            res.status(400).send('Webhook verification failed');
+        }
+    });
 }
