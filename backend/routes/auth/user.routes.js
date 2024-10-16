@@ -5,6 +5,7 @@ import {
   assignRole,
   changeCurrentPassword,
   forgotPasswordRequest,
+  verifyForgottenPasswordOtp,
   getCurrentUser,
   handleSocialLogin,
   loginUser,
@@ -51,8 +52,13 @@ router.route("/verify-email/:verificationToken").get(verifyEmail);
 router
   .route("/forgot-password")
   .post(userForgotPasswordValidator(), validate, forgotPasswordRequest);
+
 router
-  .route("/reset-password/:resetToken")
+  .route("/verify-forgot-password-otp")
+  .post(userForgotPasswordValidator(), validate, verifyForgottenPasswordOtp);
+
+router
+  .route("/reset-password/")
   .post(
     userResetForgottenPasswordValidator(),
     validate,

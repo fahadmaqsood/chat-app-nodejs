@@ -13,6 +13,7 @@ import {
 import {
   emailVerificationMailgenContent,
   forgotPasswordMailgenContent,
+  forgotPasswordOTPMailgenContent,
   sendEmail,
 } from "../../utils/mail.js";
 import LoginInfo from "../../models/auth/LoginInfo.js";
@@ -466,9 +467,14 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User does not exists", []);
   }
 
-  // Generate a temporary token
+  // // Generate a temporary token
+  // const { unHashedToken, hashedToken, tokenExpiry } =
+  //   user.generateTemporaryToken(); // generate password reset creds
+
+
   const { unHashedToken, hashedToken, tokenExpiry } =
-    user.generateTemporaryToken(); // generate password reset creds
+    user.generateOTP(); // generate password reset creds
+
 
   // save the hashed version a of the token and expiry in the DB
   user.forgotPasswordToken = hashedToken;
@@ -479,11 +485,13 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
   await sendEmail({
     email: user?.email,
     subject: "Password reset request",
-    mailgenContent: forgotPasswordMailgenContent(
+    mailgenContent: forgotPasswordOTPMailgenContent(
       user.username,
       // ! NOTE: Following link should be the link of the frontend page responsible to request password reset
       // ! Frontend will send the below token with the new password in the request body to the backend reset password endpoint
-      `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`
+      // `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`
+
+      unHashedToken
     ),
   });
   return res
@@ -492,14 +500,42 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {},
-        "Password reset mail has been sent on your mail id"
+        "Password reset mail has been sent to your email"
       )
     );
 });
 
+const verifyForgottenPasswordOtp = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  // Create a hash of the incoming reset token
+
+  let hashedToken = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
+  // See if user with hash similar to resetToken exists
+  // If yes then check if token expiry is greater than current date
+
+  const user = await User.findOne({
+    forgotPasswordToken: hashedToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+    email: email,
+  });
+
+  // If either of the one is false that means the token is invalid or expired
+  if (!user) {
+    throw new ApiError(489, "Token is invalid or expired");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "otp is valid"));
+});
+
 const resetForgottenPassword = asyncHandler(async (req, res) => {
-  const { resetToken } = req.params;
-  const { newPassword } = req.body;
+  const { email, newPassword, otp: resetToken } = req.body;
 
   // Create a hash of the incoming reset token
 
@@ -512,6 +548,7 @@ const resetForgottenPassword = asyncHandler(async (req, res) => {
   // If yes then check if token expiry is greater than current date
 
   const user = await User.findOne({
+    email: email,
     forgotPasswordToken: hashedToken,
     forgotPasswordExpiry: { $gt: Date.now() },
   });
@@ -771,6 +808,7 @@ export {
   assignRole,
   changeCurrentPassword,
   forgotPasswordRequest,
+  verifyForgottenPasswordOtp,
   getCurrentUser,
   handleSocialLogin,
   loginUser,

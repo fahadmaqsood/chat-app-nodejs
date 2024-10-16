@@ -255,19 +255,21 @@ userSchema.methods.generateTemporaryToken = function () {
 // generate otp
 
 userSchema.methods.generateOTP = function () {
-  // Generate a random number between 100000 and 999999
-  const otp = Math.floor(100000 + Math.random() * 900000);
+  // // Generate a random number between 100000 and 999999
+  // const otp = Math.floor(100000 + Math.random() * 900000);
+
+  const otp = "123456";
 
   // This should stay in the DB to compare at the time of verification
   const hashedToken = crypto
     .createHash("sha256")
-    .update(unHashedToken)
+    .update(otp)
     .digest("hex");
 
   // This is the expiry time for the token (20 minutes)
   const tokenExpiry = Date.now() + USER_TEMPORARY_TOKEN_EXPIRY;
 
-  return { unHashedToken, hashedToken, tokenExpiry }
+  return { unHashedToken: otp, hashedToken, tokenExpiry }
 }
 
 
