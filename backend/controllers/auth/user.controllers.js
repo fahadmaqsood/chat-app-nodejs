@@ -214,7 +214,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, firebaseToken } = req.body;
 
   if (!username && !email) {
     throw new ApiError(400, "Username or email is required");
@@ -256,6 +256,27 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
   );
+
+  if (firebaseToken) {
+
+    // Step 1: Find other users with the same firebaseToken
+    const usersWithSameToken = await User.find({
+      _id: { $ne: loggedInUser._id }, // Exclude the current logged-in user
+      firebaseToken: firebaseToken // Check if any user has this firebaseToken
+    });
+
+    // Step 2: Remove the token from those users (set firebaseToken to null or empty)
+    await User.updateMany(
+      { _id: { $in: usersWithSameToken.map(user => user._id) } },
+      { $set: { firebaseToken: null } } // Clear the firebaseToken field
+    );
+
+    // Step 3: Set the token for the logged-in user
+    loggedInUser.firebaseToken = firebaseToken;
+
+    // Step 4: Save the loggedInUser
+    await loggedInUser.save();
+  }
 
   // TODO: Add more options to make cookie more secure and reliable
   const options = {

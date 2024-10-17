@@ -102,6 +102,9 @@ const userSchema = new Schema(
       type: Number,
       default: 10, // Starting with 10 points for new users
     },
+    firebaseToken: {
+      type: String
+    },
     followers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     following: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     closeFriends: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
