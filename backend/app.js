@@ -157,6 +157,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+app.get('/add/quiz', (req, res) => {
+  // Route to serve the HTML file
+  // Send the subscription.html file located in the "public" folder
+  res.sendFile(path.join(__dirname, 'public', 'addQuizzes.html'));
+
+});
+
 app.get('/test/subscribe', (req, res) => {
   // Route to serve the HTML file
   // Send the subscription.html file located in the "public" folder

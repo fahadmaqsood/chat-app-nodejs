@@ -9,6 +9,15 @@ import moment from "moment"; // For easier date manipulation
 
 import mongoose from "mongoose";
 
+import fs from 'fs';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+
+// Define __dirname manually
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export const getTopicList = async (req, res) => {
     try {
         const { limit, skip } = req.query;
@@ -505,5 +514,57 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
             data: {},
             message: "Server error while checking quiz completion."
         };
+    }
+};
+
+
+
+
+
+
+
+
+
+export const addQuiz = async (req, res) => {
+    try {
+        const { json } = req.body;
+
+        // Validate required fields
+        if (!json) {
+            return res.status(400).json(new ApiResponse(400, {}, 'json for quiz is required'));
+        }
+
+        if (!json.title || !json.topic || !json.difficulty || !json.questions || !json.num_questions) {
+            return res.status(400).json(new ApiResponse(400, {}, 'All fields are required: title, topic, difficulty, questions, num_questions'));
+        }
+
+        // // Check if the topic exists
+        // const topicDoc = await QuizTopics.findOne({ name: topic });
+        // if (!topicDoc) {
+        //     return res.status(404).json(new ApiResponse(404, {}, 'Topic not found.'));
+        // }
+
+        // Create a new quiz
+        const newQuiz = new Quiz({
+            title: json.title,
+            topic: json.topic, // Reference the topic by its ID
+            difficulty: json.difficulty,
+            questions: json.questions, // Assuming questions is an array of question objects
+            num_questions: json.num_questions
+        });
+
+        // Save the quiz to the database
+        await newQuiz.save();
+
+        let quiz_id = newQuiz._id;
+
+        // Save the quiz JSON to a file in public/quizzes/ folder
+        const quizFilePath = path.join(__dirname, '../../public/quizzes', `${quiz_id}.json`);
+        fs.writeFileSync(quizFilePath, JSON.stringify(json, null, 2));
+
+        return res.status(201).json(new ApiResponse(201, newQuiz, 'Quiz created successfully.'));
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(new ApiResponse(500, {}, 'Server encountered an error while creating the quiz.'));
     }
 };

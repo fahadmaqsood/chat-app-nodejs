@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+</head>
+
+<body>
+    <h1>Create a New Quiz</h1>
+
+    <div style="display: none;">
+        <label for="topic">Topic:</label>
+        <select id="topic" required>
+            <option value="">Select a topic</option>
+        </select>
+    </div>
+
+    <form id="quizForm">
+        <div>
+            <label for="json">JSON:</label>
+            <br />
+            <br />
+            <textarea id="json" rows="20" style="width: 80%;" name="json" placeholder="Enter quiz in JSON format"
+                required></textarea>
+        </div>
+        <br />
+        <button type="submit">Create Quiz</button>
+    </form>
+
+    <script>
+        let quizTopics = {};
+
+        // Fetch quiz topics from the API and populate the dropdown
+        async function fetchQuizTopics() {
+            try {
+                const response = await fetch('/api/v1/quiz/get-quiz-topics');
+                const result = await response.json();
+
+                if (result.success) {
+                    const topicDropdown = document.getElementById('topic');
+                    result.data.forEach(topic => {
+                        const option = document.createElement('option');
+                        option.value = topic.name;
+                        option.text = topic.name;
+                        topicDropdown.add(option);
+
+                        quizTopics[topic.name] = topic._id;
+                    });
+                } else {
+                    alert('Failed to fetch topics.');
+                }
+            } catch (error) {
+                console.error('Error fetching topics:', error);
+            }
+        }
+
+        // Call fetchQuizTopics when the page loads
+        window.onload = fetchQuizTopics;
+
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+
+            let quizJSON = JSON.parse(document.getElementById('json').value);
+
+            if (!Object.keys(quizTopics).includes(quizJSON.topic)) {
+                alert("invalid topic");
+
+                return;
+            }
+
+            quizJSON.topic = quizTopics[quizJSON.topic];
+            if (!quizJSON.num_questions) {
+                quizJSON.num_questions = quizJSON.questions.length;
+            }
+
+            console.log(quizJSON);
+
+            const formData = {
+                json: quizJSON,  // Assuming questions are entered as a JSON array
+            };
+
+            try {
+                const response = await fetch('/api/v1/quiz/add-quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Quiz created successfully!');
+                } else {
+                    alert('Failed to create quiz: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error creating quiz:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

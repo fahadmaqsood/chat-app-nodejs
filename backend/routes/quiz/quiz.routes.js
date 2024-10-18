@@ -1,5 +1,5 @@
 import express from 'express';
-import { getQuizList, getQuizListByTopic, getTopicList, saveQuizResult, checkIfUserCompletedQuiz, getLeaderboard, getFriendsByScore, searchQuizTopics, getMostPopularQuizzes, searchQuizzesByName } from '../../controllers/quiz/quiz.controllers.js'; // Adjust path accordingly
+import { addQuiz, getQuizList, getQuizListByTopic, getTopicList, saveQuizResult, checkIfUserCompletedQuiz, getLeaderboard, getFriendsByScore, searchQuizTopics, getMostPopularQuizzes, searchQuizzesByName } from '../../controllers/quiz/quiz.controllers.js'; // Adjust path accordingly
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 
@@ -12,7 +12,7 @@ router.get('/get-quiz-list', validateTokensMiddleware, getQuizList);
 router.get('/get-quiz-list-by-topic', validateTokensMiddleware, getQuizListByTopic);
 
 
-router.get('/get-quiz-topics', validateTokensMiddleware, getTopicList);
+router.get('/get-quiz-topics', getTopicList);
 
 
 router.post('/save-quiz-result', validateTokensMiddleware, saveQuizResult);
@@ -32,5 +32,8 @@ router.get('/get-friends-by-score', validateTokensMiddleware, getFriendsByScore)
 
 
 router.get('/check-quiz-status', validateTokensMiddleware, checkIfUserCompletedQuiz);
+
+
+router.post('/add-quiz', addQuiz);
 
 export default router;

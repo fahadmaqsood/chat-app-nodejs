@@ -1,0 +1,108 @@
+{
+  "title": "Science Quiz",
+  "topic": "66fec2c9b6950e88826fdffe",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What is the chemical symbol for the element Oxygen?",
+      "options": [
+        "O",
+        "O2",
+        "O3",
+        "H2O"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet is the hottest in our solar system?",
+      "options": [
+        "Mercury",
+        "Venus",
+        "Earth",
+        "Mars"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": [
+        "Nucleus",
+        "Mitochondria",
+        "Ribosome",
+        "Endoplasmic Reticulum"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the boiling point of water in Celsius?",
+      "options": [
+        "50°C",
+        "100°C",
+        "150°C",
+        "200°C"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which gas is most abundant in Earth's atmosphere?",
+      "options": [
+        "Oxygen",
+        "Carbon Dioxide",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the speed of light?",
+      "options": [
+        "3,000 km/s",
+        "30,000 km/s",
+        "300,000 km/s",
+        "3,000,000 km/s"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which element has the atomic number 1?",
+      "options": [
+        "Hydrogen",
+        "Helium",
+        "Lithium",
+        "Carbon"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the main gas found in the sun?",
+      "options": [
+        "Oxygen",
+        "Hydrogen",
+        "Nitrogen",
+        "Helium"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which particle carries a negative charge?",
+      "options": [
+        "Proton",
+        "Neutron",
+        "Electron",
+        "Photon"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the most common type of star in the universe?",
+      "options": [
+        "Red Dwarf",
+        "White Dwarf",
+        "Neutron Star",
+        "Supergiant"
+      ],
+      "correct_option": 1
+    }
+  ]
+}
