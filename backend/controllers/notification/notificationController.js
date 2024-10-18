@@ -3,8 +3,55 @@ import { User } from '../../models/auth/user.models.js'
 
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
+import firebaseAdmin from 'firebase-admin';
+
+import fs from 'fs/promises';
+
+const serviceAccount = JSON.parse(await fs.readFile(process.env.FIREBASE_SERVICE_KEY_PATH, 'utf8'));
+
+
+const firebase = firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(serviceAccount),
+});
+
+
+function sendNotification(deviceToken, title, message, payload) {
+    // // This registration token comes from the client FCM SDKs.
+    // const registrationToken = 'YOUR_REGISTRATION_TOKEN';
+
+    const message_data = {
+        notification: {
+            title: title,
+            body: message
+        },
+        data: {
+            "doer": payload["doer"]
+        },
+        token: deviceToken
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    firebaseAdmin.messaging().send(message_data)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+        });
+}
+
+
 export const addNotification = async (user_id, title, message, payload) => {
     try {
+
+        let user = await User.findById(user_id);
+
+        if (!user) {
+            throw new Error("User doesn't exist");
+        }
+
         const newNotification = new Notification({
             user_id,
             title,
@@ -12,9 +59,14 @@ export const addNotification = async (user_id, title, message, payload) => {
             payload
         });
 
+
+
         await newNotification.save();
 
+        sendNotification(user.firebaseToken, title, message, payload);
+
         return newNotification;
+
     } catch (error) {
         throw error;
     }
@@ -32,7 +84,7 @@ export const createNotification = async (req, res) => {
         const userExists = await User.findById(user_id);
         if (!userExists) return res.status(404).json({ success: false, message: 'User not found' });
 
-        let newNotification = addNotification(user_id, title, message, payload);
+        let newNotification = await addNotification(user_id, title, message, payload);
 
         res.status(201).json(new ApiResponse(201, newNotification, "Notification created successfully"));
 
