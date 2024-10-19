@@ -484,7 +484,7 @@ export const getFriendsByScore = async (req, res) => {
 
 export const checkIfUserCompletedQuiz = async (req, res) => {
     try {
-        const { quizId } = req.body;
+        const { quizId } = req.query;
 
         // Find the quiz result for the user and quiz
         const result = await QuizResult.findOne({
@@ -494,18 +494,11 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
 
         // If a result is found, return the quiz result data
         if (result) {
-            return {
-                status: 200,
-                data: result,
-                message: "User has completed the quiz."
-            };
+            return res.status(200).json(new ApiResponse(200, result, "User has completed the quiz."));
+
         } else {
             // If no result is found, return a message indicating the user hasn't completed the quiz
-            return {
-                status: 404,
-                data: {},
-                message: "User has not completed the quiz."
-            };
+            return res.status(404).json(new ApiResponse(404, {}, "User hasn't completed the quiz"));
         }
     } catch (error) {
         console.error(error);
