@@ -488,8 +488,8 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
 
         // Find the quiz result for the user and quiz
         const result = await QuizResult.findOne({
-            user_id: mongoose.Types.ObjectId(req.user._id),
-            quiz_id: mongoose.Types.ObjectId(quizId)
+            user_id: new mongoose.Types.ObjectId(req.user._id),
+            quiz_id: new mongoose.Types.ObjectId(quizId)
         });
 
         // If a result is found, return the quiz result data
