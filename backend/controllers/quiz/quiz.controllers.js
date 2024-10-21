@@ -490,6 +490,9 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
         const result = await QuizResult.findOne({
             user_id: new mongoose.Types.ObjectId(req.user._id),
             quiz_id: new mongoose.Types.ObjectId(quizId)
+        }).populate({
+            path: 'quiz_id',      // Path to the quiz_id reference
+            select: 'title'   // Only retrieve the quizTitle field from the Quiz model
         });
 
         // If a result is found, return the quiz result data
