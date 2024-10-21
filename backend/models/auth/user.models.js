@@ -119,6 +119,12 @@ const userSchema = new Schema(
       enum: ['active', 'inactive'],
       default: 'inactive'
     },
+    last_renew_date: {
+      type: Date,
+    },
+    next_billing_date: {
+      type: Date,
+    },
     account_creation_date: {
       type: Date,
       default: Date.now

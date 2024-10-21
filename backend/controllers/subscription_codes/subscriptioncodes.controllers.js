@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
 import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes.js';
-
+import { User } from "../../models/auth/user.models.js";
 
 export const generateUniqueCode = async (prefix) => {
     let code;
@@ -196,6 +196,14 @@ export const redeemSubscriptionCode = async (req, res) => {
         subscription.redemption_date = new Date(); // Set current date as the redemption date
         subscription.redeemed_by = user_id; // Set the user who redeemed the code
         await subscription.save();
+
+        const user = await User.findById(req.user._id);
+        user.subscription_status = 'active';
+        user.subscription_type = subscription.months == 1 ? 'monthly' : 'yearly';
+        user.last_renew_date = subscription.subscription_date;
+        user.next_billing_date = subscription.next_billing_date;
+
+        await user.save();
 
         // Return success response
         res.status(200).json(new ApiResponse(200, {
