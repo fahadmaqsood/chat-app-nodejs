@@ -498,9 +498,7 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
 
             const quizDetails = await Quiz.findById(quizId);
 
-            result["quizDetails"] = quizDetails;
-
-            return res.status(200).json(new ApiResponse(200, result, "User has completed the quiz."));
+            return res.status(200).json(new ApiResponse(200, { quizDetails: quizDetails, ...result }, "User has completed the quiz."));
 
         } else {
             // If no result is found, return a message indicating the user hasn't completed the quiz
