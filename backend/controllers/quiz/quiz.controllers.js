@@ -490,13 +490,13 @@ export const checkIfUserCompletedQuiz = async (req, res) => {
         const result = await QuizResult.findOne({
             user_id: new mongoose.Types.ObjectId(req.user._id),
             quiz_id: new mongoose.Types.ObjectId(quizId)
-        });
+        }).lean();
 
 
         // If a result is found, return the quiz result data
         if (result) {
 
-            const quizDetails = await Quiz.findById(quizId);
+            const quizDetails = await Quiz.findById(quizId).lean();
 
             return res.status(200).json(new ApiResponse(200, { quizDetails: quizDetails, ...result }, "User has completed the quiz."));
 
