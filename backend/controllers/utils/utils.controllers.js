@@ -6,8 +6,6 @@ import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
 import { SentimentAnalysis } from "./SentimentAnalysis.js";
 
-import path from 'path';
-
 const _sentimentAnalysis = new SentimentAnalysis();
 
 // Multer setup for image storage
