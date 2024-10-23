@@ -1,10 +1,15 @@
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
-import path from 'path';
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
 import { SentimentAnalysis } from "./SentimentAnalysis.js";
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url); // Get the current file's path
+const __dirname = dirname(__filename); // Get the directory of the current file
 
 const _sentimentAnalysis = new SentimentAnalysis();
 
