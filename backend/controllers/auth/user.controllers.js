@@ -152,6 +152,23 @@ const registerUser = asyncHandler(async (req, res) => {
 
   date_of_birth = new Date(Date.parse(date_of_birth));
 
+
+  // Calculate age based on date_of_birth
+  const today = new Date();
+  const birthDate = date_of_birth;
+  const age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  // Adjust age if the birth date hasn't been reached this year
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  // Check if the user is between 13 and 19 years old
+  if (age < 13 || age > 19) {
+    throw new ApiError(400, "User must be between 13 and 19 years old", []);
+  }
+
   const user = await User.create({
     email,
     password,

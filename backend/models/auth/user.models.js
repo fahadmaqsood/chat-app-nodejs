@@ -116,7 +116,7 @@ const userSchema = new Schema(
     },
     subscription_status: {
       type: String,
-      enum: ['active', 'inactive'],
+      enum: ['active', 'inactive', 'trial'],
       default: 'inactive'
     },
     last_renew_date: {
@@ -130,7 +130,19 @@ const userSchema = new Schema(
       default: Date.now
     },
     account_termination_date: {
-      type: Date
+      type: Date,
+      default: function () {
+        if (this.date_of_birth) {
+          // Add 20 years to the date_of_birth
+          const dob = new Date(this.date_of_birth);
+          return new Date(dob.setFullYear(dob.getFullYear() + 20));
+        }
+        return null; // If no date_of_birth, set to null or handle as needed
+      }
+    },
+    account_termination_reason: {
+      type: String,
+      default: "User turned 20"
     },
     role: {
       type: String,
