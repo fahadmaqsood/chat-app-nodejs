@@ -6,14 +6,14 @@ import { validateAndRefreshTokens } from '../auth/user.controllers.js';
 
 import { SentimentAnalysis } from "./SentimentAnalysis.js";
 
+import path from 'path';
+
 const _sentimentAnalysis = new SentimentAnalysis();
 
 // Multer setup for image storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, '../../public/uploads/images');
-
-        cb(null, uploadPath); // Specify your upload directory
+        cb(null, 'public/uploads/images'); // Specify your upload directory
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${req.userIdForFileName}-${file.originalname}`);
