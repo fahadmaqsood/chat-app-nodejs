@@ -11,7 +11,9 @@ const _sentimentAnalysis = new SentimentAnalysis();
 // Multer setup for image storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/images'); // Specify your upload directory
+        const uploadPath = path.join(__dirname, '../../public/uploads/images');
+
+        cb(null, uploadPath); // Specify your upload directory
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${req.userIdForFileName}-${file.originalname}`);
