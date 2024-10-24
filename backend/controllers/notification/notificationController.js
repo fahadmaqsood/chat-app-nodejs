@@ -1,3 +1,10 @@
+import dotenv from "dotenv";
+
+dotenv.config({
+    path: "./.env",
+});
+
+
 import Notification from '../../models/notification/Notifications.js';
 import { User } from '../../models/auth/user.models.js'
 
@@ -6,6 +13,7 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import firebaseAdmin from 'firebase-admin';
 
 import fs from 'fs/promises';
+import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
 
 const serviceAccount = JSON.parse(await fs.readFile(process.env.FIREBASE_SERVICE_KEY_PATH, 'utf8'));
 
@@ -43,6 +51,107 @@ function sendNotification(deviceToken, title, message, payload) {
 }
 
 
+async function sendNotificationToMany(deviceTokens, title, message, payload) {
+    const message_data = {
+        notification: {
+            title: title,
+            body: message
+        },
+        data: {
+            "doer": payload["doer"]
+        },
+        tokens: deviceTokens // Pass multiple device tokens
+    };
+
+    // Send a message to all the device tokens provided in the array
+    await firebaseAdmin.messaging().sendEachForMulticast(message_data)
+        .then((response) => {
+            // Response provides details of how many messages were sent successfully
+            console.log(`${response.successCount} messages were sent successfully`);
+            if (response.failureCount > 0) {
+                const failedTokens = [];
+                response.responses.forEach((resp, idx) => {
+                    if (!resp.success) {
+                        failedTokens.push(deviceTokens[idx]);
+                    }
+                });
+                console.log('List of tokens that caused failures:', failedTokens);
+            }
+        })
+        .catch((error) => {
+            console.log('Error sending messages:', error);
+        });
+}
+
+
+export const addNotificationForMany = async (user_ids, title, message, payload) => {
+    try {
+        // Find all users whose IDs are in the user_ids array
+        const users = await User.find({
+            _id: { $in: user_ids }
+        });
+
+        if (users.length === 0) {
+            throw new Error("No users found");
+        }
+
+        // Create an array of notifications to insert
+        const notifications = users.map(user => ({
+            user_id: user._id,
+            title,
+            message,
+            payload
+        }));
+
+        // Insert all notifications in a single operation
+        const newNotifications = await Notification.insertMany(notifications);
+
+        // Collect all firebase tokens of users
+        const deviceTokens = users.map(user => user.firebaseToken).filter(token => !!token);
+
+        // Send notifications to all users in one batch
+        if (deviceTokens.length > 0) {
+            sendNotificationToMany(deviceTokens, title, message, payload);
+        }
+
+        user_ids.forEach((user_id) => {
+            if (isAppOpenForUser(user_id)) {
+                emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
+            }
+        });
+
+        // Return the created notifications
+        return newNotifications;
+
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const addNotificationForAll = async (title, message, payload) => {
+    try {
+        // Fetch all users
+        const users = await User.find({ firebaseToken: { $ne: null } });
+
+        // Collect all firebase tokens of users
+        const deviceTokens = users.map(user => user.firebaseToken).filter(token => !!token);
+
+        // Check if there are any valid tokens
+        if (deviceTokens.length > 0) {
+            // Send notifications to all users in one batch
+            await sendNotificationToMany(deviceTokens, title, message, payload);
+            console.log(`Notifications sent to ${deviceTokens.length} users.`);
+        } else {
+            console.log("No valid device tokens found.");
+        }
+    } catch (error) {
+        console.error("Error sending notifications to all users:", error);
+        throw error;
+    }
+};
+
+
 export const addNotification = async (user_id, title, message, payload) => {
     try {
 
@@ -58,6 +167,10 @@ export const addNotification = async (user_id, title, message, payload) => {
             message,
             payload
         });
+
+        if (isAppOpenForUser(user_id)) {
+            emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
+        }
 
 
 
@@ -113,5 +226,34 @@ export const getNotifications = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error', error: err.message });
+    }
+};
+
+
+export const _getUnreadNotificationsCount = async (user_id) => {
+
+    try {
+        const notificationsCount = await Notification.countDocuments({ user_id, status: "sent" });
+
+        return notificationsCount;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+};
+
+export const _changeNotificationsStatusToRead = async (user_id) => {
+
+    try {
+        // Mark the fetched notifications as read
+        await Notification.updateMany(
+            { user_id, status: 'sent' }, // Only mark unread notifications
+            { $set: { status: 'read', read_at: Date.now() } }  // Set them to read
+        );
+
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
     }
 };

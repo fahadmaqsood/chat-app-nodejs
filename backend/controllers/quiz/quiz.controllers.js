@@ -220,6 +220,87 @@ export const getLeaderboard = async (req, res) => {
 };
 
 
+export const getLeaderBoardByDate = async (req, res) => {
+    try {
+        const { date } = req.query;
+
+        const limit = 10;
+        const skip = 0;
+
+        // Parse the input date (which should be a Monday) and subtract 1 second to get Sunday 11:59:59 PM
+
+        let inputDate;
+        if (date) {
+            inputDate = moment(date).startOf('day'); // Get the start of the input date (Monday)
+        } else {
+            inputDate = moment().startOf('day'); // Get the start of the input date (Monday)
+        }
+        const lastSunday = inputDate.day(0).startOf('day'); // Get last Sunday at 12:00 AM
+
+        // Calculate last last Sunday (one week before the last Sunday)
+        const lastLastSunday = lastSunday.clone().subtract(1, 'week').startOf('day'); // Last last Sunday at 12:00 AM
+
+        // Set the filter to include results between last last Sunday and last Sunday
+        const dateFilter = {
+            createdAt: {
+                $gte: lastLastSunday.toDate(),  // Greater than or equal to last last Sunday
+                $lte: lastSunday.toDate()       // Less than or equal to last Sunday 11:59:59 PM
+            }
+        };
+
+        // Aggregate scores by user
+        const leaderboardResults = await QuizResult.aggregate([
+            {
+                $match: dateFilter // Filter by date
+            },
+            {
+                $group: {
+                    _id: '$user_id', // Group by user_id
+                    totalScore: { $sum: '$score' }, // Sum the scores
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users', // Ensure this matches your User model collection name
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
+                $unwind: '$userDetails' // Unwind user details
+            },
+            {
+                $project: {
+                    _id: 0,
+                    userId: '$_id',
+                    totalScore: 1,
+                    name: '$userDetails.name',
+                    username: '$userDetails.username',
+                    avatar: '$userDetails.avatar',
+                    country: '$userDetails.country',
+                }
+            },
+            {
+                $sort: { totalScore: -1 } // Sort by totalScore in descending order
+            },
+            {
+                $skip: Number(skip) // Skip for pagination
+            },
+            {
+                $limit: Number(limit) // Limit results
+            }
+        ]).exec();
+
+        return res.status(200).json(new ApiResponse(200, leaderboardResults, 'Leaderboard fetched successfully'));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(new ApiResponse(500, {}, 'Server encountered an error'));
+    }
+};
+
+
+
 
 export const searchQuizzesByName = async (req, res) => {
     try {
