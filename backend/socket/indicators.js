@@ -99,11 +99,11 @@ const initializeIndicatorsSocket = (io) => {
         socket.user = user; // mount the user object to the socket
 
 
-        userSocketMap.set(`${socket.user._id}`, socket.id);
+        userSocketMap.set(`${socket.user._id.toString()}`, socket.id);
 
 
 
-        socket.join(socket.user._id);
+        socket.join(socket.user._id.toString());
 
         // Pass io directly to handleChatbotSocketEvents
         handleIndicatorsSocketEvents(socket, io);
@@ -130,6 +130,8 @@ const initializeIndicatorsSocket = (io) => {
 
 
 const emitIndicatorsSocketEvent = (user_id, event, payload) => {
+    user_id = user_id.toString();
+
     // Emit event if io is available
     if (InputOutput) {
         InputOutput.of('/').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
@@ -141,6 +143,8 @@ const emitIndicatorsSocketEvent = (user_id, event, payload) => {
 
 
 const isAppOpenForUser = (user_id) => {
+    user_id = user_id.toString();
+
     return userSocketMap.get(user_id) !== undefined;
 }
 
