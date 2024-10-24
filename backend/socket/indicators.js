@@ -30,7 +30,8 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
     //     }
     // };
 
-    notificationsCount = await _getUnreadNotificationsCount(socket.user._id);
+    const notificationsCount = await _getUnreadNotificationsCount(socket.user._id);
+    console.log(`notificationsCount: ${notificationsCount}`);
     if (notificationsCount != false) {
         emitIndicatorsSocketEvent(socket, socket.user._id, "INITIAL_NOTIFICATIONS_COUNT_EVENT", notificationsCount);
     }
@@ -56,7 +57,7 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
 const initializeIndicatorsSocket = (io) => {
 
     io.on('connection', async (socket) => {
-        console.log('Chatbot socket connected:', socket.id);
+        console.log('indicators socket connected:', socket.id);
 
 
         // If there is no access token in cookies. Check inside the handshake auth
