@@ -15,6 +15,8 @@ const userSocketMap = new Map(); // A simple map to store userId -> socketId
  * @param {Socket} socket - The socket instance.
  */
 const handleIndicatorsSocketEvents = async (socket, io) => {
+
+
     // const handleReadMessagesEvent = async (data) => {
     //     try {
     //         // Find the socket ID for the user
@@ -94,6 +96,9 @@ const initializeIndicatorsSocket = (io) => {
 
         userSocketMap.set(`${socket.user._id}`, socket.id);
 
+
+
+        socket.join(socket.user._id);
 
         // Pass io directly to handleChatbotSocketEvents
         handleIndicatorsSocketEvents(socket, io);
