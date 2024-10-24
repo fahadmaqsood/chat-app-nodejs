@@ -10,6 +10,9 @@ import jwt from "jsonwebtoken";
 const userSocketMap = new Map(); // A simple map to store userId -> socketId
 
 
+let InputOutput;
+
+
 /**
  * @description Handles socket events related to chatbot messages.
  * @param {Socket} socket - The socket instance.
@@ -39,7 +42,7 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
     const notificationsCount = await _getUnreadNotificationsCount(socket.user._id);
     console.log(`notificationsCount: ${notificationsCount}`);
     if (notificationsCount != false) {
-        emitIndicatorsSocketEvent(socket, socket.user._id, "INITIAL_NOTIFICATIONS_COUNT_EVENT", notificationsCount);
+        emitIndicatorsSocketEvent(socket.user._id, "INITIAL_NOTIFICATIONS_COUNT_EVENT", notificationsCount);
     }
 
 
@@ -61,6 +64,8 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
  * @param {Server} io - The socket.io server instance.
  */
 const initializeIndicatorsSocket = (io) => {
+
+    InputOutput = io;
 
     io.on('connection', async (socket) => {
         console.log('indicators socket connected:', socket.id);
@@ -124,25 +129,10 @@ const initializeIndicatorsSocket = (io) => {
 
 
 
-const emitIndicatorsSocketEvent = (reqOrSocket, user_id, event, payload) => {
-    let io;
-
-    // Check if reqOrSocket is an HTTP request with app instance
-    if (reqOrSocket.app) {
-        io = reqOrSocket.app.get("io");
-    }
-    // Check if reqOrSocket is a Socket.IO server instance
-    else if (reqOrSocket instanceof Server) {
-        io = reqOrSocket;
-    }
-    // Check if reqOrSocket is a Socket.IO instance with server property
-    else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
-        io = reqOrSocket.server;
-    }
-
+const emitIndicatorsSocketEvent = (user_id, event, payload) => {
     // Emit event if io is available
-    if (io) {
-        io.of('/').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
+    if (InputOutput) {
+        InputOutput.of('/').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
         console.log(`Event '${event}' emitted to user ${user_id}.`);
     } else {
         console.error("Socket.IO instance not found.");

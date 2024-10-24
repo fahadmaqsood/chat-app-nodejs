@@ -33,7 +33,7 @@ function sendNotification(deviceToken, title, message, payload) {
             body: message
         },
         data: {
-            
+
         },
         token: deviceToken
     };
@@ -169,7 +169,7 @@ export const addNotification = async (user_id, title, message, payload) => {
         });
 
         if (isAppOpenForUser(user_id)) {
-            emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
+            emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
         }
 
 
