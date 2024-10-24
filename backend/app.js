@@ -20,6 +20,8 @@ import { initializeSocketIO } from "./socket/index.js";
 
 import { initializeChatbotSocket } from "./socket/chatbot.socket.js";
 
+import { initializeIndicatorsSocket } from "./socket/indicators.js";
+
 import { ApiError } from "./utils/ApiError.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 
@@ -145,6 +147,17 @@ app.use('/api/v1/paypal/', paypalRoutes);
 
 initializeSocketIO(io);
 initializeChatbotSocket(io);
+
+const indicatorsWebServerIO = new Server(httpServer, {
+  path: "/sockets/indicator",
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  },
+});
+
+initializeIndicatorsSocket(indicatorsWebServerIO);
 
 // Root route for the API
 app.get('/', (req, res) => {

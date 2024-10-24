@@ -132,7 +132,7 @@ const emitIndicatorsSocketEvent = (reqOrSocket, user_id, event, payload) => {
 
     // Emit event if io is available
     if (io) {
-        io.of('/').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
+        io.of('/sockets/indicator').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
         console.log(`Event '${event}' emitted to user ${user_id}.`);
     } else {
         console.error("Socket.IO instance not found.");
