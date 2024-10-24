@@ -66,7 +66,7 @@ const uploadImages = async (req, res) => {
             // Prepare the response array with file paths and original names
             const uploadedFiles = req.files.map(file => ({
                 originalName: file.originalname,
-                filePath: "/public/uploads/images" + path.basename(file.path)
+                filePath: "/public/uploads/images/" + path.basename(file.path)
             }));
 
             return res
