@@ -33,7 +33,7 @@ function sendNotification(deviceToken, title, message, payload) {
             body: message
         },
         data: {
-            "doer": payload["doer"]
+            
         },
         token: deviceToken
     };
@@ -58,7 +58,7 @@ async function sendNotificationToMany(deviceTokens, title, message, payload) {
             body: message
         },
         data: {
-            "doer": payload["doer"]
+            // "doer": payload["doer"]
         },
         tokens: deviceTokens // Pass multiple device tokens
     };
