@@ -168,9 +168,7 @@ export const addNotification = async (user_id, title, message, payload) => {
             payload
         });
 
-        if (isAppOpenForUser(user_id)) {
-            emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
-        }
+        emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
 
 
 
