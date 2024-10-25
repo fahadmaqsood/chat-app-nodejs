@@ -156,7 +156,8 @@ const sendMessage = asyncHandler(async (req, res) => {
   chat.participants.forEach((participantObjectId) => {
     // here the chat is the raw instance of the chat in which participants is the array of object ids of users
     // avoid emitting event to the user who is sending the message
-    if (participantObjectId.toString() === req.user._id.toString()) return;
+
+    // if (participantObjectId.toString() === req.user._id.toString()) return;
 
     // emit the receive message event to the other participants with received message as the payload
     emitSocketEvent(
