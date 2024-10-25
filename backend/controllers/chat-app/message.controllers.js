@@ -162,7 +162,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     // emit the receive message event to the other participants with received message as the payload
     emitSocketEvent(
       req,
-      `${chat._id} / ${participantObjectId.toString()}`,
+      `${chat._id}/${participantObjectId.toString()}`,
       ChatEventEnum.MESSAGE_RECEIVED_EVENT,
       receivedMessage
     );
