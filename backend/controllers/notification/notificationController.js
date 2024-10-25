@@ -134,8 +134,28 @@ export const addNotificationForAll = async (title, message, payload) => {
         // Fetch all users
         const users = await User.find({ firebaseToken: { $ne: null } });
 
+        if (users.length === 0) {
+            throw new Error("No users found");
+        }
+
+        // Create an array of notifications to insert
+        const notifications = users.map(user => ({
+            user_id: user._id,
+            title,
+            message,
+            payload
+        }));
+
+        // Insert all notifications in a single operation
+        const newNotifications = await Notification.insertMany(notifications);
+
+
         // Collect all firebase tokens of users
         const deviceTokens = users.map(user => user.firebaseToken).filter(token => !!token);
+
+        users.forEach(user => {
+            emitIndicatorsSocketEvent(user._id, "NEW_NOTIFICATION_EVENT", 1);
+        });
 
         // Check if there are any valid tokens
         if (deviceTokens.length > 0) {
