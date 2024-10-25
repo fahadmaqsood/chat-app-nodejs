@@ -1,5 +1,8 @@
 import multer from "multer";
 
+import { v4 } from 'uuid';
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // This storage needs public/images folder in the root directory
@@ -14,11 +17,15 @@ const storage = multer.diskStorage({
         file.originalname.lastIndexOf(".")
       );
     }
-    const filenameWithoutExtension = file.originalname
+    let filenameWithoutExtension = file.originalname
       .toLowerCase()
       .split(" ")
       .join("-")
       ?.split(".")[0];
+
+
+    filenameWithoutExtension = v4(); // Generate a unique filename
+
     cb(
       null,
       filenameWithoutExtension +
