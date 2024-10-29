@@ -4,6 +4,10 @@ import PlayStoreTransactions from '../../models/payment/PlayStoreTransactions.js
 
 import { User } from '../../models/auth/user.models.js'
 
+import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
+
+import { addNotification } from "../../controllers/notification/notificationController.js";
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -68,6 +72,16 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 );
 
                 await markPurchaseSuccess(purchaseToken);
+
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+
+                emitIndicatorsSocketEvent(currentUser._id, "COIN_PURCHASE_SUCCESS");
+
+                try {
+                    await addNotification(currentUser._id, "👛 Coin Purchase Successful!", `${coins} coins added to your account.`);
+                } catch (error) {
+                    console.log("couldn't send notification to the user");
+                }
 
                 return res.status(200).send('OK');
             }

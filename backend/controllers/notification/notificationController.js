@@ -126,9 +126,7 @@ export const addNotificationForMany = async (user_ids, title, message, payload, 
 
         if (!isCall) {
             user_ids.forEach((user_id) => {
-                if (isAppOpenForUser(user_id)) {
-                    emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
-                }
+                emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
             });
         }
 
