@@ -145,12 +145,14 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
                     break;
                 case 3: // SUBSCRIPTION_CANCELED
+                case 10: // SUBSCRIPTION_PAUSED
                 case 13: // SUBSCRIPTION_EXPIRED
-                    console.log('Subscription expired/canceled:', notification);
+                    console.log('Subscription expired/canceled/paused:', notification);
 
                     currentUser.subscription_status = "inactive";
 
                     sendNotification(currentUser, "Your subscription was expired", "You won't be able to access your account from now on.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
 
                     break;
                 case 2: // SUBSCRIPTION_RENEWED
@@ -175,6 +177,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     currentUser.subscription_status = "hold";
 
                     sendNotification(currentUser, "Your subscription is on hold", "Try to pay fees before your account gets blocked.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
 
                     break;
                 case 8: // SUBSCRIPTION_PRICE_CHANGE_CONFIRMED
@@ -182,9 +185,6 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     break;
                 case 9: // SUBSCRIPTION_DEFERRED
                     console.log('Subscription deferred:', notification);
-                    break;
-                case 10: // SUBSCRIPTION_PAUSED
-                    console.log('Subscription paused:', notification);
                     break;
                 case 11: // SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED
                     console.log('Subscription pause schedule changed:', notification);
@@ -195,6 +195,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     currentUser.subscription_status = "inactive";
 
                     sendNotification(currentUser, "Your subscription was revoked", "Your payment provider revoked your subscription.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+
 
                     break;
                 case 20: // SUBSCRIPTION_PENDING_PURCHASE_CANCELED
