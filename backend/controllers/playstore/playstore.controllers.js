@@ -50,6 +50,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 }
 
                 console.log(`coins: '${coins}', type: ${typeof (coins)}`);
+                console.log(`currentUser.user_points: ${currentUser.user_points}, ${typeof (currentUser.user_points)}`);
 
                 let coinsAfterUpdate = currentUser.user_points + coins;
 
