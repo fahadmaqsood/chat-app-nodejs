@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const coinPurchasesSchema = new mongoose.Schema({
     user_id: {
@@ -19,4 +19,4 @@ const coinPurchasesSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('CoinPurchases', coinPurchasesSchema);
+export default mongoose.model('CoinPurchases', coinPurchasesSchema);

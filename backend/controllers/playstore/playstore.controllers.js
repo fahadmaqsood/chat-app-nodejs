@@ -1,6 +1,6 @@
 import { PubSub } from '@google-cloud/pubsub';
 
-import CoinPurchases from '../../models/payment/CoinPurchases';
+import CoinPurchases from '../../models/payment/CoinPurchases.js';
 
 const pubsub = new PubSub();
 
