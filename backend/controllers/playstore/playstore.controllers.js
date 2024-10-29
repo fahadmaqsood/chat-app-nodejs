@@ -91,14 +91,14 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
 
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
-    const purchase = await CoinPurchases.find({ purchaseToken }).lean();
+    const purchase = await CoinPurchases.findOne({ purchaseToken }).lean();
 
     return purchase.user_id;
 }
 
 
 export const markPurchaseFailure = async (purchaseToken) => {
-    const purchase = await CoinPurchases.find({ purchaseToken });
+    const purchase = await CoinPurchases.findOne({ purchaseToken });
 
     purchase.payment_status = "failure";
 
