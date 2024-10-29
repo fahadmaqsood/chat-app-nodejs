@@ -24,7 +24,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             const sku = messageJson.oneTimeProductNotification.sku;
             const purchaseToken = messageJson.oneTimeProductNotification.purchaseToken;
 
-            const purchaseUserId = await getUserIdFromPurchaseToken(purchaseToken);
+            const purchaseUserId = await getUserIdFromPurchaseToken(purchaseToken.trim());
 
             console.log("purchaseUserId: ", purchaseUserId);
 
@@ -94,7 +94,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
 
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
-    const purchase = await PlayStoreTransactions.findOne({ purchaseToken.trim() });
+    const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
     console.log(`purchase: ${purchase}`)
 
