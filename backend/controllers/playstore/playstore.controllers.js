@@ -2,6 +2,8 @@ import { PubSub } from '@google-cloud/pubsub';
 
 import CoinPurchases from '../../models/payment/CoinPurchases.js';
 
+import { User } from '../../models/auth/user.models.js'
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -57,7 +59,6 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 await markPurchaseFailure(purchaseToken);
 
                 return res.status(200).send('OK');
-
             }
 
 
