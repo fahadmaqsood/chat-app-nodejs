@@ -5,7 +5,6 @@ const pubsub = new PubSub();
 // Your Google Cloud Pub/Sub subscription
 const subscriptionName = 'play-store-webhook';
 
-
 export const playstoreSubscriptionWebhook = async (req, res) => {
     try {
 
@@ -17,7 +16,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         console.log(messageJson);
 
         // Access notification attributes, e.g., notificationType, purchaseToken
-        const notificationType = req.body.message.attributes.notificationType;
+        const notificationType = req.body.message?.attributes.notificationType;
         const purchaseToken = messageJson.purchaseToken;
 
         console.log(notificationType);
@@ -28,6 +27,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         } else if (notificationType == "SUBSCRIPTION_RENEWED") {
 
         } else if (notificationType == "SUBSCRIPTION_CANCELED") {
+
+        } else {
 
         }
 
