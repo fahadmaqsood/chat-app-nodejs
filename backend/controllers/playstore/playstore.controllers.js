@@ -39,7 +39,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 let coins;
                 try {
                     console.log("parse value: ", sku.replace("tgc_shop_", "").replace("_coins", "").trim());
-                    coins = parseInt(sku.replace("tgc_shop_", "").replace("_coins").trim());
+                    coins = parseInt(sku.replace("tgc_shop_", "").replace("_coins", "").trim());
                 } catch (error) {
                     console.log(error);
 
