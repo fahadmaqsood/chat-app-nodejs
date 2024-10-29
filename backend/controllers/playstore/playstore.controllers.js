@@ -24,8 +24,11 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             const sku = messageJson.oneTimeProductNotification.sku;
             const purchaseToken = messageJson.oneTimeProductNotification.sku;
 
+            const purchaseUserId = await getUserIdFromPurchaseToken(purchaseToken);
 
-            const currentUser = await User.findById(await getUserIdFromPurchaseToken(purchaseToken));
+            console.log("purchaseUserId: ", purchaseUserId);
+
+            const currentUser = await User.findById(purchaseUserId);
 
             if (!currentUser) {
                 await markPurchaseFailure(purchaseToken);
