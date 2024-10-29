@@ -19,7 +19,11 @@ import {
   getUserPoints,
   addUserPoints,
   decreaseUserPoints,
-  refreshUser
+  refreshUser,
+
+  deactivateSubscription,
+  activateSubscription,
+  activateSubscriptionTrial
 } from "../../controllers/auth/user.controllers.js";
 import {
   verifyJWT,
@@ -96,6 +100,11 @@ router
 
 // refresh user
 router.route("/refresh-user").post(validateTokensMiddleware, refreshUser);
+
+// subscriptions
+router.route("/activate-subscription-trial").post(validateTokensMiddleware, activateSubscriptionTrial);
+router.route("/activate-subscription").post(validateTokensMiddleware, activateSubscription);
+router.route("/deactivate-subscription").post(validateTokensMiddleware, deactivateSubscription);
 
 // Get user points
 router.route("/get-user-points").get(validateTokensMiddleware, getUserPoints);

@@ -138,6 +138,93 @@ const generateAccessAndRefreshTokens = async (userId) => {
   }
 };
 
+
+const deactivateSubscription = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.subscription_status = 'inactive';
+
+    await user.save();
+
+    return res.status(200).json(new ApiResponse(200, {}, "Subscription deactivated successfully."));
+  } catch (error) {
+    res.status(500).json(new ApiResponse(500, {}, "Couldn't deactivate user's subscription."));
+  }
+};
+
+
+const activateSubscriptionTrial = async (req, res) => {
+  try {
+    const user_id = req.user._id;
+    const months = req.body.months;
+    const start_date = req.body.start_date;
+    const next_billing_date = req.body.next_billing_date;
+
+
+    const user = await User.findById(user_id);
+    user.subscription_status = 'trial';
+    user.subscription_type = months == 1 ? 'monthly' : 'yearly';
+    user.last_renew_date = new Date(Date.parse(start_date));
+
+    if (next_billing_date !== undefined && next_billing_date.trim() != "") {
+      user.next_billing_date = new Date(Date.parse(next_billing_date));
+    } else {
+      // Calculate the next_billing_date based on the subscription type
+      if (months === 1) {
+        // Monthly subscription: add 1 month
+        user.next_billing_date = new Date(user.last_renew_date);
+        user.next_billing_date.setMonth(user.next_billing_date.getMonth() + 1);
+      } else {
+        // Yearly subscription: add 1 year
+        user.next_billing_date = new Date(user.last_renew_date);
+        user.next_billing_date.setFullYear(user.next_billing_date.getFullYear() + 1);
+      }
+    }
+    await user.save();
+    return res.status(200).json(new ApiResponse(200, {}, "Trial activated successfully."));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new ApiResponse(500, {}, "Couldn't activate trial for user."));
+  }
+}
+
+const activateSubscription = async (req, res) => {
+
+  try {
+    const user_id = req.user._id;
+    const months = req.body.months;
+    const next_billing_date = req.body.next_billing_date;
+
+    const user = await User.findById(user_id);
+    user.subscription_status = 'active';
+    user.subscription_type = months == 1 ? 'monthly' : 'yearly';
+    user.last_renew_date = new Date();
+
+    if (next_billing_date !== undefined && next_billing_date.trim() != "") {
+      user.next_billing_date = new Date(Date.parse(next_billing_date));
+    } else {
+      // Calculate the next_billing_date based on the subscription type
+      if (months === 1) {
+        // Monthly subscription: add 1 month
+        user.next_billing_date = new Date(user.last_renew_date);
+        user.next_billing_date.setMonth(user.next_billing_date.getMonth() + 1);
+      } else {
+        // Yearly subscription: add 1 year
+        user.next_billing_date = new Date(user.last_renew_date);
+        user.next_billing_date.setFullYear(user.next_billing_date.getFullYear() + 1);
+      }
+    }
+
+    await user.save();
+
+
+    return res.status(200).json(new ApiResponse(200, {}, "Subscription activated successfully."));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new ApiResponse(500, {}, "Couldn't activate subscription for user."));
+  }
+}
+
 const registerUser = asyncHandler(async (req, res) => {
   let { email, username, password, religion, date_of_birth, country, language } = req.body;
 
@@ -866,5 +953,13 @@ export {
 
   _decreaseUserPoints,
 
-  refreshUser
+  refreshUser,
+
+
+
+
+  // subscriptions
+  deactivateSubscription,
+  activateSubscription,
+  activateSubscriptionTrial
 };

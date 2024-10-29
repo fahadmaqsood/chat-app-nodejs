@@ -20,10 +20,9 @@ const userScheduleSchema = new mongoose.Schema({
         required: true
     }, // Date of the session
 
-    slots: {
-        type: Number,
-        required: true,
-        min: 1
+    endTime: {
+        type: Date,
+        required: true
     }, // Number of available slots in the session
 
     organizer: {

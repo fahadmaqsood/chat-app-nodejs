@@ -19,7 +19,6 @@ let cache = {
 };
 
 getAllTopicNames().then((result) => {
-    console.log("result", result);
     cache["topicNames"] = result;
     cache["cache_time"] = Date.now();
 });

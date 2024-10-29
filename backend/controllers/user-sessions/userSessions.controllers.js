@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 // Schedule a session
 const scheduleSession = async (req, res) => {
     try {
-        const { title, description, participants, startTime, slots } = req.body;
+        const { title, description, participants, startTime, endTime } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
         if (!startTime || !slots) {
@@ -19,7 +19,7 @@ const scheduleSession = async (req, res) => {
             description,
             participants: [...participants, currentUserId], // Include the current user as a participant
             date: new Date(startTime),
-            slots,
+            endTime: new Date(endTime),
             organizer: currentUserId
         });
 

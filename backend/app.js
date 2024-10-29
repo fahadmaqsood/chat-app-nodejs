@@ -186,6 +186,15 @@ app.get('/test/subscribe', (req, res) => {
 });
 
 
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send(`
+User-agent: *
+Disallow: /
+`);
+});
+
+
 
 // route for auto server updates
 app.all('/pullAndRestart', (req, res) => {
