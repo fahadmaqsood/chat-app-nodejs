@@ -142,7 +142,7 @@ export const addCoinPurchase = async (req, res) => {
 
 
         const newPurchase = new PlayStoreTransactions({
-            user_id: new mongoose.Schema.Types.ObjectId(userId),
+            user_id: userId,
             purchaseToken,
             payment_status: "pending"
         });
