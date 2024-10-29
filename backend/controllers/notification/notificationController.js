@@ -51,17 +51,25 @@ function sendNotification(deviceToken, title, message, payload) {
 }
 
 
-async function sendNotificationToMany(deviceTokens, title, message, payload) {
-    const message_data = {
-        notification: {
-            title: title,
-            body: message
-        },
-        data: {
-            // "doer": payload["doer"]
-        },
-        tokens: deviceTokens // Pass multiple device tokens
-    };
+async function sendNotificationToMany(deviceTokens, title, message, payload, isCall = false) {
+    let message_data = {};
+
+    if (isCall) {
+        message_data = {
+            data: payload
+        };
+    } else {
+        message_data = {
+            notification: {
+                title: title,
+                body: message
+            },
+            data: {
+                // "doer": payload["doer"]
+            },
+            tokens: deviceTokens // Pass multiple device tokens
+        };
+    }
 
     // Send a message to all the device tokens provided in the array
     await firebaseAdmin.messaging().sendEachForMulticast(message_data)
@@ -84,7 +92,7 @@ async function sendNotificationToMany(deviceTokens, title, message, payload) {
 }
 
 
-export const addNotificationForMany = async (user_ids, title, message, payload) => {
+export const addNotificationForMany = async (user_ids, title, message, payload, isCall = false) => {
     try {
         // Find all users whose IDs are in the user_ids array
         const users = await User.find({
@@ -95,16 +103,18 @@ export const addNotificationForMany = async (user_ids, title, message, payload) 
             throw new Error("No users found");
         }
 
-        // Create an array of notifications to insert
-        const notifications = users.map(user => ({
-            user_id: user._id,
-            title,
-            message,
-            payload
-        }));
+        if (!isCall) {
+            // Create an array of notifications to insert
+            const notifications = users.map(user => ({
+                user_id: user._id,
+                title,
+                message,
+                payload
+            }));
 
-        // Insert all notifications in a single operation
-        const newNotifications = await Notification.insertMany(notifications);
+            // Insert all notifications in a single operation
+            const newNotifications = await Notification.insertMany(notifications);
+        }
 
         // Collect all firebase tokens of users
         const deviceTokens = users.map(user => user.firebaseToken).filter(token => !!token);
@@ -114,17 +124,44 @@ export const addNotificationForMany = async (user_ids, title, message, payload) 
             sendNotificationToMany(deviceTokens, title, message, payload);
         }
 
-        user_ids.forEach((user_id) => {
-            if (isAppOpenForUser(user_id)) {
-                emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
-            }
-        });
+        if (!isCall) {
+            user_ids.forEach((user_id) => {
+                if (isAppOpenForUser(user_id)) {
+                    emitIndicatorsSocketEvent(req, user_id, "NEW_NOTIFICATION_EVENT", 1);
+                }
+            });
+        }
 
-        // Return the created notifications
-        return newNotifications;
+        return true;
 
     } catch (error) {
         throw error;
+    }
+
+    return false;
+};
+
+
+export const sendCallNotification = async (req, res) => {
+    try {
+        const receiverIds = req.body.receiverIds;
+        const callerId = req.user._id;
+
+        if (!receiverIds || receiverIds.length == 0) {
+            res.status(400).json({ success: false, message: 'receiverIds must be defined' });
+        }
+
+        console.log(receiverIds);
+
+        await addNotificationForMany(receiverIds, null, null, {
+            "isCall": "true",
+            "callerName": req.user.nameElseUsername,
+        }, true);
+
+
+        res.status(200).json(new ApiResponse(200, {}, "Notification sent successfully"));;
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, {}, error));
     }
 };
 

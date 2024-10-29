@@ -9,9 +9,11 @@ const scheduleSession = async (req, res) => {
         const { title, description, participants, startTime, endTime } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
-        if (!startTime || !slots) {
-            return res.status(400).json(new ApiResponse(400, {}, "startTime, and slots are required"));
+        if (!startTime || !endTime) {
+            return res.status(400).json(new ApiResponse(400, {}, "startTime, and endTime are required"));
         }
+
+
 
         // Create new session
         const newSession = new UserSchedule({
