@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const coinPurchasesSchema = new mongoose.Schema({
+const PlayStoreTransactionsSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -19,4 +19,4 @@ const coinPurchasesSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model('CoinPurchases', coinPurchasesSchema);
+export default mongoose.model('PlayStoreTransactions', PlayStoreTransactionsSchema);

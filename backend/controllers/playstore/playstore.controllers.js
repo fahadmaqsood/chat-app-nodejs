@@ -1,6 +1,6 @@
 import { PubSub } from '@google-cloud/pubsub';
 
-import CoinPurchases from '../../models/payment/CoinPurchases.js';
+import PlayStoreTransactions from '../../models/payment/PlayStoreTransactions.js';
 
 import { User } from '../../models/auth/user.models.js'
 
@@ -91,14 +91,14 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
 
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
-    const purchase = await CoinPurchases.findOne({ purchaseToken }).lean();
+    const purchase = await PlayStoreTransactions.findOne({ purchaseToken }).lean();
 
     return purchase.user_id;
 }
 
 
 export const markPurchaseFailure = async (purchaseToken) => {
-    const purchase = await CoinPurchases.findOne({ purchaseToken });
+    const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
     purchase.payment_status = "failure";
 
@@ -112,7 +112,7 @@ export const addCoinPurchase = async (req, res) => {
     const payment_status = req.body.payment_status;
 
 
-    const newPurchase = new CoinPurchases({
+    const newPurchase = new PlayStoreTransactions({
         userId,
         purchaseToken,
         payment_status
@@ -128,7 +128,7 @@ export const addCoinPurchase = async (req, res) => {
 //     const payment_status = req.body.payment_status;
 
 
-//     const newNotification = new CoinPurchases({
+//     const newNotification = new PlayStoreTransactions({
 //         userId,
 //         purchaseToken,
 //         payment_status
