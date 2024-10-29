@@ -44,7 +44,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
                     await markPurchaseFailure(purchaseToken);
 
-                    res.status(500).send('Error');
+                    return res.status(500).send('Error');
                 }
 
                 console.log("coins: ", coins);
