@@ -23,7 +23,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         const messageData = Buffer.from(req.body.message.data, 'base64').toString();
         const messageJson = JSON.parse(messageData);
 
-        console.log(messageJson);
+        // console.log(messageJson);
 
         if (Object.keys(messageJson).includes("oneTimeProductNotification")) {
 
@@ -32,7 +32,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
             const purchaseUserId = await getUserIdFromPurchaseToken(purchaseToken.trim());
 
-            console.log("purchaseUserId: ", purchaseUserId);
+            // console.log("purchaseUserId: ", purchaseUserId);
 
             const currentUser = await User.findById(purchaseUserId);
 
@@ -48,7 +48,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 let coins;
                 try {
                     let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
-                    console.log(`parse value: '${parseValue}'`);
+                    // console.log(`parse value: '${parseValue}'`);
                     coins = parseInt(parseValue);
                 } catch (error) {
                     console.log(error);
@@ -112,7 +112,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
     const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
-    console.log(`purchase: ${purchase}`)
+    // console.log(`purchase: ${purchase}`)
 
     return purchase.user_id;
 }
