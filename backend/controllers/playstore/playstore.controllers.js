@@ -8,6 +8,8 @@ import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indica
 
 import { addNotification } from "../../controllers/notification/notificationController.js";
 
+import { ApiResponse } from '../../utils/ApiResponse.js';
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -134,18 +136,21 @@ export const markPurchaseSuccess = async (purchaseToken) => {
 
 
 export const addCoinPurchase = async (req, res) => {
-    const userId = req.user._id;
-    const purchaseToken = req.body.purchaseToken;
-    const payment_status = req.body.payment_status;
+    try {
+        const userId = req.user._id;
+        const purchaseToken = req.body.purchaseToken;
 
 
-    const newPurchase = new PlayStoreTransactions({
-        userId,
-        purchaseToken,
-        payment_status
-    });
+        const newPurchase = new PlayStoreTransactions({
+            userId,
+            purchaseToken,
+        });
 
-    await newPurchase.save();
+        await newPurchase.save();
+    }
+    catch (error) {
+        res.status(500).json(new ApiResponse(500, {}, "purchased added as pending"));
+    }
 };
 
 
