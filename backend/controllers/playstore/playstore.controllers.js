@@ -152,6 +152,7 @@ export const addCoinPurchase = async (req, res) => {
         res.status(201).json(new ApiResponse(201, {}, "Pending purchase added successfully."));
     }
     catch (error) {
+        console.log(error);
         res.status(500).json(new ApiResponse(500, {}, "An error occurred while adding this purchase"));
     }
 };
