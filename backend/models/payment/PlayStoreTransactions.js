@@ -13,10 +13,15 @@ const PlayStoreTransactionsSchema = new mongoose.Schema({
     },
     payment_status: {
         type: String,
-        enum: ['pending', 'success', 'failure'],
+        enum: ['pending', 'success', 'failure', 'canceled'],
         required: true,
         default: 'pending' // Optional: Default status on transaction creation
     },
+
+    isSubscription: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

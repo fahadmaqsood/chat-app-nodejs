@@ -17,6 +17,11 @@ const pubsub = new PubSub();
 // Your Google Cloud Pub/Sub subscription
 const subscriptionName = 'play-store-webhook';
 
+const subscriptionIdToMonths = {
+    "tgc_monthly_subscription": 1,
+    "tgc_annual_subscription": 12,
+};
+
 export const playstoreSubscriptionWebhook = async (req, res) => {
     try {
         // Pub/Sub messages are base64 encoded, so we decode them here
@@ -100,13 +105,113 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             return res.status(501).send(`${sku} not supported on our server yet.`);
         } else if (Object.keys(messageJson).includes("subscriptionNotification")) {
 
-            const purchaseToken = messageJson.subscriptionNotification.purchaseToken;
-            const subscriptionId = messageJson.subscriptionNotification.subscriptionId;
-            const notificationType = messageJson.subscriptionNotification.notificationType;
+            const notification = messageJson.subscriptionNotification;
+
+            const purchaseToken = notification.purchaseToken;
+            const subscriptionId = notification.subscriptionId;
+
+            const months = subscriptionIdToMonths[subscriptionId];
+
+            const purchaseUserId = await getUserIdFromPurchaseToken(purchaseToken.trim());
+
+            if (!purchaseUserId) {
+                console.log("Purchase for token: " + purchaseToken + " has not been recorded yet.");
+
+                return res
+                    .status(404)
+                    .json(new ApiResponse(404, null, "Record for that purchase token not found."));
+            }
+
+
+            const currentUser = await User.findById(purchaseUserId);
+
+            if (!currentUser) {
+                await markPurchaseFailure(purchaseToken);
+
+                return res
+                    .status(404)
+                    .json(new ApiResponse(404, null, "User not found."));
+            }
+
 
             // await markPurchaseFailure(purchaseToken);
 
-            return res.status(200).send('Not implemented yet.');
+            // Handle different notification types
+            switch (notification.notificationType) {
+                case 1: // SUBSCRIPTION_RECOVERED
+                    console.log('Subscription recovered:', notification);
+
+                    currentUser.subscription_status = "active";
+
+                    break;
+                case 3: // SUBSCRIPTION_CANCELED
+                case 13: // SUBSCRIPTION_EXPIRED
+                    console.log('Subscription expired/canceled:', notification);
+
+                    currentUser.subscription_status = "inactive";
+
+                    sendNotification(currentUser, "Your subscription was expired", "You won't be able to access your account from now on.");
+
+                    break;
+                case 2: // SUBSCRIPTION_RENEWED
+                case 4: // SUBSCRIPTION_PURCHASED
+                case 7: // SUBSCRIPTION_RESTARTED
+                    console.log('Subscription purchased/renewed/restarted:', notification);
+
+                    currentUser.subscription_status = "active";
+                    currentUser.last_renew_date = new Date();
+                    currentUser.subscription_type = months == 1 ? 'monthly' : 'yearly';
+                    currentUser.next_billing_date = calculateNextBillingDate(months);
+
+
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                    emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
+
+                    break;
+                case 5: // SUBSCRIPTION_ON_HOLD
+                case 6: // SUBSCRIPTION_IN_GRACE_PERIOD
+                    console.log('Subscription in grace period/on hold:', notification);
+
+                    currentUser.subscription_status = "hold";
+
+                    sendNotification(currentUser, "Your subscription is on hold", "Try to pay fees before your account gets blocked.");
+
+                    break;
+                case 8: // SUBSCRIPTION_PRICE_CHANGE_CONFIRMED
+                    console.log('Subscription price change confirmed:', notification);
+                    break;
+                case 9: // SUBSCRIPTION_DEFERRED
+                    console.log('Subscription deferred:', notification);
+                    break;
+                case 10: // SUBSCRIPTION_PAUSED
+                    console.log('Subscription paused:', notification);
+                    break;
+                case 11: // SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED
+                    console.log('Subscription pause schedule changed:', notification);
+                    break;
+                case 12: // SUBSCRIPTION_REVOKED
+                    console.log('Subscription revoked:', notification);
+
+                    currentUser.subscription_status = "inactive";
+
+                    sendNotification(currentUser, "Your subscription was revoked", "Your payment provider revoked your subscription.");
+
+                    break;
+                case 20: // SUBSCRIPTION_PENDING_PURCHASE_CANCELED
+                    console.log('Pending purchase canceled:', notification);
+
+                    await markPurchaseCanceled(purchaseToken);
+
+                    break;
+                default:
+                    console.log('Unknown notification type:', notification.notificationType);
+            }
+
+
+            await currentUser.save();
+
+
+            return res.status(200).send('Done.');
         }
 
 
@@ -120,6 +225,29 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
     }
 }
 
+function calculateNextBillingDate(months) {
+    let next_billing_date;
+    if (months == 12) {
+        // Yearly subscription: add 1 year
+        next_billing_date = new Date();
+        next_billing_date.setFullYear(next_billing_date.getFullYear() + 1);
+    } else {
+        // Monthly subscription: add 1 month
+        next_billing_date = new Date();
+        next_billing_date.setMonth(next_billing_date.getMonth() + 1);
+    }
+
+    return next_billing_date;
+}
+
+
+async function sendNotification(currentUser, title, message) {
+    try {
+        await addNotification(currentUser._id, title, message);
+    } catch (error) {
+        console.log("couldn't send notification to the user");
+    }
+}
 
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
     const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
@@ -146,6 +274,14 @@ export const markPurchaseSuccess = async (purchaseToken) => {
     const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
     purchase.payment_status = "success";
+
+    await purchase?.save();
+}
+
+export const markPurchaseCanceled = async (purchaseToken) => {
+    const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
+
+    purchase.payment_status = "canceled";
 
     await purchase?.save();
 }

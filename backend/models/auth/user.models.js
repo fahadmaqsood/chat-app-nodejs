@@ -116,7 +116,7 @@ const userSchema = new Schema(
     },
     subscription_status: {
       type: String,
-      enum: ['active', 'inactive', 'trial'],
+      enum: ['active', 'inactive', 'trial', 'hold'],
       default: 'inactive'
     },
     last_renew_date: {
