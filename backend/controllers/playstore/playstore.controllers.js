@@ -100,9 +100,13 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             return res.status(501).send(`${sku} not supported on our server yet.`);
         } else if (Object.keys(messageJson).includes("subscriptionNotification")) {
 
-            await markPurchaseFailure(purchaseToken);
+            const purchaseToken = messageJson.subscriptionNotification.purchaseToken;
+            const subscriptionId = messageJson.subscriptionNotification.subscriptionId;
+            const notificationType = messageJson.subscriptionNotification.notificationType;
 
-            return res.status(501).send('Not implemented yet.');
+            // await markPurchaseFailure(purchaseToken);
+
+            return res.status(200).send('Not implemented yet.');
         }
 
 
@@ -127,11 +131,15 @@ export const getUserIdFromPurchaseToken = async (purchaseToken) => {
 
 
 export const markPurchaseFailure = async (purchaseToken) => {
-    const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
+    try {
+        const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
-    purchase.payment_status = "failure";
+        purchase.payment_status = "failure";
 
-    await purchase.save();
+        await purchase.save();
+    } catch (error) {
+
+    }
 }
 
 export const markPurchaseSuccess = async (purchaseToken) => {
