@@ -38,8 +38,9 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
                 let coins;
                 try {
-                    console.log("parse value: ", sku.replace("tgc_shop_", "").replace("_coins", "").trim());
-                    coins = parseInt(sku.replace("tgc_shop_", "").replace("_coins", "").trim());
+                    let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
+                    console.log(`parse value: '${parseValue}'`);
+                    coins = parseInt(parseValue);
                 } catch (error) {
                     console.log(error);
 
@@ -48,7 +49,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     return res.status(500).send('Error');
                 }
 
-                console.log("coins: ", coins);
+                console.log(`coins: '${coins}', type: ${typeof (coins)}`);
 
                 let updatedUser = await User.findByIdAndUpdate(
                     currentUser._id,
