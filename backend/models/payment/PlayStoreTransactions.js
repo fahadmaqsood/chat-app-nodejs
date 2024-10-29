@@ -8,12 +8,14 @@ const PlayStoreTransactionsSchema = new mongoose.Schema({
     },
     purchaseToken: {
         type: String,
-        required: true
+        required: true,
+        unique: true // Ensure uniqueness for each transaction
     },
     payment_status: {
         type: String,
         enum: ['pending', 'done', 'failure'],
-        required: true
+        required: true,
+        default: 'pending' // Optional: Default status on transaction creation
     },
 }, {
     timestamps: true
