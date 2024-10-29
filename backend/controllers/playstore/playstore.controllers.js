@@ -24,6 +24,17 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             const sku = messageJson.oneTimeProductNotification.sku;
             const purchaseToken = messageJson.oneTimeProductNotification.sku;
 
+
+            const currentUser = getUserIdFromPurchaseToken(purchaseToken);
+
+            if (!currentUser) {
+                await markPurchaseFailure(purchaseToken);
+
+                return res
+                    .status(404)
+                    .json(new ApiResponse(404, null, "User not found."));
+            }
+
             if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
                 let coins;
                 try {
@@ -37,16 +48,6 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 }
 
                 console.log("coins: ", coins);
-
-                const currentUser = await User.findById(purchase.user_id);
-
-                if (!currentUser) {
-                    await markPurchaseFailure(purchaseToken);
-
-                    return res
-                        .status(404)
-                        .json(new ApiResponse(404, null, "User not found."));
-                }
 
                 let updatedUser = await User.findByIdAndUpdate(
                     currentUser._id,
@@ -79,6 +80,13 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         console.error('Error processing message:', error);
         res.status(500).send('Error');
     }
+}
+
+
+export const getUserIdFromPurchaseToken = async (purchaseToken) => {
+    const purchase = await CoinPurchases.find({ purchaseToken }).lean();
+
+    return purchase.user_id;
 }
 
 
