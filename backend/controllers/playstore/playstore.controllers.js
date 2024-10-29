@@ -91,7 +91,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
 
 export const getUserIdFromPurchaseToken = async (purchaseToken) => {
-    const purchase = await PlayStoreTransactions.find({ purchaseToken }).lean();
+    const purchase = await PlayStoreTransactions.find({ purchaseToken });
 
     console.log(`purchase: ${purchase}`)
 
