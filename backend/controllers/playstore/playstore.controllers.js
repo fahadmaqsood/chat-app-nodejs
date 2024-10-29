@@ -142,14 +142,17 @@ export const addCoinPurchase = async (req, res) => {
 
 
         const newPurchase = new PlayStoreTransactions({
-            userId,
+            user_id: userId,
             purchaseToken,
+            payment_status: "pending"
         });
 
         await newPurchase.save();
+
+        res.status(201).json(new ApiResponse(201, {}, "Pending purchase added successfully."));
     }
     catch (error) {
-        res.status(500).json(new ApiResponse(500, {}, "purchased added as pending"));
+        res.status(500).json(new ApiResponse(500, {}, "An error occurred while adding this purchase"));
     }
 };
 
