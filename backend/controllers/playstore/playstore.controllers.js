@@ -67,7 +67,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
                 );
 
-                await markPurchaseFailure(purchaseToken);
+                await markPurchaseSuccess(purchaseToken);
 
                 return res.status(200).send('OK');
             }
@@ -106,6 +106,14 @@ export const markPurchaseFailure = async (purchaseToken) => {
     const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
 
     purchase.payment_status = "failure";
+
+    await purchase.save();
+}
+
+export const markPurchaseSuccess = async (purchaseToken) => {
+    const purchase = await PlayStoreTransactions.findOne({ purchaseToken });
+
+    purchase.payment_status = "success";
 
     await purchase.save();
 }
