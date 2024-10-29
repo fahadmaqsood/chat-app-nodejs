@@ -1,5 +1,7 @@
 import { PubSub } from '@google-cloud/pubsub';
 
+import CoinPurchases from '../../models/payment/CoinPurchases';
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -15,31 +17,104 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
         console.log(messageJson);
 
-        // Access notification attributes, e.g., notificationType, purchaseToken
-        const notificationType = req.body.message?.attributes?.notificationType;
-        const purchaseToken = messageJson.purchaseToken;
+        if (Object.keys(messageJson).includes("oneTimeProductNotification")) {
 
-        console.log(notificationType);
+            const sku = messageJson.oneTimeProductNotification.sku;
+            const purchaseToken = messageJson.oneTimeProductNotification.sku;
+
+            if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+                let coins;
+                try {
+                    coins = parseInt(sku.replace("tgc_shop_", "").replace("_coins").trim());
+                } catch (error) {
+                    console.log(error);
+
+                    await markPurchaseFailure(purchaseToken);
+
+                    res.status(500).send('Error');
+                }
+
+                console.log("coins: ", coins);
+
+                const currentUser = await User.findById(purchase.user_id);
+
+                if (!currentUser) {
+                    await markPurchaseFailure(purchaseToken);
+
+                    return res
+                        .status(404)
+                        .json(new ApiResponse(404, null, "User not found."));
+                }
+
+                let updatedUser = await User.findByIdAndUpdate(
+                    currentUser._id,
+                    { user_points: currentUser.user_points + coins },
+                    { new: true }
+                ).select(
+                    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+                );
+
+                await markPurchaseFailure(purchaseToken);
+
+                return res.status(200).send('OK');
+
+            }
 
 
-        if (notificationType == "SUBSCRIPTION_PURCHASED") {
+            return res.status(501).send(`${sku} not supported on our server yet.`);
+        } else if (Object.keys(messageJson).includes("subscriptionNotification")) {
 
-        } else if (notificationType == "SUBSCRIPTION_RENEWED") {
+            await markPurchaseFailure(purchaseToken);
 
-        } else if (notificationType == "SUBSCRIPTION_CANCELED") {
-
-        } else {
-
+            return res.status(501).send('Not implemented yet.');
         }
 
-        // Process based on notification type (purchase, renewal, cancellation, etc.)
-        console.log(`Received notification type: ${notificationType}`);
-        console.log(`Purchase token: ${purchaseToken}`);
+
+        await markPurchaseFailure(purchaseToken);
 
         // Respond to Google that the message was received
-        res.status(200).send('OK');
+        res.status(501).send("Don't know what kind of purchase that is.");
     } catch (error) {
         console.error('Error processing message:', error);
         res.status(500).send('Error');
     }
 }
+
+
+export const markPurchaseFailure = async (purchaseToken) => {
+    const purchase = await CoinPurchases.find({ purchaseToken });
+
+    purchase.payment_status = "failure";
+
+    await purchase.save();
+}
+
+
+export const addCoinPurchase = async (req, res) => {
+    const userId = req.user._id;
+    const purchaseToken = req.body.purchaseToken;
+    const payment_status = req.body.payment_status;
+
+
+    const newPurchase = new CoinPurchases({
+        userId,
+        purchaseToken,
+        payment_status
+    });
+
+    await newPurchase.save();
+};
+
+
+// export const updateCoinPurchase = async (req, res) => {
+//     const userId = req.user._id;
+//     const purchaseToken = req.body.purchaseToken;
+//     const payment_status = req.body.payment_status;
+
+
+//     const newNotification = new CoinPurchases({
+//         userId,
+//         purchaseToken,
+//         payment_status
+//     });
+// };

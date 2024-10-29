@@ -902,6 +902,7 @@ const decreaseUserPoints = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user: updatedUser }, "User points fetched successfully."));
 });
 
+
 // add user points
 const addUserPoints = asyncHandler(async (req, res) => {
 
