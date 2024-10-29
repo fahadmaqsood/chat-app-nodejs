@@ -51,9 +51,13 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
                 console.log(`coins: '${coins}', type: ${typeof (coins)}`);
 
+                let coinsAfterUpdate = currentUser.user_points + coins;
+
+                console.log(`coinsAfterUpdate: '${coinsAfterUpdate}', type: ${typeof (coinsAfterUpdate)}`);
+
                 let updatedUser = await User.findByIdAndUpdate(
                     currentUser._id,
-                    { user_points: currentUser.user_points + coins },
+                    { user_points: coinsAfterUpdate },
                     { new: true }
                 ).select(
                     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
