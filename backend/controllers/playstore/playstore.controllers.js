@@ -16,7 +16,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         console.log(messageJson);
 
         // Access notification attributes, e.g., notificationType, purchaseToken
-        const notificationType = req.body.message?.attributes.notificationType;
+        const notificationType = req.body.message?.attributes?.notificationType;
         const purchaseToken = messageJson.purchaseToken;
 
         console.log(notificationType);
