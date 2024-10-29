@@ -8,6 +8,8 @@ const subscriptionName = 'play-store-webhook';
 
 export const playstoreSubscriptionWebhook = async (req, res) => {
     try {
+
+        console.log(req.body);
         // Pub/Sub messages are base64 encoded, so we decode them here
         const messageData = Buffer.from(req.body.message.data, 'base64').toString();
         const messageJson = JSON.parse(messageData);
