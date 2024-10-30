@@ -39,8 +39,8 @@ const sendEmail = async (options) => {
   });
 
   const mail = {
-    //from: "verification@teenglobalconnect.com", // We can name this anything. The mail will go to your Mailtrap inbox
-    from: "hi@demomailtrap.com",
+    from: "verification@teenglobalconnect.com", // We can name this anything. The mail will go to your Mailtrap inbox
+    //from: "hi@demomailtrap.com",
     to: options.email, // receiver's mail
     subject: options.subject, // mail subject
     text: emailTextual, // mailgen content textual variant
