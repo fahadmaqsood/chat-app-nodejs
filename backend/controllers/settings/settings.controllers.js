@@ -91,7 +91,7 @@ const updatePrivacySettings = async (req, res) => {
         const { viewFollowers, viewFollowing, viewCloseFriends } = req.body;
 
         // Validate privacy settings
-        const validOptions = ['everyone', 'no one', 'close friends'];
+        const validOptions = ['everyone', 'no one', 'friends'];
         if (![viewFollowers, viewFollowing, viewCloseFriends].every(opt => validOptions.includes(opt))) {
             throw new ApiError(400, 'Invalid privacy settings');
         }

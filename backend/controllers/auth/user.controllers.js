@@ -332,6 +332,14 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User does not exist");
   }
 
+  // Convert the termination date to a Date object and compare with the current date
+  const terminationDate = new Date(user.account_termination_date);
+  const currentDate = new Date();
+
+  if (currentDate >= terminationDate) {
+    throw new ApiError(401, `Account has been terminated due to ${user.account_termination_reason}`);
+  }
+
   if (user.loginType !== UserLoginType.EMAIL_PASSWORD) {
     // If user is registered with some other method, we will ask him/her to use the same method as registered.
     // This shows that if user is registered with methods other than email password, he/she will not be able to login with password. Which makes password field redundant for the SSO
