@@ -73,8 +73,8 @@ export const processChatMessage = async ({ userId, message, subject }) => {
         subject: subject
     })
         .sort({ createdAt: -1 })
-        .skip(Number(skip || 0))
-        .limit(Number(limit || 5))
+        .skip(Number(0))
+        .limit(Number(5))
         .exec();
 
     // Save incoming message
