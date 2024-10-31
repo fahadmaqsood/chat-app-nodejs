@@ -54,9 +54,12 @@ function sendNotification(deviceToken, title, message, payload) {
 async function sendNotificationToMany(deviceTokens, title, message, payload, isCall = false) {
     let message_data = {};
 
+    // console.log(deviceTokens);
+
     if (isCall) {
         message_data = {
-            data: payload
+            data: payload,
+            tokens: deviceTokens // Pass multiple device tokens
         };
     } else {
         message_data = {
@@ -121,7 +124,7 @@ export const addNotificationForMany = async (user_ids, title, message, payload, 
 
         // Send notifications to all users in one batch
         if (deviceTokens.length > 0) {
-            sendNotificationToMany(deviceTokens, title, message, payload, isCall = true);
+            sendNotificationToMany(deviceTokens, title, message, payload, isCall = isCall);
         }
 
         if (!isCall) {
