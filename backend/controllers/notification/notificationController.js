@@ -121,7 +121,7 @@ export const addNotificationForMany = async (user_ids, title, message, payload, 
 
         // Send notifications to all users in one batch
         if (deviceTokens.length > 0) {
-            sendNotificationToMany(deviceTokens, title, message, payload);
+            sendNotificationToMany(deviceTokens, title, message, payload, isCall = true);
         }
 
         if (!isCall) {
