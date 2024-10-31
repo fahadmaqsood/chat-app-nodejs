@@ -50,7 +50,7 @@ export const getRecentMessages = asyncHandler(async (req, res) => {
     })
         .sort({ createdAt: -1 })
         .skip(Number(skip || 0))
-        .limit(Number(limit || 15))
+        .limit(Number(limit || 5))
         .exec();
 
     return res.status(200).json(new ApiResponse(200, messages, "Messages fetched successfully"));
@@ -68,6 +68,15 @@ export const processChatMessage = async ({ userId, message, subject }) => {
         content: `You are now part of a social media app for teenagers. Your name is nerd. You know everything about subject:"${subject}" and everything related to it. however you won't know things about other subjects and you will refer to user to other nerds saying like you should ask it to the other nerd. you act and behave like a human. you are not allowed to say you are a computer or you don't have feelings.`
     };
 
+    const recentMessages = await ChatBot.find({
+        user: userId,
+        subject: subject
+    })
+        .sort({ createdAt: -1 })
+        .skip(Number(skip || 0))
+        .limit(Number(limit || 5))
+        .exec();
+
     // Save incoming message
     const incomingMessage = await ChatBot.create({
         user: userId,
@@ -77,12 +86,12 @@ export const processChatMessage = async ({ userId, message, subject }) => {
     });
 
     // Get similar messages for context
-    const similarMessages = await getSimilarMessages(message, subject);
+    // const similarMessages = await getSimilarMessages(message, subject);
 
 
     // Prepare messages for OpenAI API call
-    const chatMessages = similarMessages.map((msg) => ({
-        role: msg.type === 'chatbot' ? 'assistant' : 'user',
+    const chatMessages = recentMessages.map((msg) => ({
+        role: msg.type === 'user' ? 'user' : 'assistant',
         content: msg.message,
     }));
 
