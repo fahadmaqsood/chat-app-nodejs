@@ -50,7 +50,7 @@ export const savePersonalityQuizResult = async (req, res) => {
         }
 
         // Check if the quiz exists
-        const quizExists = await Quiz.findById(quiz_id);
+        const quizExists = await PersonalityQuiz.findById(quiz_id);
         if (!quizExists) {
             return res.status(404).json(new ApiResponse(404, {}, 'Quiz not found.'));
         }
