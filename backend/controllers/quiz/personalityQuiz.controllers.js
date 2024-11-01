@@ -183,8 +183,6 @@ export const getMostPopularPersonalityQuizzes = async (req, res) => {
                     completionsInWeek: 1, // Show completions in the past week
                     totalCompletions: 1,  // Show total completions
                     title: 1,              // Include quiz name or other fields you want to display
-                    topic: 1,
-                    difficulty: 1,
                     num_questions: 1,
                     userHasCompleted: 1,   // Show whether the user has completed the quiz
                     createdAt: 1
