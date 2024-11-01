@@ -1,0 +1,217 @@
+{
+  "title": "Which Book Genre Matches Your Personality?",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What type of story captivates you the most?",
+      "options": [
+        {
+          "text": "Adventurous and thrilling",
+          "points": {
+            "Adventure": 2,
+            "Fantasy": 1
+          }
+        },
+        {
+          "text": "Romantic and heartfelt",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "Thought-provoking and deep",
+          "points": {
+            "Non-fiction": 2,
+            "Literary": 1
+          }
+        },
+        {
+          "text": "Mysterious and suspenseful",
+          "points": {
+            "Mystery": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to unwind?",
+      "options": [
+        {
+          "text": "Traveling to new places",
+          "points": {
+            "Adventure": 2
+          }
+        },
+        {
+          "text": "Curling up with a good book",
+          "points": {
+            "Literary": 2
+          }
+        },
+        {
+          "text": "Watching romantic movies",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "Solving puzzles or riddles",
+          "points": {
+            "Mystery": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What character do you relate to most?",
+      "options": [
+        {
+          "text": "A brave hero",
+          "points": {
+            "Adventure": 2
+          }
+        },
+        {
+          "text": "A nurturing friend",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "A wise mentor",
+          "points": {
+            "Non-fiction": 2
+          }
+        },
+        {
+          "text": "A clever detective",
+          "points": {
+            "Mystery": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What motivates you to read?",
+      "options": [
+        {
+          "text": "The thrill of adventure",
+          "points": {
+            "Adventure": 2
+          }
+        },
+        {
+          "text": "Connection and love",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "Knowledge and insight",
+          "points": {
+            "Non-fiction": 2
+          }
+        },
+        {
+          "text": "The thrill of the unknown",
+          "points": {
+            "Mystery": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you choose your next book?",
+      "options": [
+        {
+          "text": "Based on recommendations",
+          "points": {
+            "Literary": 2
+          }
+        },
+        {
+          "text": "From a favorite author",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "By genre exploration",
+          "points": {
+            "Adventure": 2
+          }
+        },
+        {
+          "text": "By book cover design",
+          "points": {
+            "Fantasy": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "Which setting do you prefer?",
+      "options": [
+        {
+          "text": "A magical realm",
+          "points": {
+            "Fantasy": 2
+          }
+        },
+        {
+          "text": "A bustling city",
+          "points": {
+            "Mystery": 2
+          }
+        },
+        {
+          "text": "A serene countryside",
+          "points": {
+            "Non-fiction": 2
+          }
+        },
+        {
+          "text": "A historical landmark",
+          "points": {
+            "Romance": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What kind of endings do you enjoy?",
+      "options": [
+        {
+          "text": "Happy and satisfying",
+          "points": {
+            "Romance": 2
+          }
+        },
+        {
+          "text": "Unexpected twists",
+          "points": {
+            "Mystery": 2
+          }
+        },
+        {
+          "text": "Thought-provoking conclusions",
+          "points": {
+            "Literary": 2
+          }
+        },
+        {
+          "text": "Epic battles and triumphs",
+          "points": {
+            "Adventure": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Adventure": "You are an adventurer at heart, thriving on exploration and excitement!",
+    "Romance": "You have a romantic soul, drawn to love and human connection.",
+    "Non-fiction": "You seek knowledge and understanding, making you wise beyond your years.",
+    "Mystery": "You are naturally curious, always looking to uncover the truth."
+  }
+}
