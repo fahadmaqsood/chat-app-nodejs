@@ -115,7 +115,7 @@ export const getMostPopularPersonalityQuizzes = async (req, res) => {
         const lastSundayMidnight = moment().startOf('week').subtract(1, 'week').toDate();
 
         // Aggregate to get the number of completions per quiz, sorted by most completions, starting from the past week
-        const popularQuizzes = await Quiz.aggregate([
+        const popularQuizzes = await PersonalityQuiz.aggregate([
             {
                 $lookup: {
                     from: 'quizresults', // Reference the QuizResult collection
