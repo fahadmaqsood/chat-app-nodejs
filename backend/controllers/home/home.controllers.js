@@ -49,13 +49,14 @@ export const searchUsers = async (req, res) => {
         // Filter topics based on the search text
         const filteredTopics = await PostTopics.find({
             name: { $regex: new RegExp(searchText, 'i') } // Case-insensitive regex search for topics
-        }).select('_id name'); // Select only the required fields
+        }).select('_id name') // Select only the required fields
+            .skip(skip)           // Apply skip for pagination
+            .limit(limit);        // Apply limit for pagination;
 
         const topics = filteredTopics
             .map(topic => (
                 { id: topic._id, name: topic.name }
-            )).skip(skip)           // Apply skip for pagination
-            .limit(limit);        // Apply limit for pagination;
+            ))
 
 
         // Return the matched users
