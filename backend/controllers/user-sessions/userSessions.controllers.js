@@ -3,6 +3,8 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import UserSchedule from "../../models/user-sessions/UserSchedule.js";
 import mongoose from "mongoose";
 
+const moment = require('moment-timezone');
+
 // Schedule a session
 const scheduleSession = async (req, res) => {
     try {

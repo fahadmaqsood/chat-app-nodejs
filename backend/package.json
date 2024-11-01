@@ -28,6 +28,7 @@
     "jsonwebtoken": "^9.0.0",
     "mailgen": "^2.0.27",
     "moment": "^2.30.1",
+    "moment-timezone": "^0.5.46",
     "mongoose": "^7.4.0",
     "mongoose-aggregate-paginate-v2": "^1.0.6",
     "morgan": "^1.10.0",

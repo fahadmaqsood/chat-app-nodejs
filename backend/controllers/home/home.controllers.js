@@ -10,7 +10,7 @@ export const searchUsers = async (req, res) => {
         const hasNewAccessToken = req.hasNewAccessToken;
 
         // Get search fields from request body
-        const { searchText } = req.body;
+        const { searchText, limit = 10, skip = 0 } = req.body;
 
         // Check if at least one search field is provided
         if (!searchText) {
@@ -38,6 +38,8 @@ export const searchUsers = async (req, res) => {
                     email: 1,
                 },
             },
+            { $skip: skip },   // Skip the number of documents specified
+            { $limit: limit },  // Limit the number of documents returned
         ]);
 
         // if (!users || users.length === 0) {
@@ -49,7 +51,11 @@ export const searchUsers = async (req, res) => {
             name: { $regex: new RegExp(searchText, 'i') } // Case-insensitive regex search for topics
         }).select('_id name'); // Select only the required fields
 
-        const topics = filteredTopics.map(topic => ({ id: topic._id, name: topic.name }));
+        const topics = filteredTopics
+            .map(topic => (
+                { id: topic._id, name: topic.name }
+            )).skip(skip)           // Apply skip for pagination
+            .limit(limit);        // Apply limit for pagination;
 
 
         // Return the matched users
