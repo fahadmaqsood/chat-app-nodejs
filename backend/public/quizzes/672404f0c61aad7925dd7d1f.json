@@ -1,0 +1,88 @@
+{
+  "title": "Music Quiz",
+  "topic": "66fec2c9b6950e88826fe005",
+  "difficulty": "easy",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Which instrument has black and white keys?",
+      "options": [
+        "Guitar",
+        "Piano",
+        "Drums",
+        "Violin"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is known as the 'King of Pop'?",
+      "options": [
+        "Elvis Presley",
+        "Michael Jackson",
+        "Prince",
+        "Madonna"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the title of the famous song by The Beatles that begins with 'Help!'?",
+      "options": [
+        "Hey Jude",
+        "Let It Be",
+        "Help!",
+        "Yesterday"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What type of music is characterized by a strong rhythm and often includes electric guitars?",
+      "options": [
+        "Classical",
+        "Jazz",
+        "Rock",
+        "Opera"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which pop singer is known for hits like 'Shake It Off' and 'Blank Space'?",
+      "options": [
+        "Katy Perry",
+        "Adele",
+        "Taylor Swift",
+        "Beyoncé"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the name of the music festival held in Coachella Valley, California?",
+      "options": [
+        "Lollapalooza",
+        "Glastonbury",
+        "Coachella",
+        "Woodstock"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which musical genre is known for its improvisation and swing?",
+      "options": [
+        "Blues",
+        "Jazz",
+        "Rock",
+        "Classical"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is the famous composer of the 'Fifth Symphony'?",
+      "options": [
+        "Johann Sebastian Bach",
+        "Ludwig van Beethoven",
+        "Wolfgang Amadeus Mozart",
+        "Frédéric Chopin"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "title": "Art Quiz",
+  "topic": "66fec2c9b6950e88826fe004",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Which artist is known for the painting 'Starry Night'?",
+      "options": [
+        "Pablo Picasso",
+        "Vincent van Gogh",
+        "Claude Monet",
+        "Henri Matisse"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What artistic movement is Salvador Dalí associated with?",
+      "options": [
+        "Impressionism",
+        "Cubism",
+        "Surrealism",
+        "Futurism"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which famous sculpture was created by Michelangelo?",
+      "options": [
+        "The Thinker",
+        "David",
+        "Venus de Milo",
+        "The Kiss"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary technique used in watercolor painting?",
+      "options": [
+        "Layering oil paint",
+        "Applying water-soluble paint to paper",
+        "Using acrylic paint",
+        "Sculpting with clay"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which art movement is characterized by bold colors and abstract forms, often inspired by the natural world?",
+      "options": [
+        "Fauvism",
+        "Baroque",
+        "Realism",
+        "Dadaism"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who painted the ceiling of the Sistine Chapel?",
+      "options": [
+        "Raphael",
+        "Michelangelo",
+        "Leonardo da Vinci",
+        "Caravaggio"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is an example of a mixed media artwork?",
+      "options": [
+        "A watercolor painting",
+        "A collage made with different materials",
+        "A traditional oil painting",
+        "A digital art piece"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the term for a painting created on wet plaster?",
+      "options": [
+        "Fresco",
+        "Tempera",
+        "Mural",
+        "Acrylic"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

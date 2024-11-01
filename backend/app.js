@@ -182,6 +182,14 @@ app.get('/add/quiz', (req, res) => {
 
 });
 
+
+app.get('/add/personalityQuiz', (req, res) => {
+  // Route to serve the HTML file
+  // Send the subscription.html file located in the "public" folder
+  res.sendFile(path.join(__dirname, 'public', 'addPersonalityQuizzes.html'));
+
+});
+
 app.get('/test/subscribe', (req, res) => {
   // Route to serve the HTML file
   // Send the subscription.html file located in the "public" folder

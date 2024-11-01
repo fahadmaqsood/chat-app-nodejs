@@ -1,0 +1,158 @@
+{
+  "title": "Biology Quiz",
+  "topic": "66fec2c9b6950e88826fe007",
+  "difficulty": "easy",
+  "num_questions": 15,
+  "questions": [
+    {
+      "question": "What is the basic unit of life?",
+      "options": [
+        "Atom",
+        "Molecule",
+        "Cell",
+        "Tissue"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which organ is responsible for pumping blood in the human body?",
+      "options": [
+        "Lung",
+        "Liver",
+        "Heart",
+        "Kidney"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the process by which plants make their own food?",
+      "options": [
+        "Respiration",
+        "Photosynthesis",
+        "Digestion",
+        "Transpiration"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which part of the cell contains the genetic material?",
+      "options": [
+        "Cytoplasm",
+        "Nucleus",
+        "Cell membrane",
+        "Ribosome"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What do we call animals that eat both plants and meat?",
+      "options": [
+        "Herbivores",
+        "Carnivores",
+        "Omnivores",
+        "Detrivores"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which vitamin is primarily obtained from sunlight?",
+      "options": [
+        "Vitamin A",
+        "Vitamin B12",
+        "Vitamin C",
+        "Vitamin D"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": [
+        "Nucleus",
+        "Ribosome",
+        "Mitochondria",
+        "Endoplasmic reticulum"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What do we call the study of living organisms?",
+      "options": [
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Geology"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the largest organ in the human body?",
+      "options": [
+        "Heart",
+        "Skin",
+        "Liver",
+        "Lung"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of blood cells help fight infection?",
+      "options": [
+        "Red blood cells",
+        "White blood cells",
+        "Platelets",
+        "Plasma"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which part of the plant conducts photosynthesis?",
+      "options": [
+        "Roots",
+        "Stem",
+        "Leaves",
+        "Flowers"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the process by which cells divide called?",
+      "options": [
+        "Mitosis",
+        "Meiosis",
+        "Fertilization",
+        "Metabolism"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which animal is known for its ability to regenerate limbs?",
+      "options": [
+        "Frog",
+        "Lizard",
+        "Starfish",
+        "Octopus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What gas do humans breathe in that is essential for survival?",
+      "options": [
+        "Carbon dioxide",
+        "Nitrogen",
+        "Oxygen",
+        "Hydrogen"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which organ is responsible for filtering blood in the human body?",
+      "options": [
+        "Heart",
+        "Kidney",
+        "Liver",
+        "Lung"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

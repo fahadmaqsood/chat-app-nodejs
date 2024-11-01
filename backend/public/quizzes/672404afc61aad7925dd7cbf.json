@@ -1,0 +1,88 @@
+{
+  "title": "Math Quiz",
+  "topic": "66fec2c9b6950e88826fe003",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the value of π (pi) to two decimal places?",
+      "options": [
+        "3.12",
+        "3.14",
+        "3.16",
+        "3.18"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the square root of 144?",
+      "options": [
+        "10",
+        "11",
+        "12",
+        "13"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "If a triangle has angles of 45° and 90°, what is the measure of the third angle?",
+      "options": [
+        "45°",
+        "30°",
+        "60°",
+        "75°"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the value of 7^2 + 4^2?",
+      "options": [
+        "65",
+        "70",
+        "50",
+        "60"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the formula for the area of a circle?",
+      "options": [
+        "πr^2",
+        "2πr",
+        "r^2",
+        "πd"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is 15% of 200?",
+      "options": [
+        "25",
+        "30",
+        "35",
+        "40"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the solution to the equation 2x + 3 = 11?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the value of the expression 5(3 + 2) - 4?",
+      "options": [
+        "21",
+        "19",
+        "23",
+        "20"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

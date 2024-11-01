@@ -1,0 +1,58 @@
+{
+  "title": "Sports Quiz",
+  "topic": "66fec2c9b6950e88826fe001",
+  "difficulty": "easy",
+  "num_questions": 5,
+  "questions": [
+    {
+      "question": "In soccer, how many players are on the field for each team at the start of a game?",
+      "options": [
+        "10",
+        "11",
+        "12",
+        "9"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which sport is known as the 'king of sports'?",
+      "options": [
+        "Basketball",
+        "Soccer",
+        "Tennis",
+        "Cricket"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In which country were the first modern Olympic Games held in 1896?",
+      "options": [
+        "France",
+        "United Kingdom",
+        "United States",
+        "Greece"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which player is known as the 'King of Clay' in tennis?",
+      "options": [
+        "Roger Federer",
+        "Novak Djokovic",
+        "Rafael Nadal",
+        "Andy Murray"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the name of the professional basketball league in the United States?",
+      "options": [
+        "NBA",
+        "FIFA",
+        "NHL",
+        "NFL"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

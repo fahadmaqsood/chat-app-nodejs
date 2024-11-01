@@ -1,0 +1,88 @@
+{
+  "title": "Literature Quiz",
+  "topic": "66fec2c9b6950e88826fe002",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Who wrote the novel 'Pride and Prejudice'?",
+      "options": [
+        "Emily Brontë",
+        "Jane Austen",
+        "George Eliot",
+        "Charlotte Brontë"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In George Orwell's '1984', what is the name of the totalitarian party that rules Oceania?",
+      "options": [
+        "Big Brother",
+        "The Party",
+        "Ministry of Truth",
+        "Oceania United"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which Shakespearean play features the characters Rosencrantz and Guildenstern?",
+      "options": [
+        "Hamlet",
+        "Macbeth",
+        "Othello",
+        "King Lear"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the fictional setting of J.R.R. Tolkien's 'The Lord of the Rings'?",
+      "options": [
+        "Westeros",
+        "Middle-earth",
+        "Narnia",
+        "Earthsea"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is the author of 'The Catcher in the Rye'?",
+      "options": [
+        "F. Scott Fitzgerald",
+        "J.D. Salinger",
+        "Ernest Hemingway",
+        "John Steinbeck"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In 'To Kill a Mockingbird', who is the father of Scout Finch?",
+      "options": [
+        "Boo Radley",
+        "Atticus Finch",
+        "Tom Robinson",
+        "Dill Harris"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the title of the first 'Harry Potter' book?",
+      "options": [
+        "Harry Potter and the Chamber of Secrets",
+        "Harry Potter and the Philosopher's Stone",
+        "Harry Potter and the Prisoner of Azkaban",
+        "Harry Potter and the Goblet of Fire"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who wrote the novel 'Moby-Dick'?",
+      "options": [
+        "Herman Melville",
+        "Mark Twain",
+        "Nathaniel Hawthorne",
+        "James Fenimore Cooper"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

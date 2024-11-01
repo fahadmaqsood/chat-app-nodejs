@@ -1,0 +1,108 @@
+{
+  "title": "Geography Quiz",
+  "topic": "66fec2c9b6950e88826fe000",
+  "difficulty": "hard",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "Which country has the most time zones?",
+      "options": [
+        "United States",
+        "France",
+        "Russia",
+        "China"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the longest river in the world?",
+      "options": [
+        "Amazon River",
+        "Yangtze River",
+        "Nile River",
+        "Mississippi River"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which city is known as the highest capital city in the world?",
+      "options": [
+        "La Paz, Bolivia",
+        "Kathmandu, Nepal",
+        "Quito, Ecuador",
+        "Thimphu, Bhutan"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What desert is the largest hot desert in the world?",
+      "options": [
+        "Kalahari Desert",
+        "Sahara Desert",
+        "Gobi Desert",
+        "Arabian Desert"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country has the most lakes in the world?",
+      "options": [
+        "Canada",
+        "United States",
+        "Russia",
+        "Brazil"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Mount Elbrus is located in which mountain range?",
+      "options": [
+        "Rockies",
+        "Himalayas",
+        "Caucasus",
+        "Alps"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which is the deepest ocean trench in the world?",
+      "options": [
+        "Kuril-Kamchatka Trench",
+        "Puerto Rico Trench",
+        "Mariana Trench",
+        "Tonga Trench"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "The Galápagos Islands are part of which country?",
+      "options": [
+        "Chile",
+        "Peru",
+        "Ecuador",
+        "Brazil"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which country borders the most other countries?",
+      "options": [
+        "China",
+        "Brazil",
+        "Russia",
+        "India"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the name of the tectonic plate on which India lies?",
+      "options": [
+        "Pacific Plate",
+        "Indian Plate",
+        "Eurasian Plate",
+        "Australian Plate"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

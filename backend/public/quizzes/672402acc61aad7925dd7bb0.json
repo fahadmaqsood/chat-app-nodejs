@@ -1,0 +1,108 @@
+{
+  "title": "History Quiz",
+  "topic": "66fec2c9b6950e88826fdfff",
+  "difficulty": "hard",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "Who was the first Emperor of China?",
+      "options": [
+        "Emperor Taizong",
+        "Emperor Gaozu",
+        "Emperor Wu",
+        "Qin Shi Huang"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "In what year did the Roman Empire fall?",
+      "options": [
+        "476 AD",
+        "527 AD",
+        "410 AD",
+        "1453 AD"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the longest-reigning British monarch before Queen Elizabeth II?",
+      "options": [
+        "Queen Victoria",
+        "King George III",
+        "Queen Mary I",
+        "Queen Anne"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "The 'Silk Road' was an ancient trade route that connected which empire with Europe?",
+      "options": [
+        "Roman Empire",
+        "Ottoman Empire",
+        "Byzantine Empire",
+        "Mongol Empire"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which empire was ruled by Suleiman the Magnificent?",
+      "options": [
+        "Roman Empire",
+        "Ottoman Empire",
+        "Persian Empire",
+        "Byzantine Empire"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What year did the United States land the first humans on the Moon?",
+      "options": [
+        "1967",
+        "1969",
+        "1970",
+        "1972"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was known as the 'Iron Chancellor' of Germany?",
+      "options": [
+        "Otto von Bismarck",
+        "Kaiser Wilhelm II",
+        "Friedrich Ebert",
+        "Heinrich Brüning"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which battle marked the final defeat of Napoleon Bonaparte?",
+      "options": [
+        "Battle of Leipzig",
+        "Battle of Austerlitz",
+        "Battle of Borodino",
+        "Battle of Waterloo"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "The Treaty of Versailles officially ended which war?",
+      "options": [
+        "World War I",
+        "World War II",
+        "Franco-Prussian War",
+        "Napoleonic Wars"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the famous Egyptian queen who ruled alongside Julius Caesar and Mark Antony?",
+      "options": [
+        "Nefertiti",
+        "Cleopatra",
+        "Hatshepsut",
+        "Neithhotep"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

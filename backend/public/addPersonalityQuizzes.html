@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Personality Quiz</title>
+</head>
+
+<body>
+    <h1>Create a New Personality Quiz</h1>
+
+    <form id="quizForm">
+        <div>
+            <label for="json">JSON:</label>
+            <br />
+            <br />
+            <textarea id="json" rows="20" style="width: 80%;" name="json" placeholder="Enter quiz in JSON format"
+                required></textarea>
+        </div>
+        <br />
+        <button type="submit">Create Personality Quiz</button>
+    </form>
+
+    <script>
+
+        // Handle form submission
+        document.getElementById('quizForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+
+            let quizJSON = JSON.parse(document.getElementById('json').value);
+
+            if (!quizJSON.num_questions) {
+                quizJSON.num_questions = quizJSON.questions.length;
+            }
+
+            console.log(quizJSON);
+
+            const formData = {
+                json: quizJSON,  // Assuming questions are entered as a JSON array
+            };
+
+            try {
+                const response = await fetch('/api/v1/quiz/add-personality-quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Personality Quiz created successfully!');
+                } else {
+                    alert('Failed to create personality quiz: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error creating  personality quiz:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

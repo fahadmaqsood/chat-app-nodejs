@@ -1,0 +1,88 @@
+{
+  "title": "Technology Quiz",
+  "topic": "66fec2c9b6950e88826fe006",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What was the first computer virus ever created?",
+      "options": [
+        "ILOVEYOU",
+        "Morris Worm",
+        "Creeper",
+        "MyDoom"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which programming language is known as the mother of all languages?",
+      "options": [
+        "C",
+        "Fortran",
+        "Assembly",
+        "Pascal"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does the acronym 'URL' stand for?",
+      "options": [
+        "Uniform Resource Locator",
+        "Universal Resource Link",
+        "Uniform Retrieval Locator",
+        "Universal Reference Link"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In which year was the first iPhone released?",
+      "options": [
+        "2005",
+        "2007",
+        "2009",
+        "2010"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary purpose of a firewall in computer networks?",
+      "options": [
+        "To increase network speed",
+        "To prevent unauthorized access",
+        "To store data",
+        "To facilitate internet browsing"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which company developed the Linux operating system?",
+      "options": [
+        "Microsoft",
+        "Apple",
+        "Linus Torvalds",
+        "IBM"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What technology is used to make telephone calls over the Internet?",
+      "options": [
+        "VoIP",
+        "VPN",
+        "ISP",
+        "FTP"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is NOT a type of cloud computing service?",
+      "options": [
+        "IaaS",
+        "PaaS",
+        "CaaS",
+        "SaaS"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

@@ -3,6 +3,8 @@ import { addQuiz, getQuizList, getQuizListByTopic, getTopicList, saveQuizResult,
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 
+import { getPersonalityQuizList, savePersonalityQuizResult, searchPersonalityQuizzesByName, getMostPopularPersonalityQuizzes, checkIfUserCompletedPersonalityQuiz, addPersonalityQuiz } from '../../controllers/quiz/personalityQuiz.controllers.js'; // Adjust path accordingly
+
 
 const router = express.Router();
 
@@ -37,5 +39,21 @@ router.get('/check-quiz-status', validateTokensMiddleware, checkIfUserCompletedQ
 
 
 router.post('/add-quiz', addQuiz);
+
+
+
+
+// personality quizzes
+router.get('/get-personality-quiz-list', validateTokensMiddleware, getPersonalityQuizList);
+
+router.post('/save-personality-quiz-result', validateTokensMiddleware, savePersonalityQuizResult);
+
+router.get('/search-personality-quizzes-by-name', validateTokensMiddleware, searchPersonalityQuizzesByName);
+
+router.get('/popular-personality-quizzes', validateTokensMiddleware, getMostPopularPersonalityQuizzes);
+
+router.get('/check-personality-quiz-status', validateTokensMiddleware, checkIfUserCompletedPersonalityQuiz);
+
+router.post('/add-personality-quiz', addPersonalityQuiz);
 
 export default router;

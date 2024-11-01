@@ -1,0 +1,253 @@
+{
+  "title": "What kind of movie character are you?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "How do you handle conflict?",
+      "options": [
+        {
+          "text": "I face it head-on.",
+          "points": {
+            "Hero": 2,
+            "Explorer": 1
+          }
+        },
+        {
+          "text": "I try to find a diplomatic solution.",
+          "points": {
+            "Sage": 2,
+            "Caregiver": 1
+          }
+        },
+        {
+          "text": "I avoid it if I can.",
+          "points": {
+            "Caregiver": 2,
+            "Explorer": 1
+          }
+        },
+        {
+          "text": "I think through every possible outcome first.",
+          "points": {
+            "Sage": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What would be your ideal weekend activity?",
+      "options": [
+        {
+          "text": "Exploring a new place or trying something adventurous",
+          "points": {
+            "Explorer": 2,
+            "Hero": 1
+          }
+        },
+        {
+          "text": "Spending quality time with close friends and family",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "Reading a book or working on a personal project",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "Attending a big social gathering or party",
+          "points": {
+            "Explorer": 1
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your biggest strength?",
+      "options": [
+        {
+          "text": "My bravery",
+          "points": {
+            "Hero": 2
+          }
+        },
+        {
+          "text": "My intelligence",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "My kindness",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "My loyalty",
+          "points": {
+            "Caregiver": 1,
+            "Hero": 1
+          }
+        }
+      ]
+    },
+    {
+      "question": "How would your friends describe you?",
+      "options": [
+        {
+          "text": "Resourceful and clever",
+          "points": {
+            "Hero": 1,
+            "Sage": 1
+          }
+        },
+        {
+          "text": "Warm and compassionate",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "Ambitious and driven",
+          "points": {
+            "Hero": 2
+          }
+        },
+        {
+          "text": "Fun and spontaneous",
+          "points": {
+            "Explorer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "If you were in a team, what role would you take?",
+      "options": [
+        {
+          "text": "The leader",
+          "points": {
+            "Hero": 2
+          }
+        },
+        {
+          "text": "The strategist",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "The supporter",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "The one keeping things light-hearted",
+          "points": {
+            "Explorer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What's your approach to new challenges?",
+      "options": [
+        {
+          "text": "Bring it on—I'm ready for anything!",
+          "points": {
+            "Hero": 2,
+            "Explorer": 1
+          }
+        },
+        {
+          "text": "Think it through and make a plan",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "Help others who are also facing challenges",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "Find creative or unconventional solutions",
+          "points": {
+            "Explorer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "Which place feels most like home to you?",
+      "options": [
+        {
+          "text": "A bustling city with lots of energy",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A quiet town with friendly neighbors",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "A peaceful, natural environment",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "Anywhere as long as I'm with people I care about",
+          "points": {
+            "Caregiver": 1,
+            "Hero": 1
+          }
+        }
+      ]
+    },
+    {
+      "question": "What would you do if you found a lost treasure?",
+      "options": [
+        {
+          "text": "Keep it and use it to help myself and others",
+          "points": {
+            "Hero": 1,
+            "Caregiver": 1
+          }
+        },
+        {
+          "text": "Donate it to a museum or an important cause",
+          "points": {
+            "Sage": 2
+          }
+        },
+        {
+          "text": "Split it with friends and family",
+          "points": {
+            "Caregiver": 2
+          }
+        },
+        {
+          "text": "Hide it in a secret spot and keep it safe",
+          "points": {
+            "Explorer": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Hero": "You are a natural leader, brave and determined like Indiana Jones.",
+    "Sage": "You are wise and thoughtful, with traits like Yoda or Hermione Granger.",
+    "Caregiver": "You are warm and supportive, similar to Samwise Gamgee from Lord of the Rings.",
+    "Explorer": "You are curious and adventurous, like Lara Croft or Peter Pan."
+  }
+}
