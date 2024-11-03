@@ -84,7 +84,7 @@ const userSchema = new Schema(
     },
     religion: {
       type: String,
-      required: true,
+      default: "",
     },
     date_of_birth: { // date of birth
       type: Date,
@@ -92,11 +92,11 @@ const userSchema = new Schema(
     },
     country: {
       type: String,
-      required: true,
+      default: "",
     },
     language: {
       type: String,
-      required: true,
+      default: "",
     },
     user_points: {
       type: Number,
