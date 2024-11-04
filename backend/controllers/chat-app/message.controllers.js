@@ -2,10 +2,15 @@ import mongoose from "mongoose";
 import { ChatEventEnum } from "../../constants.js";
 import { Chat } from "../../models/chat-app/chat.models.js";
 import { ChatMessage } from "../../models/chat-app/message.models.js";
-import { emitSocketEvent } from "../../socket/index.js";
+import { emitSocketEvent, canEmit } from "../../socket/index.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
+
+import { User } from '../../models/auth/user.models.js';
+
+import { sendNotification } from "../notification/notificationController.js";
+
 import {
   getLocalPath,
   getStaticFilePath,
@@ -153,20 +158,31 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 
   // logic to emit socket event about the new message created to the other participants
-  chat.participants.forEach((participantObjectId) => {
+  for (const participantObjectId of chat.participants) {
     // here the chat is the raw instance of the chat in which participants is the array of object ids of users
     // avoid emitting event to the user who is sending the message
 
-    // if (participantObjectId.toString() === req.user._id.toString()) return;
+    if (participantObjectId.toString() !== req.user._id.toString()) {
+      if (canEmit) {
+      } else {
+
+        let token = (await User.findById(participantObjectId.toString())).firebaseToken;
+        sendNotification(token, `New message from ${req.user.nameElseUsername}`, content || "", {
+          "type": "message"
+        });
+      }
+    };
 
     // emit the receive message event to the other participants with received message as the payload
+
     emitSocketEvent(
       req,
       `${chat._id}/${participantObjectId.toString()}`,
       ChatEventEnum.MESSAGE_RECEIVED_EVENT,
       receivedMessage
     );
-  });
+
+  };
 
   return res
     .status(201)

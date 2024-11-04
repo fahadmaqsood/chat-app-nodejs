@@ -137,5 +137,25 @@ const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
   }
 };
 
+const canEmit = (reqOrSocket, roomId) => {
+  let io;
 
-export { initializeSocketIO, emitSocketEvent };
+  // Check if reqOrSocket is an HTTP request with app instance
+  if (reqOrSocket.app) {
+    io = reqOrSocket.app.get("io");
+  }
+  // Check if reqOrSocket is a Socket.IO server instance
+  else if (reqOrSocket instanceof Server) {
+    io = reqOrSocket;
+  }
+  // Check if reqOrSocket is a Socket.IO instance with server property
+  else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
+    io = reqOrSocket.server;
+  }
+
+  // Emit event if io is available
+  return io;
+}
+
+
+export { initializeSocketIO, emitSocketEvent, canEmit };

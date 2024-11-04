@@ -22,8 +22,7 @@ const firebase = firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount),
 });
 
-
-async function sendNotification(deviceToken, title, message, payload) {
+export async function sendNotification(deviceToken, title, message, payload) {
     // // This registration token comes from the client FCM SDKs.
     // const registrationToken = 'YOUR_REGISTRATION_TOKEN';
 
@@ -33,7 +32,7 @@ async function sendNotification(deviceToken, title, message, payload) {
             body: message
         },
         data: {
-
+            type: payload["type"] || ""
         },
         token: deviceToken
     };
