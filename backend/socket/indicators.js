@@ -137,7 +137,7 @@ const emitIndicatorsSocketEvent = (user_id, event, payload) => {
         InputOutput.of('/').in(user_id).emit(event, payload); // Ensure you are targeting the correct namespace
         console.log(`Event '${event}' emitted to user ${user_id}.`);
     } else {
-        console.error("Socket.IO instance not found.");
+        console.log("Socket.IO instance not found.");
     }
 };
 

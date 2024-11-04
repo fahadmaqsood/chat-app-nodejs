@@ -23,7 +23,7 @@ const firebase = firebaseAdmin.initializeApp({
 });
 
 
-function sendNotification(deviceToken, title, message, payload) {
+async function sendNotification(deviceToken, title, message, payload) {
     // // This registration token comes from the client FCM SDKs.
     // const registrationToken = 'YOUR_REGISTRATION_TOKEN';
 
@@ -40,7 +40,7 @@ function sendNotification(deviceToken, title, message, payload) {
 
     // Send a message to the device corresponding to the provided
     // registration token.
-    firebaseAdmin.messaging().send(message_data)
+    await firebaseAdmin.messaging().send(message_data)
         .then((response) => {
             // Response is a message ID string.
             console.log('Successfully sent message:', response);
@@ -124,7 +124,7 @@ export const addNotificationForMany = async (user_ids, title, message, payload, 
 
         // Send notifications to all users in one batch
         if (deviceTokens.length > 0) {
-            sendNotificationToMany(deviceTokens, title, message, payload, isCall = isCall);
+            await sendNotificationToMany(deviceTokens, title, message, payload, isCall = isCall);
         }
 
         if (!isCall) {
@@ -226,13 +226,12 @@ export const addNotification = async (user_id, title, message, payload) => {
             payload
         });
 
-        emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
-
-
-
         await newNotification.save();
 
-        sendNotification(user.firebaseToken, title, message, payload);
+        await sendNotification(user.firebaseToken, title, message, payload);
+
+
+        emitIndicatorsSocketEvent(user_id, "NEW_NOTIFICATION_EVENT", 1);
 
         return newNotification;
 
