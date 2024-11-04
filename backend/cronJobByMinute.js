@@ -15,9 +15,6 @@ try {
 
     let currentSessions = await getCurrentSessions();
 
-    console.log("currentSessions");
-    console.log(currentSessions.length);
-
     if (currentSessions.length > 0) {
 
         // Use a for...of loop to handle async operations sequentially
@@ -45,12 +42,12 @@ try {
             });
 
 
-            const participantIds = session.participants.map(participant => participant._id);
+            const participantIds = session.participants.map(participant => participant._id.toString());
 
             // send to participants
             await addNotificationForMany(participantIds, "Session time!", `You have a session scheduled with ${organizerName} right now.`, {
                 'type': 'session',
-                'session_id': session._id
+                'session_id': session._id.toString()
             });
         }
 

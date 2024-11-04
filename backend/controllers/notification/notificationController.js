@@ -54,7 +54,7 @@ function sendNotification(deviceToken, title, message, payload) {
 async function sendNotificationToMany(deviceTokens, title, message, payload, isCall = false) {
     let message_data = {};
 
-    // console.log(deviceTokens);
+    console.log(deviceTokens);
 
     if (isCall) {
         message_data = {
