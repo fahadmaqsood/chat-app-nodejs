@@ -226,7 +226,7 @@ const activateSubscription = async (req, res) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-  let { email, username, password, religion, date_of_birth, country, language } = req.body;
+  let { email, username, password, religion, date_of_birth, country, language, firebaseToken } = req.body;
 
 
   const existedUser = await User.findOne({
@@ -256,6 +256,21 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User must be between 13 and 19 years old", []);
   }
 
+  if (firebaseToken) {
+
+    // Step 1: Find other users with the same firebaseToken
+    const usersWithSameToken = await User.find({
+      firebaseToken: firebaseToken // Check if any user has this firebaseToken
+    });
+
+    // Step 2: Remove the token from those users (set firebaseToken to null or empty)
+    await User.updateMany(
+      { _id: { $in: usersWithSameToken.map(user => user._id) } },
+      { $set: { firebaseToken: null } } // Clear the firebaseToken field
+    );
+  }
+
+
   const user = await User.create({
     email,
     password,
@@ -264,6 +279,7 @@ const registerUser = asyncHandler(async (req, res) => {
     religion,
     country,
     language,
+    firebaseToken,
     isEmailVerified: false,
     role: UserRolesEnum.USER,
   });

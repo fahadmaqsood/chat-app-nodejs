@@ -26,23 +26,22 @@ try {
             console.log(session);
 
             // Access the organizer's name
-            const organizerName = session.organizer.name;
+            const organizerName = session.organizer.name == "" ? session.organizer.username : session.organizer.name;
             console.log("Organizer:", organizerName);
 
             // Loop over participants to get their names
             session.participants.forEach(participant => {
-                const participantName = participant.name;
+                const participantName = participant.name == "" ? participant.username : participant.name;;
                 console.log("Participant:", participantName);
             });
 
             let organizer_id = session.organizer._id;
 
-
             let num_participants = session.participants.length;
 
-            await addNotification(organizer_id, "Session time!", `You have a session scheduled with ${session.participants[0].name} ${(num_participants - 1) > 0 ? `and ${num_participants - 1} others` : ""}. Come, join now!`, {
+            await addNotification(organizer_id.toString(), "Session time!", `You have a session scheduled with ${session.participants[0].name} ${(num_participants - 1) > 0 ? `and ${num_participants - 1} others` : ""}. Come, join now!`, {
                 'type': 'session',
-                'session_id': session._id
+                'session_id': session._id.toString()
             });
 
 
