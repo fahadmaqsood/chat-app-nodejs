@@ -118,8 +118,8 @@ const getCurrentSessions = async (req, res) => {
             date: { $gte: startOfMinute, $lt: endOfMinute }, // Start time must be in the past or now
             endTime: { $gt: now } // End time must be in the future or now
         })
-            .populate('organizer', 'name') // Populate organizer's name
-            .populate('participants', 'name') // Populate participants' names
+            .populate('organizer', '_id username name') // Populate organizer's name
+            .populate('participants', '_id username name') // Populate participants' names
             .select('organizer participants') // Only select organizer and participants
             .lean();
 

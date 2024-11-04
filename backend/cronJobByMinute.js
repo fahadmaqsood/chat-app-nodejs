@@ -23,6 +23,8 @@ try {
         // Use a for...of loop to handle async operations sequentially
         for (const session of currentSessions) {
 
+            console.log(session);
+
             // Access the organizer's name
             const organizerName = session.organizer.name;
             console.log("Organizer:", organizerName);
