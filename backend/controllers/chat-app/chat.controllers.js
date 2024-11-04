@@ -203,7 +203,7 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
 const getListOfUserChats = asyncHandler(async (req, res) => {
   const userId = req.user._id; // Get the logged-in user's ID
 
-  const { limit = 15, skip = 0 } = req.query;
+  const { limit = 15, skip = 0 } = req.body;
 
   const chats = await Chat.aggregate([
     {
