@@ -102,4 +102,34 @@ const getSessionDetails = async (req, res) => {
     }
 };
 
-export { scheduleSession, getSessionsByDate, getSessionDetails };
+
+
+// Get currently scheduled sessions
+const getCurrentSessions = async (req, res) => {
+    try {
+        // Get the current date and time
+        const now = new Date();
+
+        // Fetch sessions that are ongoing right now
+        const currentSessions = await UserSchedule.find({
+            date: { $eq: now }, // Start time must be in the past or now
+            endTime: { $gt: now } // End time must be in the future or now
+        })
+            .populate('organizer', 'name') // Populate organizer's name
+            .populate('participants', 'name') // Populate participants' names
+            .select('organizer participants') // Only select organizer and participants
+            .lean();
+
+        if (!currentSessions || currentSessions.length === 0) {
+            return [];
+        }
+
+        return currentSessions;
+    } catch (error) {
+        console.error("Error in getCurrentSessions:", error);
+        return [];
+    }
+};
+
+
+export { scheduleSession, getSessionsByDate, getSessionDetails, getCurrentSessions };

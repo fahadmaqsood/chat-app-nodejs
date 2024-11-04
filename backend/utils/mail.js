@@ -29,17 +29,26 @@ const sendEmail = async (options) => {
   const emailHtml = mailGenerator.generate(options.mailgenContent);
 
   // Create a nodemailer transporter instance which is responsible to send a mail
-  const transporter = nodemailer.createTransport({
-    host: process.env.MAILTRAP_SMTP_HOST,
-    port: process.env.MAILTRAP_SMTP_PORT,
+  // const transporter = nodemailer.createTransport({
+  //   host: process.env.MAILTRAP_SMTP_HOST,
+  //   port: process.env.MAILTRAP_SMTP_PORT,
+  //   auth: {
+  //     user: process.env.MAILTRAP_SMTP_USER,
+  //     pass: process.env.MAILTRAP_SMTP_PASS,
+  //   },
+  // });
+
+  // Configure the transporter with Gmail's SMTP server
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
     auth: {
-      user: process.env.MAILTRAP_SMTP_USER,
-      pass: process.env.MAILTRAP_SMTP_PASS,
-    },
+      user: process.env.SENDER_EMAIL, // Replace with your Gmail address
+      pass: process.env.SENDER_EMAIL_PASSWORD // Replace with the app-specific password
+    }
   });
 
   const mail = {
-    from: "verification@teenglobalconnect.com", // We can name this anything. The mail will go to your Mailtrap inbox
+    from: process.env.SENDER_EMAIL,
     //from: "hi@demomailtrap.com",
     to: options.email, // receiver's mail
     subject: options.subject, // mail subject
