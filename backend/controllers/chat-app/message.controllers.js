@@ -166,8 +166,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     // if (canEmit) {
     // } else {
 
-    let token = (await User.findById(participantObjectId.toString())).firebaseToken;
-    await sendNotification(token, `New message from ${req.user.nameElseUsername}`, content || "", {
+    let user = await User.findById(participantObjectId.toString());
+    await sendNotification(user.firebaseToken, `New message from ${req.user.nameElseUsername}`, content || "", {
       "type": "message"
     });
     // }
