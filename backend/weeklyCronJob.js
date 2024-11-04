@@ -11,7 +11,7 @@ try {
     await connectDB();
 
     await addNotificationForAll("Week is over 🎉!", "Weekly quiz competition is over, come see the results.", {
-
+        type: "leaderboard"
     });
 
     // Close the connection after task completion
