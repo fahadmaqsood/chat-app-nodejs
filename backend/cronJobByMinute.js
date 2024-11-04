@@ -15,6 +15,9 @@ try {
 
     let currentSessions = await getCurrentSessions();
 
+    console.log("currentSessions");
+    console.log(currentSessions.length);
+
     if (currentSessions.length > 0) {
 
         // Use a for...of loop to handle async operations sequentially
