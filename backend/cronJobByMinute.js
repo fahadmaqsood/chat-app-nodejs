@@ -36,19 +36,25 @@ try {
 
             let num_participants = session.participants.length;
 
-            await addNotification(organizer_id.toString(), "Session time!", `You have a session scheduled with ${session.participants[0].name} ${(num_participants - 1) > 0 ? `and ${num_participants - 1} others` : ""}. Come, join now!`, {
+            console.log("adding notification for organizer");
+            let notification = await addNotification(organizer_id.toString(), "Session time!", `You have a session scheduled with ${session.participants[0].name} ${(num_participants - 1) > 0 ? `and ${num_participants - 1} others` : ""}. Come, join now!`, {
                 'type': 'session',
                 'session_id': session._id.toString()
             });
+            console.log("adding notification done");
+            console.log(notification);
 
 
             const participantIds = session.participants.map(participant => participant._id.toString());
 
+            console.log("adding notification for participants");
+
             // send to participants
-            await addNotificationForMany(participantIds, "Session time!", `You have a session scheduled with ${organizerName} right now.`, {
+            let sent = await addNotificationForMany(participantIds, "Session time!", `You have a session scheduled with ${organizerName} right now.`, {
                 'type': 'session',
                 'session_id': session._id.toString()
             });
+            console.log("done: " + sent);
         }
 
 
