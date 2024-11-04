@@ -6,7 +6,7 @@ import logger from "./logger/winston.logger.js";
 
 import { addNotification, addNotificationForMany } from "./controllers/notification/notificationController.js";
 
-import { getCurrentSessions } from './controller/user-sessions/userSessions.controller.js';
+import { getCurrentSessions } from './controllers/user-sessions/userSessions.controllers.js';
 
 import mongoose from "mongoose"; // Import mongoose to close the connection
 

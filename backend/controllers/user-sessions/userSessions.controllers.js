@@ -110,9 +110,12 @@ const getCurrentSessions = async (req, res) => {
         // Get the current date and time
         const now = new Date();
 
+        const startOfMinute = new Date(now.setSeconds(0, 0)); // Current minute, seconds = 0
+        const endOfMinute = new Date(startOfMinute.getTime() + 60000); // Start of next minute
+
         // Fetch sessions that are ongoing right now
         const currentSessions = await UserSchedule.find({
-            date: { $eq: now }, // Start time must be in the past or now
+            date: { $gte: startOfMinute, $lt: endOfMinute }, // Start time must be in the past or now
             endTime: { $gt: now } // End time must be in the future or now
         })
             .populate('organizer', 'name') // Populate organizer's name
