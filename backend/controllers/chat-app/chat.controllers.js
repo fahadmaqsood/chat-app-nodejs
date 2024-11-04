@@ -203,6 +203,8 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
 const getListOfUserChats = asyncHandler(async (req, res) => {
   const userId = req.user._id; // Get the logged-in user's ID
 
+  const { limit = 15, skip = 0 } = req.query;
+
   const chats = await Chat.aggregate([
     {
       $match: {
@@ -285,6 +287,9 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
         "lastMessage.createdAt": -1, // Sort chats by the most recent message
       },
     },
+    // Add skip and limit stages for pagination
+    { $skip: parseInt(skip) },
+    { $limit: parseInt(limit) },
   ]);
 
   return res
