@@ -20,6 +20,7 @@ const notificationSchema = new mongoose.Schema({
             ref: 'User' // This references the User model
         },
         additionalData: mongoose.Schema.Types.Mixed, // Additional data associated with the notification, e.g., links
+        type: mongoose.Schema.Types.Mixed,
         default: {}
     },
     status: {
