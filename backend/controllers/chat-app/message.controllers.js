@@ -162,16 +162,16 @@ const sendMessage = asyncHandler(async (req, res) => {
     // here the chat is the raw instance of the chat in which participants is the array of object ids of users
     // avoid emitting event to the user who is sending the message
 
-    if (participantObjectId.toString() !== req.user._id.toString()) {
-      if (canEmit) {
-      } else {
+    // if (participantObjectId.toString() !== req.user._id.toString()) {
+    // if (canEmit) {
+    // } else {
 
-        let token = (await User.findById(participantObjectId.toString())).firebaseToken;
-        sendNotification(token, `New message from ${req.user.nameElseUsername}`, content || "", {
-          "type": "message"
-        });
-      }
-    };
+    let token = (await User.findById(participantObjectId.toString())).firebaseToken;
+    await sendNotification(token, `New message from ${req.user.nameElseUsername}`, content || "", {
+      "type": "message"
+    });
+    // }
+    // };
 
     // emit the receive message event to the other participants with received message as the payload
 
