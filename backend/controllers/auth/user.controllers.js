@@ -229,7 +229,7 @@ const registerUser = asyncHandler(async (req, res) => {
   let { email, username, password, religion, date_of_birth, country, language, firebaseToken } = req.body;
 
 
-  const existedUser = await User.findOne({
+  let existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -237,14 +237,14 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User with email or username already exists", []);
   }
 
-  date_of_birth = new Date(Date.parse(date_of_birth));
+  let d_of_birth = new Date(Date.parse(date_of_birth));
 
 
   // Calculate age based on date_of_birth
-  const today = new Date();
-  const birthDate = date_of_birth;
-  const age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
+  let today = new Date();
+  let birthDate = d_of_birth;
+  let age = today.getFullYear() - birthDate.getFullYear();
+  let monthDiff = today.getMonth() - birthDate.getMonth();
 
   // Adjust age if the birth date hasn't been reached this year
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
@@ -259,7 +259,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (firebaseToken) {
 
     // Step 1: Find other users with the same firebaseToken
-    const usersWithSameToken = await User.find({
+    let usersWithSameToken = await User.find({
       firebaseToken: firebaseToken // Check if any user has this firebaseToken
     });
 
@@ -271,7 +271,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
 
-  const user = await User.create({
+  let user = await User.create({
     email,
     password,
     username,
@@ -289,11 +289,11 @@ const registerUser = asyncHandler(async (req, res) => {
    * hashedToken: we will keep record of hashedToken to validate the unHashedToken in verify email controller
    * tokenExpiry: Expiry to be checked before validating the incoming token
    */
-  const { unHashedToken, hashedToken, tokenExpiry } =
+  let { unHashedToken, hashedToken, tokenExpiry } =
     user.generateTemporaryToken();
 
   // generate access and refresh tokens
-  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
+  let { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
   /**
    * assign hashedToken and tokenExpiry in DB till user clicks on email verification link
@@ -314,7 +314,7 @@ const registerUser = asyncHandler(async (req, res) => {
     ),
   });
 
-  const createdUser = await User.findById(user._id).select(
+  let createdUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
 
