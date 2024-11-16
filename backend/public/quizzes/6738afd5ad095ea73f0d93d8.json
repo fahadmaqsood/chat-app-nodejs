@@ -1,0 +1,68 @@
+{
+  "title": "art",
+  "topic": "66fec2c9b6950e88826fe004",
+  "difficulty": "easy",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "Who painted the Mona Lisa?",
+      "options": [
+        "Vincent van Gogh",
+        "Pablo Picasso",
+        "Leonardo da Vinci",
+        "Michelangelo"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which artist is known for his melting clocks in the painting 'The Persistence of Memory'?",
+      "options": [
+        "Salvador Dali",
+        "Claude Monet",
+        "Jackson Pollock",
+        "Andy Warhol"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In which country was the famous painter Frida Kahlo born?",
+      "options": [
+        "Mexico",
+        "Spain",
+        "France",
+        "Italy"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who sculpted the famous statue of David?",
+      "options": [
+        "Donatello",
+        "Michelangelo",
+        "Leonardo da Vinci",
+        "Raphael"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which art movement includes works like 'Starry Night' by Vincent van Gogh?",
+      "options": [
+        "Cubism",
+        "Surrealism",
+        "Impressionism",
+        "Post-Impressionism"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which artist is famous for his soup cans and pop art?",
+      "options": [
+        "Roy Lichtenstein",
+        "Jackson Pollock",
+        "Andy Warhol",
+        "Keith Haring"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

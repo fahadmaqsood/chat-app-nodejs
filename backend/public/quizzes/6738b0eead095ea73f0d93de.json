@@ -1,0 +1,78 @@
+{
+  "title": "Pollution",
+  "topic": "66fec2c9b6950e88826fe00a",
+  "difficulty": "easy",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What is the main cause of air pollution?",
+      "options": [
+        "Cars",
+        "Planes",
+        "Trees",
+        "Factories"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which type of pollution is caused by excessive use of fertilizers and pesticides?",
+      "options": [
+        "Air pollution",
+        "Water pollution",
+        "Soil pollution",
+        "Noise pollution"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary source of plastic pollution in oceans?",
+      "options": [
+        "Fishing nets",
+        "Plastic bottles",
+        "Plastic bags",
+        "Straws"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which gas is responsible for the greenhouse effect?",
+      "options": [
+        "Oxygen",
+        "Carbon dioxide",
+        "Nitrogen",
+        "Helium"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the most common form of litter found in water bodies?",
+      "options": [
+        "Plastic bottles",
+        "Aluminum cans",
+        "Cigarette butts",
+        "Paper bags"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the process of breaking down organic waste by microorganisms called?",
+      "options": [
+        "Incineration",
+        "Recycling",
+        "Composting",
+        "Landfill"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following is a major contributor to deforestation?",
+      "options": [
+        "Mining",
+        "Urbanization",
+        "Logging",
+        "Agriculture"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

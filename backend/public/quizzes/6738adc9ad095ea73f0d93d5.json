@@ -1,0 +1,78 @@
+{
+  "title": "history",
+  "topic": "66fec2c9b6950e88826fdfff",
+  "difficulty": "medium",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "Who was the first President of the United States?",
+      "options": [
+        "Thomas Jefferson",
+        "George Washington",
+        "John Adams",
+        "Abraham Lincoln"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In which year did World War I end?",
+      "options": [
+        "1917",
+        "1918",
+        "1920",
+        "1945"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was the first female Prime Minister of the United Kingdom?",
+      "options": [
+        "Margaret Thatcher",
+        "Theresa May",
+        "Angela Merkel",
+        "Indira Gandhi"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "When did the Berlin Wall fall?",
+      "options": [
+        "1990",
+        "1989",
+        "1975",
+        "2001"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which ancient civilization built the pyramids of Giza?",
+      "options": [
+        "Roman Empire",
+        "Greek Empire",
+        "Maya Civilization",
+        "Egyptian Civilization"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Who is known as the 'Father of the Indian Nation'?",
+      "options": [
+        "Jawaharlal Nehru",
+        "Mahatma Gandhi",
+        "Subhas Chandra Bose",
+        "B.R. Ambedkar"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which famous explorer led the first expedition to circumnavigate the Earth?",
+      "options": [
+        "Marco Polo",
+        "Christopher Columbus",
+        "Ferdinand Magellan",
+        "Vasco da Gama"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

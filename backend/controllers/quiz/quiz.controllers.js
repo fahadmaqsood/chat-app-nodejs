@@ -18,6 +18,31 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
+export const retrieveQuizTopicList = async (limit, skip) => {
+    try {
+
+        // Prepare the query
+        let query = QuizTopics.find({}).sort({ createdAt: -1 });
+
+        // Only apply skip and limit if they are defined
+        if (skip) {
+            query = query.skip(Number(skip));
+        }
+        if (limit) {
+            query = query.limit(Number(limit));
+        }
+
+        // Execute the query
+        const topics = await query.exec();
+
+        return topics;
+
+    } catch (error) {
+        return [];
+    }
+};
+
 export const getTopicList = async (req, res) => {
     try {
         const { limit, skip } = req.query;
@@ -389,6 +414,11 @@ export const getMostPopularQuizzes = async (req, res) => {
                             else: false
                         }
                     }
+                }
+            },
+            {
+                $match: {
+                    userHasCompleted: { $ne: true }  // Exclude quizzes the user has already completed
                 }
             },
             {

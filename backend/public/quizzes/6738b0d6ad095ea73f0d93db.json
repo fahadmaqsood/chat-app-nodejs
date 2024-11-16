@@ -1,0 +1,78 @@
+{
+  "title": "Photosynthesis",
+  "topic": "66fec2c9b6950e88826fe007",
+  "difficulty": "hard",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "Where does the light-dependent reaction of photosynthesis take place in a plant cell?",
+      "options": [
+        "Mitochondria",
+        "Chloroplasts",
+        "Nucleus",
+        "Cytosol"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary pigment involved in photosynthesis?",
+      "options": [
+        "Chlorophyll a",
+        "Chlorophyll b",
+        "Carotenoids",
+        "Xanthophylls"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What gas is primarily absorbed by plants during photosynthesis?",
+      "options": [
+        "Oxygen",
+        "Carbon Dioxide",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In which organelle does the Calvin cycle of photosynthesis occur?",
+      "options": [
+        "Mitochondria",
+        "Golgi Apparatus",
+        "Endoplasmic Reticulum",
+        "Chloroplasts"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "During photosynthesis, what is the byproduct released into the atmosphere?",
+      "options": [
+        "Oxygen",
+        "Carbon Dioxide",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the ultimate source of energy for photosynthesis?",
+      "options": [
+        "Sunlight",
+        "Heat",
+        "Electricity",
+        "Chemical Reactions"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which part of the plant allows for gas exchange necessary for photosynthesis?",
+      "options": [
+        "Stem",
+        "Roots",
+        "Leaves",
+        "Flowers"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

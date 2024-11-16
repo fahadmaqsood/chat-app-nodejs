@@ -257,7 +257,7 @@ export const addPersonalityQuiz = async (req, res) => {
         }
 
         // Create a new quiz
-        const newQuiz = new PersonalityQuiz({
+        const newQuiz = await new PersonalityQuiz({
             title: json.title,
             num_questions: json.num_questions
         });
