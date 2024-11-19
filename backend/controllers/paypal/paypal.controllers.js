@@ -196,7 +196,7 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
 
 
-    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, function (response) {
+    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, async function (response) {
         // if (error) {
         //     console.error('Webhook signature verification failed:', error);
         //     return res.sendStatus(400); // Bad Request if verification fails
@@ -224,11 +224,23 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
                 console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
 
+                const {
+                    user_subscription_code,
+                    user_referral_code
+                } = await getSubscriptionCode(
+                    planIDs[planId],
+                    price_paid,
+                    full_name,
+                    email_address,
+                    new Date(subscription_start_date),
+                    new Date(next_billing_time)
+                );
+
                 break;
 
             case 'BILLING.SUBSCRIPTION.ACTIVATED':
                 // Handle subscription activation
-                console.log('Subscription activated:', resource);
+                console.log('Subscription activated:', webhookEvent.resource);
                 // Mark subscription as active in your system, grant access to the user
                 break;
 
