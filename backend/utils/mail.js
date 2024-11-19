@@ -16,8 +16,8 @@ const sendEmail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: "default",
     product: {
-      name: "FreeAPI",
-      link: "https://freeapi.app",
+      name: "Teen Global Connect",
+      link: "https://www.invasiveideasllc.com/Teen-Global-Connect",
     },
   });
 
