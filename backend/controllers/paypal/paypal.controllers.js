@@ -194,11 +194,11 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         eventBody: req.body
     };
 
-    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, function (error, response) {
-        if (error) {
-            console.error('Webhook signature verification failed:', error);
-            return res.sendStatus(400); // Bad Request if verification fails
-        }
+    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, function (response) {
+        // if (error) {
+        //     console.error('Webhook signature verification failed:', error);
+        //     return res.sendStatus(400); // Bad Request if verification fails
+        // }
 
         if (response.verification_status === 'SUCCESS') {
             console.log('Webhook Verified Successfully:', webhookEvent);
