@@ -17,6 +17,13 @@ const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 
 
+
+paypal.configure({
+    'mode': process.env.PAYPAL_TYPE,  // live
+    'client_id': process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_CLIENT_ID : process.env.PAYPAL_SANDBOX_CLIENT_ID,
+    'client_secret': process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_CLIENT_SECRET : process.env.PAYPAL_CLIENT_ID,
+});
+
 // const planIDs = {
 //     "P-3JP97424FK586314NM4F3ZJQ": 1 //monthly subscription
 // };
@@ -187,7 +194,7 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         eventBody: req.body
     };
 
-    paypal.notification.webhookEvent.verify(expectedSignature, function (error, response) {
+    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, function (error, response) {
         if (error) {
             console.error('Webhook signature verification failed:', error);
             return res.sendStatus(400); // Bad Request if verification fails
