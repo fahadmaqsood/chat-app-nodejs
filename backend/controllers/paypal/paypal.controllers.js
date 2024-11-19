@@ -6,6 +6,13 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes.js';
 import { generateUniqueCode } from '../subscription_codes/subscriptioncodes.controllers.js';
 
+
+import {
+    sendEmail,
+    paypalSubscriptionCodeMailgenContent
+} from "../../utils/mail.js";
+
+
 import paypal from 'paypal-rest-sdk';
 
 //const paypal = require('paypal-rest-sdk');
@@ -83,13 +90,29 @@ async function validateSubscription(subscriptionID) {
 }
 
 
-async function getSubscriptionCode(months, price_paid, full_name, email, subscription_date, next_billing_date) {
+async function getSubscriptionCode(paypal_subscription_id, months, price_paid, full_name, email, subscription_date, next_billing_date) {
+
+
+    // Check if subscription with the given paypal_subscription_id already exists
+    const existingSubscription = await SubscriptionCodes.findOne({ paypal_subscription_id });
+
+    if (existingSubscription) {
+        // If the subscription exists, return the existing subscription code and referral code
+        return {
+            user_subscription_code: existingSubscription.subscription_code,
+            user_referral_code: existingSubscription.referral_code
+        };
+    }
+
+
     const user_subscription_code = await generateUniqueCode('SB'); // Generate unique subscription code
     const user_referral_code = await generateUniqueCode('RF'); // Generate unique referral code
 
 
     // Create new subscription code
     const newSubscription = new SubscriptionCodes({
+        paypal_subscription_id: paypal_subscription_id,
+
         months: months,
         referrals: [],
 
@@ -222,12 +245,15 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 const planId = webhookEvent.resource.plan_id;
                 const startTime = webhookEvent.resource.start_time;
 
+                console.log(webhookEvent.resource.payer.payer_info);
+
                 console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
 
                 const {
                     user_subscription_code,
                     user_referral_code
                 } = await getSubscriptionCode(
+                    subscriptionId,
                     planIDs[planId],
                     price_paid,
                     full_name,
@@ -235,6 +261,17 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                     new Date(subscription_start_date),
                     new Date(next_billing_time)
                 );
+
+                // Send mail with the password reset link. It should be the link of the frontend url with token
+                await sendEmail({
+                    email: email_address,
+                    subject: "Teen Global Connect Subscription Voucher",
+                    mailgenContent: paypalSubscriptionCodeMailgenContent(
+                        full_name,
+                        planIDs[planId] == 1 ? "Monthly" : "Yearly",
+                        user_subscription_code
+                    ),
+                });
 
                 break;
 

@@ -2,6 +2,13 @@ import mongoose from 'mongoose';
 
 
 const subscriptionCodesSchema = new mongoose.Schema({
+    paypal_subscription_id: {
+        type: String,
+        unique: true,
+        required: true
+    }, // subscription id received from paypal
+
+
     subscription_code: {
         type: String,
         unique: true,
