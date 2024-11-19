@@ -526,7 +526,7 @@ export const liveSubscriptionWebhook = async (req, res) => {
     const certUrl = req.headers['paypal-cert-url'];
     const authAlgo = req.headers['paypal-auth-algo'];
     const transmissionSig = req.headers['paypal-transmission-sig'];
-    const webhookId = PAYPAL_SANDBOX_WEBHOOK_ID; // Replace with the Webhook ID from PayPal dashboard
+    const webhookId = PAYPAL_LIVE_WEBHOOK_ID; // Replace with the Webhook ID from PayPal dashboard
 
     const expectedSignature = {
         transmissionId,
