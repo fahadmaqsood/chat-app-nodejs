@@ -197,7 +197,7 @@ const PAYPAL_LIVE_WEBHOOK_ID = process.env.PAYPAL_LIVE_WEBHOOK_ID;
 export const sandboxSubscriptionWebhook = async (req, res) => {
     const webhookEvent = req.body;
 
-    console.log(req.body);
+    console.log("webhookEvent: ", JSON.stringify(req.body));
 
     // Verify webhook signature (optional but recommended)
     const transmissionId = req.headers['paypal-transmission-id'];
@@ -255,25 +255,19 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
                 const planId = webhookEvent.resource.plan_id;
                 const startTime = webhookEvent.resource.start_time;
+                const next_billing_time = webhookEvent.resource.billing_info.next_billing_time;
 
 
 
                 console.log(`Subscription activated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
 
 
+                const email_address = webhookEvent.resource.subscriber.email_address;
+                const full_name = webhookEvent.resource.subscriber.name.given_name + " " + webhookEvent.resource.subscriber.name.surname;
+                const shipping_address = webhookEvent.resource.subscriber.shipping_address;
 
 
-                console.log("payment_definitions: ", webhookEvent.resource.plan.payment_definitions);
-                console.log("merchant_preferences: ", webhookEvent.resource.plan.merchant_preferences);
-
-                console.log(webhookEvent.resource.payer.payer_info);
-
-                const first_name = webhookEvent.resource.payer.payer_info.first_name;
-                const last_name = webhookEvent.resource.payer.payer_info.last_name;
-
-                const full_name = first_name + " " + last_name;
-
-                const email_address = webhookEvent.resource.payer.payer_info.email;
+                const price_paid = webhookEvent.resource.shipping_amount.value + " " + webhookEvent.resource.shipping_amount.currency_code;
 
                 const {
                     user_subscription_code,
@@ -281,10 +275,10 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 } = await getSubscriptionCode(
                     subscriptionId,
                     planIDs[planId],
-                    "Unknown",
+                    price_paid,
                     full_name,
                     email_address,
-                    new Date(subscription_start_date),
+                    new Date(startTime),
                     new Date(next_billing_time)
                 );
 
