@@ -163,6 +163,8 @@ const PAYPAL_LIVE_WEBHOOK_ID = process.env.PAYPAL_LIVE_WEBHOOK_ID;
 export const sandboxSubscriptionWebhook = async (req, res) => {
     const webhookEvent = req.body;
 
+    console.log(req.body);
+
     // Verify webhook signature (optional but recommended)
     const transmissionId = req.headers['paypal-transmission-id'];
     const transmissionTime = req.headers['paypal-transmission-time'];
