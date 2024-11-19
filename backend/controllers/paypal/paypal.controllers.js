@@ -7,6 +7,10 @@ import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes
 import { generateUniqueCode } from '../subscription_codes/subscriptioncodes.controllers.js';
 
 
+import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
+
+import { addNotification } from "../../controllers/notification/notificationController.js";
+
 import {
     sendEmail,
     paypalSubscriptionCodeMailgenContent
@@ -237,6 +241,8 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
         console.log('subscriptionId:', subscriptionId);
 
+        let existingSubscription;
+
 
         // Handle the webhook event here, e.g., updating your order status in the database
         switch (webhookEvent.event_type) {
@@ -306,6 +312,21 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
             case 'BILLING.SUBSCRIPTION.EXPIRED':
                 console.log(`Subscription expired: ${subscriptionId}`);
 
+                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+
+                if (existingSubscription.redeemed_by) {
+
+                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+
+                    currentUser.subscription_status = "inactive";
+
+                    sendNotification(currentUser, "Your subscription was expired", "You won't be able to access your account from now on.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+
+                } else {
+                    console.log("User not found for subscription expiry (paypal)");
+                }
+
                 break;
 
             case 'PAYMENT.SALE.COMPLETED':
@@ -319,23 +340,68 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 // Handle failed subscription payment
                 console.log('Payment failed:', resource);
                 // Notify user of failed payment, retry payment, offer alternative methods
+
+                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+
+                if (existingSubscription.redeemed_by) {
+
+                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+
+                    sendNotification(currentUser, "Payment Failed", "Please resolve issues with your paypal account.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+
+                } else {
+                    console.log("User not found for subscription expiry (paypal)");
+                }
+
+
                 break;
 
             case 'BILLING.SUBSCRIPTION.RE-ACTIVATED':
                 // Handle subscription re-activation
-                console.log('Subscription re-activated:', resource);
+                console.log(`Subscription re-activated: ${subscriptionId}`);
                 // Mark subscription as active again, restore access, notify the user
+
+                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+
+                if (existingSubscription.redeemed_by) {
+
+                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+
+                    currentUser.subscription_status = "active";
+
+                } else {
+                    console.log("User not found for subscription expiry (paypal)");
+                }
+
                 break;
 
             case 'BILLING.SUBSCRIPTION.SUSPENDED':
                 // Handle subscription suspension
-                console.log('Subscription suspended:', resource);
+                console.log('Subscription suspended:', subscriptionId);
                 // Temporarily suspend access, notify the user, guide them on reactivation
+
+                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+
+                if (existingSubscription.redeemed_by) {
+
+                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+
+                    currentUser.subscription_status = "inactive";
+
+                    sendNotification(currentUser, "Your subscription was suspended", "Paypal couldn't send us your subscription payment.");
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+
+                } else {
+                    console.log("User not found for subscription expiry (paypal)");
+                }
+
+
                 break;
 
             case 'BILLING.SUBSCRIPTION.UPDATED':
                 // Handle subscription updates (e.g., plan change)
-                console.log('Subscription updated:', resource);
+                console.log('Subscription updated:', subscriptionId);
                 // Update subscription details in your system, notify the user
                 break;
 
@@ -352,6 +418,7 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         // }
     });
 }
+
 
 
 
@@ -463,4 +530,13 @@ export const liveSubscriptionWebhook = async (req, res) => {
             res.status(400).send('Webhook verification failed');
         }
     });
+}
+
+
+async function sendNotification(currentUser, title, message) {
+    try {
+        await addNotification(currentUser._id, title, message);
+    } catch (error) {
+        console.log("couldn't send notification to the user");
+    }
 }
