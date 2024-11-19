@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/log-subscription', logSubscription);
 
-router.post('sandbox-subscriptions-webhook', sandboxSubscriptionWebhook);
-router.post('live-subscriptions-webhook', liveSubscriptionWebhook);
+router.post('/sandbox-subscriptions-webhook', sandboxSubscriptionWebhook);
+router.post('/live-subscriptions-webhook', liveSubscriptionWebhook);
 
 export default router;

@@ -6,6 +6,10 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes.js';
 import { generateUniqueCode } from '../subscription_codes/subscriptioncodes.controllers.js';
 
+import paypal from 'paypal-rest-sdk';
+
+//const paypal = require('paypal-rest-sdk');
+
 
 
 // Your PayPal client credentials
