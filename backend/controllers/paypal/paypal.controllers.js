@@ -242,12 +242,26 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         switch (webhookEvent.event_type) {
 
             case 'BILLING.SUBSCRIPTION.CREATED':
+
+                console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+
+                break;
+
+            case 'BILLING.SUBSCRIPTION.ACTIVATED':
+                // Handle subscription activation
+
+                // Mark subscription as active in your system, grant access to the user
+
                 const planId = webhookEvent.resource.plan_id;
                 const startTime = webhookEvent.resource.start_time;
 
 
 
-                console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+                console.log(`Subscription activated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+
+
 
                 console.log("payment_definitions: ", webhookEvent.resource.plan.payment_definitions);
                 console.log("merchant_preferences: ", webhookEvent.resource.plan.merchant_preferences);
@@ -267,7 +281,7 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 } = await getSubscriptionCode(
                     subscriptionId,
                     planIDs[planId],
-                    price_paid,
+                    "Unknown",
                     full_name,
                     email_address,
                     new Date(subscription_start_date),
@@ -285,12 +299,6 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                     ),
                 });
 
-                break;
-
-            case 'BILLING.SUBSCRIPTION.ACTIVATED':
-                // Handle subscription activation
-                console.log('Subscription activated:', webhookEvent.resource);
-                // Mark subscription as active in your system, grant access to the user
                 break;
 
             case 'BILLING.SUBSCRIPTION.CANCELLED':
