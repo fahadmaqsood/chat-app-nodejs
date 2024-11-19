@@ -24,15 +24,15 @@ import paypal from 'paypal-rest-sdk';
 
 
 // Your PayPal client credentials
-const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
-const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_LIVE_CLIENT_ID : process.env.PAYPAL_SANDBOX_CLIENT_ID;
+const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_LIVE_CLIENT_SECRET : process.env.PAYPAL_SANDBOX_CLIENT_SECRET;
 
 
 
 paypal.configure({
     'mode': process.env.PAYPAL_TYPE,  // live
-    'client_id': process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_CLIENT_ID : process.env.PAYPAL_SANDBOX_CLIENT_ID,
-    'client_secret': process.env.PAYPAL_TYPE == "live" ? process.env.PAYPAL_CLIENT_SECRET : process.env.PAYPAL_CLIENT_ID,
+    'client_id': PAYPAL_CLIENT_ID,
+    'client_secret': PAYPAL_CLIENT_SECRET,
 });
 
 // const planIDs = {
