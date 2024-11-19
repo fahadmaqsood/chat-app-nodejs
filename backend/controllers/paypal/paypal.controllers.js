@@ -194,6 +194,8 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         eventBody: req.body
     };
 
+
+
     paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, function (response) {
         // if (error) {
         //     console.error('Webhook signature verification failed:', error);
@@ -206,9 +208,11 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         // if (response.verification_status === 'SUCCESS') {
         console.log('Webhook Verified Successfully:', webhookEvent);
 
+
         const subscriptionId = webhookEvent.resource.id;
 
-        console.log('subscriptionId:', webhookEvent);
+
+        console.log('subscriptionId:', webhookEvent.resource.id);
 
 
         // Handle the webhook event here, e.g., updating your order status in the database
@@ -237,7 +241,6 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 break;
 
             case 'BILLING.SUBSCRIPTION.EXPIRED':
-                const subscriptionId = webhookEvent.resource.id;
                 console.log(`Subscription expired: ${subscriptionId}`);
 
                 break;
