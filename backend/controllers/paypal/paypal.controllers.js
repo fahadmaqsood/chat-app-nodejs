@@ -243,7 +243,7 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
             case 'BILLING.SUBSCRIPTION.CREATED':
 
-                console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+                console.log(`New subscription created: ${subscriptionId}`);
 
 
                 break;
