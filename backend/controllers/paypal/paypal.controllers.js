@@ -245,9 +245,21 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
                 const planId = webhookEvent.resource.plan_id;
                 const startTime = webhookEvent.resource.start_time;
 
-                console.log(webhookEvent.resource.payer.payer_info);
+
 
                 console.log(`New subscription created: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+                console.log("payment_definitions: ", webhookEvent.resource.plan.payment_definitions);
+                console.log("merchant_preferences: ", webhookEvent.resource.plan.merchant_preferences);
+
+                console.log(webhookEvent.resource.payer.payer_info);
+
+                const first_name = webhookEvent.resource.payer.payer_info.first_name;
+                const last_name = webhookEvent.resource.payer.payer_info.last_name;
+
+                const full_name = first_name + " " + last_name;
+
+                const email_address = webhookEvent.resource.payer.payer_info.email;
 
                 const {
                     user_subscription_code,
