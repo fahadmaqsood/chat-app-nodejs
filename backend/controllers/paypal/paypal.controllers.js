@@ -208,6 +208,8 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
 
         const subscriptionId = webhookEvent.resource.id;
 
+        console.log('subscriptionId:', webhookEvent);
+
 
         // Handle the webhook event here, e.g., updating your order status in the database
         switch (webhookEvent.event_type) {
