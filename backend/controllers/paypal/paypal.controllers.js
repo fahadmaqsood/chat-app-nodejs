@@ -276,8 +276,8 @@ export const sandboxSubscriptionWebhook = async (req, res) => {
         //     return res.sendStatus(400); // Bad Request if verification fails
         // }
 
-        console.log("response: " + response);
-        console.log("response: " + response.verification_status);
+        // console.log("response: " + response);
+        // console.log("response: " + response.verification_status);
 
         // if (response.verification_status === 'SUCCESS') {
         console.log('Webhook Verified Successfully:', webhookEvent);
