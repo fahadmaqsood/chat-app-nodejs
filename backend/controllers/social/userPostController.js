@@ -282,87 +282,87 @@ export const getPosts = async (req, res) => {
 
 
         // If we have fewer posts than requested, try to fill in with related moods
-        if (posts.length < limit) {
-            const currentMoodScore = _sentimentAnalysis.moodScores[mood] ?? 61;
-            const moodKeys = Object.keys(_sentimentAnalysis.moodScores);
-            const moodScores = Object.values(_sentimentAnalysis.moodScores);
+        // if (posts.length < limit) {
+        //     const currentMoodScore = _sentimentAnalysis.moodScores[mood] ?? 61;
+        //     const moodKeys = Object.keys(_sentimentAnalysis.moodScores);
+        //     const moodScores = Object.values(_sentimentAnalysis.moodScores);
 
-            // Find the index of the current mood score
-            const currentMoodIndex = moodScores.findIndex(score => score === currentMoodScore);
+        //     // Find the index of the current mood score
+        //     const currentMoodIndex = moodScores.findIndex(score => score === currentMoodScore);
 
-            let relevantMoods = [];
+        //     let relevantMoods = [];
 
-            // Collect relevant moods, prioritizing right neighbors first
-            let leftIndex = currentMoodIndex + 1; // Start from the right neighbor
-            let rightIndex = currentMoodIndex - 1; // Then check the left neighbor
+        //     // Collect relevant moods, prioritizing right neighbors first
+        //     let leftIndex = currentMoodIndex + 1; // Start from the right neighbor
+        //     let rightIndex = currentMoodIndex - 1; // Then check the left neighbor
 
-            // Keep fetching until we have enough relevant moods
-            while (relevantMoods.length < moodKeys.length && (leftIndex < moodScores.length || rightIndex >= 0)) {
-                // First try to get from the right side (higher scores)
-                if (leftIndex < moodScores.length) {
-                    relevantMoods.push(moodKeys[leftIndex]);
-                    leftIndex++;
-                }
+        //     // Keep fetching until we have enough relevant moods
+        //     while (relevantMoods.length < moodKeys.length && (leftIndex < moodScores.length || rightIndex >= 0)) {
+        //         // First try to get from the right side (higher scores)
+        //         if (leftIndex < moodScores.length) {
+        //             relevantMoods.push(moodKeys[leftIndex]);
+        //             leftIndex++;
+        //         }
 
-                // Then check the left side (lower scores)
-                if (rightIndex >= 0 && relevantMoods.length < limit) {
-                    relevantMoods.push(moodKeys[rightIndex]);
-                    rightIndex--;
-                }
-            }
+        //         // Then check the left side (lower scores)
+        //         if (rightIndex >= 0 && relevantMoods.length < limit) {
+        //             relevantMoods.push(moodKeys[rightIndex]);
+        //             rightIndex--;
+        //         }
+        //     }
 
-            // Fetch additional posts from related moods if needed
+        //     // Fetch additional posts from related moods if needed
 
-            while (posts.length < limit && relevantMoods.length > 0) {
-                // const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
-                // query.mood = randomMood;
+        //     while (posts.length < limit && relevantMoods.length > 0) {
+        //         // const randomMood = relatedMoods[Math.floor(Math.random() * relatedMoods.length)];
+        //         // query.mood = randomMood;
 
-                query.mood = relevantMoods[0];
-
-
-                if (topics) {
-                    const allTopics = await getCachedTopicNames();
-                    const topicNames = allTopics.map(topic => topic.name);
-                    const topicIDs = allTopics.map(topic => topic.id);
-
-                    // Check if topics is provided and is an array
-                    if (topics && Array.isArray(topics)) {
-
-                        const topicIdsFromRequest = topics
-                            .filter(topic => topicNames.includes(topic)) // Filter only valid topic names
-                            .map(topic => {
-                                const index = topicNames.indexOf(topic);
-                                return topicIDs[index]; // Get corresponding ID
-                            });
+        //         query.mood = relevantMoods[0];
 
 
-                        query.topics = { $in: topicIdsFromRequest }; // Filter by specific topics if provided
-                    } else if (topics && typeof topics === "string") {
-                        const filteredTopic = allTopics.filter((topic) => topic.name == topics);
+        //         if (topics) {
+        //             const allTopics = await getCachedTopicNames();
+        //             const topicNames = allTopics.map(topic => topic.name);
+        //             const topicIDs = allTopics.map(topic => topic.id);
+
+        //             // Check if topics is provided and is an array
+        //             if (topics && Array.isArray(topics)) {
+
+        //                 const topicIdsFromRequest = topics
+        //                     .filter(topic => topicNames.includes(topic)) // Filter only valid topic names
+        //                     .map(topic => {
+        //                         const index = topicNames.indexOf(topic);
+        //                         return topicIDs[index]; // Get corresponding ID
+        //                     });
 
 
-                        if (filteredTopic.length !== 0) {
-                            query.topics = { $in: [filteredTopic[0]["id"]] };
-                        }
-                    }
-                }
+        //                 query.topics = { $in: topicIdsFromRequest }; // Filter by specific topics if provided
+        //             } else if (topics && typeof topics === "string") {
+        //                 const filteredTopic = allTopics.filter((topic) => topic.name == topics);
 
 
-                const additionalPosts = await UserPost.find(query)
-
-                    .sort({ createdAt: -1 })
-                    .skip(parseInt(start_from))
-                    .limit(limit - posts.length).exec(); // Limit to what is needed
-
-
-                posts = posts.concat(additionalPosts);
+        //                 if (filteredTopic.length !== 0) {
+        //                     query.topics = { $in: [filteredTopic[0]["id"]] };
+        //                 }
+        //             }
+        //         }
 
 
+        //         const additionalPosts = await UserPost.find(query)
 
-                // Remove the used mood from the relatedMoods array
-                relevantMoods.splice(relevantMoods.indexOf(query.mood), 1);
-            }
-        }
+        //             .sort({ createdAt: -1 })
+        //             .skip(parseInt(start_from))
+        //             .limit(limit - posts.length).exec(); // Limit to what is needed
+
+
+        //         posts = posts.concat(additionalPosts);
+
+
+
+        //         // Remove the used mood from the relatedMoods array
+        //         relevantMoods.splice(relevantMoods.indexOf(query.mood), 1);
+        //     }
+        // }
 
 
         // Prepare the response with numLikes and numComments
