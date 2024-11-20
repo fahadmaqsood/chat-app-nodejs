@@ -540,245 +540,245 @@ export const liveSubscriptionWebhook = async (req, res) => {
 
 
 
-    paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, async function (response) {
-        // if (error) {
-        //     console.error('Webhook signature verification failed:', error);
-        //     return res.sendStatus(400); // Bad Request if verification fails
-        // }
+    //paypal.notification.webhookEvent.verify(req.headers, req.body, webhookId, async function (response) {
+    // if (error) {
+    //     console.error('Webhook signature verification failed:', error);
+    //     return res.sendStatus(400); // Bad Request if verification fails
+    // }
 
-        console.log("response: " + response);
-        console.log("response: " + response.verification_status);
+    //    console.log("response: " + response);
+    //    console.log("response: " + response.verification_status);
 
-        // if (response.verification_status === 'SUCCESS') {
-        console.log('Webhook Verified Successfully:', webhookEvent);
-
-
-        const subscriptionId = webhookEvent.resource.id;
+    // if (response.verification_status === 'SUCCESS') {
+    console.log('Webhook Verified Successfully:', webhookEvent);
 
 
-        console.log('subscriptionId:', subscriptionId);
-
-        let existingSubscription;
-
-        let planId;
-        let startTime;
-        let next_billing_time;
-
-        let full_name;
-        let email_address;
-        let shipping_address;
-
-        let price_paid;
+    const subscriptionId = webhookEvent.resource.id;
 
 
+    console.log('subscriptionId:', subscriptionId);
 
-        // Handle the webhook event here, e.g., updating your order status in the database
-        switch (webhookEvent.event_type) {
+    let existingSubscription;
 
-            case 'BILLING.SUBSCRIPTION.CREATED':
+    let planId;
+    let startTime;
+    let next_billing_time;
 
-                console.log(`New subscription created: ${subscriptionId}`);
+    let full_name;
+    let email_address;
+    let shipping_address;
 
-
-                break;
-
-            case 'BILLING.SUBSCRIPTION.ACTIVATED':
-                // Handle subscription activation
-
-                // Mark subscription as active in your system, grant access to the user
-
-                planId = webhookEvent.resource.plan_id;
-                startTime = webhookEvent.resource.start_time;
-                next_billing_time = webhookEvent.resource.billing_info.next_billing_time;
+    let price_paid;
 
 
 
-                console.log(`Subscription activated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+    // Handle the webhook event here, e.g., updating your order status in the database
+    switch (webhookEvent.event_type) {
+
+        case 'BILLING.SUBSCRIPTION.CREATED':
+
+            console.log(`New subscription created: ${subscriptionId}`);
 
 
-                email_address = webhookEvent.resource.subscriber.email_address;
-                full_name = webhookEvent.resource.subscriber.name.given_name + " " + webhookEvent.resource.subscriber.name.surname;
-                shipping_address = webhookEvent.resource.subscriber.shipping_address;
+            break;
+
+        case 'BILLING.SUBSCRIPTION.ACTIVATED':
+            // Handle subscription activation
+
+            // Mark subscription as active in your system, grant access to the user
+
+            planId = webhookEvent.resource.plan_id;
+            startTime = webhookEvent.resource.start_time;
+            next_billing_time = webhookEvent.resource.billing_info.next_billing_time;
 
 
-                price_paid = webhookEvent.resource.shipping_amount.value + " " + webhookEvent.resource.shipping_amount.currency_code;
 
-                const {
-                    user_subscription_code,
-                    user_referral_code
-                } = await getSubscriptionCode(
-                    subscriptionId,
-                    planIDs[planId],
-                    price_paid,
+            console.log(`Subscription activated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+
+
+            email_address = webhookEvent.resource.subscriber.email_address;
+            full_name = webhookEvent.resource.subscriber.name.given_name + " " + webhookEvent.resource.subscriber.name.surname;
+            shipping_address = webhookEvent.resource.subscriber.shipping_address;
+
+
+            price_paid = webhookEvent.resource.shipping_amount.value + " " + webhookEvent.resource.shipping_amount.currency_code;
+
+            const {
+                user_subscription_code,
+                user_referral_code
+            } = await getSubscriptionCode(
+                subscriptionId,
+                planIDs[planId],
+                price_paid,
+                full_name,
+                email_address,
+                new Date(startTime),
+                new Date(next_billing_time)
+            );
+
+            // Send mail with the password reset link. It should be the link of the frontend url with token
+            await sendEmail({
+                email: email_address,
+                subject: "Teen Global Connect Subscription Voucher",
+                mailgenContent: paypalSubscriptionCodeMailgenContent(
                     full_name,
-                    email_address,
-                    new Date(startTime),
-                    new Date(next_billing_time)
-                );
+                    planIDs[planId] == 1 ? "Monthly" : "Yearly",
+                    user_subscription_code
+                ),
+            });
 
-                // Send mail with the password reset link. It should be the link of the frontend url with token
-                await sendEmail({
-                    email: email_address,
-                    subject: "Teen Global Connect Subscription Voucher",
-                    mailgenContent: paypalSubscriptionCodeMailgenContent(
-                        full_name,
-                        planIDs[planId] == 1 ? "Monthly" : "Yearly",
-                        user_subscription_code
-                    ),
-                });
+            break;
 
-                break;
+        case 'BILLING.SUBSCRIPTION.CANCELLED':
+            const cancellationTime = webhookEvent.resource.update_time;
 
-            case 'BILLING.SUBSCRIPTION.CANCELLED':
-                const cancellationTime = webhookEvent.resource.update_time;
+            console.log(`Subscription cancelled: ${subscriptionId}, Time: ${cancellationTime}`);
+            // Update subscription status in your database
 
-                console.log(`Subscription cancelled: ${subscriptionId}, Time: ${cancellationTime}`);
-                // Update subscription status in your database
+            break;
 
-                break;
+        case 'BILLING.SUBSCRIPTION.EXPIRED':
+            console.log(`Subscription expired: ${subscriptionId}`);
 
-            case 'BILLING.SUBSCRIPTION.EXPIRED':
-                console.log(`Subscription expired: ${subscriptionId}`);
+            existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
 
-                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+            if (existingSubscription.redeemed_by) {
 
-                if (existingSubscription.redeemed_by) {
+                const currentUser = await User.findById(existingSubscription.redeemed_by);
 
-                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+                currentUser.subscription_status = "inactive";
 
-                    currentUser.subscription_status = "inactive";
+                await currentUser.save();
 
-                    await currentUser.save();
+                sendNotification(currentUser, "Your subscription was expired", "You won't be able to access your account from now on.");
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
 
-                    sendNotification(currentUser, "Your subscription was expired", "You won't be able to access your account from now on.");
-                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+            } else {
+                console.log("User not found for subscription expiry (paypal)");
+            }
 
-                } else {
-                    console.log("User not found for subscription expiry (paypal)");
-                }
+            break;
 
-                break;
+        case 'PAYMENT.SALE.COMPLETED':
+            const paymentAmount = webhookEvent.resource.amount.total;
+            const paymentCurrency = webhookEvent.resource.amount.currency;
+            console.log(`Payment completed: ${paymentAmount} ${paymentCurrency}`);
+            // Extend subscription period, save payment info
+            break;
 
-            case 'PAYMENT.SALE.COMPLETED':
-                const paymentAmount = webhookEvent.resource.amount.total;
-                const paymentCurrency = webhookEvent.resource.amount.currency;
-                console.log(`Payment completed: ${paymentAmount} ${paymentCurrency}`);
-                // Extend subscription period, save payment info
-                break;
+        case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
+            // Handle failed subscription payment
+            console.log('Payment failed:', resource);
+            // Notify user of failed payment, retry payment, offer alternative methods
 
-            case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
-                // Handle failed subscription payment
-                console.log('Payment failed:', resource);
-                // Notify user of failed payment, retry payment, offer alternative methods
+            existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
 
-                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+            if (existingSubscription.redeemed_by) {
 
-                if (existingSubscription.redeemed_by) {
+                const currentUser = await User.findById(existingSubscription.redeemed_by);
 
-                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+                sendNotification(currentUser, "Payment Failed", "Please resolve issues with your paypal account.");
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
 
-                    sendNotification(currentUser, "Payment Failed", "Please resolve issues with your paypal account.");
-                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
-
-                } else {
-                    console.log("User not found for subscription expiry (paypal)");
-                }
+            } else {
+                console.log("User not found for subscription expiry (paypal)");
+            }
 
 
-                break;
+            break;
 
-            case 'BILLING.SUBSCRIPTION.RE-ACTIVATED':
-                // Handle subscription re-activation
-                console.log(`Subscription re-activated: ${subscriptionId}`);
-                // Mark subscription as active again, restore access, notify the user
+        case 'BILLING.SUBSCRIPTION.RE-ACTIVATED':
+            // Handle subscription re-activation
+            console.log(`Subscription re-activated: ${subscriptionId}`);
+            // Mark subscription as active again, restore access, notify the user
 
-                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+            existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
 
-                if (existingSubscription.redeemed_by) {
+            if (existingSubscription.redeemed_by) {
 
-                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+                const currentUser = await User.findById(existingSubscription.redeemed_by);
 
-                    currentUser.subscription_status = "active";
+                currentUser.subscription_status = "active";
 
-                    await currentUser.save();
+                await currentUser.save();
 
-                } else {
-                    console.log("User not found for subscription expiry (paypal)");
-                }
+            } else {
+                console.log("User not found for subscription expiry (paypal)");
+            }
 
-                break;
+            break;
 
-            case 'BILLING.SUBSCRIPTION.SUSPENDED':
-                // Handle subscription suspension
-                console.log('Subscription suspended:', subscriptionId);
-                // Temporarily suspend access, notify the user, guide them on reactivation
+        case 'BILLING.SUBSCRIPTION.SUSPENDED':
+            // Handle subscription suspension
+            console.log('Subscription suspended:', subscriptionId);
+            // Temporarily suspend access, notify the user, guide them on reactivation
 
-                existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
+            existingSubscription = await SubscriptionCodes.findOne({ subscriptionId });
 
-                if (existingSubscription.redeemed_by) {
+            if (existingSubscription.redeemed_by) {
 
-                    const currentUser = await User.findById(existingSubscription.redeemed_by);
+                const currentUser = await User.findById(existingSubscription.redeemed_by);
 
-                    currentUser.subscription_status = "inactive";
+                currentUser.subscription_status = "inactive";
 
-                    await currentUser.save();
+                await currentUser.save();
 
-                    sendNotification(currentUser, "Your subscription was suspended", "Paypal couldn't send us your subscription payment.");
-                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                sendNotification(currentUser, "Your subscription was suspended", "Paypal couldn't send us your subscription payment.");
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
 
-                } else {
-                    console.log("User not found for subscription expiry (paypal)");
-                }
+            } else {
+                console.log("User not found for subscription expiry (paypal)");
+            }
 
 
-                break;
+            break;
 
-            case 'BILLING.SUBSCRIPTION.UPDATED':
-                // Handle subscription updates (e.g., plan change)
-                console.log('Subscription updated:', subscriptionId);
-                // Update subscription details in your system, notify the user
+        case 'BILLING.SUBSCRIPTION.UPDATED':
+            // Handle subscription updates (e.g., plan change)
+            console.log('Subscription updated:', subscriptionId);
+            // Update subscription details in your system, notify the user
 
-                planId = webhookEvent.resource.plan_id;
-                startTime = webhookEvent.resource.start_time;
-                next_billing_time = webhookEvent.resource.billing_info.next_billing_time;
+            planId = webhookEvent.resource.plan_id;
+            startTime = webhookEvent.resource.start_time;
+            next_billing_time = webhookEvent.resource.billing_info.next_billing_time;
 
 
 
-                console.log(`Subscription updated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
+            console.log(`Subscription updated: ${subscriptionId}, Plan: ${planId}, Start: ${startTime}`);
 
 
-                email_address = webhookEvent.resource.subscriber.email_address;
-                full_name = webhookEvent.resource.subscriber.name.given_name + " " + webhookEvent.resource.subscriber.name.surname;
-                shipping_address = webhookEvent.resource.subscriber.shipping_address;
+            email_address = webhookEvent.resource.subscriber.email_address;
+            full_name = webhookEvent.resource.subscriber.name.given_name + " " + webhookEvent.resource.subscriber.name.surname;
+            shipping_address = webhookEvent.resource.subscriber.shipping_address;
 
 
-                price_paid = webhookEvent.resource.shipping_amount.value + " " + webhookEvent.resource.shipping_amount.currency_code;
+            price_paid = webhookEvent.resource.shipping_amount.value + " " + webhookEvent.resource.shipping_amount.currency_code;
 
 
-                await updateSubscriptionCode(
-                    subscriptionId,
-                    planIDs[planId],
-                    price_paid,
-                    full_name,
-                    email_address,
-                    new Date(startTime),
-                    new Date(next_billing_time)
-                );
+            await updateSubscriptionCode(
+                subscriptionId,
+                planIDs[planId],
+                price_paid,
+                full_name,
+                email_address,
+                new Date(startTime),
+                new Date(next_billing_time)
+            );
 
-                break;
+            break;
 
-            default:
-                // Handle unknown or other events
-                console.log('Unhandled event type:', event_type);
-                break;
-        }
+        default:
+            // Handle unknown or other events
+            console.log('Unhandled event type:', event_type);
+            break;
+    }
 
-        res.status(200).send('Webhook received');
-        // } else {
-        // console.error('Webhook signature verification failed');
-        // res.status(400).send('Webhook verification failed');
-        // }
-    });
+    res.status(200).send('Webhook received');
+    // } else {
+    // console.error('Webhook signature verification failed');
+    // res.status(400).send('Webhook verification failed');
+    // }
+    //});
 }
 
 
