@@ -163,7 +163,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     // avoid emitting event to the user who is sending the message
 
     if (participantObjectId.toString() !== req.user._id.toString()) {
-      if (canEmit) {
+      if (canEmit(req, `${chat._id}/${participantObjectId.toString()}`)) {
       } else {
         let user = await User.findById(participantObjectId.toString());
         try {
