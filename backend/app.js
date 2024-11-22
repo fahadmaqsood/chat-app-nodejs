@@ -121,6 +121,8 @@ import paypalRoutes from "./routes/paypal/paypal.routes.js";
 
 import playstoreRoutes from "./routes/playstore/playstore.routes.js";
 
+import personalDiaryRoutes from "./routes/personal-diary/personalDiary.routes.js";
+
 // * App apis
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat-app/chats", chatRouter);
@@ -148,6 +150,9 @@ app.use('/api/v1/sessions/', userSessionRoutes);
 app.use('/api/v1/paypal/', paypalRoutes);
 
 app.use('/api/v1/playstore/', playstoreRoutes);
+
+
+app.use('/api/v1/personal-diary/', personalDiaryRoutes);
 
 
 initializeSocketIO(io);
