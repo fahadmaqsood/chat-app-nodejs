@@ -193,6 +193,29 @@ const sendMessage = asyncHandler(async (req, res) => {
 });
 
 
+const getSpecificMessage = asyncHandler(async (req, res) => {
+  const { messageId } = req.params;
+
+  // Ensure messageId is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    throw new ApiError(400, "Invalid message ID");
+  }
+
+  // Find the message by its ID
+  const message = await ChatMessage.findById(messageId).populate({
+    path: 'sender',
+    select: 'name username email' // Optionally populate sender details
+  });
+
+  // Check if the message exists
+  if (!message) {
+    throw new ApiError(404, "Message not found");
+  }
+
+
+  // Return the message details as the response
+  return res.status(200).json(new ApiResponse(200, message, "Message retrieved successfully"));
+});
 
 
 
@@ -372,4 +395,4 @@ const deleteMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, message, "Message deleted successfully"));
 });
 
-export { chatMessageCommonAggregation, getAllMessages, sendMessage, sendMessageToMany, deleteMessage };
+export { chatMessageCommonAggregation, getAllMessages, sendMessage, getSpecificMessage, sendMessageToMany, deleteMessage };

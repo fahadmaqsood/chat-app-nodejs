@@ -4,6 +4,7 @@ import {
   getAllMessages,
   sendMessage,
   sendMessageToMany,
+  getSpecificMessage
 } from "../../controllers/chat-app/message.controllers.js";
 import { validateTokensMiddleware } from "../../middlewares/auth.middlewares.js";
 import { upload } from "../../middlewares/multer.middlewares.js";
@@ -25,6 +26,13 @@ router
     upload.fields([{ name: "attachments", maxCount: 5 }]),
     sendMessageValidator(),
     sendMessageToMany
+  );
+
+
+router
+  .route("/get/message/:messageId")
+  .get(
+    getSpecificMessage
   );
 
 
