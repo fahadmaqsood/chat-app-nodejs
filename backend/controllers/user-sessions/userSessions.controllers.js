@@ -3,10 +3,140 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import UserSchedule from "../../models/user-sessions/UserSchedule.js";
 import mongoose from "mongoose";
 
+
+import { Chat } from "../../models/chat-app/chat.models.js";
+
+
+
+const getChatsForReceivers = async (user_id, receiverIds) => {
+
+    // Ensure that receiverIds is an array and not empty
+    if (!Array.isArray(receiverIds) || receiverIds.length === 0) {
+        throw new ApiError(400, "Receiver IDs are required and must be a non-empty array");
+    }
+
+    // Check if receiverIds contains duplicates (this step is optional but good practice)
+    const uniqueReceiverIds = [...new Set(receiverIds)];
+
+    // Find all one-on-one chats where participants are only req.user._id and any of the receiverIds
+    const chats = await Chat.aggregate([
+        {
+            $match: {
+                isGroupChat: false, // Ensure it's a one-on-one chat (not a group chat)
+                participants: {
+                    $all: [  // Ensure both participants are in the chat
+                        new mongoose.Types.ObjectId(user_id.toString()),
+                        { $in: uniqueReceiverIds.map(id => new mongoose.Types.ObjectId(id.toString())) } // Receivers
+                    ],
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 1, // Only return the chat ID
+            },
+        },
+    ]);
+
+    // Extract the chat IDs
+    const chatIds = chats.map(chat => chat._id);
+
+    // Return the list of chat IDs if found
+    return chatIds;
+};
+
+
+
+const sendMessageToMany = async (chatIds, content) => {
+
+    // Check if chatIds is an array and has at least one chat ID
+    if (!Array.isArray(chatIds) || chatIds.length === 0) {
+        throw new ApiError(400, "Chat IDs are required");
+    }
+
+    // Convert chatIds to ObjectId
+    const chatIdArray = chatIds.map(id => new mongoose.Types.ObjectId(id));
+
+    // Find all chats based on chatIds
+    const selectedChats = await Chat.find({ _id: { $in: chatIdArray } });
+
+    if (selectedChats.length === 0) {
+        throw new ApiError(404, "No chats exist with the provided chat IDs");
+    }
+
+    // Store received messages for emitting later
+    const receivedMessages = [];
+
+    // Iterate through each chat ID and create a message for each
+    for (const chatId of chatIdArray) {
+        const message = await ChatMessage.create({
+            sender: new mongoose.Types.ObjectId(req.user._id),
+            content: content || "",
+            chat: chatId, // Associate message with the current chat ID
+            attachments: [],
+        });
+
+        // Update each chat's last message
+        await Chat.findByIdAndUpdate(
+            chatId,
+            {
+                $set: {
+                    lastMessage: message._id,
+                },
+            },
+            { new: true }
+        );
+
+        // Structure the message for each chat
+        const messages = await ChatMessage.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(message._id),
+                },
+            },
+            ...chatMessageCommonAggregation(),
+        ]);
+
+        // Store the aggregation result
+        const receivedMessage = messages[0];
+
+        if (!receivedMessage) {
+            throw new ApiError(500, "Internal server error");
+        }
+
+        receivedMessages.push(receivedMessage);
+
+
+        // Logic to emit socket event about the new message created to all chat participants
+        const chat = selectedChats.find(c => c._id.equals(chatId));
+
+
+        // Logic to emit socket event about the new message created to all chat participants
+
+        chat.participants.forEach((participantObjectId) => {
+            // Avoid emitting event to the user who is sending the message
+            if (participantObjectId.toString() === req.user._id.toString()) return;
+
+            // Emit the receive message event to the other participants with received message as the payload
+            emitSocketEvent(
+                req,
+                `${chat._id} / ${participantObjectId.toString()}`,
+                ChatEventEnum.MESSAGE_RECEIVED_EVENT,
+                receivedMessage
+            );
+
+        });
+
+    }
+
+    return receivedMessages;
+};
+
+
 // Schedule a session
 const scheduleSession = async (req, res) => {
     try {
-        const { title, description, participants, startTime, endTime } = req.body;
+        const { title, description, participants, startTime, endTime, sendMessageToParticipants } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
         if (!startTime || !endTime) {
@@ -26,6 +156,13 @@ const scheduleSession = async (req, res) => {
         });
 
         await newSession.save();
+
+        if (sendMessageToParticipants) {
+            // send messages to conversation where only userId and participantId is included
+
+            let chatIds = await getChatsForReceivers(req.user._id.toString(), participants);
+            await sendMessageToMany(chatIds, `~~forward~~/session/?name=${title}&description=${description}&startTime=${startTime}&endTime=${endTime}`);
+        }
 
         return res.status(201).json(new ApiResponse(201, { session: newSession }, "Session scheduled successfully"));
     } catch (error) {

@@ -2,6 +2,7 @@ import express from 'express';
 
 import { scheduleSession, getSessionsByDate, getSessionDetails } from '../../controllers/user-sessions/userSessions.controllers.js';
 
+import { sendMessage } from '../../controllers/chat-app/message.controllers.js';
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 

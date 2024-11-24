@@ -194,6 +194,8 @@ const sendMessage = asyncHandler(async (req, res) => {
 
 
 
+
+
 const sendMessageToMany = asyncHandler(async (req, res) => {
   const { chatIds, content } = req.body; // Expecting chatIds to be an array in the request body
 
