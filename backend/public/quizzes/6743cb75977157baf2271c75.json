@@ -1,0 +1,78 @@
+{
+  "title": "World History",
+  "topic": "66fec2c9b6950e88826fdffd",
+  "difficulty": "hard",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "Which event began on July 28, 1914?",
+      "options": [
+        "World War I",
+        "World War II",
+        "The Great Depression",
+        "The Cold War"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the first emperor of the Roman Empire?",
+      "options": [
+        "Julius Caesar",
+        "Augustus",
+        "Nero",
+        "Tiberius"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In what year did the Berlin Wall fall?",
+      "options": [
+        "1987",
+        "1989",
+        "1991",
+        "1993"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which ancient civilization built the pyramids?",
+      "options": [
+        "Inca",
+        "Aztec",
+        "Egyptian",
+        "Mayan"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What was the main cause of the French Revolution?",
+      "options": [
+        "Taxation",
+        "Monarchy",
+        "Religion",
+        "War"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was the British Prime Minister during World War II?",
+      "options": [
+        "Clement Attlee",
+        "Winston Churchill",
+        "Neville Chamberlain",
+        "Anthony Eden"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "The Rosetta Stone was key to deciphering which language?",
+      "options": [
+        "Hieroglyphics",
+        "Latin",
+        "Greek",
+        "Sanskrit"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

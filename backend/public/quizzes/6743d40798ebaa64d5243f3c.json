@@ -1,0 +1,128 @@
+{
+  "title": "History",
+  "topic": "66fec2c9b6950e88826fdffd",
+  "difficulty": "extra hard",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "Who was the first emperor of the Roman Empire?",
+      "options": [
+        "Julius Caesar",
+        "Augustus",
+        "Nero",
+        "Caligula"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What year did the Titanic sink?",
+      "options": [
+        "1912",
+        "1905",
+        "1898",
+        "1920"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the first person to circumnavigate the globe?",
+      "options": [
+        "Ferdinand Magellan",
+        "Christopher Columbus",
+        "Sir Francis Drake",
+        "James Cook"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which treaty ended World War I?",
+      "options": [
+        "Treaty of Versailles",
+        "Treaty of Paris",
+        "Treaty of Trianon",
+        "Treaty of Ghent"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In what year did the Berlin Wall fall?",
+      "options": [
+        "1989",
+        "1990",
+        "1987",
+        "1991"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the first female Prime Minister of the United Kingdom?",
+      "options": [
+        "Margaret Thatcher",
+        "Golda Meir",
+        "Indira Gandhi",
+        "Angela Merkel"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What ancient civilization built the pyramids?",
+      "options": [
+        "Mesopotamians",
+        "Indus Valley",
+        "Maya",
+        "Egyptians"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Who was the longest-reigning monarch in British history before Queen Elizabeth II?",
+      "options": [
+        "Queen Victoria",
+        "King George III",
+        "Henry VIII",
+        "King Edward VII"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What was the main cause of the fall of the Roman Empire?",
+      "options": [
+        "Barbarian invasions",
+        "Economic troubles",
+        "Political corruption",
+        "All of the above"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which war was fought between the North and South regions in the United States?",
+      "options": [
+        "Revolutionary War",
+        "Civil War",
+        "World War I",
+        "World War II"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was the famous civil rights leader who delivered the 'I Have a Dream' speech?",
+      "options": [
+        "Malcolm X",
+        "Rosa Parks",
+        "Martin Luther King Jr.",
+        "Nelson Mandela"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What was the name of the ship that brought the Pilgrims to America in 1620?",
+      "options": [
+        "The Mayflower",
+        "The Santa Maria",
+        "The Nina",
+        "The Pinta"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

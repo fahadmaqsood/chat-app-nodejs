@@ -1,0 +1,128 @@
+{
+  "title": "Existentialism",
+  "topic": "66fec2c9b6950e88826fe011",
+  "difficulty": "extra hard",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "Who is considered the father of existentialism?",
+      "options": [
+        "Friedrich Nietzsche",
+        "Jean-Paul Sartre",
+        "Simone de Beauvoir",
+        "Martin Heidegger"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the central theme of existentialism?",
+      "options": [
+        "The existence precedes essence",
+        "The essence precedes existence",
+        "The search for objective truth",
+        "The importance of scientific rationality"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In which book does Sartre famously declare 'existence precedes essence'?",
+      "options": [
+        "Being and Nothingness",
+        "Nausea",
+        "The Ethics of Ambiguity",
+        "The Flies"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which philosopher wrote 'The Myth of Sisyphus'?",
+      "options": [
+        "Albert Camus",
+        "Søren Kierkegaard",
+        "Gilles Deleuze",
+        "Jean-Paul Sartre"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does Sartre mean by 'bad faith'?",
+      "options": [
+        "A deliberate deception",
+        "A lack of authenticity",
+        "A refusal to accept freedom",
+        "All of the above"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which of the following concepts is NOT associated with existentialism?",
+      "options": [
+        "Absurdism",
+        "Authenticity",
+        "Determinism",
+        "Freedom"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which existentialist philosopher is known for their work on the concept of 'the Other'?",
+      "options": [
+        "Simone de Beauvoir",
+        "Friedrich Nietzsche",
+        "Martin Heidegger",
+        "Jean-Paul Sartre"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does the term 'anguish' refer to in existentialist philosophy?",
+      "options": [
+        "The fear of death",
+        "The recognition of one's freedom",
+        "The burden of knowledge",
+        "The struggle for meaning"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which novel by Dostoevsky is often cited as a precursor to existentialist thought?",
+      "options": [
+        "Crime and Punishment",
+        "The Brothers Karamazov",
+        "Notes from Underground",
+        "The Idiot"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In existentialism, what is often seen as the primary challenge of human existence?",
+      "options": [
+        "Finding happiness",
+        "Creating meaning",
+        "Achieving success",
+        "Understanding reality"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which existentialist thinker emphasized the role of the absurd in human experience?",
+      "options": [
+        "Martin Heidegger",
+        "Albert Camus",
+        "Jean-Paul Sartre",
+        "Simone de Beauvoir"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary focus of existential psychotherapy?",
+      "options": [
+        "Cognitive restructuring",
+        "Behavior modification",
+        "Finding personal meaning",
+        "Psychoanalysis"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

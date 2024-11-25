@@ -1,0 +1,68 @@
+{
+  "title": "Ancient Civilizations",
+  "topic": "66fec2c9b6950e88826fdfff",
+  "difficulty": "extra hard",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "Which civilization is known for the invention of the wheel around 3500 BC?",
+      "options": [
+        "Ancient Egyptians",
+        "Sumerians",
+        "Indus Valley Civilization",
+        "Minoans"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What was the primary writing system used by the ancient Egyptians?",
+      "options": [
+        "Cuneiform",
+        "Hieroglyphics",
+        "Phoenician Alphabet",
+        "Latin"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was the first emperor of the Roman Empire?",
+      "options": [
+        "Julius Caesar",
+        "Augustus",
+        "Nero",
+        "Caligula"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which ancient city is considered the cradle of Western civilization?",
+      "options": [
+        "Athens",
+        "Rome",
+        "Carthage",
+        "Babylon"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What was the main purpose of the Great Wall of China?",
+      "options": [
+        "Trade route",
+        "Cultural exchange",
+        "Defense against invasions",
+        "Agricultural expansion"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which empire was known for its road system and efficient communication?",
+      "options": [
+        "Mongol Empire",
+        "Persian Empire",
+        "Ottoman Empire",
+        "Byzantine Empire"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

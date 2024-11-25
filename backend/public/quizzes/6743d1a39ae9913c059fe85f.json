@@ -1,0 +1,88 @@
+{
+  "title": "Cell Biology",
+  "topic": "66fec2c9b6950e88826fe007",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the primary function of ribosomes in a cell?",
+      "options": [
+        "DNA replication",
+        "Protein synthesis",
+        "Lipid synthesis",
+        "Energy production"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which organelle is known as the powerhouse of the cell?",
+      "options": [
+        "Nucleus",
+        "Mitochondria",
+        "Endoplasmic reticulum",
+        "Golgi apparatus"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the fluid mosaic model associated with?",
+      "options": [
+        "Cell wall structure",
+        "Cell membrane structure",
+        "Nuclear envelope structure",
+        "Cytoskeleton structure"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of transport requires energy to move substances across a cell membrane?",
+      "options": [
+        "Passive transport",
+        "Facilitated diffusion",
+        "Active transport",
+        "Osmosis"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which structure is selectively permeable?",
+      "options": [
+        "Cell wall",
+        "Cytoplasm",
+        "Cell membrane",
+        "Nucleus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the role of lysosomes in a cell?",
+      "options": [
+        "Energy production",
+        "Waste disposal",
+        "Protein synthesis",
+        "Genetic material storage"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the process by which a cell engulfs material called?",
+      "options": [
+        "Exocytosis",
+        "Endocytosis",
+        "Diffusion",
+        "Osmosis"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is NOT a component of the cell theory?",
+      "options": [
+        "All living things are composed of cells",
+        "Cells are the basic unit of life",
+        "All cells arise from pre-existing cells",
+        "Cells can arise spontaneously"
+      ],
+      "correct_option": 4
+    }
+  ]
+}

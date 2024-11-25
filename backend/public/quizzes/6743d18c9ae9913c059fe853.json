@@ -1,0 +1,128 @@
+{
+  "title": "Calculus",
+  "topic": "66fec2c9b6950e88826fe003",
+  "difficulty": "hard",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What is the derivative of sin(x)?",
+      "options": [
+        "cos(x)",
+        "-sin(x)",
+        "sin(x)",
+        "tan(x)"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the integral of 1/x dx?",
+      "options": [
+        "ln|x| + C",
+        "x + C",
+        "e^x + C",
+        "1/x + C"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the limit of (1/x) as x approaches 0?",
+      "options": [
+        "0",
+        "Infinity",
+        "Undefined",
+        "1"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the second derivative of x^3?",
+      "options": [
+        "6x",
+        "3x^2",
+        "6",
+        "3"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the fundamental theorem of calculus?",
+      "options": [
+        "It connects differentiation and integration",
+        "It is about limits",
+        "It defines continuity",
+        "It deals with sequences"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the Taylor series expansion of e^x at x=0?",
+      "options": [
+        "1 + x + x^2/2 + x^3/6 + ...",
+        "x + x^2/2 + x^3/3 + ...",
+        "1 + x + x^2 + x^3 + ...",
+        "x + x^2 + x^3 + ..."
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the value of the integral from 0 to 1 of x^2 dx?",
+      "options": [
+        "1/3",
+        "1/2",
+        "1",
+        "2/3"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the derivative of e^(3x)?",
+      "options": [
+        "3e^(3x)",
+        "e^(3x)",
+        "9e^(3x)",
+        "e^(x)"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the area under the curve y = x^2 from x = 0 to x = 2?",
+      "options": [
+        "2",
+        "4/3",
+        "8/3",
+        "4"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the result of the limit lim (x->0) (sin(x)/x)?",
+      "options": [
+        "0",
+        "1",
+        "Infinity",
+        "-1"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the chain rule in calculus?",
+      "options": [
+        "A method for finding the derivative of composite functions",
+        "A way to integrate functions",
+        "It relates derivatives and integrals",
+        "A method for finding limits"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the integral of cos(x) dx?",
+      "options": [
+        "sin(x) + C",
+        "-sin(x) + C",
+        "cos(x) + C",
+        "tan(x) + C"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

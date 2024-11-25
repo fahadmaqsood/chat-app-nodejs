@@ -1,0 +1,108 @@
+{
+  "title": "Climate Change",
+  "topic": "66fec2c9b6950e88826fe00a",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What gas is primarily responsible for climate change?",
+      "options": [
+        "Oxygen",
+        "Carbon Dioxide",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is a renewable energy source?",
+      "options": [
+        "Coal",
+        "Natural Gas",
+        "Solar Energy",
+        "Nuclear Energy"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the term for the increase in Earth's average surface temperature due to rising levels of greenhouse gases?",
+      "options": [
+        "Global Cooling",
+        "Global Warming",
+        "Climate Stabilization",
+        "Climate Control"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which international agreement aims to limit global warming to below 2 degrees Celsius?",
+      "options": [
+        "Kyoto Protocol",
+        "Paris Agreement",
+        "Montreal Protocol",
+        "Rio Declaration"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the main effect of deforestation on the environment?",
+      "options": [
+        "Increased biodiversity",
+        "Reduced carbon emissions",
+        "Loss of habitat",
+        "Enhanced soil fertility"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which layer of the atmosphere contains the ozone layer?",
+      "options": [
+        "Troposphere",
+        "Stratosphere",
+        "Mesosphere",
+        "Thermosphere"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What phenomenon describes the gradual increase in the Earth's temperature due to human activities?",
+      "options": [
+        "Greenhouse Effect",
+        "Urban Heat Island",
+        "Acid Rain",
+        "Ozone Depletion"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which gas is released by livestock and contributes to climate change?",
+      "options": [
+        "Methane",
+        "Oxygen",
+        "Helium",
+        "Nitrous Oxide"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the term used for the loss of biodiversity in an ecosystem?",
+      "options": [
+        "Ecosystem Restoration",
+        "Environmental Degradation",
+        "Habitat Fragmentation",
+        "Species Extinction"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is a consequence of climate change?",
+      "options": [
+        "Stable weather patterns",
+        "Increased sea levels",
+        "Decreased temperatures",
+        "More predictable seasons"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

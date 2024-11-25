@@ -1,0 +1,88 @@
+{
+  "title": "Spanish Language",
+  "topic": "66fec2c9b6950e88826fe00e",
+  "difficulty": "hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the Spanish word for 'library'?",
+      "options": [
+        "Librería",
+        "Biblioteca",
+        "Libro",
+        "Papelería"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is a common greeting in Spain?",
+      "options": [
+        "Bonjour",
+        "Ciao",
+        "Hola",
+        "Namaste"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What does the Spanish phrase '¿Cómo estás?' mean in English?",
+      "options": [
+        "How are you?",
+        "Where are you?",
+        "What is your name?",
+        "What time is it?"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In Spanish, what is the term for 'the weather'?",
+      "options": [
+        "La casa",
+        "El tiempo",
+        "El clima",
+        "La nube"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the Spanish word for 'thank you'?",
+      "options": [
+        "Por favor",
+        "Gracias",
+        "De nada",
+        "Lo siento"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of these is a Spanish-speaking country?",
+      "options": [
+        "Brazil",
+        "Portugal",
+        "Argentina",
+        "Italy"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the correct way to say 'I love you' in Spanish?",
+      "options": [
+        "Te quiero",
+        "Te amo",
+        "Me gusta",
+        "Te aprecio"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What does 'Buenos días' mean?",
+      "options": [
+        "Good night",
+        "Good afternoon",
+        "Good morning",
+        "Good evening"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

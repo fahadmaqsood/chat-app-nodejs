@@ -1,0 +1,88 @@
+{
+  "title": "Geography",
+  "topic": "66fec2c9b6950e88826fdffd",
+  "difficulty": "hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the capital of Australia?",
+      "options": [
+        "Sydney",
+        "Canberra",
+        "Melbourne",
+        "Brisbane"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country is known as the Land of the Rising Sun?",
+      "options": [
+        "China",
+        "Japan",
+        "South Korea",
+        "Thailand"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the longest river in the world?",
+      "options": [
+        "Amazon River",
+        "Nile River",
+        "Yangtze River",
+        "Mississippi River"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which desert is the largest in the world?",
+      "options": [
+        "Gobi Desert",
+        "Sahara Desert",
+        "Kalahari Desert",
+        "Arabian Desert"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What mountain range separates Europe from Asia?",
+      "options": [
+        "Andes",
+        "Rockies",
+        "Himalayas",
+        "Ural Mountains"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which is the smallest country in the world?",
+      "options": [
+        "Monaco",
+        "Nauru",
+        "Vatican City",
+        "San Marino"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In which continent is the Amazon rainforest primarily located?",
+      "options": [
+        "Africa",
+        "Asia",
+        "North America",
+        "South America"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which ocean is Bermuda located in?",
+      "options": [
+        "Atlantic Ocean",
+        "Indian Ocean",
+        "Pacific Ocean",
+        "Arctic Ocean"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

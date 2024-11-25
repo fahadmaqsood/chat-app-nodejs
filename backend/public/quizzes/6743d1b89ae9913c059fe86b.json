@@ -1,0 +1,108 @@
+{
+  "title": "Nutrition",
+  "topic": "66fec2c9b6950e88826fe00b",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "Which vitamin is primarily obtained from sunlight?",
+      "options": [
+        "Vitamin A",
+        "Vitamin B12",
+        "Vitamin C",
+        "Vitamin D"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What is the main source of protein in a vegetarian diet?",
+      "options": [
+        "Meat",
+        "Dairy",
+        "Legumes",
+        "Fish"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What mineral is essential for oxygen transport in the blood?",
+      "options": [
+        "Calcium",
+        "Iron",
+        "Magnesium",
+        "Potassium"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which food is highest in omega-3 fatty acids?",
+      "options": [
+        "Chicken",
+        "Salmon",
+        "Beef",
+        "Pork"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the recommended daily intake of water for an average adult?",
+      "options": [
+        "2 liters",
+        "3 liters",
+        "1 liter",
+        "4 liters"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is a whole grain?",
+      "options": [
+        "White rice",
+        "Quinoa",
+        "Cornflakes",
+        "White bread"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What does BMI stand for?",
+      "options": [
+        "Body Mass Index",
+        "Body Metabolic Index",
+        "Body Muscle Index",
+        "Body Measurement Index"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which vitamin is known for boosting the immune system?",
+      "options": [
+        "Vitamin A",
+        "Vitamin C",
+        "Vitamin E",
+        "Vitamin K"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is a source of dietary fiber?",
+      "options": [
+        "Sugar",
+        "Butter",
+        "Fruits",
+        "Cheese"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary function of carbohydrates in the body?",
+      "options": [
+        "Build muscle",
+        "Provide energy",
+        "Store fat",
+        "Regulate blood pressure"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

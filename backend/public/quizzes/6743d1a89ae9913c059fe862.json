@@ -1,0 +1,68 @@
+{
+  "title": "Organic Chemistry",
+  "topic": "66fec2c9b6950e88826fe008",
+  "difficulty": "extra hard",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the functional group of alcohols?",
+      "options": [
+        "Hydroxyl group",
+        "Carbonyl group",
+        "Amino group",
+        "Carboxyl group"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is an example of an aromatic compound?",
+      "options": [
+        "Cyclohexane",
+        "Benzene",
+        "Ethylene",
+        "Propylene"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of reaction is involved in the conversion of an alkene to an alkane?",
+      "options": [
+        "Hydrogenation",
+        "Halogenation",
+        "Hydrolysis",
+        "Oxidation"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following compounds contains a carbon-carbon triple bond?",
+      "options": [
+        "Ethylene",
+        "Acetylene",
+        "Propylene",
+        "Butane"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary product of the reaction between an alcohol and a carboxylic acid?",
+      "options": [
+        "Ester",
+        "Ether",
+        "Aldehyde",
+        "Ketone"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is a characteristic of a chiral molecule?",
+      "options": [
+        "It has a plane of symmetry",
+        "It cannot be superimposed on its mirror image",
+        "It has no stereocenters",
+        "It is always a gas"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

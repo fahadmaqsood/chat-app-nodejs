@@ -1,0 +1,108 @@
+{
+  "title": "Quantum Mechanics",
+  "topic": "66fec2c9b6950e88826fe009",
+  "difficulty": "hard",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What is the principle that states that certain pairs of physical properties cannot be simultaneously known to arbitrary precision?",
+      "options": [
+        "Heisenberg Uncertainty Principle",
+        "Pauli Exclusion Principle",
+        "Quantum Superposition",
+        "Wave-Particle Duality"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the quantum number that describes the orientation of an orbital?",
+      "options": [
+        "Principal Quantum Number",
+        "Azimuthal Quantum Number",
+        "Magnetic Quantum Number",
+        "Spin Quantum Number"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What phenomenon demonstrates that light can behave both as a wave and a particle?",
+      "options": [
+        "Photoelectric Effect",
+        "Compton Scattering",
+        "Double-Slit Experiment",
+        "Blackbody Radiation"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the value of Planck's constant?",
+      "options": [
+        "6.626 x 10^-34 J·s",
+        "3.14 x 10^-10 J·s",
+        "1.12 x 10^-27 J·s",
+        "9.11 x 10^-31 J·s"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is a fundamental particle?",
+      "options": [
+        "Proton",
+        "Neutron",
+        "Electron",
+        "Alpha Particle"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the term for a quantum state that is a linear combination of multiple states?",
+      "options": [
+        "Quantum Entanglement",
+        "Quantum Superposition",
+        "Quantum Tunneling",
+        "Quantum Decoherence"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which equation describes the time evolution of a quantum state?",
+      "options": [
+        "Schrödinger Equation",
+        "Maxwell's Equations",
+        "Newton's Second Law",
+        "Einstein's Equation"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the concept of particles being interconnected regardless of distance called?",
+      "options": [
+        "Quantum Tunneling",
+        "Quantum Entanglement",
+        "Wave Function Collapse",
+        "Particle-Wave Duality"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the hypothetical particle proposed to mediate the force of gravity in quantum mechanics?",
+      "options": [
+        "Photon",
+        "Graviton",
+        "Gluon",
+        "W Boson"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which experiment famously demonstrated the particle nature of light?",
+      "options": [
+        "Millikan Oil Drop Experiment",
+        "Double-Slit Experiment",
+        "Rutherford Gold Foil Experiment",
+        "Hertz's Spark Experiment"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

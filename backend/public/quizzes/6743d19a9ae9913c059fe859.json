@@ -1,0 +1,88 @@
+{
+  "title": "Classical Music",
+  "topic": "66fec2c9b6950e88826fe005",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Which composer is known for the 'Moonlight Sonata'?",
+      "options": [
+        "Ludwig van Beethoven",
+        "Johann Sebastian Bach",
+        "Wolfgang Amadeus Mozart",
+        "Frédéric Chopin"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the term for a piece of music written for a solo instrument with orchestral accompaniment?",
+      "options": [
+        "Concerto",
+        "Sonata",
+        "Symphony",
+        "Suite"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which opera features the famous aria 'Nessun dorma'?",
+      "options": [
+        "Tosca",
+        "La Bohème",
+        "Turandot",
+        "Carmen"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Who composed the 'Four Seasons'?",
+      "options": [
+        "Antonio Vivaldi",
+        "Claude Debussy",
+        "Johannes Brahms",
+        "Igor Stravinsky"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the name of the famous ballet composed by Pyotr Ilyich Tchaikovsky about a princess cursed to sleep for 100 years?",
+      "options": [
+        "The Nutcracker",
+        "Swan Lake",
+        "Sleeping Beauty",
+        "Giselle"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following composers was not part of the Romantic era?",
+      "options": [
+        "Franz Schubert",
+        "Richard Wagner",
+        "Igor Stravinsky",
+        "Johannes Brahms"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is a symphony typically composed for?",
+      "options": [
+        "Solo instrument",
+        "Small ensemble",
+        "Full orchestra",
+        "Vocal choir"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which composer is famous for his 'Brandenburg Concertos'?",
+      "options": [
+        "Johann Sebastian Bach",
+        "George Frideric Handel",
+        "Franz Liszt",
+        "Robert Schumann"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

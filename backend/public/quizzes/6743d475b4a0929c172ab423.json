@@ -1,0 +1,88 @@
+{
+  "title": "Global Politics",
+  "topic": "66fec2c9b6950e88826fe00c",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Which country recently became the first to recognize a new state in 2023?",
+      "options": [
+        "Canada",
+        "France",
+        "Taiwan",
+        "Israel"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What was the main focus of the 2023 United Nations Climate Change Conference (COP28)?",
+      "options": [
+        "Biodiversity",
+        "Global warming",
+        "Ocean pollution",
+        "Carbon emissions"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In 2023, which country announced plans to phase out all coal power by 2030?",
+      "options": [
+        "Germany",
+        "China",
+        "India",
+        "United States"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which leader was re-elected in a controversial election in 2023?",
+      "options": [
+        "Vladimir Putin",
+        "Jair Bolsonaro",
+        "Joe Biden",
+        "Narendra Modi"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What significant geopolitical event occurred in Eastern Europe in 2023?",
+      "options": [
+        "Ukraine joining NATO",
+        "The fall of the Belarus government",
+        "A peace treaty between Russia and Ukraine",
+        "The annexation of Crimea by Ukraine"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which country hosted the G20 summit in 2023?",
+      "options": [
+        "Indonesia",
+        "Italy",
+        "India",
+        "Brazil"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In 2023, which major international treaty was signed to combat digital privacy violations?",
+      "options": [
+        "Paris Agreement",
+        "Budapest Convention",
+        "Digital Privacy Accord",
+        "Cybersecurity Pact"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What was the outcome of the 2023 referendum on Scottish independence?",
+      "options": [
+        "Independence granted",
+        "Independence denied",
+        "Further negotiations",
+        "No referendum held"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

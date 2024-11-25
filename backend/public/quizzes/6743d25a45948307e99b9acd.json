@@ -1,0 +1,68 @@
+{
+  "title": "Physics",
+  "topic": "66fec2c9b6950e88826fdffe",
+  "difficulty": "easy",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the speed of light in a vacuum?",
+      "options": [
+        "300,000 km/s",
+        "150,000 km/s",
+        "1,000 km/s",
+        "3,000 km/s"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the unit of force in the International System of Units (SI)?",
+      "options": [
+        "Joule",
+        "Newton",
+        "Pascal",
+        "Watt"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the boiling point of water at sea level?",
+      "options": [
+        "100 degrees Celsius",
+        "50 degrees Celsius",
+        "0 degrees Celsius",
+        "25 degrees Celsius"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the primary gas found in the Earth's atmosphere?",
+      "options": [
+        "Oxygen",
+        "Carbon Dioxide",
+        "Nitrogen",
+        "Hydrogen"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the formula for calculating kinetic energy?",
+      "options": [
+        "KE = 1/2 mv^2",
+        "KE = mv",
+        "KE = mgh",
+        "KE = Fd"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Venus"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

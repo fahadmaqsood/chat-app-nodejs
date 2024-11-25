@@ -1,0 +1,88 @@
+{
+  "title": "Poetry",
+  "topic": "66fec2c9b6950e88826fe002",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Who is known as the 'Bard of Avon'?",
+      "options": [
+        "John Milton",
+        "William Wordsworth",
+        "William Shakespeare",
+        "Robert Frost"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the main theme of Robert Frost's poem 'The Road Not Taken'?",
+      "options": [
+        "Love",
+        "Nature",
+        "Choices in life",
+        "Death"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which poet is famous for the line 'I wandered lonely as a cloud'?",
+      "options": [
+        "Emily Dickinson",
+        "William Wordsworth",
+        "Sylvia Plath",
+        "T.S. Eliot"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of poem is a 'haiku'?",
+      "options": [
+        "A lyrical poem",
+        "A narrative poem",
+        "A three-line poem",
+        "A sonnet"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Who wrote 'The Waste Land'?",
+      "options": [
+        "Ezra Pound",
+        "T.S. Eliot",
+        "Robert Frost",
+        "W.H. Auden"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is a common feature of a sonnet?",
+      "options": [
+        "It has no rhyme scheme",
+        "It has 14 lines",
+        "It tells a story",
+        "It is always about love"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is a famous work by Emily Dickinson?",
+      "options": [
+        "The Raven",
+        "Because I could not stop for Death",
+        "The Love Song of J. Alfred Prufrock",
+        "The Waste Land"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the term for a poem that tells a story?",
+      "options": [
+        "Lyric",
+        "Sonnet",
+        "Ballad",
+        "Ode"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

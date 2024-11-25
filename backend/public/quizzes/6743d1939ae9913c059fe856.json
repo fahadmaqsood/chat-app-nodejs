@@ -1,0 +1,128 @@
+{
+  "title": "Painting",
+  "topic": "66fec2c9b6950e88826fe004",
+  "difficulty": "medium",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "Who is famous for the painting 'The Starry Night'?",
+      "options": [
+        "Pablo Picasso",
+        "Vincent van Gogh",
+        "Claude Monet",
+        "Leonardo da Vinci"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What technique involves applying paint to a wet plaster surface?",
+      "options": [
+        "Fresco",
+        "Oil painting",
+        "Watercolor",
+        "Acrylic"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which art movement is Salvador Dalí associated with?",
+      "options": [
+        "Impressionism",
+        "Cubism",
+        "Surrealism",
+        "Expressionism"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary medium used in traditional Japanese ink painting?",
+      "options": [
+        "Acrylic",
+        "Oil",
+        "Sumi ink",
+        "Watercolor"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Who painted the 'Mona Lisa'?",
+      "options": [
+        "Vincent van Gogh",
+        "Pablo Picasso",
+        "Leonardo da Vinci",
+        "Michelangelo"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following is a famous sculpture by Michelangelo?",
+      "options": [
+        "The Thinker",
+        "David",
+        "The Kiss",
+        "Venus de Milo"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the term for a painting done in the style of the Renaissance?",
+      "options": [
+        "Baroque",
+        "Fauvism",
+        "Rococo",
+        "Renaissance"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Which artist is known for the 'Water Lilies' series?",
+      "options": [
+        "Claude Monet",
+        "Edvard Munch",
+        "Henri Matisse",
+        "Jackson Pollock"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What style of art is characterized by geometric shapes and bold colors?",
+      "options": [
+        "Cubism",
+        "Impressionism",
+        "Realism",
+        "Surrealism"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the main subject of Frida Kahlo's paintings?",
+      "options": [
+        "Nature",
+        "Still life",
+        "Self-portraits",
+        "Abstract forms"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which artist is known for the mural 'The Last Judgment'?",
+      "options": [
+        "Raphael",
+        "Michelangelo",
+        "Titian",
+        "Donatello"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the use of light and shadow in painting called?",
+      "options": [
+        "Chiaroscuro",
+        "Sfumato",
+        "Tenebrism",
+        "Fresco"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

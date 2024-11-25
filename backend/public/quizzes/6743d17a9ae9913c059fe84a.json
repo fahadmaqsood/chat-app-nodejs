@@ -1,0 +1,128 @@
+{
+  "title": "Countries and Capitals",
+  "topic": "66fec2c9b6950e88826fe000",
+  "difficulty": "easy",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What is the capital of France?",
+      "options": [
+        "Berlin",
+        "Madrid",
+        "Paris",
+        "Rome"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "options": [
+        "Seoul",
+        "Tokyo",
+        "Beijing",
+        "Bangkok"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country is known as the Land of the Rising Sun?",
+      "options": [
+        "China",
+        "Japan",
+        "Thailand",
+        "India"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "options": [
+        "Toronto",
+        "Vancouver",
+        "Montreal",
+        "Ottawa"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "options": [
+        "Sydney",
+        "Canberra",
+        "Melbourne",
+        "Brisbane"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country has the largest population in the world?",
+      "options": [
+        "India",
+        "USA",
+        "China",
+        "Indonesia"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "options": [
+        "Cairo",
+        "Nairobi",
+        "Algiers",
+        "Lagos"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which continent is Egypt located in?",
+      "options": [
+        "Asia",
+        "Europe",
+        "Africa",
+        "Australia"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "options": [
+        "Brasília",
+        "Rio de Janeiro",
+        "São Paulo",
+        "Salvador"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the capital city of Russia?",
+      "options": [
+        "Moscow",
+        "St. Petersburg",
+        "Kiev",
+        "Tbilisi"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which country is known for the Eiffel Tower?",
+      "options": [
+        "Germany",
+        "France",
+        "Italy",
+        "Spain"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the capital of India?",
+      "options": [
+        "Mumbai",
+        "Delhi",
+        "Bangalore",
+        "Chennai"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

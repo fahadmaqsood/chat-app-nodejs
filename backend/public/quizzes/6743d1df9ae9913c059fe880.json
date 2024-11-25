@@ -1,0 +1,108 @@
+{
+  "title": "Mechanical Engineering",
+  "topic": "66fec2c9b6950e88826fe012",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What is the unit of torque?",
+      "options": [
+        "Newton meter",
+        "Joule",
+        "Pascal",
+        "Watt"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which law states that for every action, there is an equal and opposite reaction?",
+      "options": [
+        "Newton's First Law",
+        "Newton's Second Law",
+        "Newton's Third Law",
+        "Archimedes' Principle"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary purpose of a heat exchanger?",
+      "options": [
+        "To transfer heat between two or more fluids",
+        "To generate electricity",
+        "To store energy",
+        "To measure temperature"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the common material used for making gears?",
+      "options": [
+        "Aluminum",
+        "Plastic",
+        "Steel",
+        "Copper"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In fluid mechanics, what does Bernoulli's principle relate?",
+      "options": [
+        "Pressure and temperature",
+        "Velocity and pressure",
+        "Volume and density",
+        "Mass and energy"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of stress is experienced when a material is pulled apart?",
+      "options": [
+        "Compressive stress",
+        "Tensile stress",
+        "Shear stress",
+        "Bending stress"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the main purpose of a piston in an engine?",
+      "options": [
+        "To cool the engine",
+        "To compress fuel and air",
+        "To ignite fuel",
+        "To transfer power to the wheels"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following is not a type of welding?",
+      "options": [
+        "MIG welding",
+        "TIG welding",
+        "Arc welding",
+        "CNC welding"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What does CAD stand for in engineering?",
+      "options": [
+        "Computer-Aided Design",
+        "Computer-Aided Development",
+        "Computer-Assisted Drawing",
+        "Computer-Aided Drafting"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the primary function of a bearing in machinery?",
+      "options": [
+        "To support rotating shafts",
+        "To provide electrical insulation",
+        "To absorb shock",
+        "To generate heat"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

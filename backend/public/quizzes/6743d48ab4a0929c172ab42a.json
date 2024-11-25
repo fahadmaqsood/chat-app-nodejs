@@ -1,0 +1,128 @@
+{
+  "title": "Planets",
+  "topic": "66fec2c9b6950e88826fe00f",
+  "difficulty": "easy",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What is the closest planet to the Sun?",
+      "options": [
+        "Venus",
+        "Earth",
+        "Mercury",
+        "Mars"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Jupiter",
+        "Mars",
+        "Saturn",
+        "Venus"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What planet is known for its rings?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Saturn",
+        "Jupiter"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet is the largest in our solar system?",
+      "options": [
+        "Earth",
+        "Jupiter",
+        "Saturn",
+        "Neptune"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which planet is referred to as the Earth’s twin?",
+      "options": [
+        "Venus",
+        "Mars",
+        "Mercury",
+        "Saturn"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the fourth planet from the Sun?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Venus",
+        "Mercury"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which planet has the most moons?",
+      "options": [
+        "Earth",
+        "Jupiter",
+        "Saturn",
+        "Uranus"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the smallest planet in our solar system?",
+      "options": [
+        "Mercury",
+        "Mars",
+        "Venus",
+        "Earth"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet is known for having a Great Red Spot?",
+      "options": [
+        "Mars",
+        "Saturn",
+        "Jupiter",
+        "Neptune"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet is known for its extreme greenhouse effect?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Venus",
+        "Mercury"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the second planet from the Sun?",
+      "options": [
+        "Venus",
+        "Earth",
+        "Mars",
+        "Mercury"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet orbits the Sun at an average distance of about 1.5 astronomical units?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Venus",
+        "Jupiter"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

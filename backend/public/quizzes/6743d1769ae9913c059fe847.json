@@ -1,0 +1,128 @@
+{
+  "title": "World War II",
+  "topic": "66fec2c9b6950e88826fdfff",
+  "difficulty": "hard",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What year did World War II begin?",
+      "options": [
+        "1937",
+        "1938",
+        "1939",
+        "1940"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which country was not a member of the Axis Powers?",
+      "options": [
+        "Germany",
+        "Italy",
+        "Japan",
+        "France"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Who was the British Prime Minister at the start of World War II?",
+      "options": [
+        "Winston Churchill",
+        "Neville Chamberlain",
+        "Clement Attlee",
+        "Anthony Eden"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What event triggered the United States to enter World War II?",
+      "options": [
+        "The sinking of the Lusitania",
+        "The bombing of Pearl Harbor",
+        "The invasion of Poland",
+        "The Battle of Britain"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which battle is considered the turning point in the Pacific Theater of World War II?",
+      "options": [
+        "Battle of Midway",
+        "Battle of Guadalcanal",
+        "Battle of Iwo Jima",
+        "Battle of Okinawa"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What was the code name for the invasion of Normandy?",
+      "options": [
+        "Operation Barbarossa",
+        "Operation Overlord",
+        "Operation Torch",
+        "Operation Market Garden"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who was the leader of the Soviet Union during World War II?",
+      "options": [
+        "Leon Trotsky",
+        "Joseph Stalin",
+        "Vladimir Lenin",
+        "Nikita Khrushchev"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which city was the first to be targeted by an atomic bomb?",
+      "options": [
+        "Tokyo",
+        "Nagasaki",
+        "Hiroshima",
+        "Osaka"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What was the main purpose of the Manhattan Project?",
+      "options": [
+        "To develop radar technology",
+        "To create a long-range bomber",
+        "To develop the atomic bomb",
+        "To build the first aircraft carrier"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following was a major consequence of World War II?",
+      "options": [
+        "The establishment of the United Nations",
+        "The Cold War",
+        "Decolonization of Asia and Africa",
+        "All of the above"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What was the name of the Nazi secret police?",
+      "options": [
+        "Gestapo",
+        "SS",
+        "SA",
+        "Waffen-SS"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which conference established the post-war order in Europe?",
+      "options": [
+        "Yalta Conference",
+        "Potsdam Conference",
+        "Tehran Conference",
+        "Munich Conference"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

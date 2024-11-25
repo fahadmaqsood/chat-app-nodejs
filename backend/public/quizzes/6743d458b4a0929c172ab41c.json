@@ -1,0 +1,68 @@
+{
+  "title": "Genetics",
+  "topic": "66fec2c9b6950e88826fe007",
+  "difficulty": "hard",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the structure that carries genetic information in cells?",
+      "options": [
+        "RNA",
+        "DNA",
+        "Protein",
+        "Chromosome"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which process describes the formation of RNA from a DNA template?",
+      "options": [
+        "Replication",
+        "Translation",
+        "Transcription",
+        "Transduction"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the term for the different forms of a gene?",
+      "options": [
+        "Locus",
+        "Allele",
+        "Phenotype",
+        "Genotype"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In humans, how many pairs of chromosomes are typically present?",
+      "options": [
+        "22",
+        "23",
+        "24",
+        "46"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the genetic disorder caused by the presence of an extra chromosome 21?",
+      "options": [
+        "Turner Syndrome",
+        "Klinefelter Syndrome",
+        "Down Syndrome",
+        "Cystic Fibrosis"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following is a technique used to amplify DNA?",
+      "options": [
+        "PCR",
+        "Gel Electrophoresis",
+        "DNA Sequencing",
+        "Cloning"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

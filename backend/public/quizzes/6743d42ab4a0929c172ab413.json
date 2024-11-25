@@ -1,0 +1,68 @@
+{
+  "title": "Continents",
+  "topic": "66fec2c9b6950e88826fe000",
+  "difficulty": "easy",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the smallest continent by land area?",
+      "options": [
+        "Asia",
+        "Australia",
+        "Europe",
+        "Antarctica"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which continent is known as the 'Dark Continent'?",
+      "options": [
+        "Asia",
+        "Africa",
+        "Australia",
+        "South America"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which continent is home to the Amazon Rainforest?",
+      "options": [
+        "Africa",
+        "Asia",
+        "South America",
+        "North America"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the largest continent by land area?",
+      "options": [
+        "Africa",
+        "Asia",
+        "North America",
+        "Antarctica"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which continent is known for the Great Barrier Reef?",
+      "options": [
+        "Asia",
+        "Australia",
+        "Africa",
+        "South America"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which continent is completely located in the Western Hemisphere?",
+      "options": [
+        "Africa",
+        "North America",
+        "Australia",
+        "Antarctica"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

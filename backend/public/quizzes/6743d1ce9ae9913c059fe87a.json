@@ -1,0 +1,88 @@
+{
+  "title": "Norse Mythology",
+  "topic": "66fec2c9b6950e88826fe010",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Who is considered the chief god in Norse mythology?",
+      "options": [
+        "Loki",
+        "Odin",
+        "Thor",
+        "Freyr"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the Norse afterlife realm for warriors who died bravely?",
+      "options": [
+        "Hel",
+        "Valhalla",
+        "Niflheim",
+        "Muspelheim"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which creature is known as the world serpent in Norse mythology?",
+      "options": [
+        "Fenrir",
+        "Jörmungandr",
+        "Nidhogg",
+        "Sleipnir"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who are the beings known as the Vanir?",
+      "options": [
+        "Gods of war",
+        "Fertility gods",
+        "Giant slayers",
+        "Sky gods"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the tree that connects the nine worlds in Norse mythology?",
+      "options": [
+        "Yggdrasil",
+        "Bifrost",
+        "Asgard",
+        "Midgard"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which goddess is known for her association with love and fertility in Norse mythology?",
+      "options": [
+        "Frigg",
+        "Freya",
+        "Skadi",
+        "Idun"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the final battle that will lead to the death of many gods?",
+      "options": [
+        "Ragnarök",
+        "Fimbulwinter",
+        "Götterdämmerung",
+        "Valhalla"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which god is known for wielding the hammer Mjölnir?",
+      "options": [
+        "Odin",
+        "Loki",
+        "Thor",
+        "Baldr"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

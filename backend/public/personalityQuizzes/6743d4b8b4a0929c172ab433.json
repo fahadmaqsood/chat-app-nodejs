@@ -1,0 +1,215 @@
+{
+  "title": "What Type of Creative Are You?",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What fuels your creativity?",
+      "options": [
+        {
+          "text": "Nature and the outdoors",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Stories and human experiences",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "Music and rhythms",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "Ideas and concepts",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to work?",
+      "options": [
+        {
+          "text": "In solitude, focusing deeply",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "With others, sharing ideas",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "Inspiration strikes spontaneously",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "Methodically, planning every detail",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you want your creations to achieve?",
+      "options": [
+        {
+          "text": "To evoke emotions",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "To tell a compelling story",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "To inspire and uplift",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "To solve problems",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "Which medium do you enjoy the most?",
+      "options": [
+        {
+          "text": "Paint, canvas, or sculpture",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Words and narrative",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "Melody and lyrics",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "Blueprints and prototypes",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your biggest source of inspiration?",
+      "options": [
+        {
+          "text": "Color and form",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Life experiences and emotions",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "Nature and sounds",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "Science and technology",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you handle criticism?",
+      "options": [
+        {
+          "text": "Use it to fuel my next piece",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Reflect and grow from it",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "Let it wash over me and keep creating",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "Analyze it logically to improve",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ultimate goal as a creator?",
+      "options": [
+        {
+          "text": "To leave a lasting visual impact",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "To connect with readers on a deep level",
+          "points": {
+            "Writer": 2
+          }
+        },
+        {
+          "text": "To create music that resonates with people",
+          "points": {
+            "Musician": 2
+          }
+        },
+        {
+          "text": "To innovate and change the world",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Artist": "You are a visual creator, finding beauty and expression through art.",
+    "Writer": "You are a storyteller, weaving narratives that connect with others.",
+    "Musician": "You are a melodious soul, crafting music that touches hearts.",
+    "Inventor": "You are a visionary thinker, always looking to innovate and solve problems."
+  }
+}

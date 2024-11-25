@@ -1,0 +1,68 @@
+{
+  "title": "Astronomy",
+  "topic": "66fec2c9b6950e88826fdffe",
+  "difficulty": "hard",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the approximate age of the universe?",
+      "options": [
+        "13.8 billion years",
+        "4.5 billion years",
+        "10 billion years",
+        "1 billion years"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet has the most extensive ring system?",
+      "options": [
+        "Earth",
+        "Jupiter",
+        "Saturn",
+        "Uranus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the name of the galaxy that contains our Solar System?",
+      "options": [
+        "Andromeda",
+        "Milky Way",
+        "Triangulum",
+        "Whirlpool"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What force keeps the planets in orbit around the sun?",
+      "options": [
+        "Magnetism",
+        "Gravity",
+        "Friction",
+        "Inertia"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which type of star is the Sun classified as?",
+      "options": [
+        "Red Giant",
+        "White Dwarf",
+        "Main Sequence",
+        "Neutron Star"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the closest star system to Earth?",
+      "options": [
+        "Proxima Centauri",
+        "Alpha Centauri A",
+        "Sirius",
+        "Betelgeuse"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

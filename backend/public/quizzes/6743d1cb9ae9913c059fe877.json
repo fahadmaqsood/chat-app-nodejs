@@ -1,0 +1,88 @@
+{
+  "title": "Planetary Science",
+  "topic": "66fec2c9b6950e88826fe00f",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the largest planet in our solar system?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Mercury"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the fifth planet from the Sun?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet has the most moons?",
+      "options": [
+        "Earth",
+        "Saturn",
+        "Jupiter",
+        "Uranus"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the hottest planet in our solar system?",
+      "options": [
+        "Venus",
+        "Mercury",
+        "Mars",
+        "Jupiter"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which planet is known for its rings?",
+      "options": [
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the smallest planet in our solar system?",
+      "options": [
+        "Venus",
+        "Earth",
+        "Mercury",
+        "Mars"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which planet is known as the Earth's twin?",
+      "options": [
+        "Mars",
+        "Venus",
+        "Mercury",
+        "Jupiter"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

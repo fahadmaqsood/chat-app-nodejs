@@ -1,0 +1,88 @@
+{
+  "title": "International Relations",
+  "topic": "66fec2c9b6950e88826fe00c",
+  "difficulty": "extra hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "Which country recently announced that it would be increasing its military presence in the Indo-Pacific region in response to rising tensions with China?",
+      "options": [
+        "United States",
+        "Australia",
+        "India",
+        "Japan"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What was the main focus of the COP26 climate conference held in Glasgow in 2021?",
+      "options": [
+        "Ocean conservation",
+        "Biodiversity",
+        "Global warming and climate change",
+        "Plastic pollution"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In 2022, who was appointed as the new Secretary-General of the United Nations?",
+      "options": [
+        "António Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Amina J. Mohammed"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which country became the first to grant citizenship to a robot in 2021?",
+      "options": [
+        "Saudi Arabia",
+        "United States",
+        "Japan",
+        "United Arab Emirates"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What significant treaty was signed between Israel and several Arab nations in 2020?",
+      "options": [
+        "Oslo Accords",
+        "Camp David Accords",
+        "Abraham Accords",
+        "Paris Agreement"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In 2023, which country faced economic sanctions due to its invasion of Ukraine?",
+      "options": [
+        "China",
+        "North Korea",
+        "Russia",
+        "Iran"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which international organization suspended Russia's membership in 2022 due to its actions in Ukraine?",
+      "options": [
+        "NATO",
+        "World Trade Organization",
+        "United Nations",
+        "Council of Europe"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What was the main goal of the Belt and Road Initiative launched by China?",
+      "options": [
+        "Promote democracy",
+        "Enhance military presence",
+        "Develop global trade and infrastructure",
+        "Reduce carbon emissions"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

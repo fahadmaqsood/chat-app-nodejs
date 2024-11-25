@@ -1,0 +1,78 @@
+{
+  "title": "Physical Geography",
+  "topic": "66fec2c9b6950e88826fe000",
+  "difficulty": "extra hard",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What is the capital city of Bhutan?",
+      "options": [
+        "Thimphu",
+        "Kathmandu",
+        "Dhaka",
+        "Lhasa"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which mountain range separates Europe from Asia?",
+      "options": [
+        "Andes",
+        "Himalayas",
+        "Ural Mountains",
+        "Rocky Mountains"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the longest river in South America?",
+      "options": [
+        "Amazon River",
+        "Nile River",
+        "Paraná River",
+        "Orinoco River"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which desert is the largest in the world?",
+      "options": [
+        "Gobi Desert",
+        "Sahara Desert",
+        "Arabian Desert",
+        "Kalahari Desert"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the largest island in the Mediterranean Sea?",
+      "options": [
+        "Sicily",
+        "Crete",
+        "Cyprus",
+        "Corsica"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which country has the most natural lakes?",
+      "options": [
+        "Canada",
+        "Russia",
+        "United States",
+        "India"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the name of the tectonic plate that includes both North America and part of the Atlantic Ocean?",
+      "options": [
+        "Nazca Plate",
+        "Eurasian Plate",
+        "North American Plate",
+        "Pacific Plate"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

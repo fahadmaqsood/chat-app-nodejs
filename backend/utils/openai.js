@@ -5,7 +5,8 @@ import { OpenAI } from 'openai';
 
 let openai = null;
 
-export const getChatCompletion = async ({ messages, user_message }) => {
+// model = gpt-4o-mini or gpt-3.5-turbo
+export const getChatCompletion = async ({ messages, user_message, model = "gpt-4o-mini" }) => {
     try {
         if (!openai) {
             openai = new OpenAI({
@@ -19,11 +20,14 @@ export const getChatCompletion = async ({ messages, user_message }) => {
 
         do {
             const response = await openai.chat.completions.create({
-                model: 'gpt-3.5-turbo',
+                model: model,
                 messages: allMessages,
-                max_tokens: 300, // Increase this limit for longer responses
+                max_tokens: 1000, // Increase this limit for longer responses
                 temperature: 0.7,
             });
+
+            // console.log("got response", response.choices[0].message.content);
+            // console.log("allMessages", allMessages);
 
             const completion = response.choices[0].message.content;
             totalResponse += completion;

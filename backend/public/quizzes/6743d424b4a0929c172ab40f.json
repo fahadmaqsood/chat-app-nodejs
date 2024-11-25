@@ -1,0 +1,88 @@
+{
+  "title": "Astrophysics",
+  "topic": "66fec2c9b6950e88826fdffe",
+  "difficulty": "hard",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the term for the boundary around a black hole beyond which no light or other radiation can escape?",
+      "options": [
+        "Event Horizon",
+        "Schwarzschild Radius",
+        "Singularity",
+        "Photon Sphere"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which particle is known as the 'God particle'?",
+      "options": [
+        "Neutrino",
+        "Higgs Boson",
+        "Photon",
+        "Electron"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the galaxy that contains our Solar System?",
+      "options": [
+        "Andromeda Galaxy",
+        "Milky Way Galaxy",
+        "Whirlpool Galaxy",
+        "Sombrero Galaxy"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What force is responsible for the acceleration of an object in free fall?",
+      "options": [
+        "Electromagnetic Force",
+        "Nuclear Force",
+        "Gravitational Force",
+        "Frictional Force"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the approximate age of the universe, according to current scientific estimates?",
+      "options": [
+        "4.5 billion years",
+        "13.8 billion years",
+        "10 billion years",
+        "8 billion years"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which planet in our Solar System has the most moons?",
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary component of the Sun's mass?",
+      "options": [
+        "Oxygen",
+        "Hydrogen",
+        "Helium",
+        "Carbon"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In astrophysics, what does the term 'redshift' refer to?",
+      "options": [
+        "Increase in temperature",
+        "Decrease in brightness",
+        "Increase in distance",
+        "Decrease in wavelength"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

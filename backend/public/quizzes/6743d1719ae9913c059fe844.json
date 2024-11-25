@@ -1,0 +1,128 @@
+{
+  "title": "Biology",
+  "topic": "66fec2c9b6950e88826fdffe",
+  "difficulty": "easy",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": [
+        "Nucleus",
+        "Mitochondria",
+        "Ribosome",
+        "Endoplasmic Reticulum"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which part of the plant conducts photosynthesis?",
+      "options": [
+        "Roots",
+        "Stems",
+        "Leaves",
+        "Flowers"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the basic unit of life?",
+      "options": [
+        "Atom",
+        "Cell",
+        "Tissue",
+        "Organ"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which organ is responsible for pumping blood throughout the body?",
+      "options": [
+        "Liver",
+        "Lungs",
+        "Heart",
+        "Kidney"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What type of blood cell is responsible for carrying oxygen?",
+      "options": [
+        "White blood cells",
+        "Red blood cells",
+        "Platelets",
+        "Plasma"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which vitamin is primarily obtained from sunlight?",
+      "options": [
+        "Vitamin A",
+        "Vitamin B12",
+        "Vitamin C",
+        "Vitamin D"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What is the genetic material in living organisms?",
+      "options": [
+        "RNA",
+        "DNA",
+        "Protein",
+        "Carbohydrates"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What process do plants use to convert sunlight into energy?",
+      "options": [
+        "Respiration",
+        "Photosynthesis",
+        "Transpiration",
+        "Decomposition"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which organ in the human body is primarily responsible for detoxification?",
+      "options": [
+        "Heart",
+        "Liver",
+        "Kidney",
+        "Lungs"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What type of bond holds the two strands of DNA together?",
+      "options": [
+        "Ionic bonds",
+        "Covalent bonds",
+        "Hydrogen bonds",
+        "Metallic bonds"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which part of the brain is responsible for coordination and balance?",
+      "options": [
+        "Cerebrum",
+        "Brainstem",
+        "Cerebellum",
+        "Hypothalamus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the main function of red blood cells?",
+      "options": [
+        "Fight infections",
+        "Clot blood",
+        "Carry oxygen",
+        "Provide immunity"
+      ],
+      "correct_option": 3
+    }
+  ]
+}

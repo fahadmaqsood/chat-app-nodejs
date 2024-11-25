@@ -1,0 +1,128 @@
+{
+  "title": "Civil Rights",
+  "topic": "66fec2c9b6950e88826fe00d",
+  "difficulty": "medium",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What year was the Civil Rights Act passed?",
+      "options": [
+        "1964",
+        "1954",
+        "1972",
+        "1980"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which amendment abolished slavery in the United States?",
+      "options": [
+        "13th Amendment",
+        "14th Amendment",
+        "15th Amendment",
+        "19th Amendment"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the leader of the Civil Rights Movement who delivered the famous 'I Have a Dream' speech?",
+      "options": [
+        "Malcolm X",
+        "Rosa Parks",
+        "Martin Luther King Jr.",
+        "Frederick Douglass"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the significance of the Brown v. Board of Education case?",
+      "options": [
+        "It ended segregation in public schools",
+        "It granted women the right to vote",
+        "It abolished slavery",
+        "It established the right to bear arms"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which organization was founded to fight for African American civil rights?",
+      "options": [
+        "NAACP",
+        "NRA",
+        "UNICEF",
+        "AARP"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What did the Voting Rights Act of 1965 aim to eliminate?",
+      "options": [
+        "Racial discrimination in voting",
+        "Segregation in schools",
+        "Job discrimination",
+        "Housing discrimination"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the first African American woman to refuse to give up her bus seat, sparking the Montgomery Bus Boycott?",
+      "options": [
+        "Rosa Parks",
+        "Harriet Tubman",
+        "Sojourner Truth",
+        "Angela Davis"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What U.S. Supreme Court decision declared 'separate but equal' unconstitutional?",
+      "options": [
+        "Plessy v. Ferguson",
+        "Brown v. Board of Education",
+        "Loving v. Virginia",
+        "Roe v. Wade"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which amendment granted women the right to vote?",
+      "options": [
+        "19th Amendment",
+        "18th Amendment",
+        "15th Amendment",
+        "14th Amendment"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who was the author of 'Letter from Birmingham Jail'?",
+      "options": [
+        "Malcolm X",
+        "Martin Luther King Jr.",
+        "James Baldwin",
+        "W.E.B. Du Bois"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What was the main purpose of the Freedom Rides in 1961?",
+      "options": [
+        "To protest against segregation in interstate bus travel",
+        "To promote voter registration",
+        "To fight for housing rights",
+        "To organize a march on Washington"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which civil rights activist was assassinated in 1965 while advocating for voting rights?",
+      "options": [
+        "Martin Luther King Jr.",
+        "Malcolm X",
+        "Rosa Parks",
+        "John Lewis"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

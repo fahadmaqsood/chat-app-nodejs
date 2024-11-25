@@ -1,0 +1,68 @@
+{
+  "title": "Ethics",
+  "topic": "66fec2c9b6950e88826fe011",
+  "difficulty": "easy",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "What is the study of moral principles called?",
+      "options": [
+        "Metaphysics",
+        "Ethics",
+        "Epistemology",
+        "Aesthetics"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is considered the father of modern ethics?",
+      "options": [
+        "Immanuel Kant",
+        "Plato",
+        "Aristotle",
+        "Friedrich Nietzsche"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which ethical theory focuses on the consequences of actions?",
+      "options": [
+        "Deontology",
+        "Utilitarianism",
+        "Virtue Ethics",
+        "Social Contract Theory"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which philosopher is known for the concept of the 'categorical imperative'?",
+      "options": [
+        "John Stuart Mill",
+        "David Hume",
+        "Immanuel Kant",
+        "Jeremy Bentham"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What does 'virtue ethics' primarily focus on?",
+      "options": [
+        "The rules of conduct",
+        "The consequences of actions",
+        "The character of the moral agent",
+        "The social context"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which philosopher argued that 'the greatest happiness for the greatest number' is the measure of right and wrong?",
+      "options": [
+        "Aristotle",
+        "John Stuart Mill",
+        "Immanuel Kant",
+        "Friedrich Nietzsche"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

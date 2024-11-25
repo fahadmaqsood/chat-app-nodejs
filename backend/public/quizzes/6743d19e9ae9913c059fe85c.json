@@ -1,0 +1,108 @@
+{
+  "title": "Artificial Intelligence",
+  "topic": "66fec2c9b6950e88826fe006",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What does AI stand for?",
+      "options": [
+        "Artificial Intelligence",
+        "Automated Interface",
+        "Advanced Integration",
+        "Artificial Interaction"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which company developed the AI assistant Siri?",
+      "options": [
+        "Google",
+        "Microsoft",
+        "Apple",
+        "Amazon"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the primary programming language used for AI development?",
+      "options": [
+        "Python",
+        "Java",
+        "C++",
+        "Ruby"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is a common application of AI?",
+      "options": [
+        "Facial recognition",
+        "Web browsing",
+        "Email writing",
+        "Hard disk partitioning"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the Turing Test used for?",
+      "options": [
+        "Measuring computer speed",
+        "Assessing AI's ability to exhibit intelligent behavior",
+        "Testing software bugs",
+        "Evaluating network security"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which algorithm is commonly associated with machine learning?",
+      "options": [
+        "Quicksort",
+        "Neural Networks",
+        "Dijkstra's Algorithm",
+        "Binary Search"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is deep learning a subset of?",
+      "options": [
+        "Machine Learning",
+        "Data Mining",
+        "Cloud Computing",
+        "Artificial Neural Networks"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is an example of a reinforcement learning environment?",
+      "options": [
+        "Chess",
+        "Image classification",
+        "Spam detection",
+        "Data encryption"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does NLP stand for in the context of AI?",
+      "options": [
+        "Natural Language Processing",
+        "Neural Language Programming",
+        "Network Logic Processing",
+        "Non-Linear Programming"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which of the following is NOT a type of machine learning?",
+      "options": [
+        "Supervised learning",
+        "Unsupervised learning",
+        "Reinforcement learning",
+        "Static learning"
+      ],
+      "correct_option": 4
+    }
+  ]
+}

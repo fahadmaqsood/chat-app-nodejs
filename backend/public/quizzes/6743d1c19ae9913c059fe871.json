@@ -1,0 +1,88 @@
+{
+  "title": "Political Systems",
+  "topic": "66fec2c9b6950e88826fe00d",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the supreme law of the land in the United States?",
+      "options": [
+        "The Declaration of Independence",
+        "The Constitution",
+        "The Bill of Rights",
+        "The Emancipation Proclamation"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In a democracy, what is the term for the right to vote?",
+      "options": [
+        "Suffrage",
+        "Eminent Domain",
+        "Legislation",
+        "Referendum"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which branch of government is responsible for making federal laws?",
+      "options": [
+        "Executive",
+        "Legislative",
+        "Judicial",
+        "Administrative"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary purpose of the judicial branch?",
+      "options": [
+        "To enforce laws",
+        "To interpret laws",
+        "To create laws",
+        "To amend laws"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is known as the 'Father of the Constitution'?",
+      "options": [
+        "George Washington",
+        "James Madison",
+        "Thomas Jefferson",
+        "Alexander Hamilton"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the term for a government ruled by a king or queen?",
+      "options": [
+        "Democracy",
+        "Oligarchy",
+        "Monarchy",
+        "Theocracy"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What document ended the American Revolutionary War?",
+      "options": [
+        "The Treaty of Paris",
+        "The Constitution",
+        "The Bill of Rights",
+        "The Articles of Confederation"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which amendment to the U.S. Constitution granted women the right to vote?",
+      "options": [
+        "19th Amendment",
+        "15th Amendment",
+        "24th Amendment",
+        "1st Amendment"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

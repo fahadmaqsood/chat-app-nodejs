@@ -1,0 +1,108 @@
+{
+  "title": "Football",
+  "topic": "66fec2c9b6950e88826fe001",
+  "difficulty": "extra hard",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "Which player holds the record for the most goals scored in a single calendar year?",
+      "options": [
+        "Cristiano Ronaldo",
+        "Lionel Messi",
+        "Pele",
+        "Gerd Muller"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country won the first FIFA World Cup in 1930?",
+      "options": [
+        "Brazil",
+        "Italy",
+        "Uruguay",
+        "Germany"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Who is the all-time top scorer in the UEFA Champions League?",
+      "options": [
+        "Cristiano Ronaldo",
+        "Lionel Messi",
+        "Raúl",
+        "Alfredo Di Stéfano"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which club has won the most UEFA Champions League titles?",
+      "options": [
+        "AC Milan",
+        "Real Madrid",
+        "Liverpool",
+        "Barcelona"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In which year was the Premier League founded?",
+      "options": [
+        "1988",
+        "1992",
+        "1995",
+        "2000"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country hosted the 1998 FIFA World Cup?",
+      "options": [
+        "France",
+        "Japan",
+        "South Korea",
+        "Germany"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who is the only player to have won the Ballon d'Or five times?",
+      "options": [
+        "Cristiano Ronaldo",
+        "Lionel Messi",
+        "Johan Cruyff",
+        "Michel Platini"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which player is known as 'The King' of football?",
+      "options": [
+        "Pele",
+        "Diego Maradona",
+        "Zinedine Zidane",
+        "Cristiano Ronaldo"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which team has won the most Copa America titles?",
+      "options": [
+        "Argentina",
+        "Brazil",
+        "Chile",
+        "Uruguay"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "Who was the first player to score in the FIFA World Cup final?",
+      "options": [
+        "Geoff Hurst",
+        "Pele",
+        "Franz Beckenbauer",
+        "Just Fontaine"
+      ],
+      "correct_option": 1
+    }
+  ]
+}
