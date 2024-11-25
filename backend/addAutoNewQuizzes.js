@@ -382,23 +382,31 @@ try {
                 // json.difficulty = randomDifficulty;
                 // json.topic = quizTopic._id;
 
-                // adding this new quiz
-                const newQuiz = new PersonalityQuiz({
-                    title: json.title,
-                    num_questions: json.num_questions
-                });
 
-                // Save the quiz to the database
-                await newQuiz.save();
+                let titleExists = await Quiz.exists({ title: json.title });
+
+                if (!titleExists) {
+
+                    // adding this new quiz
+                    const newQuiz = new PersonalityQuiz({
+                        title: json.title,
+                        num_questions: json.num_questions
+                    });
+
+                    // Save the quiz to the database
+                    await newQuiz.save();
 
 
-                let quiz_id = newQuiz._id;
+                    let quiz_id = newQuiz._id;
 
-                const quizFilePath = path.join(__dirname, './public/personalityQuizzes', `${quiz_id}.json`);
-                fs.writeFileSync(quizFilePath, JSON.stringify(json, null, 2));
+                    const quizFilePath = path.join(__dirname, './public/personalityQuizzes', `${quiz_id}.json`);
+                    fs.writeFileSync(quizFilePath, JSON.stringify(json, null, 2));
 
 
-                personalityQuizzesAdded++;
+                    personalityQuizzesAdded++;
+                } else {
+                    console.log("Personality quiz title already exists.");
+                }
             } catch (error) {
                 console.log(error);
             }

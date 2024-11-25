@@ -80,6 +80,55 @@ const uploadImages = async (req, res) => {
 };
 
 
+// Multer setup for generic media storage
+const mediaStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '../../public/uploads/media'); // Changed to 'media' for generic media
+
+        cb(null, uploadPath); // Specify your upload directory
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${req.userIdForFileName}-${file.originalname}`);
+    }
+});
+
+// Multer setup for accepting any file type (no filter or specific type)
+const mediaUpload = multer({ mediaStorage }).array('media', 10); // Handle up to 10 files of any type
+
+
+const uploadMedia = async (req, res) => {
+    try {
+        req.userIdForFileName = req.user._id;
+
+        // Use multer to handle file uploads
+        mediaUpload(req, res, function (err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).json(new ApiResponse(500, {}, "Error uploading files"));
+            }
+
+            // Check if files were uploaded
+            if (!req.files || req.files.length === 0) {
+                return res.status(400).json(new ApiResponse(400, {}, "No files uploaded"));
+            }
+
+            // Prepare the response array with file paths and original names
+            const uploadedFiles = req.files.map(file => ({
+                originalName: file.originalname,
+                filePath: "/uploads/media/" + path.basename(file.path)
+            }));
+
+            return res
+                .status(200)
+                .json(new ApiResponse(200, { files: uploadedFiles }, "Media files uploaded successfully"));
+        });
+    } catch (err) {
+        console.error("Error in uploadMedia:", err);
+        res.status(500).json(new ApiResponse(500, {}, err.message || "Internal server error"));
+    }
+};
+
+
 const sentimentAnalysis = async (req, res) => {
 
     if (req.body.text) {
@@ -95,4 +144,4 @@ const sentimentAnalysis = async (req, res) => {
     }
 };
 
-export { uploadImages, sentimentAnalysis };
+export { uploadImages, uploadMedia, sentimentAnalysis };
