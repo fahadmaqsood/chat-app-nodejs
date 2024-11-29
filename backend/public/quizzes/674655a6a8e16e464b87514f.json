@@ -1,0 +1,88 @@
+{
+  "title": "Algebra",
+  "topic": "66fec2c9b6950e88826fe003",
+  "difficulty": "medium",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is the solution to the equation 2x + 3 = 11?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the quadratic formula used to solve ax² + bx + c = 0?",
+      "options": [
+        "x = -b ± √(b² - 4ac)/2a",
+        "x = -a ± √(c - b²)/2b",
+        "x = -c ± √(a - b²)/2a",
+        "x = -b ± √(4ac - b²)/2a"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "If f(x) = 3x + 2, what is f(4)?",
+      "options": [
+        "10",
+        "14",
+        "12",
+        "16"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the value of x in the equation 5x - 10 = 0?",
+      "options": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following is a factor of x² - 5x + 6?",
+      "options": [
+        "(x - 2)(x - 3)",
+        "(x + 2)(x + 3)",
+        "(x - 1)(x - 6)",
+        "(x + 1)(x + 6)"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the sum of the roots of the quadratic equation x² + 4x + 4 = 0?",
+      "options": [
+        "-4",
+        "4",
+        "0",
+        "-2"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "If 3x + 5 = 20, what is the value of x?",
+      "options": [
+        "5",
+        "10",
+        "15",
+        "20"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the value of 2^3 + 3^2?",
+      "options": [
+        "17",
+        "19",
+        "21",
+        "23"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

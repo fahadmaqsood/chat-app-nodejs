@@ -146,9 +146,14 @@ export const sendCallNotification = async (req, res) => {
     try {
         const receiverIds = req.body.receiverIds;
         const callerId = req.user._id;
+        const chatId = req.body.chatId;
+        const isVideoCall = req.body.isVideoCall;
 
         if (!receiverIds || receiverIds.length == 0) {
             res.status(400).json({ success: false, message: 'receiverIds must be defined' });
+        }
+        if (!chatId) {
+            res.status(400).json({ success: false, message: 'chatId must be defined' });
         }
 
         console.log(receiverIds);
@@ -156,6 +161,9 @@ export const sendCallNotification = async (req, res) => {
         await addNotificationForMany(receiverIds, null, null, {
             "isCall": "true",
             "callerName": req.user.nameElseUsername,
+            "callerId": callerId,
+            "chatId": chatId,
+            "isVideoCall": `${isVideoCall}`
         }, true);
 
 

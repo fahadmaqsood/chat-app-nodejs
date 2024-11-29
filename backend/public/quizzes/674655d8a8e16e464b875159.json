@@ -1,0 +1,108 @@
+{
+  "title": "Classical Mechanics",
+  "topic": "66fec2c9b6950e88826fe009",
+  "difficulty": "easy",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What is the unit of force in the International System of Units (SI)?",
+      "options": [
+        "Newton",
+        "Pascal",
+        "Joule",
+        "Watt"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the acceleration due to gravity on Earth?",
+      "options": [
+        "9.8 m/s²",
+        "10 m/s²",
+        "9.0 m/s²",
+        "8.5 m/s²"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the formula for calculating kinetic energy?",
+      "options": [
+        "KE = 1/2 mv²",
+        "KE = mv",
+        "KE = mgh",
+        "KE = 1/2 mgh"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the principle of conservation of momentum?",
+      "options": [
+        "Energy cannot be created or destroyed",
+        "Momentum is always conserved in an isolated system",
+        "Mass is conserved in a chemical reaction",
+        "Force equals mass times acceleration"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "In which type of collision is kinetic energy conserved?",
+      "options": [
+        "Elastic collision",
+        "Inelastic collision",
+        "Perfectly inelastic collision",
+        "All of the above"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the law of universal gravitation?",
+      "options": [
+        "Every object attracts every other object with a force",
+        "Energy is always conserved",
+        "For every action, there is an equal and opposite reaction",
+        "The total energy of an isolated system remains constant"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the formula for calculating work done?",
+      "options": [
+        "Work = Force × Distance",
+        "Work = Mass × Acceleration",
+        "Work = Energy × Time",
+        "Work = Power × Time"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does Newton's first law of motion state?",
+      "options": [
+        "An object in motion stays in motion unless acted upon by an external force",
+        "For every action, there is an equal and opposite reaction",
+        "The acceleration of an object is directly proportional to the net force acting on it",
+        "Energy cannot be created or destroyed"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the unit of mass in the SI system?",
+      "options": [
+        "Kilogram",
+        "Gram",
+        "Pound",
+        "Ounce"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the formula to calculate potential energy?",
+      "options": [
+        "PE = mgh",
+        "PE = 1/2 mv²",
+        "PE = Fd",
+        "PE = mv"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

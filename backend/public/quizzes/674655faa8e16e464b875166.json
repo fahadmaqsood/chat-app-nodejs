@@ -1,0 +1,108 @@
+{
+  "title": "Greek Mythology",
+  "topic": "66fec2c9b6950e88826fe010",
+  "difficulty": "medium",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "Who is the king of the Greek gods?",
+      "options": [
+        "Hades",
+        "Zeus",
+        "Poseidon",
+        "Apollo"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the winged horse in Greek mythology?",
+      "options": [
+        "Cerberus",
+        "Chimera",
+        "Pegasus",
+        "Hydra"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Who is the goddess of wisdom and warfare?",
+      "options": [
+        "Artemis",
+        "Athena",
+        "Demeter",
+        "Aphrodite"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which hero is known for his 12 labors?",
+      "options": [
+        "Hercules",
+        "Perseus",
+        "Theseus",
+        "Achilles"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who is the god of the sea?",
+      "options": [
+        "Hades",
+        "Zeus",
+        "Poseidon",
+        "Hermes"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the name of the underworld in Greek mythology?",
+      "options": [
+        "Elysium",
+        "Hades",
+        "Olympus",
+        "Tartarus"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is the messenger of the gods?",
+      "options": [
+        "Apollo",
+        "Ares",
+        "Hermes",
+        "Dionysus"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which Greek goddess is associated with love and beauty?",
+      "options": [
+        "Hera",
+        "Artemis",
+        "Aphrodite",
+        "Demeter"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What creature has the body of a lion and the head of a human?",
+      "options": [
+        "Sphinx",
+        "Minotaur",
+        "Centaur",
+        "Gorgon"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who is known as the god of war?",
+      "options": [
+        "Hades",
+        "Ares",
+        "Hermes",
+        "Zeus"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

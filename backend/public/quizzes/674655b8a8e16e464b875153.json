@@ -1,0 +1,128 @@
+{
+  "title": "Pop Music",
+  "topic": "66fec2c9b6950e88826fe005",
+  "difficulty": "easy",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "Who is known as the 'Queen of Pop'?",
+      "options": [
+        "Madonna",
+        "Beyoncé",
+        "Taylor Swift",
+        "Lady Gaga"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the name of the famous pop group that includes members such as Justin Timberlake and Britney Spears?",
+      "options": [
+        "Backstreet Boys",
+        "NSYNC",
+        "One Direction",
+        "The Jackson 5"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which pop star is known for the hit song 'Bad Romance'?",
+      "options": [
+        "Katy Perry",
+        "Rihanna",
+        "Lady Gaga",
+        "Ariana Grande"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the title of Taylor Swift's debut album?",
+      "options": [
+        "Fearless",
+        "1989",
+        "Taylor Swift",
+        "Red"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which song by Katy Perry features the lyrics 'Do you ever feel like a plastic bag'?",
+      "options": [
+        "Firework",
+        "Roar",
+        "Teenage Dream",
+        "Last Friday Night"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the stage name of the artist born Stefani Joanne Angelina Germanotta?",
+      "options": [
+        "Beyoncé",
+        "Kesha",
+        "Lady Gaga",
+        "Ariana Grande"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which artist released the album '25' in 2015?",
+      "options": [
+        "Adele",
+        "Ed Sheeran",
+        "Bruno Mars",
+        "Demi Lovato"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who is known for the song 'Shape of You'?",
+      "options": [
+        "Justin Bieber",
+        "Ed Sheeran",
+        "Shawn Mendes",
+        "Maroon 5"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What genre of music is typically associated with artists like Billie Eilish and Halsey?",
+      "options": [
+        "Rock",
+        "Pop",
+        "Jazz",
+        "Country"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which pop singer's real name is Robyn Fenty?",
+      "options": [
+        "Ariana Grande",
+        "Rihanna",
+        "Nicki Minaj",
+        "Demi Lovato"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the name of the popular music festival held annually in Coachella Valley, California?",
+      "options": [
+        "Lollapalooza",
+        "Bonnaroo",
+        "Coachella",
+        "Glastonbury"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which pop artist is known for the song 'Blinding Lights'?",
+      "options": [
+        "The Weeknd",
+        "Drake",
+        "Post Malone",
+        "Maroon 5"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

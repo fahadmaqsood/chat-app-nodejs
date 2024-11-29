@@ -1,0 +1,215 @@
+{
+  "title": "What Type of Adventurer Are You?",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What motivates you to go on an adventure?",
+      "options": [
+        {
+          "text": "The thrill of discovery",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Seeking new experiences",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Connecting with nature",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Learning about different cultures",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to travel?",
+      "options": [
+        {
+          "text": "By foot, exploring hidden paths",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "By train or bus, taking in the scenery",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Camping and hiking in the great outdoors",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "By plane, visiting cities and landmarks",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you pack for an adventure?",
+      "options": [
+        {
+          "text": "A map and a compass",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A journal to document my journey",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Binoculars and a field guide",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Camera and travel books",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ideal adventure destination?",
+      "options": [
+        {
+          "text": "Uncharted territories",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A bustling city full of life",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "A serene forest or national park",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "A historical site rich in culture",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about planning your adventures?",
+      "options": [
+        {
+          "text": "I prefer spontaneity and going with the flow",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "I like to have a rough itinerary but leave room for flexibility",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "I plan to ensure I can enjoy nature safely",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "I research thoroughly to maximize cultural experiences",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you enjoy most during an adventure?",
+      "options": [
+        {
+          "text": "The unexpected surprises along the way",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Meeting new people",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Observing wildlife",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Trying local cuisines",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you hope to take away from your adventures?",
+      "options": [
+        {
+          "text": "Stories of daring exploits",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Memories of great experiences",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "A deeper appreciation for nature",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "A richer understanding of different cultures",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Explorer": "You are a true adventurer at heart, always seeking the next thrill!",
+    "Traveler": "You love to explore the world and create unforgettable memories.",
+    "Naturalist": "You have a deep connection with nature and enjoy the outdoors.",
+    "Cultural Enthusiast": "You thrive on understanding the world through its diverse cultures."
+  }
+}

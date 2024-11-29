@@ -1,0 +1,128 @@
+{
+  "title": "Structural Engineering",
+  "topic": "66fec2c9b6950e88826fe012",
+  "difficulty": "extra hard",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What is the primary purpose of a shear wall in a building structure?",
+      "options": [
+        "To provide aesthetic appeal",
+        "To resist lateral forces",
+        "To support vertical loads",
+        "To improve thermal insulation"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which of the following materials has the highest tensile strength?",
+      "options": [
+        "Steel",
+        "Aluminum",
+        "Concrete",
+        "Wood"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "In structural analysis, what does the term 'deflection' refer to?",
+      "options": [
+        "The bending of a beam under load",
+        "The ultimate load a structure can take",
+        "The angle of a structure's inclination",
+        "The difference in elevation between two points"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the primary function of a foundation in a building?",
+      "options": [
+        "To provide aesthetic support",
+        "To distribute loads to the ground",
+        "To support the roof",
+        "To resist wind loads"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which type of bridge uses cables suspended between towers?",
+      "options": [
+        "Arch bridge",
+        "Beam bridge",
+        "Suspension bridge",
+        "Truss bridge"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What does the term 'moment of inertia' refer to in structural engineering?",
+      "options": [
+        "The resistance to rotational motion",
+        "The ability to withstand shear forces",
+        "The stiffness of a material",
+        "The weight distribution of a structure"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What is the primary purpose of a cross-bracing system in a structure?",
+      "options": [
+        "To enhance aesthetic value",
+        "To provide stability against lateral loads",
+        "To increase the weight of the structure",
+        "To improve thermal insulation"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which design philosophy is primarily used in seismic design?",
+      "options": [
+        "Limit state design",
+        "Working stress design",
+        "Ultimate load design",
+        "Factor of safety design"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "What does the term 'live load' refer to in structural engineering?",
+      "options": [
+        "Permanent loads like walls and roofs",
+        "Variable loads like people and furniture",
+        "Loads due to wind and earthquakes",
+        "The weight of the structural materials"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the primary advantage of using reinforced concrete over plain concrete?",
+      "options": [
+        "Lower cost",
+        "Higher compressive strength",
+        "Higher tensile strength",
+        "Easier to mold into shapes"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "In an Euler-Bernoulli beam theory, which assumption is NOT made?",
+      "options": [
+        "Plane sections remain plane",
+        "Material is isotropic and homogeneous",
+        "Beam is subjected to axial loads only",
+        "Deflections are small compared to the beam length"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "Which of the following is a common method for analyzing indeterminate structures?",
+      "options": [
+        "Method of joints",
+        "Virtual work method",
+        "Method of sections",
+        "Simple beam theory"
+      ],
+      "correct_option": 2
+    }
+  ]
+}

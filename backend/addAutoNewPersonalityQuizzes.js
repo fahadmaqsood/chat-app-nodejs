@@ -288,6 +288,9 @@ try {
     }
 
 
+    console.log(`${personalityQuizzesAdded} personality quizzes added.`);
+
+
     // Close the connection after task completion
     await mongoose.connection.close();
     process.exit(0); // Gracefully exit the process

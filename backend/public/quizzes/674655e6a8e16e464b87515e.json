@@ -1,0 +1,68 @@
+{
+  "title": "World Politics",
+  "topic": "66fec2c9b6950e88826fe00c",
+  "difficulty": "medium",
+  "num_questions": 6,
+  "questions": [
+    {
+      "question": "Who is the current Secretary-General of the United Nations?",
+      "options": [
+        "Antonio Guterres",
+        "Ban Ki-moon",
+        "Kofi Annan",
+        "Javier Pérez de Cuéllar"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which country recently held its presidential elections in 2023?",
+      "options": [
+        "Brazil",
+        "United States",
+        "France",
+        "Turkey"
+      ],
+      "correct_option": 4
+    },
+    {
+      "question": "What is the main goal of the Paris Agreement?",
+      "options": [
+        "Reduce poverty",
+        "Combat climate change",
+        "Promote free trade",
+        "Enhance technology"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which organization aims to promote global economic cooperation?",
+      "options": [
+        "World Health Organization",
+        "International Monetary Fund",
+        "World Trade Organization",
+        "United Nations"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who is the current Prime Minister of the United Kingdom?",
+      "options": [
+        "Boris Johnson",
+        "Rishi Sunak",
+        "Liz Truss",
+        "David Cameron"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which country recently joined the BRICS group in 2023?",
+      "options": [
+        "Argentina",
+        "Mexico",
+        "South Korea",
+        "Indonesia"
+      ],
+      "correct_option": 1
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "title": "What Kind of Traveler Are You?",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What motivates you to travel?",
+      "options": [
+        {
+          "text": "Exploring new cultures",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Relaxation and escape",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Adventure and thrill-seeking",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Learning and personal growth",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you usually plan your trips?",
+      "options": [
+        {
+          "text": "I create a detailed itinerary",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I go with the flow",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "I look for the most exciting activities",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I research extensively beforehand",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of accommodation do you prefer?",
+      "options": [
+        {
+          "text": "A local guesthouse",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "A beach resort",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "A hostel or camping",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "An educational retreat or workshop",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you enjoy doing during your travels?",
+      "options": [
+        {
+          "text": "Visiting museums and cultural landmarks",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Lying on the beach and soaking up the sun",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Hiking or engaging in extreme sports",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Attending lectures or learning new skills",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about trying new foods?",
+      "options": [
+        {
+          "text": "I love trying authentic local dishes",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "As long as it’s delicious, I’m in!",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "I’m open to anything adventurous and unique",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I enjoy learning about the history behind the food",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your ideal travel companion?",
+      "options": [
+        {
+          "text": "A fellow culture enthusiast",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Someone who enjoys relaxation as much as I do",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "A friend who loves adventure and spontaneity",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Someone who shares my passion for learning",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you hope to bring back from your travels?",
+      "options": [
+        {
+          "text": "New experiences and stories to share",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "A tan and great memories",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Adventures to brag about",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Knowledge and insights",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Cultural Explorer": "You thrive on immersing yourself in new cultures and experiences!",
+    "Beach Bum": "You value relaxation and enjoying life’s simple pleasures.",
+    "Adventure Seeker": "You live for thrills and seek out the next adrenaline rush.",
+    "Knowledge Seeker": "You’re always looking to learn something new and expand your horizons."
+  }
+}

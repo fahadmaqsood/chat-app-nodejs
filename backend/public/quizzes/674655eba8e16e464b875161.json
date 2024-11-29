@@ -1,0 +1,108 @@
+{
+  "title": "Constitutional Law",
+  "topic": "66fec2c9b6950e88826fe00d",
+  "difficulty": "extra hard",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What is the supreme law of the land?",
+      "options": [
+        "The Constitution",
+        "The Declaration of Independence",
+        "Federal Laws",
+        "State Laws"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "How many amendments does the Constitution have?",
+      "options": [
+        "10",
+        "27",
+        "33",
+        "50"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What does the First Amendment protect?",
+      "options": [
+        "Right to bear arms",
+        "Freedom of speech",
+        "Right to a fair trial",
+        "Freedom from search and seizure"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Which branch of government is responsible for making federal laws?",
+      "options": [
+        "Executive",
+        "Legislative",
+        "Judicial",
+        "Administrative"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the main purpose of the system of checks and balances?",
+      "options": [
+        "To allow the President to enact laws",
+        "To prevent any one branch from becoming too powerful",
+        "To ensure state laws are upheld",
+        "To manage the economy"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "Who has the power to declare war?",
+      "options": [
+        "The President",
+        "The Supreme Court",
+        "Congress",
+        "The Secretary of Defense"
+      ],
+      "correct_option": 3
+    },
+    {
+      "question": "What is the minimum age to be President of the United States?",
+      "options": [
+        "35",
+        "30",
+        "40",
+        "50"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Which amendment abolished slavery?",
+      "options": [
+        "13th Amendment",
+        "14th Amendment",
+        "15th Amendment",
+        "19th Amendment"
+      ],
+      "correct_option": 1
+    },
+    {
+      "question": "Who is known as the 'Father of the Constitution'?",
+      "options": [
+        "George Washington",
+        "James Madison",
+        "Benjamin Franklin",
+        "Thomas Jefferson"
+      ],
+      "correct_option": 2
+    },
+    {
+      "question": "What is the economic system in the United States?",
+      "options": [
+        "Capitalist economy",
+        "Socialist economy",
+        "Mixed economy",
+        "Communist economy"
+      ],
+      "correct_option": 1
+    }
+  ]
+}
