@@ -401,15 +401,16 @@ export const getPosts = async (req, res) => {
         const formattedPosts = await Promise.all(postPromises);
 
 
-        const searchTerms = "happy|funny";
+        if (mood == "sad" || mood == "unamused") {
+            const searchTerms = "happy|funny";
 
-        const limit = 5;
+            const limit = 5;
 
 
-        const news = await fetchNews(searchTerms, limit);
+            const news = await fetchNews(searchTerms, limit);
 
-        formattedPosts.push(...news);
-
+            formattedPosts.push(...news);
+        }
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
     } catch (err) {
