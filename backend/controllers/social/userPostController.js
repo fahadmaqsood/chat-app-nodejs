@@ -11,6 +11,9 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 
 import { addNotification } from '../notification/notificationController.js';
 
+
+import axios from 'axios';
+
 const _sentimentAnalysis = new SentimentAnalysis();
 
 
@@ -218,6 +221,8 @@ async function populateAndFormatPost(req, _post) {
 
     postObject.hasUserLiked = !!hasUserLiked;
 
+    postObject.type = "post";
+
     // handling polls
     if (post.poll && Array.isArray(post.poll.options)) {
         postObject.poll.options = post.poll.options.map((option) => {
@@ -232,6 +237,26 @@ async function populateAndFormatPost(req, _post) {
 
     return postObject;
 
+}
+
+
+const fetchNews = async (searchTerms, limit) => {
+    try {
+        const apiToken = process.env.THE_NEWS_API;
+
+        const url = `https://api.thenewsapi.com/v1/news/top?api_token=${apiToken}&search=${searchTerms}&search_fields=title,description,main_text&locale=us&limit=${limit}`;
+
+
+        const response = await axios.get(url);
+
+        const news = response.data;  // Handle the response data
+
+
+        return news.data.map((arr) => { arr["type"] = "news"; return arr; });
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const getPosts = async (req, res) => {
@@ -374,6 +399,16 @@ export const getPosts = async (req, res) => {
 
 
         const formattedPosts = await Promise.all(postPromises);
+
+
+        const searchTerms = "happy|funny";
+
+        const limit = 5;
+
+
+        const news = await fetchNews(searchTerms, limit);
+
+        formattedPosts.push(...news);
 
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
