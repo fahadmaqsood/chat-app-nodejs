@@ -241,22 +241,17 @@ async function populateAndFormatPost(req, _post) {
 
 
 const fetchNews = async (searchTerms, limit) => {
-    try {
-        const apiToken = process.env.THE_NEWS_API;
+    const apiToken = process.env.THE_NEWS_API;
 
-        const url = `https://api.thenewsapi.com/v1/news/top?api_token=${apiToken}&search=${searchTerms}&search_fields=title,description,main_text&locale=us&limit=${limit}`;
-
-
-        const response = await axios.get(url);
-
-        const news = response.data;  // Handle the response data
+    const url = `https://api.thenewsapi.com/v1/news/top?api_token=${apiToken}&search=${searchTerms}&search_fields=title,description,main_text&locale=us&limit=${limit}`;
 
 
-        return news.data.map((arr) => { arr["type"] = "news"; return arr; });
+    const response = await axios.get(url);
 
-    } catch (error) {
-        console.log(error);
-    }
+    const news = response.data;  // Handle the response data
+
+
+    return news.data.map((arr) => { arr["type"] = "news"; return arr; });
 }
 
 export const getPosts = async (req, res) => {
