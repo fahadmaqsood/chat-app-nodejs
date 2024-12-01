@@ -40,6 +40,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             if (!purchaseUserId) {
                 console.log("Purchase for token: " + purchaseToken + " has not been recorded yet.");
 
+                await markPurchaseFailure(purchaseToken);
+
                 return res
                     .status(404)
                     .json(new ApiResponse(404, null, "Record for that purchase token not found."));
@@ -217,7 +219,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         }
 
 
-        await markPurchaseFailure(purchaseToken);
+        // await markPurchaseFailure(purchaseToken);
 
         // Respond to Google that the message was received
         res.status(501).send("Don't know what kind of purchase that is.");
@@ -256,7 +258,10 @@ export const getUserIdFromPurchaseToken = async (purchaseToken) => {
 
     // console.log(`purchase: ${purchase}`)
 
-    return purchase.user_id;
+    if (purchase)
+        return purchase.user_id;
+    else
+        return null;
 }
 
 
