@@ -77,6 +77,7 @@ async function sendNotificationToMany(deviceTokens, title, message, payload, isC
     await firebaseAdmin.messaging().sendEachForMulticast(message_data)
         .then((response) => {
             // Response provides details of how many messages were sent successfully
+            console.log(response);
             console.log(`${response.successCount} messages were sent successfully`);
             if (response.failureCount > 0) {
                 const failedTokens = [];
@@ -160,9 +161,9 @@ export const sendCallNotification = async (req, res) => {
 
         await addNotificationForMany(receiverIds, null, null, {
             "isCall": "true",
-            "callerName": req.user.nameElseUsername,
-            "callerId": callerId,
-            "chatId": chatId,
+            "callerName": `${req.user.nameElseUsername}`,
+            "callerId": `${callerId}`,
+            "chatId": `${chatId}`,
             "isVideoCall": `${isVideoCall}`
         }, true);
 
