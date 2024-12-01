@@ -240,10 +240,10 @@ async function populateAndFormatPost(req, _post) {
 }
 
 
-const fetchNews = async (searchTerms, limit) => {
+const fetchNews = async (searchTerms, limit, page = 1) => {
     const apiToken = process.env.THE_NEWS_API;
 
-    const url = `https://api.thenewsapi.com/v1/news/top?api_token=${apiToken}&search=${searchTerms}&search_fields=title,description,main_text&locale=us&limit=${limit}`;
+    const url = `https://api.thenewsapi.com/v1/news/top?api_token=${apiToken}&search=${searchTerms}&search_fields=title,description,main_text&locale=us&limit=${limit}&page=${page}`;
 
 
     const response = await axios.get(url);
@@ -401,7 +401,7 @@ export const getPosts = async (req, res) => {
             const limit = 5;
 
 
-            const news = await fetchNews(searchTerms, limit);
+            const news = await fetchNews(searchTerms, limit, page = start_from / limit);
 
             formattedPosts.push(...news);
         }
