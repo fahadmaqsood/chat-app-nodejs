@@ -401,7 +401,7 @@ export const getPosts = async (req, res) => {
             const limit = 5;
 
 
-            const news = await fetchNews(searchTerms, limit, start_from / limit);
+            const news = await fetchNews(searchTerms, limit, Math.ceil((start_from == 0 ? 1 : start_from) / limit));
 
             formattedPosts.push(...news);
         }
