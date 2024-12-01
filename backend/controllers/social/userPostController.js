@@ -250,7 +250,6 @@ const fetchNews = async (searchTerms, limit) => {
 
     const news = response.data;  // Handle the response data
 
-
     return news.data.map((arr) => { arr["type"] = "news"; return arr; });
 }
 
