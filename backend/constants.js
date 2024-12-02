@@ -100,6 +100,9 @@ export const ChatEventEnum = Object.freeze({
   TYPING_EVENT: "typing",
   // ? when message is deleted
   MESSAGE_DELETE_EVENT: "messageDeleted",
+
+
+  CALL_EVENT: "CALL_EVENT",
 });
 
 export const AvailableChatEvents = Object.values(ChatEventEnum);

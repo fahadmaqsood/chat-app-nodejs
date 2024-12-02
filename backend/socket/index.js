@@ -5,6 +5,8 @@ import { AvailableChatEvents, ChatEventEnum } from "../constants.js";
 import { User } from "../models/auth/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 
+import { emitIndicatorsSocketEvent } from "./indicators.js";
+
 import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
 
 /**
@@ -38,6 +40,24 @@ const mountParticipantTypingEvent = (socket) => {
 const mountParticipantStoppedTypingEvent = (socket) => {
   socket.on(ChatEventEnum.STOP_TYPING_EVENT, (chatId) => {
     socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+  });
+};
+
+const mountSendCallEvent = (socket) => {
+  socket.on(ChatEventEnum.CALL_EVENT, (roomId, chatId, participants, isVideoCall) => {
+    // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+    console.log("Calling: ", participants, "isVideoCall: ", isVideoCall);
+
+    for (let participant of participants) {
+      emitIndicatorsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+        chatId: chatId,
+        callerName: socket.user.nameElseUsername,
+        callerId: socket.user._id,
+        isVideoCall: isVideoCall
+      });
+    }
+
+
   });
 };
 
@@ -76,6 +96,8 @@ const initializeSocketIO = (io) => {
       }
       socket.user = user; // mount the user object to the socket
 
+      socket.user.nameElseUsername = (socket.user.name == null || socket.user.name == "") ? socket.user.username.trim() : socket.user.name.trim();
+
       // We are creating a room with user id so that if user is joined but does not have any active chat going on.
       // still we want to emit some socket events to the user.
       // so that the client can catch the event and show the notifications.
@@ -87,6 +109,7 @@ const initializeSocketIO = (io) => {
       mountJoinChatEvent(socket);
       mountParticipantTypingEvent(socket);
       mountParticipantStoppedTypingEvent(socket);
+      mountSendCallEvent(socket);
 
       socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
         console.log("user has disconnected 🚫. userId: " + socket.user?._id);
