@@ -120,8 +120,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 console.log("Purchase for token: " + purchaseToken + " has not been recorded yet.");
 
                 return res
-                    .status(404)
-                    .json(new ApiResponse(404, null, "Record for that purchase token not found."));
+                    .status(200)
+                    .json(new ApiResponse(200, null, "Record for that purchase token not found."));
             }
 
 
