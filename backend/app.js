@@ -22,6 +22,8 @@ import { initializeChatbotSocket } from "./socket/chatbot.socket.js";
 
 import { initializeIndicatorsSocket } from "./socket/indicators.js";
 
+import { initializeCallsSocket } from "./socket/calls.js";
+
 import { ApiError } from "./utils/ApiError.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 
@@ -168,6 +170,18 @@ const indicatorsWebServerIO = new Server(httpServer, {
 });
 
 initializeIndicatorsSocket(indicatorsWebServerIO);
+
+
+const callsWebServerIO = new Server(httpServer, {
+  path: "/sockets/calls",
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  },
+});
+
+initializeCallsSocket(callsWebServerIO);
 
 // Root route for the API
 app.get('/', (req, res) => {
