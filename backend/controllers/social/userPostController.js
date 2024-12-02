@@ -431,7 +431,7 @@ export const getPosts = async (req, res) => {
                 formattedPosts = updatedPosts;
             }
         } catch (error) {
-
+            console.log(error);
         }
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
