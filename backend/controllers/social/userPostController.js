@@ -400,7 +400,7 @@ export const getPosts = async (req, res) => {
         if (mood == "sad" || mood == "unamused") {
 
         } else {
-            const searchTerms = ["happy", "funny", "cat", "dogs", "peace"];
+            const searchTerms = ["happy", "funny", "happy cat", "funny cat", "happy dogs", "funny dogs", "peace"];
 
             console.log(searchTerms.join("|"));
 
