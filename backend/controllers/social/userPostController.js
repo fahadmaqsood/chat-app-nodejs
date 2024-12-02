@@ -394,7 +394,7 @@ export const getPosts = async (req, res) => {
         });
 
 
-        const formattedPosts = await Promise.all(postPromises);
+        let formattedPosts = await Promise.all(postPromises);
 
 
         if (mood == "sad" || mood == "unamused") {
