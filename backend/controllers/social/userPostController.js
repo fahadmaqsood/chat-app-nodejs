@@ -409,7 +409,7 @@ export const getPosts = async (req, res) => {
 
                 console.log(searchTerms.join("|"));
 
-                const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(postsNewsPaginationPage, postsNewsPaginationPage + 100));
+                const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
 
                 // Create a new array to hold the posts and news in the correct pattern
                 let updatedPosts = [];
