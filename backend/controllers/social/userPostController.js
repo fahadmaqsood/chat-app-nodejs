@@ -400,9 +400,11 @@ export const getPosts = async (req, res) => {
         if (mood == "sad" || mood == "unamused") {
 
         } else {
-            const searchTerms = "happy|funny";
+            const searchTerms = ["happy", "funny", "cat", "dogs", "peace"];
 
-            const news = await fetchNews(searchTerms, 5, postsNewsPaginationPage);
+            console.log(searchTerms.join("|"));
+
+            const news = await fetchNews(searchTerms.join("|"), 5, postsNewsPaginationPage);
 
             // Create a new array to hold the posts and news in the correct pattern
             let updatedPosts = [];
