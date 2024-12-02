@@ -28,7 +28,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         const messageData = Buffer.from(req.body.message.data, 'base64').toString();
         const messageJson = JSON.parse(messageData);
 
-        console.log(messageJson);
+        // console.log(messageJson);
 
         if (Object.keys(messageJson).includes("oneTimeProductNotification")) {
 
@@ -40,15 +40,11 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
             if (!purchaseUserId) {
                 console.log("Purchase for token: " + purchaseToken + " has not been recorded yet.");
 
-                await markPurchaseFailure(purchaseToken);
+                // await markPurchaseFailure(purchaseToken);
 
                 return res
                     .status(200)
                     .json(new ApiResponse(200, null, "Record for that purchase token not found."));
-
-                // return res
-                //     .status(404)
-                //     .json(new ApiResponse(404, null, "Record for that purchase token not found."));
             }
 
             // console.log("purchaseUserId: ", purchaseUserId);
