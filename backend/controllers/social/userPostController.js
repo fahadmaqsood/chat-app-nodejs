@@ -415,20 +415,28 @@ export const getPosts = async (req, res) => {
                 let updatedPosts = [];
                 let newsIndex = 0;
 
-                // Loop through the `formattedPosts` array
-                for (let i = 0; i < formattedPosts.length; i++) {
-                    // Add the current post
-                    updatedPosts.push(formattedPosts[i]);
+                if (formattedPosts.length < 2) {
+                    formattedPosts.push(...news);
+                } else {
 
-                    // After every two posts, insert one item from news (if there are still news items left)
-                    if ((i + 1) % 2 === 0 && newsIndex < news.length) {
-                        updatedPosts.push(news[newsIndex]);  // Insert one news item
-                        newsIndex++;  // Move to the next news item
+                    // Loop through the `formattedPosts` array
+                    for (let i = 0; i < formattedPosts.length; i++) {
+                        // Add the current post
+                        updatedPosts.push(formattedPosts[i]);
+
+                        // After every two posts, insert one item from news (if there are still news items left)
+                        if ((i + 1) % 2 === 0 && newsIndex < news.length) {
+                            updatedPosts.push(news[newsIndex]);  // Insert one news item
+                            newsIndex++;  // Move to the next news item
+                        }
                     }
+
+                    updatedPosts.push(...news.slice(newsIndex, news.length));
+
+                    // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
+                    formattedPosts = updatedPosts;
                 }
 
-                // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
-                formattedPosts = updatedPosts;
             }
         } catch (error) {
             console.log(error);
