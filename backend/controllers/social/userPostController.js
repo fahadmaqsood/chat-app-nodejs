@@ -254,8 +254,14 @@ const fetchNews = async (searchTerms, limit, page = 1) => {
 }
 
 export const getPosts = async (req, res) => {
-    const { mood, topics, start_from = 0, postsNewsPaginationPage = 1 } = req.query;
+    const { mood, topics, start_from = 0, postsNewsPaginationPage } = req.query;
     const limit = 10;
+
+    console.log(`postsNewsPaginationPage: ${postsNewsPaginationPage}`);
+
+    if (!postsNewsPaginationPage) {
+        postsNewsPaginationPage = 1;
+    }
 
     try {
         // Validate input
