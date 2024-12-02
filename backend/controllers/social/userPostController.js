@@ -401,34 +401,37 @@ export const getPosts = async (req, res) => {
 
         let formattedPosts = await Promise.all(postPromises);
 
+        try {
+            if (mood == "sad" || mood == "unamused") {
 
-        if (mood == "sad" || mood == "unamused") {
+            } else {
+                const searchTerms = ["happy", "funny", "happy cat", "funny cat", "happy dogs", "funny dogs", "peace"];
 
-        } else {
-            const searchTerms = ["happy", "funny", "happy cat", "funny cat", "happy dogs", "funny dogs", "peace"];
+                console.log(searchTerms.join("|"));
 
-            console.log(searchTerms.join("|"));
+                const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(postsNewsPaginationPage, postsNewsPaginationPage + 100));
 
-            const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(postsNewsPaginationPage, postsNewsPaginationPage + 100));
+                // Create a new array to hold the posts and news in the correct pattern
+                let updatedPosts = [];
+                let newsIndex = 0;
 
-            // Create a new array to hold the posts and news in the correct pattern
-            let updatedPosts = [];
-            let newsIndex = 0;
+                // Loop through the `formattedPosts` array
+                for (let i = 0; i < formattedPosts.length; i++) {
+                    // Add the current post
+                    updatedPosts.push(formattedPosts[i]);
 
-            // Loop through the `formattedPosts` array
-            for (let i = 0; i < formattedPosts.length; i++) {
-                // Add the current post
-                updatedPosts.push(formattedPosts[i]);
-
-                // After every two posts, insert one item from news (if there are still news items left)
-                if ((i + 1) % 2 === 0 && newsIndex < news.length) {
-                    updatedPosts.push(news[newsIndex]);  // Insert one news item
-                    newsIndex++;  // Move to the next news item
+                    // After every two posts, insert one item from news (if there are still news items left)
+                    if ((i + 1) % 2 === 0 && newsIndex < news.length) {
+                        updatedPosts.push(news[newsIndex]);  // Insert one news item
+                        newsIndex++;  // Move to the next news item
+                    }
                 }
-            }
 
-            // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
-            formattedPosts = updatedPosts;
+                // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
+                formattedPosts = updatedPosts;
+            }
+        } catch (error) {
+
         }
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
