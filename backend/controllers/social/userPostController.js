@@ -240,6 +240,11 @@ async function populateAndFormatPost(req, _post) {
 }
 
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
 const fetchNews = async (searchTerms, limit, page = 1) => {
     const apiToken = process.env.THE_NEWS_API;
 
@@ -404,7 +409,7 @@ export const getPosts = async (req, res) => {
 
             console.log(searchTerms.join("|"));
 
-            const news = await fetchNews(searchTerms.join("|"), 5, postsNewsPaginationPage);
+            const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(postsNewsPaginationPage, postsNewsPaginationPage + 100));
 
             // Create a new array to hold the posts and news in the correct pattern
             let updatedPosts = [];
