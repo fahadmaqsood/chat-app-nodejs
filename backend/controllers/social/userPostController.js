@@ -398,10 +398,8 @@ export const getPosts = async (req, res) => {
         if (mood == "sad" || mood == "unamused") {
             const searchTerms = "happy|funny";
 
-            const limit = 5;
-
-
-            const news = await fetchNews(searchTerms, limit, postsNewsPaginationPage);
+            console.log(postsNewsPaginationPage);
+            const news = await fetchNews(searchTerms, 5, postsNewsPaginationPage);
 
             formattedPosts.push(...news);
         }
