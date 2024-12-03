@@ -59,7 +59,7 @@ const initializeCallsSocket = (io) => {
             for (let [user_subject, id] of userSocketMap.entries()) {
                 if (id === socket.id) {
                     userSocketMap.delete(user_subject);
-                    console.log(`User ${user_subject} disconnected, removed from map.`);
+                    console.log(`User ${user_subject} disconnected from call service, removed from map.`);
                     break;
                 }
             }
