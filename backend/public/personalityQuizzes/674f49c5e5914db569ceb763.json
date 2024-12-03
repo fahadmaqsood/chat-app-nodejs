@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Traveler Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is your ideal vacation destination?",
+      "options": [
+        {
+          "text": "A bustling city full of culture",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "A serene beach to relax on",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "A remote mountain retreat",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "A historical site to explore",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to travel?",
+      "options": [
+        {
+          "text": "By plane for quick access",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "By car for the scenic route",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "By hiking to reach hidden spots",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "By train to enjoy the journey",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you pack first for a trip?",
+      "options": [
+        {
+          "text": "My camera for capturing moments",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "My swimsuit for beach time",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "My hiking boots for adventures",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "A guidebook for historical insights",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of activities do you enjoy while traveling?",
+      "options": [
+        {
+          "text": "Visiting museums and galleries",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "Sunbathing and swimming",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Hiking and nature walks",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Touring ancient ruins",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your travel budget like?",
+      "options": [
+        {
+          "text": "I prefer luxury accommodations",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "I look for affordable beach resorts",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "I camp or stay in hostels",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "I spend on experiences rather than hotels",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you document your travels?",
+      "options": [
+        {
+          "text": "Social media posts and updates",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "A travel journal filled with memories",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Nature photography and sketches",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Research notes and historical reflections",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What kind of food do you seek out while traveling?",
+      "options": [
+        {
+          "text": "Trendy local restaurants",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "Fresh seafood and beach bars",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Local dishes and farm-to-table fare",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Traditional meals with historical significance",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What souvenir do you like to bring back?",
+      "options": [
+        {
+          "text": "Art and crafts from local artists",
+          "points": {
+            "Urban Explorer": 2
+          }
+        },
+        {
+          "text": "Beach shells and sun hats",
+          "points": {
+            "Beach Bum": 2
+          }
+        },
+        {
+          "text": "Nature-inspired gifts like plants",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Books or artifacts related to history",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Urban Explorer": "You thrive in vibrant cities, seeking culture and adventure!",
+    "Beach Bum": "You love to relax by the beach and enjoy the sun and sea.",
+    "Nature Lover": "You are drawn to the great outdoors and love exploring nature.",
+    "History Buff": "You enjoy delving into the past and discovering historical sites."
+  }
+}

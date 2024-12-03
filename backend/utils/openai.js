@@ -33,6 +33,8 @@ export const getChatCompletion = async ({ messages, user_message, model = "gpt-4
             totalResponse += completion;
             finishReason = response.choices[0].finish_reason;
 
+            console.log(finishReason);
+
             // Append the assistant's message to continue the conversation
             allMessages.push({ role: 'assistant', content: completion });
 

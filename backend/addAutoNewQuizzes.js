@@ -124,6 +124,12 @@ try {
 
                         titleExists = await Quiz.exists({ title: json.title });
 
+                        if (titleExists == null) {
+                            titleExists = false;
+                        } else {
+                            titleExists = true;
+                        }
+
                         if (!titleExists) {
 
                             // console.log(json);

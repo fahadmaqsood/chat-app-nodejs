@@ -1,0 +1,244 @@
+{
+  "title": "What Kind of Adventurer Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What motivates you to go on an adventure?",
+      "options": [
+        {
+          "text": "The thrill of discovery",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "The challenge of overcoming obstacles",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "The beauty of nature",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "The search for hidden treasures",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prepare for an adventure?",
+      "options": [
+        {
+          "text": "Research and plan every detail",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Gather the best gear and weapons",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "Pack essentials and embrace spontaneity",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Compile maps and clues",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of environment do you prefer for your adventures?",
+      "options": [
+        {
+          "text": "Uncharted territories",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Mountains and battlefields",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "Forests and parks",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Mysterious caves and ruins",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you handle obstacles during your adventures?",
+      "options": [
+        {
+          "text": "Analyze and strategize",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Face them head-on with courage",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "Find a peaceful way around",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Use wit and cleverness to bypass them",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider the greatest reward from an adventure?",
+      "options": [
+        {
+          "text": "Knowledge and experiences",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Honor and recognition",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "Peace and tranquility",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Riches and artifacts",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "Who would you take with you on an adventure?",
+      "options": [
+        {
+          "text": "A fellow explorer",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A trusted warrior",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "A nature enthusiast",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "A skilled treasure tracker",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you document your adventures?",
+      "options": [
+        {
+          "text": "Journaling and mapping",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Writing epic tales",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "Taking photographs and sketches",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "Creating treasure maps and logs",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ultimate adventure goal?",
+      "options": [
+        {
+          "text": "To explore every corner of the world",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "To become a legendary hero",
+          "points": {
+            "Warrior": 2
+          }
+        },
+        {
+          "text": "To connect deeply with nature",
+          "points": {
+            "Nature Lover": 2
+          }
+        },
+        {
+          "text": "To uncover lost treasures",
+          "points": {
+            "Treasure Hunter": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Explorer": "You are always seeking new knowledge and experiences!",
+    "Warrior": "You are bold and courageous, facing challenges head-on!",
+    "Nature Lover": "You have a deep appreciation for the beauty of the natural world!",
+    "Treasure Hunter": "You are clever and resourceful, always in search of hidden treasures!"
+  }
+}

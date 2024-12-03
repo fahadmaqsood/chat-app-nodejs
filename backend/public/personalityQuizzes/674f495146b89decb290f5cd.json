@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Traveler Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What motivates you to travel?",
+      "options": [
+        {
+          "text": "Adventure and thrill",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Cultural experiences",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "Relaxation and leisure",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "Learning new things",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to plan your trips?",
+      "options": [
+        {
+          "text": "I love detailed itineraries",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "I go with the flow",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "I prefer all-inclusive packages",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "I research extensively before going",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of accommodation do you prefer?",
+      "options": [
+        {
+          "text": "Hostels or camping",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Boutique hotels or homestays",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "Luxury resorts",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "Bed and breakfasts or guesthouses",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your ideal travel companion?",
+      "options": [
+        {
+          "text": "A fellow thrill-seeker",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Someone who appreciates art and culture",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "A friend who loves to relax",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "A curious and inquisitive partner",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about trying local food?",
+      "options": [
+        {
+          "text": "I’m up for anything!",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "I enjoy trying new dishes",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "I stick to familiar foods",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "I love learning the history behind dishes",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of activities do you enjoy on vacation?",
+      "options": [
+        {
+          "text": "Hiking and extreme sports",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Visiting museums and galleries",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "Spa days and lounging on the beach",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "Taking workshops or classes",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about solo travel?",
+      "options": [
+        {
+          "text": "I thrive on it!",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "I enjoy it but prefer company",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "I’m not a fan, I like to share experiences",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "I love the opportunity to learn independently",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your favorite way to document your travels?",
+      "options": [
+        {
+          "text": "Photos and adventure stories",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Sketches and journals",
+          "points": {
+            "Cultural Enthusiast": 2
+          }
+        },
+        {
+          "text": "Relaxing with a good book about the place",
+          "points": {
+            "Relaxer": 2
+          }
+        },
+        {
+          "text": "Researching and writing articles",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Explorer": "You are an adventurous traveler, always seeking the next thrill!",
+    "Cultural Enthusiast": "You love immersing yourself in the local culture and experiences.",
+    "Relaxer": "You prefer to unwind and enjoy the leisurely side of travel.",
+    "Knowledge Seeker": "You are a curious traveler, always eager to learn and explore."
+  }
+}

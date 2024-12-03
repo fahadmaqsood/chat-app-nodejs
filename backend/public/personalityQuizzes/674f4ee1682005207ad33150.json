@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Innovator Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What drives your creativity?",
+      "options": [
+        {
+          "text": "Solving complex problems",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "Understanding human emotions",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "Exploring new technologies",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "Expressing personal experiences",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you approach a new project?",
+      "options": [
+        {
+          "text": "I dive in and start building",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "I sketch out ideas and concepts",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "I research and analyze trends",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "I brainstorm and gather inspiration",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your preferred working environment?",
+      "options": [
+        {
+          "text": "A workshop or lab",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "A studio with lots of materials",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "A tech hub with the latest gadgets",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "A quiet space full of art supplies",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider your greatest strength?",
+      "options": [
+        {
+          "text": "My problem-solving skills",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "My empathy and understanding",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "My technical knowledge",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "My ability to convey emotions",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you deal with failure?",
+      "options": [
+        {
+          "text": "I learn from it and try again",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "I analyze what went wrong and adjust",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "I use it as a stepping stone to innovate",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "I express my feelings through my art",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of projects excite you the most?",
+      "options": [
+        {
+          "text": "Creating new inventions",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "Designing user-friendly products",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "Developing cutting-edge software",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "Producing thought-provoking art",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you stay motivated?",
+      "options": [
+        {
+          "text": "By envisioning the final product",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "By receiving feedback from others",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "By keeping up with industry trends",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "By connecting with other artists",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you hope to achieve with your work?",
+      "options": [
+        {
+          "text": "To create something groundbreaking",
+          "points": {
+            "Inventor": 2
+          }
+        },
+        {
+          "text": "To enhance people's lives through design",
+          "points": {
+            "Designer": 2
+          }
+        },
+        {
+          "text": "To push the boundaries of technology",
+          "points": {
+            "Tech Enthusiast": 2
+          }
+        },
+        {
+          "text": "To evoke emotions and provoke thought",
+          "points": {
+            "Artist": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Inventor": "You are an innovative thinker, constantly seeking to create new solutions!",
+    "Designer": "You have a keen eye for aesthetics and functionality, always focusing on the user experience.",
+    "Tech Enthusiast": "You are passionate about technology and love to explore its endless possibilities.",
+    "Artist": "You are a creative soul, using your art to express your thoughts and feelings."
+  }
+}

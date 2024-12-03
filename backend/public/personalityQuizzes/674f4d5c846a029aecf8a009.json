@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Leader Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "How do you make decisions?",
+      "options": [
+        {
+          "text": "I rely on data and analysis",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "I trust my intuition and gut feelings",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "I consult my team for their input",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "I follow established protocols and rules",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What motivates you the most?",
+      "options": [
+        {
+          "text": "Achieving goals and targets",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Inspiring others with my vision",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Fostering teamwork and cooperation",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Maintaining order and discipline",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you handle conflict?",
+      "options": [
+        {
+          "text": "Analyze the situation and find a solution",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Use persuasion to bring people together",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Facilitate a discussion to resolve differences",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Enforce rules to ensure compliance",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your leadership style?",
+      "options": [
+        {
+          "text": "Data-driven and strategic",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Visionary and engaging",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Inclusive and supportive",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Structured and directive",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you celebrate team success?",
+      "options": [
+        {
+          "text": "Analyze results and share insights",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Host a grand celebration",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Acknowledge everyone’s contributions",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Reward with promotions or bonuses",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider your greatest strength?",
+      "options": [
+        {
+          "text": "Critical thinking and problem-solving",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Ability to motivate and charm others",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Building strong relationships",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Establishing clear expectations",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you develop your team?",
+      "options": [
+        {
+          "text": "Providing data-driven feedback",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Offering mentorship and inspiration",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Encouraging collaboration and skill sharing",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Setting clear guidelines and training",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your vision for your team’s future?",
+      "options": [
+        {
+          "text": "Achieving measurable success",
+          "points": {
+            "Analytical Leader": 2
+          }
+        },
+        {
+          "text": "Becoming a leading force in our industry",
+          "points": {
+            "Charismatic Leader": 2
+          }
+        },
+        {
+          "text": "Creating a harmonious and productive environment",
+          "points": {
+            "Collaborative Leader": 2
+          }
+        },
+        {
+          "text": "Maintaining high standards and efficiency",
+          "points": {
+            "Authoritative Leader": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Analytical Leader": "You are a logical thinker who values data and strategy.",
+    "Charismatic Leader": "You inspire others with your vision and enthusiasm.",
+    "Collaborative Leader": "You believe in teamwork and fostering strong relationships.",
+    "Authoritative Leader": "You lead with structure and clear guidelines."
+  }
+}

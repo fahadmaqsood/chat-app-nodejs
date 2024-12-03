@@ -1,0 +1,215 @@
+{
+  "title": "What Type of Adventurer Are You?",
+  "num_questions": 7,
+  "questions": [
+    {
+      "question": "What motivates you to explore?",
+      "options": [
+        {
+          "text": "The thrill of discovery",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "The quest for knowledge",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "The call of nature",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "The chance to experience new cultures",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to travel?",
+      "options": [
+        {
+          "text": "By foot, through uncharted territory",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "By reading and researching before I go",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "In a camper van, immersed in nature",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Taking guided tours to learn from locals",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ideal adventure destination?",
+      "options": [
+        {
+          "text": "An unknown island",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A historical site with rich stories",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "A national park with breathtaking views",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "A bustling city filled with diverse cultures",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you enjoy doing while traveling?",
+      "options": [
+        {
+          "text": "Mapping out new paths and routes",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Visiting museums and libraries",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "Hiking and observing wildlife",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Trying local cuisines and traditions",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you document your adventures?",
+      "options": [
+        {
+          "text": "With a detailed travel journal",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "Through essays and research papers",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "With photographs of nature",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "By collecting stories from locals",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider the most rewarding part of an adventure?",
+      "options": [
+        {
+          "text": "The stories I can tell later",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "The knowledge I gain",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "The beauty of the natural world",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "The friendships I form along the way",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What legacy do you hope to leave behind?",
+      "options": [
+        {
+          "text": "A collection of maps and findings",
+          "points": {
+            "Explorer": 2
+          }
+        },
+        {
+          "text": "A library of knowledge and insights",
+          "points": {
+            "Scholar": 2
+          }
+        },
+        {
+          "text": "A commitment to environmental preservation",
+          "points": {
+            "Naturalist": 2
+          }
+        },
+        {
+          "text": "Cultural understanding and appreciation",
+          "points": {
+            "Cultural Voyager": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Explorer": "You are a daring adventurer, always seeking the thrill of the unknown!",
+    "Scholar": "You are a curious mind, eager to learn and share knowledge with others.",
+    "Naturalist": "You find joy in nature and seek to understand and protect the environment.",
+    "Cultural Voyager": "You thrive on connecting with people and cultures from around the world."
+  }
+}

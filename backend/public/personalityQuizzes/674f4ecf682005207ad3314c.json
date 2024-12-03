@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Foodie Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What meal do you enjoy the most?",
+      "options": [
+        {
+          "text": "A hearty breakfast",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "A gourmet dinner",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "Street food adventures",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "A simple home-cooked meal",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you like to explore new cuisines?",
+      "options": [
+        {
+          "text": "Through cooking classes",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "Dining at high-end restaurants",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "Trying food stalls and markets",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "Family recipes passed down through generations",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your go-to snack?",
+      "options": [
+        {
+          "text": "Avocado toast",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "Artisanal cheese and charcuterie",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "Tacos from a food truck",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "Homemade cookies",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of restaurant do you prefer?",
+      "options": [
+        {
+          "text": "A cozy café with brunch specials",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "A Michelin-starred restaurant",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "A vibrant food market",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "A family diner with comfort food",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about trying exotic ingredients?",
+      "options": [
+        {
+          "text": "I love experimenting with new flavors",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "Only if they’re presented elegantly",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "Bring it on, I’m ready for anything!",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "I prefer familiar tastes, thanks!",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your ideal food experience?",
+      "options": [
+        {
+          "text": "A brunch with friends",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "An elaborate multi-course meal",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "A food festival with diverse options",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "A family gathering with traditional dishes",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about leftovers?",
+      "options": [
+        {
+          "text": "I love reinventing them into new dishes",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "Only if they’re gourmet enough",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "They’re perfect for late-night snacks!",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "They remind me of home-cooked meals",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your favorite drink to accompany a meal?",
+      "options": [
+        {
+          "text": "A creative brunch cocktail",
+          "points": {
+            "Brunch Lover": 2
+          }
+        },
+        {
+          "text": "A fine wine that complements the dish",
+          "points": {
+            "Fine Dining Enthusiast": 2
+          }
+        },
+        {
+          "text": "A craft beer or unique soda",
+          "points": {
+            "Food Adventurer": 2
+          }
+        },
+        {
+          "text": "A comforting cup of tea or coffee",
+          "points": {
+            "Comfort Foodie": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Brunch Lover": "You enjoy the relaxed vibes of brunch and love to experiment with creative dishes!",
+    "Fine Dining Enthusiast": "You appreciate the art of fine dining and savor every bite of gourmet meals.",
+    "Food Adventurer": "You’re always on the lookout for your next delicious adventure and love trying new flavors.",
+    "Comfort Foodie": "You find joy in traditional meals that evoke nostalgia and comfort."
+  }
+}

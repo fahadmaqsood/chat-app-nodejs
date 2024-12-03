@@ -1,0 +1,244 @@
+{
+  "title": "What Type of Traveler Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What motivates you to travel?",
+      "options": [
+        {
+          "text": "Exploring new cultures",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Seeking adventure and thrills",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Relaxing and unwinding",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "Learning and gaining knowledge",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ideal travel companion?",
+      "options": [
+        {
+          "text": "A close friend who shares my interests",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "A fellow adventurer ready for anything",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "My partner for a romantic getaway",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "Someone who loves to discuss ideas and history",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to plan your trips?",
+      "options": [
+        {
+          "text": "I love researching and planning every detail",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I prefer to go with the flow and be spontaneous",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I like to book a nice hotel and relax",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "I enjoy learning about the destination beforehand",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of accommodation do you prefer?",
+      "options": [
+        {
+          "text": "A local homestay or boutique hotel",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Camping or staying in hostels",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "A luxurious resort or spa",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "A historic or educational place to stay",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your favorite travel activity?",
+      "options": [
+        {
+          "text": "Visiting museums and cultural sites",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Hiking, climbing, or extreme sports",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Sunbathing by the beach or pool",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "Attending lectures, workshops, or tours",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about trying local cuisine?",
+      "options": [
+        {
+          "text": "I love trying new dishes and flavors",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I’ll try anything once for the experience",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I prefer familiar foods, especially when relaxing",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "I enjoy learning the history behind local dishes",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What souvenir do you like to bring back?",
+      "options": [
+        {
+          "text": "Art or crafts made by local artisans",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "A photo or story from my adventure",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Spa products or relaxation items",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "Books or educational materials about the place",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel when you return home from a trip?",
+      "options": [
+        {
+          "text": "Inspired to continue exploring new cultures",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Eager to plan my next adventure",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Refreshed and ready to relax at home",
+          "points": {
+            "Relaxation Enthusiast": 2
+          }
+        },
+        {
+          "text": "Motivated to share what I've learned with others",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Cultural Explorer": "You love immersing yourself in new cultures and experiences!",
+    "Adventure Seeker": "You live for the thrill of adventure and the excitement of new challenges!",
+    "Relaxation Enthusiast": "You prioritize relaxation and comfort, seeking peace during your travels.",
+    "Knowledge Seeker": "You travel to learn, explore ideas, and expand your understanding of the world."
+  }
+}

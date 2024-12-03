@@ -1,0 +1,302 @@
+{
+  "title": "What's Your Ideal Vacation Style?",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "How do you prefer to travel?",
+      "options": [
+        {
+          "text": "By plane to far-off destinations",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "By car, enjoying the scenery along the way",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "By train for a scenic and leisurely journey",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Staying local and exploring hidden gems",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your favorite type of accommodation?",
+      "options": [
+        {
+          "text": "Luxury hotels with all the amenities",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "Cozy cabins or cottages in nature",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Charming bed and breakfasts",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Staying at home or in familiar places",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What activities excite you the most?",
+      "options": [
+        {
+          "text": "Extreme sports or adventurous outings",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "Exploring national parks and hiking",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Cultural experiences and museums",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Reading and relaxing in quiet places",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you like to plan your trips?",
+      "options": [
+        {
+          "text": "Spontaneously, I go where the wind takes me",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "With a detailed itinerary and stops planned out",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Researching and learning about each destination",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "I prefer to stay in familiar places and relax",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your ideal vacation length?",
+      "options": [
+        {
+          "text": "A quick weekend getaway",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "A week-long road trip",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "A couple of weeks exploring a new culture",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "A staycation to recharge and relax",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your approach to food while traveling?",
+      "options": [
+        {
+          "text": "Trying exotic and local dishes",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "Stopping at diners and local eateries",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Dining at well-reviewed restaurants",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Eating at home or familiar places",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about crowds?",
+      "options": [
+        {
+          "text": "I thrive in bustling tourist spots",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "I enjoy popular attractions but need some quiet time",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "I prefer less crowded and off-the-beaten-path locations",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "I avoid crowds and prefer solitude",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What kind of souvenirs do you like to bring back?",
+      "options": [
+        {
+          "text": "Unique and adventurous items from my travels",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "Local crafts and keepsakes from my journey",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Artistic or cultural items that reflect the place",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Nothing, I prefer to enjoy memories instead",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your view on itineraries?",
+      "options": [
+        {
+          "text": "I like flexibility and spontaneity",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "I prefer a mix of planned stops and spontaneity",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "I like to have a plan but leave room for changes",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "I enjoy having no plan at all",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your vacation vibe?",
+      "options": [
+        {
+          "text": "Adventurous and thrill-seeking",
+          "points": {
+            "Adventurer": 2
+          }
+        },
+        {
+          "text": "Relaxed and carefree on the road",
+          "points": {
+            "Road Tripper": 2
+          }
+        },
+        {
+          "text": "Curious and explorative",
+          "points": {
+            "Traveler": 2
+          }
+        },
+        {
+          "text": "Comfortable and cozy at home",
+          "points": {
+            "Homebody": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Adventurer": "You seek thrill and excitement in every journey!",
+    "Road Tripper": "You love the freedom of the open road and discovering new places.",
+    "Traveler": "You thrive on cultural experiences and learning about the world.",
+    "Homebody": "You find joy in comfort and familiarity, preferring the cozy over the adventurous."
+  }
+}

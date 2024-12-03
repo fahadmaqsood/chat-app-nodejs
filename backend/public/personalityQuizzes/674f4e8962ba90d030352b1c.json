@@ -1,0 +1,244 @@
+{
+  "title": "What Kind of Innovator Are You?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What motivates your creativity?",
+      "options": [
+        {
+          "text": "Solving complex problems",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Expressing my emotions",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Improving people's lives",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Exploring new ideas",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you approach collaboration?",
+      "options": [
+        {
+          "text": "I take the lead and guide others",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "I share my vision and inspire the team",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "I focus on building relationships and trust",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "I encourage brainstorming and experimentation",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ideal work environment?",
+      "options": [
+        {
+          "text": "Structured and organized",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Open and free-spirited",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Community-focused and supportive",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Dynamic and ever-changing",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider a major achievement?",
+      "options": [
+        {
+          "text": "Completing a complex project on time",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Creating a powerful piece of art",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Starting a successful social initiative",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Inventing something that changes the world",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you handle failure?",
+      "options": [
+        {
+          "text": "Analyze what went wrong and improve",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Use it as inspiration for my next creation",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Learn from it and keep pushing forward",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Experiment until I find a solution",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you value most in your work?",
+      "options": [
+        {
+          "text": "Precision and efficiency",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Authenticity and expression",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Impact and community well-being",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Innovation and discovery",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your dream project?",
+      "options": [
+        {
+          "text": "Designing a groundbreaking technology",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "Creating a transformative art exhibit",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "Launching a non-profit that empowers others",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "Inventing a revolutionary product",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you stay inspired?",
+      "options": [
+        {
+          "text": "By studying the latest technologies",
+          "points": {
+            "Engineer": 2
+          }
+        },
+        {
+          "text": "By immersing myself in various art forms",
+          "points": {
+            "Artist": 2
+          }
+        },
+        {
+          "text": "By connecting with like-minded individuals",
+          "points": {
+            "Social Entrepreneur": 2
+          }
+        },
+        {
+          "text": "By exploring new ideas and concepts",
+          "points": {
+            "Inventor": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Engineer": "You are a detail-oriented problem solver, focused on precision and efficiency.",
+    "Artist": "You are a creative soul, driven by emotion and self-expression.",
+    "Social Entrepreneur": "You are passionate about making a difference and improving lives.",
+    "Inventor": "You are a visionary thinker, always looking to innovate and discover."
+  }
+}

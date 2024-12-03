@@ -1,0 +1,302 @@
+{
+  "title": "What Type of Traveler Are You?",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "What motivates you to travel?",
+      "options": [
+        {
+          "text": "Exploring new cultures",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Seeking adventure",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Relaxing and unwinding",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Learning history and heritage",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to plan your trips?",
+      "options": [
+        {
+          "text": "I like to have a detailed itinerary",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I go with the flow and see where the day takes me",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I choose a destination and book a resort",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I research historical sites to visit",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of accommodation do you prefer?",
+      "options": [
+        {
+          "text": "Boutique hotels or local stays",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Camping or hostels",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Luxury resorts",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Historical inns or landmarks",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What activity do you enjoy most while traveling?",
+      "options": [
+        {
+          "text": "Visiting museums and galleries",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Hiking and outdoor activities",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Spa days and beach lounging",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Exploring ancient ruins",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you like to interact with locals?",
+      "options": [
+        {
+          "text": "Join local tours or workshops",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Engage in adventurous activities with them",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Relax at local cafes and chat",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Learn about their history and traditions",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your ideal travel companion like?",
+      "options": [
+        {
+          "text": "Someone who loves art and culture",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "A thrill-seeker who craves adventure",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "A friend who enjoys lounging and relaxing",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "A fellow history enthusiast",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What souvenirs do you like to bring back?",
+      "options": [
+        {
+          "text": "Art and cultural artifacts",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Outdoor gear or memorabilia from activities",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Spa products or relaxation items",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Books or replicas of historical items",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about trying local cuisine?",
+      "options": [
+        {
+          "text": "I love trying local dishes and street food",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I’m up for any adventurous food experience",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I prefer familiar foods and comfort meals",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I enjoy learning the history behind traditional dishes",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your preferred mode of transportation while traveling?",
+      "options": [
+        {
+          "text": "Walking or biking to explore the area",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Off-roading or adventurous transportation",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Private cars or taxis for comfort",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Trains or historical routes",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you consider the most rewarding part of travel?",
+      "options": [
+        {
+          "text": "Connecting with different cultures",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Experiencing new thrills and challenges",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Finding peace and tranquility",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Gaining knowledge and understanding of the past",
+          "points": {
+            "History Buff": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Cultural Explorer": "You are a cultural explorer, always looking to immerse yourself in new experiences and traditions!",
+    "Adventure Seeker": "You thrive on adventure and excitement, always seeking your next thrill!",
+    "Relaxation Lover": "You cherish relaxation and comfort, finding peace wherever you go!",
+    "History Buff": "You have a passion for history, eager to learn and explore the stories of the past!"
+  }
+}

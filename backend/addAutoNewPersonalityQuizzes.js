@@ -226,8 +226,12 @@ const personalityExampleQuiz = {
     }
 };
 
+const num_questions = [8, 10, 12];
 
-let personalityQuizInstructionMessage = `${JSON.stringify(personalityExampleQuiz)} use the template given above to generate a personality quiz, you can choose the topic however you like. num_questions must be 7.`;
+const randomNumQuestions = num_questions[Math.floor(Math.random() * num_questions.length)];
+
+
+let personalityQuizInstructionMessage = `${JSON.stringify(personalityExampleQuiz)} use the template given above to generate a personality quiz, you can choose the topic however you like. num_questions must be ${randomNumQuestions}. Your output should be valid JSON, there shouldn't be any extra text. there should be no mistakes in JSON. it should be parsable. PLEASE NO MISTAKES IN JSON! `;
 
 
 try {
@@ -238,23 +242,45 @@ try {
     let personalityQuizzesAdded = 0;
 
     for (let i = 0; i < 3; i++) {
+
+        let instructionMessage = personalityQuizInstructionMessage;
+
+
         try {
-            let openAIResponse = await getChatCompletion({
-                messages: [{ role: 'system', content: personalityQuizInstructionMessage }],
-                user_message: "",
-            });
+            let titleExists = false;
+            let json;
+            do {
 
-            console.log(openAIResponse);
+                if (titleExists) {
+                    instructionMessage += ` Personality Quiz with title: '${json.title}' already exists, don't make a quiz related to that. `;
+                }
 
-            try {
-                let json = JSON.parse(openAIResponse);
+
+                console.log("generating completion");
+
+                let openAIResponse = await getChatCompletion({
+                    messages: [{ role: 'system', content: instructionMessage }],
+                    user_message: "",
+                });
+
+                // console.log(openAIResponse);
+
+                json = JSON.parse(openAIResponse);
 
                 json.num_questions = json.questions.length;
                 // json.difficulty = randomDifficulty;
                 // json.topic = quizTopic._id;
 
 
-                let titleExists = await Quiz.exists({ title: json.title });
+                titleExists = await PersonalityQuiz.exists({ title: json.title });
+
+                if (titleExists == null) {
+                    titleExists = false;
+                } else {
+                    titleExists = true;
+                }
+
+                console.log("exists: ", titleExists);
 
                 if (!titleExists) {
 
@@ -278,9 +304,12 @@ try {
                 } else {
                     console.log("Personality quiz title already exists.");
                 }
-            } catch (error) {
-                console.log(error);
-            }
+
+
+            } while (titleExists == true)
+
+
+            console.log("quiz added");
 
         } catch (e) {
             console.log(e.message);

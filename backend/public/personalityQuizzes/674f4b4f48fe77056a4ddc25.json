@@ -1,0 +1,360 @@
+{
+  "title": "What Type of Book Reader Are You?",
+  "num_questions": 12,
+  "questions": [
+    {
+      "question": "What genre do you prefer to read?",
+      "options": [
+        {
+          "text": "Fantasy",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Mystery",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Non-fiction",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Romance",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you choose your next book?",
+      "options": [
+        {
+          "text": "Recommendations from friends",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Best-seller lists",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Reviews and ratings",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Cover art and titles",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What do you enjoy most about reading?",
+      "options": [
+        {
+          "text": "Escaping into another world",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Solving puzzles and mysteries",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Learning new things",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Experiencing love stories",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about book adaptations?",
+      "options": [
+        {
+          "text": "They can never capture the magic of the book",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "I enjoy them if they stay true to the story",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "I appreciate the different perspectives they bring",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "I love seeing characters come to life on screen",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your reading environment?",
+      "options": [
+        {
+          "text": "Cozy nook with blankets",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "A quiet café",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "At a desk with coffee and notes",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "In a park on a sunny day",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How often do you read?",
+      "options": [
+        {
+          "text": "Every day, as much as possible",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Whenever I have a spare moment",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "I read regularly but not daily",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "When the mood strikes me",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your favorite book format?",
+      "options": [
+        {
+          "text": "Hardcover for the shelf appeal",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "E-books for convenience",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Audiobooks for multitasking",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Paperbacks for portability",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What makes you stop reading a book?",
+      "options": [
+        {
+          "text": "Poor world-building",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Predictable plots",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Lack of depth in information",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Unrealistic characters",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about rereading books?",
+      "options": [
+        {
+          "text": "I love revisiting favorite worlds",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "I rarely do it unless it’s a classic",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "I find it enlightening to see things I missed",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "I enjoy reliving the emotions",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of book cover grabs your attention?",
+      "options": [
+        {
+          "text": "Intricate and colorful designs",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "Mysterious and dark themes",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "Simple and informative",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "Romantic and whimsical illustrations",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your reading goal?",
+      "options": [
+        {
+          "text": "To read the entire series",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "To solve every mystery in the genre",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "To expand my knowledge on various subjects",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "To find the next great love story",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about book clubs?",
+      "options": [
+        {
+          "text": "I’d love to share my fantasy experiences",
+          "points": {
+            "Fantasy Enthusiast": 2
+          }
+        },
+        {
+          "text": "I’d enjoydiscussing theories and clues",
+          "points": {
+            "Mystery Solver": 2
+          }
+        },
+        {
+          "text": "I’d love to learn from others’ perspectives",
+          "points": {
+            "Knowledge Seeker": 2
+          }
+        },
+        {
+          "text": "I’d enjoy sharing my thoughts on romance",
+          "points": {
+            "Romantic Dreamer": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Fantasy Enthusiast": "You are a dreamer, escaping into fantastical worlds and adventures!",
+    "Mystery Solver": "You love a good puzzle and enjoy unraveling intricate plots.",
+    "Knowledge Seeker": "You are curious and seek knowledge through your reading.",
+    "Romantic Dreamer": "You cherish love stories and the emotions they evoke."
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "title": "Which Animal Are You Most Like?",
+  "num_questions": 8,
+  "questions": [
+    {
+      "question": "What is your preferred habitat?",
+      "options": [
+        {
+          "text": "Mountains and high altitudes",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Forests and woodlands",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Oceans and seas",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Savannas and grasslands",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you handle challenges?",
+      "options": [
+        {
+          "text": "Soar above them with a clear perspective",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Work with a team to strategize",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Use intelligence and playfulness to navigate",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Face them head-on with bravery",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What describes your social life best?",
+      "options": [
+        {
+          "text": "Independent and solitary",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Strong bonds with close companions",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Enjoy playful interactions with others",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "A natural leader in a social group",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What motivates you?",
+      "options": [
+        {
+          "text": "The thrill of freedom",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Loyalty and connection with others",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Curiosity and exploration of the world",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Strength and dominance in your environment",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you express your feelings?",
+      "options": [
+        {
+          "text": "In solitude, reflecting on my thoughts",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Through actions that support my pack",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "With playful gestures and communication",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "With confidence and assertiveness",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What is your biggest strength?",
+      "options": [
+        {
+          "text": "Vision and focus",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Teamwork and collaboration",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Intelligence and adaptability",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Courage and leadership",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you recharge after a long day?",
+      "options": [
+        {
+          "text": "Soaring high and enjoying the view",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "Spending quality time with my pack",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Swimming and playing in the water",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Resting and reflecting on the day's events",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What legacy do you wish to leave behind?",
+      "options": [
+        {
+          "text": "A legacy of freedom and independence",
+          "points": {
+            "Eagle": 2
+          }
+        },
+        {
+          "text": "A strong community and lasting bonds",
+          "points": {
+            "Wolf": 2
+          }
+        },
+        {
+          "text": "Joy and intelligence in interactions",
+          "points": {
+            "Dolphin": 2
+          }
+        },
+        {
+          "text": "Strength and courage for future generations",
+          "points": {
+            "Lion": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Eagle": "You are a free spirit, independent and visionary.",
+    "Wolf": "You are loyal and value the importance of community.",
+    "Dolphin": "You are playful and intelligent, always exploring new ideas.",
+    "Lion": "You are a natural leader, strong and courageous."
+  }
+}

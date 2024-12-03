@@ -1,0 +1,302 @@
+{
+  "title": "What Type of Traveler Are You?",
+  "num_questions": 10,
+  "questions": [
+    {
+      "question": "How do you choose your travel destinations?",
+      "options": [
+        {
+          "text": "I love exploring historical sites",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I seek out adventure and thrill",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I prefer relaxing on a beach",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I enjoy culinary experiences and food tours",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your ideal travel companion?",
+      "options": [
+        {
+          "text": "A friend who shares my interests",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Someone who’s up for anything",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "A laid-back partner who just wants to chill",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "A fellow foodie who loves trying new dishes",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you prefer to plan your trips?",
+      "options": [
+        {
+          "text": "Carefully with detailed itineraries",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Spontaneously with no specific plans",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I go with the flow and see where the day takes me",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I research the best restaurants and food spots",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of accommodation do you prefer?",
+      "options": [
+        {
+          "text": "Historical hotels or cultural stays",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Camping or hostels for a unique experience",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Luxury resorts or beach huts to unwind",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Boutique hotels with great dining options",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your travel packing style?",
+      "options": [
+        {
+          "text": "I pack a lot to be prepared for anything",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I pack light and bring only essentials",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I take my time packing for comfort and relaxation",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I pack specific outfits for all my meals out",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What type of activities do you enjoy while traveling?",
+      "options": [
+        {
+          "text": "Visiting museums and cultural events",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Hiking, diving, or extreme sports",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Spa days and lounging by the pool",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Cooking classes and food tastings",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you capture your travel memories?",
+      "options": [
+        {
+          "text": "Through journaling and documenting experiences",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "With action-packed photos and videos",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I just enjoy the moment and don’t worry about it",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "By taking photos of every meal I have",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your favorite way to interact with locals?",
+      "options": [
+        {
+          "text": "Joining cultural workshops or tours",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "Participating in local sports or activities",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "Chatting over drinks or at the beach",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "Dining at local restaurants and asking for recommendations",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "What’s your travel philosophy?",
+      "options": [
+        {
+          "text": "To learn and immerse myself in culture",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "To push my limits and try new things",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "To take it easy and enjoy life’s simple pleasures",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "To savor every bite and discover new flavors",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    },
+    {
+      "question": "How do you feel about souvenirs?",
+      "options": [
+        {
+          "text": "I prefer cultural artifacts or crafts",
+          "points": {
+            "Cultural Explorer": 2
+          }
+        },
+        {
+          "text": "I look for unique adventure gear",
+          "points": {
+            "Adventure Seeker": 2
+          }
+        },
+        {
+          "text": "I buy relaxing spa products or beach items",
+          "points": {
+            "Relaxation Lover": 2
+          }
+        },
+        {
+          "text": "I collect food items or cookbooks",
+          "points": {
+            "Foodie Traveler": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result_logic": {
+    "Cultural Explorer": "You are someone who loves to immerse yourself in the history and culture of places you visit!",
+    "Adventure Seeker": "You thrive on excitement and new challenges, always looking for your next adventure!",
+    "Relaxation Lover": "You value peace and comfort, seeking tounwind and enjoy your surroundings during your travels.",
+    "Foodie Traveler": "You are passionate about exploring culinary delights and indulging in local flavors wherever you go."
+  }
+}
