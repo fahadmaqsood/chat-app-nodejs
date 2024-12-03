@@ -11,6 +11,8 @@ import { emitIndicatorsSocketEvent } from "./indicators.js";
 
 import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
 
+let InputOutput;
+
 /**
  * @description This function is responsible to allow user to join the chat represented by chatId (chatId). event happens when user switches between the chats
  * @param {Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>} socket
@@ -68,6 +70,9 @@ const mountSendCallEvent = (socket) => {
  * @param {Server<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>} io
  */
 const initializeSocketIO = (io) => {
+
+  InputOutput = io;
+
   return io.on("connection", async (socket) => {
     try {
 
@@ -138,20 +143,22 @@ const initializeSocketIO = (io) => {
  * @description Utility function responsible to abstract the logic of socket emission via the io instance
  */
 const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
-  let io;
+  // let io;
 
-  // Check if reqOrSocket is an HTTP request with app instance
-  if (reqOrSocket.app) {
-    io = reqOrSocket.app.get("io");
-  }
-  // Check if reqOrSocket is a Socket.IO server instance
-  else if (reqOrSocket instanceof Server) {
-    io = reqOrSocket;
-  }
-  // Check if reqOrSocket is a Socket.IO instance with server property
-  else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
-    io = reqOrSocket.server;
-  }
+  // // Check if reqOrSocket is an HTTP request with app instance
+  // if (reqOrSocket.app) {
+  //   io = reqOrSocket.app.get("io");
+  // }
+  // // Check if reqOrSocket is a Socket.IO server instance
+  // else if (reqOrSocket instanceof Server) {
+  //   io = reqOrSocket;
+  // }
+  // // Check if reqOrSocket is a Socket.IO instance with server property
+  // else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
+  //   io = reqOrSocket.server;
+  // }
+
+  let io = InputOutput;
 
   // Emit event if io is available
   if (io) {
@@ -163,23 +170,23 @@ const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
 };
 
 const canEmit = (reqOrSocket, roomId) => {
-  let io;
+  // let io;
 
-  // Check if reqOrSocket is an HTTP request with app instance
-  if (reqOrSocket.app) {
-    io = reqOrSocket.app.get("io");
-  }
-  // Check if reqOrSocket is a Socket.IO server instance
-  else if (reqOrSocket instanceof Server) {
-    io = reqOrSocket;
-  }
-  // Check if reqOrSocket is a Socket.IO instance with server property
-  else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
-    io = reqOrSocket.server;
-  }
+  // // Check if reqOrSocket is an HTTP request with app instance
+  // if (reqOrSocket.app) {
+  //   io = reqOrSocket.app.get("io");
+  // }
+  // // Check if reqOrSocket is a Socket.IO server instance
+  // else if (reqOrSocket instanceof Server) {
+  //   io = reqOrSocket;
+  // }
+  // // Check if reqOrSocket is a Socket.IO instance with server property
+  // else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
+  //   io = reqOrSocket.server;
+  // }
 
   // Emit event if io is available
-  return io;
+  return InputOutput.of('/').in(roomId);
 }
 
 

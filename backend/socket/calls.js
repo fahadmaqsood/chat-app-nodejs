@@ -3,6 +3,10 @@ import { Server, Socket } from 'socket.io';
 import { User } from "../models/auth/user.models.js";
 import { _getUnreadNotificationsCount, _changeNotificationsStatusToRead } from '../controllers/notification/notificationController.js';
 
+import { AvailableChatEvents, ChatEventEnum } from "../constants.js";
+
+import { emitSocketEvent } from "./index.js";
+
 import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
 
 import { ApiError } from "../utils/ApiError.js";
@@ -63,6 +67,22 @@ const initializeCallsSocket = (io) => {
                     break;
                 }
             }
+        });
+
+        socket.on(ChatEventEnum.INCOMING_CALL_ACCEPTED_EVENT, (roomId, chatId, isVideoCall) => {
+            // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+            console.log("Call accepted: ", chatId, "isVideoCall: ", isVideoCall);
+
+
+            emitSocketEvent(null, roomId, ChatEventEnum.OUTGOING_CALL_ACCEPTED_EVENT, {
+                chatId: chatId,
+                callerName: socket.user.nameElseUsername,
+                callerId: socket.user._id,
+                isVideoCall: isVideoCall
+            });
+
+
+
         });
     });
 };

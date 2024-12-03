@@ -103,6 +103,10 @@ export const ChatEventEnum = Object.freeze({
 
 
   CALL_EVENT: "CALL_EVENT",
+
+  INCOMING_CALL_ACCEPTED_EVENT: "INCOMING_CALL_ACCEPTED_EVENT",
+
+  OUTGOING_CALL_ACCEPTED_EVENT: "OUTGOING_CALL_ACCEPTED_EVENT",
 });
 
 export const AvailableChatEvents = Object.values(ChatEventEnum);
