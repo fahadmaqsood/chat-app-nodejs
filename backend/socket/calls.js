@@ -27,7 +27,9 @@ const initializeCallsSocket = (io) => {
         console.log('Calls socket connected:', socket.id);
 
 
-        let firebaseToken = socket.handshake.firebaseToken;
+        console.log(socket.handshake);
+
+        let firebaseToken = socket.handshake.auth?.firebaseToken;
 
         if (!firebaseToken) {
             throw new ApiError(401, "Un-authorized handshake. Token(s) are missing");
