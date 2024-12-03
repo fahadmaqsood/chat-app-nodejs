@@ -5,6 +5,8 @@ import { AvailableChatEvents, ChatEventEnum } from "../constants.js";
 import { User } from "../models/auth/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 
+import { emitCallsSocketEvent } from "../socket/calls.js";
+
 import { emitIndicatorsSocketEvent } from "./indicators.js";
 
 import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
@@ -49,7 +51,7 @@ const mountSendCallEvent = (socket) => {
     console.log("Calling: ", participants, "isVideoCall: ", isVideoCall);
 
     for (let participant of participants) {
-      emitIndicatorsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+      emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
         chatId: chatId,
         callerName: socket.user.nameElseUsername,
         callerId: socket.user._id,

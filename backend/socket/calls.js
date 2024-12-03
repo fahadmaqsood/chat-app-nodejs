@@ -5,6 +5,8 @@ import { _getUnreadNotificationsCount, _changeNotificationsStatusToRead } from '
 
 import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
 
+import { ApiError } from "../utils/ApiError.js";
+
 import jwt from "jsonwebtoken";
 
 const userSocketMap = new Map(); // A simple map to store userId -> socketId

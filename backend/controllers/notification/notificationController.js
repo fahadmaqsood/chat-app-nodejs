@@ -15,6 +15,8 @@ import firebaseAdmin from 'firebase-admin';
 import fs from 'fs/promises';
 import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
 
+import { emitCallsSocketEvent } from "../../socket/calls.js";
+
 const serviceAccount = JSON.parse(await fs.readFile(process.env.FIREBASE_SERVICE_KEY_PATH, 'utf8'));
 
 
@@ -171,6 +173,36 @@ export const sendCallNotification = async (req, res) => {
         res.status(200).json(new ApiResponse(200, {}, "Notification sent successfully"));;
     } catch (error) {
         res.status(500).json(new ApiResponse(500, {}, error));
+    }
+};
+
+
+export const sendCallSocketNotification = async (req, res) => {
+    try {
+        const receiverIds = req.body.receiverIds;
+        const callerId = req.user._id;
+        const chatId = req.body.chatId;
+        const isVideoCall = req.body.isVideoCall;
+
+        if (!receiverIds || receiverIds.length == 0) {
+            res.status(400).json({ success: false, message: 'receiverIds must be defined' });
+        }
+        if (!chatId) {
+            res.status(400).json({ success: false, message: 'chatId must be defined' });
+        }
+
+        console.log(receiverIds);
+
+        for (let participant of receiverIds) {
+            emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+                chatId: chatId,
+                callerName: req.user.nameElseUsername,
+                callerId: req.user._id,
+                isVideoCall: isVideoCall
+            });
+        }
+    } catch (error) {
+        console.log(error);
     }
 };
 

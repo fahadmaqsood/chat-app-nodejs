@@ -4,6 +4,7 @@ import { User } from "../models/auth/user.models.js";
 import { _getUnreadNotificationsCount, _changeNotificationsStatusToRead } from '../controllers/notification/notificationController.js';
 
 import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
+import { ApiError } from "../utils/ApiError.js";
 
 import jwt from "jsonwebtoken";
 

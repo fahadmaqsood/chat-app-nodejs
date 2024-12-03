@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import { emitSocketEvent } from './index.js'; // Import your socket utility
 import { processChatMessage } from '../controllers/chatbot/chatbotController.js'; // Import your chatbot controller
 
+import { ApiError } from "../utils/ApiError.js";
 
 const userSocketMap = new Map(); // A simple map to store userId:subject -> socketId
 
