@@ -127,6 +127,9 @@ export function getVideos(searchResponse) {
         _webpage.datePublished = webPage.datePublished;
         // _webpage.thumbnail = webPage.thumbnail;
         _webpage.description = webPage.description;
+        if (!webPage.creator) {
+            continue;
+        }
         _webpage.creator = webPage.creator.name;
 
 
