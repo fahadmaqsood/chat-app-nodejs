@@ -12,6 +12,9 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 import { addNotification } from '../notification/notificationController.js';
 
 
+import { bingWebSearch, getWebPages, getImages, getVideos } from "../../utils/bing.js";
+
+
 import axios from 'axios';
 
 const _sentimentAnalysis = new SentimentAnalysis();
@@ -402,41 +405,51 @@ export const getPosts = async (req, res) => {
         let formattedPosts = await Promise.all(postPromises);
 
         try {
-            if (mood == "sad" || mood == "unamused") {
-
+            let news = [];
+            if (mood == "happy" || mood == "laughing" || mood == "rofl") {
+                news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
             } else {
-                const searchTerms = ["happy", "funny", "happy cat", "funny cat", "happy dogs", "funny dogs", "peace"];
+                const searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
 
                 console.log(searchTerms.join("|"));
 
-                const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
+                // const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
+                let searchResponse = await bingWebSearch(searchTerms.join("|"), postsNewsPaginationPage);
 
-                // Create a new array to hold the posts and news in the correct pattern
-                let updatedPosts = [];
-                let newsIndex = 0;
+                let webPages = getWebPages(searchResponse);
+                let images = getImages(searchResponse);
+                let videos = getVideos(searchResponse);
 
-                if (formattedPosts.length < 2) {
-                    formattedPosts.push(...news);
-                } else {
+                news = [...webPages, ...images, ...videos];
 
-                    // Loop through the `formattedPosts` array
-                    for (let i = 0; i < formattedPosts.length; i++) {
-                        // Add the current post
-                        updatedPosts.push(formattedPosts[i]);
+                news.sort(() => Math.random() - 0.5);
+            }
 
-                        // After every two posts, insert one item from news (if there are still news items left)
-                        if ((i + 1) % 2 === 0 && newsIndex < news.length) {
-                            updatedPosts.push(news[newsIndex]);  // Insert one news item
-                            newsIndex++;  // Move to the next news item
-                        }
+
+            // Create a new array to hold the posts and news in the correct pattern
+            let updatedPosts = [];
+            let newsIndex = 0;
+
+            if (formattedPosts.length < 2) {
+                formattedPosts.push(...news);
+            } else {
+
+                // Loop through the `formattedPosts` array
+                for (let i = 0; i < formattedPosts.length; i++) {
+                    // Add the current post
+                    updatedPosts.push(formattedPosts[i]);
+
+                    // After every two posts, insert one item from news (if there are still news items left)
+                    if ((i + 1) % 2 === 0 && newsIndex < news.length) {
+                        updatedPosts.push(news[newsIndex]);  // Insert one news item
+                        newsIndex++;  // Move to the next news item
                     }
-
-                    updatedPosts.push(...news.slice(newsIndex, news.length));
-
-                    // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
-                    formattedPosts = updatedPosts;
                 }
 
+                updatedPosts.push(...news.slice(newsIndex, news.length));
+
+                // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
+                formattedPosts = updatedPosts;
             }
         } catch (error) {
             console.log(error);
