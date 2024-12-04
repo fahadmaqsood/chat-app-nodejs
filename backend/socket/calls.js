@@ -102,11 +102,21 @@ const emitCallsSocketEvent = (user_id, event, payload) => {
 };
 
 
-const isAppOpenForUser = (user_id) => {
-    user_id = user_id.toString();
+const canEmit = (roomId) => {
+    if (InputOutput) {
+        // Check if there are any clients connected to the room
+        const clientsInRoom = InputOutput.of('/').adapter.rooms.get(roomId);
 
-    return userSocketMap.get(user_id) !== undefined;
+        if (clientsInRoom && clientsInRoom.size > 0) {
+            console.log(`Room ${roomId} has clients. Emission possible.`);
+            return true;
+        } else {
+            console.log(`Room ${roomId} does not have any clients or does not exist.`);
+            return false;
+        }
+    }
+
+    return false;
 }
 
-
-export { initializeCallsSocket, isAppOpenForUser, emitCallsSocketEvent };
+export { initializeCallsSocket, canEmit, emitCallsSocketEvent };

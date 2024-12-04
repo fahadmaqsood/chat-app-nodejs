@@ -15,7 +15,7 @@ import firebaseAdmin from 'firebase-admin';
 import fs from 'fs/promises';
 import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
 
-import { emitCallsSocketEvent } from "../../socket/calls.js";
+import { canEmit, emitCallsSocketEvent } from "../../socket/calls.js";
 
 const serviceAccount = JSON.parse(await fs.readFile(process.env.FIREBASE_SERVICE_KEY_PATH, 'utf8'));
 
@@ -194,12 +194,22 @@ export const sendCallSocketNotification = async (req, res) => {
         console.log(receiverIds);
 
         for (let participant of receiverIds) {
-            emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
-                chatId: chatId,
-                callerName: req.user.nameElseUsername,
-                callerId: req.user._id,
-                isVideoCall: isVideoCall
-            });
+            if (canEmit(participant)) {
+                emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+                    chatId: chatId,
+                    callerName: req.user.nameElseUsername,
+                    callerId: req.user._id,
+                    isVideoCall: isVideoCall
+                });
+            } else {
+                await addNotificationForMany([participant], null, null, {
+                    "isCall": "true",
+                    "callerName": `${req.user.nameElseUsername}`,
+                    "callerId": `${req.user._id}`,
+                    "chatId": `${chatId}`,
+                    "isVideoCall": `${isVideoCall}`
+                }, true);
+            }
         }
 
         res.status(200).json(new ApiResponse(200, {}, "Notification sent successfully"));;
