@@ -170,23 +170,20 @@ const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
 };
 
 const canEmit = (reqOrSocket, roomId) => {
-  // let io;
+  if (InputOutput) {
+    // Check if there are any clients connected to the room
+    const clientsInRoom = io.of('/').adapter.rooms.get(roomId);
 
-  // // Check if reqOrSocket is an HTTP request with app instance
-  // if (reqOrSocket.app) {
-  //   io = reqOrSocket.app.get("io");
-  // }
-  // // Check if reqOrSocket is a Socket.IO server instance
-  // else if (reqOrSocket instanceof Server) {
-  //   io = reqOrSocket;
-  // }
-  // // Check if reqOrSocket is a Socket.IO instance with server property
-  // else if (reqOrSocket.server && reqOrSocket.server instanceof Server) {
-  //   io = reqOrSocket.server;
-  // }
+    if (clientsInRoom && clientsInRoom.size > 0) {
+      console.log(`Room ${roomId} has clients. Emission possible.`);
+      return true;
+    } else {
+      console.log(`Room ${roomId} does not have any clients or does not exist.`);
+      return false;
+    }
+  }
 
-  // Emit event if io is available
-  return InputOutput.of('/').in(roomId);
+  return false;
 }
 
 
