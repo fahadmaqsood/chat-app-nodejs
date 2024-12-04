@@ -216,6 +216,7 @@ export const sendCallSocketNotification = async (req, res) => {
 
         res.status(200).json(new ApiResponse(200, {}, "Notification sent successfully"));;
     } catch (error) {
+        console.log(error);
         res.status(500).json(new ApiResponse(500, {}, error));
     }
 };
