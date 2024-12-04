@@ -404,6 +404,8 @@ export const getPosts = async (req, res) => {
 
         let formattedPosts = await Promise.all(postPromises);
 
+        console.log("posts length: ", formattedPosts.length);
+
         try {
             let news = [];
 

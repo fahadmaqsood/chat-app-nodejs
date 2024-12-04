@@ -55,31 +55,38 @@ export const bingWebSearch = async (query, page = 1) => {
 export function getWebPages(searchResponse) {
     let webpages = [];
 
-    for (var i = 0; i < searchResponse.webPages.value.length; ++i) {
+    try {
+        for (var i = 0; i < searchResponse.webPages.value.length; ++i) {
 
-        var webPage = searchResponse.webPages.value[i];
+            var webPage = searchResponse.webPages.value[i];
 
-        // console.log(Object.keys(webPage));
+            // console.log(Object.keys(webPage));
 
-        let _webpage = {};
-        _webpage.title = webPage.name;
-        _webpage.url = webPage.url;
-        // _webpage.contentUrl = webPage.contentUrl;
-        // _webpage.displayUrl = webPage.displayUrl;
-        // _webpage.thumbnailUrl = webPage.thumbnailUrl;
-        _webpage.description = webPage.snippet;
-        _webpage.datePublished = webPage.datePublished;
+            let _webpage = {};
+            _webpage.title = webPage.name;
+            _webpage.url = webPage.url;
+            // _webpage.contentUrl = webPage.contentUrl;
+            // _webpage.displayUrl = webPage.displayUrl;
+            // _webpage.thumbnailUrl = webPage.thumbnailUrl;
+            _webpage.description = webPage.snippet;
+            _webpage.datePublished = webPage.datePublished;
 
-        if (!webPage.primaryImageOfPage) {
-            continue;
+            if (!webPage.primaryImageOfPage) {
+                continue;
+            }
+
+            _webpage.image_url = webPage.primaryImageOfPage.thumbnailUrl.replace("&w=" + webPage.primaryImageOfPage.width, "&w=" + webPage.primaryImageOfPage.sourceWidth).replace("&h=" + webPage.primaryImageOfPage.height, "&h=" + webPage.primaryImageOfPage.sourceHeight) + "&p=0";
+            _webpage.source = webPage.siteName;
+
+            _webpage.type = "webpage";
+
+            webpages.push(_webpage);
         }
 
-        _webpage.image_url = webPage.primaryImageOfPage.thumbnailUrl.replace("&w=" + webPage.primaryImageOfPage.width, "&w=" + webPage.primaryImageOfPage.sourceWidth).replace("&h=" + webPage.primaryImageOfPage.height, "&h=" + webPage.primaryImageOfPage.sourceHeight) + "&p=0";
-        _webpage.source = webPage.siteName;
+        return webpages;
 
-        _webpage.type = "webpage";
-
-        webpages.push(_webpage);
+    } catch (error) {
+        console.log(error);
     }
 
     return webpages;
@@ -89,22 +96,28 @@ export function getWebPages(searchResponse) {
 export function getImages(searchResponse) {
     let webpages = [];
 
-    for (var i = 0; i < searchResponse.images.value.length; ++i) {
+    try {
+        for (var i = 0; i < searchResponse.images.value.length; ++i) {
 
-        var webPage = searchResponse.images.value[i];
+            var webPage = searchResponse.images.value[i];
 
-        // console.log(Object.keys(webPage));
+            // console.log(Object.keys(webPage));
 
-        let _webpage = {};
-        _webpage.title = webPage.name;
-        _webpage.url = webPage.hostPageUrl;
-        _webpage.image_url = webPage.thumbnailUrl;
-        _webpage.datePublished = webPage.datePublished;
-        // _webpage.thumbnail = webPage.thumbnail;
+            let _webpage = {};
+            _webpage.title = webPage.name;
+            _webpage.url = webPage.hostPageUrl;
+            _webpage.image_url = webPage.thumbnailUrl;
+            _webpage.datePublished = webPage.datePublished;
+            // _webpage.thumbnail = webPage.thumbnail;
 
-        _webpage.type = "image";
+            _webpage.type = "image";
 
-        webpages.push(_webpage);
+            webpages.push(_webpage);
+        }
+
+        return webpages;
+    } catch (error) {
+        console.log(error);
     }
 
     return webpages;
@@ -114,29 +127,36 @@ export function getImages(searchResponse) {
 export function getVideos(searchResponse) {
     let webpages = [];
 
-    for (var i = 0; i < searchResponse.videos.value.length; ++i) {
+    try {
+        for (var i = 0; i < searchResponse.videos.value.length; ++i) {
 
-        var webPage = searchResponse.videos.value[i];
+            var webPage = searchResponse.videos.value[i];
 
-        // console.log(Object.keys(webPage));
+            // console.log(Object.keys(webPage));
 
-        let _webpage = {};
-        _webpage.title = webPage.name;
-        _webpage.url = webPage.hostPageUrl;
-        _webpage.image_url = webPage.thumbnailUrl;
-        _webpage.datePublished = webPage.datePublished;
-        // _webpage.thumbnail = webPage.thumbnail;
-        _webpage.description = webPage.description;
-        if (!webPage.creator) {
-            continue;
+            let _webpage = {};
+            _webpage.title = webPage.name;
+            _webpage.url = webPage.hostPageUrl;
+            _webpage.image_url = webPage.thumbnailUrl;
+            _webpage.datePublished = webPage.datePublished;
+            // _webpage.thumbnail = webPage.thumbnail;
+            _webpage.description = webPage.description;
+            if (!webPage.creator) {
+                continue;
+            }
+            _webpage.creator = webPage.creator.name;
+
+
+            _webpage.type = "video";
+
+
+            webpages.push(_webpage);
         }
-        _webpage.creator = webPage.creator.name;
 
+        return webpages;
 
-        _webpage.type = "video";
-
-
-        webpages.push(_webpage);
+    } catch (error) {
+        console.log(error);
     }
 
     return webpages;
