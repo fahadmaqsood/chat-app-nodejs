@@ -60,7 +60,8 @@ async function sendNotificationToMany(deviceTokens, title, message, payload, isC
     if (isCall) {
         message_data = {
             data: payload,
-            tokens: deviceTokens // Pass multiple device tokens
+            tokens: deviceTokens, // Pass multiple device tokens
+            priority: "high",
         };
     } else {
         message_data = {
