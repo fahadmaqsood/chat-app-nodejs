@@ -69,15 +69,14 @@ const initializeCallsSocket = (io) => {
             }
         });
 
-        socket.on(ChatEventEnum.INCOMING_CALL_ACCEPTED_EVENT, (roomId, chatId, isVideoCall) => {
+        socket.on(ChatEventEnum.INCOMING_CALL_ACCEPTED_EVENT, (roomId, chatId, callerId, isVideoCall) => {
             // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
             console.log("Call accepted: ", chatId, "isVideoCall: ", isVideoCall);
 
 
             emitSocketEvent(null, roomId, ChatEventEnum.OUTGOING_CALL_ACCEPTED_EVENT, {
                 chatId: chatId,
-                callerName: socket.user.nameElseUsername,
-                callerId: socket.user._id,
+                callerId: callerId,
                 isVideoCall: isVideoCall
             });
 
