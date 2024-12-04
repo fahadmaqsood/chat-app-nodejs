@@ -172,7 +172,7 @@ const emitSocketEvent = (reqOrSocket, roomId, event, payload) => {
 const canEmit = (reqOrSocket, roomId) => {
   if (InputOutput) {
     // Check if there are any clients connected to the room
-    const clientsInRoom = io.of('/').adapter.rooms.get(roomId);
+    const clientsInRoom = InputOutput.of('/').adapter.rooms.get(roomId);
 
     if (clientsInRoom && clientsInRoom.size > 0) {
       console.log(`Room ${roomId} has clients. Emission possible.`);
