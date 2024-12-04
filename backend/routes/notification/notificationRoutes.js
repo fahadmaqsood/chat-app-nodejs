@@ -5,7 +5,7 @@ import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js'
 
 const router = express.Router();
 
-router.use(validateTokensMiddleware)
+// router.use(validateTokensMiddleware)
 
 router.post('/create', createNotification);
 
