@@ -95,6 +95,7 @@ export const createComment = async (req, res) => {
 
         res.status(201).json(new ApiResponse(201, {}, "Comment posted successfully."));
     } catch (err) {
+        console.log(err);
         res.status(500).json(new ApiResponse(500, { error: err.message }, "Server error"));
     }
 };
