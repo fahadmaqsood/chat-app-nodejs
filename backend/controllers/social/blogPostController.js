@@ -67,6 +67,7 @@ export const createBlogPost = async (req, res) => {
 
     const user_id = req.user._id;
 
+    console.log("creating blog post");
     console.log(user_id);
 
     try {
