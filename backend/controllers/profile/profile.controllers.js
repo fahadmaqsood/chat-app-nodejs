@@ -143,20 +143,10 @@ const getProfilePosts = async (req, res) => {
         const hasNewAccessToken = req.hasNewAccessToken;
 
         // Getting userId from request body
-        const { userId, _limit, _skip } = req.body;
+        const { userId, limit = 10, skip = 0 } = req.body;
 
         if (!userId) {
             return res.status(400).json(new ApiResponse(400, "userId is required"));
-        }
-
-        let limit = _limit;
-        let skip = _skip;
-        if (!_limit) {
-            limit = 10;
-        }
-
-        if (!_skip) {
-            skip = 0;
         }
 
         // Fetch user's posts from the database using userId
@@ -219,6 +209,83 @@ const getProfilePosts = async (req, res) => {
         return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
+
+
+const getProfileBlogPosts = async (req, res) => {
+    try {
+        // Extract token from headers
+        const accessToken = req.headers['access-token'];
+        const hasNewAccessToken = req.hasNewAccessToken;
+
+        // Getting userId from request body
+        const { userId, limit = 10, skip = 0 } = req.body;
+
+        if (!userId) {
+            return res.status(400).json(new ApiResponse(400, "userId is required"));
+        }
+
+        // Fetch user's posts from the database using userId
+        const posts = await UserPost.find({ user_id: userId })
+            .sort({ createdAt: -1 })
+            .skip(parseInt(skip))
+            .limit(limit).populate({
+                path: 'user_id', // The field to populate
+                select: 'avatar username name email privacySettings notificationSettings' // Fields to select from the User model
+            }).populate({
+                path: 'topics', // The field to populate
+                select: 'name description' // Fields to select from the User model
+            }).exec();
+
+        if (!posts || posts.length === 0) {
+            return res.status(404).json(new ApiResponse(404, {}, "No posts found for this user"));
+        }
+
+        // Prepare the response with numLikes and numComments
+        const postPromises = posts.map(async (post) => {
+            const postObject = post.toObject();
+            postObject.user = postObject.user_id; // Add user info under user key
+            delete postObject.user_id; // Remove user_id field
+
+            // Count likes and comments
+            const numLikes = await PostLike.countDocuments({ post_id: post._id });
+            const numComments = await UserComment.countDocuments({ post_id: post._id });
+
+
+            const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
+
+            postObject.numLikes = numLikes; // Add numLikes to the post object
+            postObject.numComments = numComments; // Add numComments to the post object
+
+            postObject.hasUserLiked = !!hasUserLiked;
+
+            // handling polls
+            if (post.poll && Array.isArray(post.poll.options)) {
+                postObject.poll.options = post.poll.options.map((option) => {
+                    return {
+                        _id: option._id,
+                        option: option.option,
+                        numVotes: option.votedBy.length,
+                        isVotedByUser: option.votedBy.includes(req.user._id)
+                    };
+                });
+            }
+
+            return postObject;
+        });
+
+
+        const formattedPosts = await Promise.all(postPromises);
+
+        return res
+            .status(200)
+            .json(new ApiResponse(200, { posts: formattedPosts, ...(hasNewAccessToken ? { accessToken: accessToken } : {}) }, "Profile posts fetched successfully"));
+    } catch (error) {
+        console.error("Error in getProfilePosts:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
 
 const followUser = async (req, res) => {
     try {
@@ -322,4 +389,4 @@ const getFriends = async (req, res) => {
 };
 
 
-export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, followUser, unfollowUser, getFriends };
+export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, getProfileBlogPosts, followUser, unfollowUser, getFriends };
