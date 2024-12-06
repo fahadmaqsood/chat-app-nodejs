@@ -246,7 +246,7 @@ export const getComments = async (req, res) => {
 export const likeComment = async (req, res) => {
     try {
         const currentUserId = req.user._id; // Current user's ID from the request
-        const { post_id, comment_id } = req.body; // Post and comment IDs
+        const { post_id, post_type = "post", comment_id } = req.body; // Post and comment IDs
 
         // Validate post_id and comment_id
         if (!post_id) {
@@ -258,15 +258,30 @@ export const likeComment = async (req, res) => {
         }
 
         // Check if the post exists
-        const postExists = await UserPost.findById(post_id);
-        if (!postExists) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        if (post_type == "post") {
+            const postExists = await UserPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
         }
 
         // Check if the comment exists
-        const commentExists = await UserComment.findById(comment_id);
-        if (!commentExists || commentExists.post_id.toString() !== post_id) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+        let commentExists;
+        if (post_type == "post") {
+            commentExists = await UserComment.findById(comment_id);
+            if (!commentExists || commentExists.post_id.toString() !== post_id) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+            }
+        } else {
+            commentExists = await BlogPostComment.findById(comment_id);
+            if (!commentExists || commentExists.post_id.toString() !== post_id) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+            }
         }
 
         // Check if the user has already liked the comment
@@ -304,15 +319,30 @@ export const unlikeComment = async (req, res) => {
         }
 
         // Check if the post exists
-        const postExists = await UserPost.findById(post_id);
-        if (!postExists) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        if (post_type == "post") {
+            const postExists = await UserPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
         }
 
         // Check if the comment exists
-        const commentExists = await UserComment.findById(comment_id);
-        if (!commentExists || commentExists.post_id.toString() !== post_id) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+        let commentExists;
+        if (post_type == "post") {
+            commentExists = await UserComment.findById(comment_id);
+            if (!commentExists || commentExists.post_id.toString() !== post_id) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+            }
+        } else {
+            commentExists = await BlogPostComment.findById(comment_id);
+            if (!commentExists || commentExists.post_id.toString() !== post_id) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Comment not found for this post'));
+            }
         }
 
         // Check if the user has already liked the comment
