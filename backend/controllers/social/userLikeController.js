@@ -11,14 +11,15 @@ export const likePost = async (req, res) => {
 
     try {
         const userExists = await User.findById(req.user._id);
+        let postExists;
         if (type == "post") {
-            const postExists = await UserPost.findById(post_id);
+            postExists = await UserPost.findById(post_id);
 
             if (!userExists || !postExists) {
                 return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
             }
         } else {
-            const postExists = await BlogPost.findById(post_id);
+            postExists = await BlogPost.findById(post_id);
 
             if (!userExists || !postExists) {
                 return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
