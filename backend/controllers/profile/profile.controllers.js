@@ -200,7 +200,13 @@ const getProfilePosts = async (req, res) => {
                         isVotedByUser: option.votedBy.includes(req.user._id)
                     };
                 });
+
+
             }
+
+            postObject.type = "post";
+
+
 
             return postObject;
         });
@@ -264,6 +270,8 @@ const getProfileBlogPosts = async (req, res) => {
             postObject.numComments = numComments; // Add numComments to the post object
 
             postObject.hasUserLiked = !!hasUserLiked;
+
+            postObject.type = "blog_post";
 
 
             return postObject;
