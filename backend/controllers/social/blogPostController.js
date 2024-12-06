@@ -127,7 +127,7 @@ export const createBlogPost = async (req, res) => {
             }
         }
 
-        const newPost = new UserPost({
+        const newPost = new BlogPost({
             user_id: user_id,
             title: title,
             content: content,
