@@ -25,8 +25,9 @@ router.post('/delete-blog-post', validateTokensMiddleware, deleteBlogPost);
 
 router.get('/get/posts', validateTokensMiddleware, getPosts);
 
+router.get('/get-blog-post/:postId', validateTokensMiddleware, getSpecificBlogPost);
 router.get('/get/:postId', validateTokensMiddleware, getSpecificPost);
-router.get('/get/blog-post/:postId', validateTokensMiddleware, getSpecificBlogPost);
+
 
 
 // poll
