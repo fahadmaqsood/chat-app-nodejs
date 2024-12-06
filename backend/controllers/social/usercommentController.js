@@ -1,6 +1,10 @@
 import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
 import UserComment from '../../models/social/UserComment.js';
+
+import BlogPost from '../../models/social/BlogPost.js';
+import BlogPostComment from '../../models/social/BlogPostComment.js';
+
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
 import { addNotification } from '../notification/notificationController.js';
@@ -8,7 +12,7 @@ import { addNotification } from '../notification/notificationController.js';
 import mongoose from "mongoose";
 
 export const createComment = async (req, res) => {
-    const { post_id, parent_comment_id, comment_text } = req.body;
+    const { post_id, parent_comment_id, post_type = "post", comment_text } = req.body;
 
 
     let user_id = req.user._id;
@@ -18,9 +22,16 @@ export const createComment = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Post ID and User ID are required' });
         }
 
-        const postExists = await UserPost.findById(post_id);
-        if (!postExists) {
-            return res.status(404).json({ success: false, message: 'Post not found' });
+        if (post_type == "post") {
+            const postExists = await UserPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
         }
 
         const userExists = await User.findById(user_id);
@@ -31,34 +42,54 @@ export const createComment = async (req, res) => {
         let parentCommentExists;
         if (parent_comment_id) {
             // Check if the comment exists
-            parentCommentExists = await UserComment.findById(parent_comment_id);
-            if (!parentCommentExists || parentCommentExists.post_id.toString() !== post_id) {
-                return res.status(404).json(new ApiResponse(404, {}, 'Parent comment not found for this post'));
+            if (post_type == "post") {
+                parentCommentExists = await UserComment.findById(parent_comment_id);
+                if (!parentCommentExists || parentCommentExists.post_id.toString() !== post_id) {
+                    return res.status(404).json(new ApiResponse(404, {}, 'Parent comment not found for this post'));
+                }
+            } else {
+                parentCommentExists = await BlogPostComment.findById(parent_comment_id);
+                if (!parentCommentExists || parentCommentExists.post_id.toString() !== post_id) {
+                    return res.status(404).json(new ApiResponse(404, {}, 'Parent comment not found for this post'));
+                }
             }
         }
 
-        const newComment = new UserComment({
-            post_id,
-            user_id,
-            parent_comment_id: (parent_comment_id == undefined || parent_comment_id == null) ? null : parent_comment_id,
-            comment_text
-        });
+        let newComment;
 
-        await newComment.save();
+        if (post_type == "post") {
+            newComment = new UserComment({
+                post_id,
+                user_id,
+                parent_comment_id: (parent_comment_id == undefined || parent_comment_id == null) ? null : parent_comment_id,
+                comment_text
+            });
+
+            await newComment.save();
+        } else {
+            newComment = new BlogPostComment({
+                post_id,
+                user_id,
+                parent_comment_id: (parent_comment_id == undefined || parent_comment_id == null) ? null : parent_comment_id,
+                comment_text
+            });
+
+            await newComment.save();
+        }
 
         console.log(req.user._id, postExists.user_id);
 
         if (!parent_comment_id) {
             if (!req.user._id.equals(postExists.user_id)) {
-                addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, id: newComment._id } });
+                addNotification(postExists.user_id, `Commented on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, id: newComment._id, post_type: post_type } });
             }
         } else {
             if (!req.user._id.equals(postExists.user_id) && !postExists.user_id.equals(parentCommentExists.user_id)) {
-                addNotification(postExists.user_id, `Replied to a comment on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id } });
+                addNotification(postExists.user_id, `Replied to a comment on your post!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id, post_type: post_type } });
             }
 
             if (!req.user._id.equals(parentCommentExists.user_id)) {
-                addNotification(parentCommentExists.user_id, `Replied to your comment!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id } });
+                addNotification(parentCommentExists.user_id, `Replied to your comment!`, newComment.comment_text, { doer: req.user._id, additionalData: { open: "comment", post_id: postExists._id, post_author_id: postExists.user_id, parent_comment_id: parent_comment_id, id: newComment._id, post_type: post_type } });
             }
         }
 
@@ -130,16 +161,24 @@ const getNestedComments = async (parentId) => {
 
 // Get comments for a post
 export const getComments = async (req, res) => {
-    const { post_id, parent_comment_id } = req.body;
+    const { post_id, post_type = "post", parent_comment_id } = req.body;
 
     try {
         if (!post_id) {
             return res.status(400).json(new ApiResponse(400, {}, 'Post ID is required'));
         }
 
-        const postExists = await UserPost.findById(post_id);
-        if (!postExists) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+
+        if (post_type == "post") {
+            const postExists = await UserPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+            if (!postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            }
         }
 
         // Build query for comments
@@ -153,8 +192,13 @@ export const getComments = async (req, res) => {
             query.parent_comment_id = null;
         }
 
-        const comments = await UserComment.find(query).populate('user_id', 'name username avatar');
+        let comments = [];
 
+        if (post_type == "post") {
+            comments = await UserComment.find(query).populate('user_id', 'name username avatar');
+        } else {
+            comments = await BlogPostComment.find(query).populate('user_id', 'name username avatar');
+        }
 
         const commentPromises = comments.map(async (comment) => {
             const commentObject = comment.toObject();
@@ -163,8 +207,13 @@ export const getComments = async (req, res) => {
 
 
             // Count the number of replies for each comment
-            const repliesCount = await UserComment.countDocuments({ parent_comment_id: comment._id });
-            commentObject.repliesCount = repliesCount; // Add repliesCount field
+            if (post_type == "post") {
+                const repliesCount = await UserComment.countDocuments({ parent_comment_id: comment._id });
+                commentObject.repliesCount = repliesCount; // Add repliesCount field
+            } else {
+                const repliesCount = await BlogPostComment.countDocuments({ parent_comment_id: comment._id });
+                commentObject.repliesCount = repliesCount; // Add repliesCount field
+            }
 
 
 

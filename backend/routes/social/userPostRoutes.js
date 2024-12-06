@@ -5,13 +5,29 @@ import { createComment, getComments, likeComment, unlikeComment } from '../../co
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 
+
+import { createBlogPost, deleteBlogPost, getSpecificBlogPost } from '../../controllers/social/blogPostController.js';
+
+
+
 const router = express.Router();
 
 // Route to create a new post
 router.post('/create-post', validateTokensMiddleware, createUserPost);
+router.post('/create-blog-post', validateTokensMiddleware, createBlogPost);
+
+
+
+router.post('/delete-post', validateTokensMiddleware, deletePost);
+router.post('/delete-blog-post', validateTokensMiddleware, deleteBlogPost);
+
+
+
 router.get('/get/posts', validateTokensMiddleware, getPosts);
 
 router.get('/get/:postId', validateTokensMiddleware, getSpecificPost);
+router.get('/get/blog-post/:postId', validateTokensMiddleware, getSpecificBlogPost);
+
 
 // poll
 router.post('/vote-in-poll', validateTokensMiddleware, voteInPoll);
@@ -28,7 +44,6 @@ router.post('/get-comments', validateTokensMiddleware, getComments);
 router.post('/like-comment', validateTokensMiddleware, likeComment);
 router.post('/unlike-comment', validateTokensMiddleware, unlikeComment);
 
-router.post('/delete-post', validateTokensMiddleware, deletePost);
 
 
 router.get("/get-all-topics", getAllTopics);

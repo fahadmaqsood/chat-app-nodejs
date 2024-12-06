@@ -1,26 +1,43 @@
 import { User } from '../../models/auth/user.models.js';
 import UserPost from '../../models/social/UserPost.js';
+import BlogPost from '../../models/social/BlogPost.js';
 import PostLike from '../../models/social/PostLikes.js';
+import BlogPostLike from '../../models/social/BlogPostLike.js';
 import { ApiResponse } from '../../utils/ApiResponse.js';
 import { addNotification } from '../notification/notificationController.js';
 
 export const likePost = async (req, res) => {
-    const { post_id } = req.body;
+    const { post_id, type = "post" } = req.body;
 
     try {
         const userExists = await User.findById(req.user._id);
-        const postExists = await UserPost.findById(post_id);
+        if (type == "post") {
+            const postExists = await UserPost.findById(post_id);
 
-        if (!userExists || !postExists) {
-            return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+            if (!userExists || !postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+
+            if (!userExists || !postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+            }
         }
 
-        const newLike = new PostLike({ user_id: req.user._id, post_id });
-        await newLike.save();
+        let newLike;
+
+        if (type == "post") {
+            newLike = new PostLike({ user_id: req.user._id, post_id });
+            await newLike.save();
+        } else {
+            newLike = new BlogPostLike({ user_id: req.user._id, post_id });
+            await newLike.save();
+        }
 
 
         if (!req.user._id.equals(postExists.user_id)) {
-            addNotification(postExists.user_id, `liked your post!`, (!postExists.content || postExists.content.trim() == "") ? "" : postExists.content, { doer: req.user._id, additionalData: { open: "post", post_id: postExists._id } });
+            addNotification(postExists.user_id, `liked your post!`, (!postExists.content || postExists.content.trim() == "" || type != "post") ? "" : postExists.content, { doer: req.user._id, additionalData: { open: "post", post_id: postExists._id } });
         }
 
         res.status(200).json(new ApiResponse(200, {}, "Successfully liked the post"));
@@ -35,20 +52,39 @@ export const likePost = async (req, res) => {
 
 
 export const unlikePost = async (req, res) => {
-    const { post_id } = req.body;
+    const { post_id, type = "post" } = req.body;
 
     try {
         const userExists = await User.findById(req.user._id);
-        const postExists = await UserPost.findById(post_id);
 
-        if (!userExists || !postExists) {
-            return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+
+        if (type == "post") {
+            const postExists = await UserPost.findById(post_id);
+
+            if (!userExists || !postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+            }
+        } else {
+            const postExists = await BlogPost.findById(post_id);
+
+            if (!userExists || !postExists) {
+                return res.status(404).json(new ApiResponse(404, {}, "User or post not found"));
+            }
         }
 
-        const result = await PostLike.findOneAndDelete({
-            user_id: req.user._id,
-            post_id: post_id
-        });
+        let result;
+
+        if (type == "post") {
+            result = await PostLike.findOneAndDelete({
+                user_id: req.user._id,
+                post_id: post_id
+            });
+        } else {
+            result = await BlogPostLike.findOneAndDelete({
+                user_id: req.user._id,
+                post_id: post_id
+            });
+        }
 
         // Check if the like was found and removed
         if (!result) {
