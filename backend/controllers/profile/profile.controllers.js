@@ -1,11 +1,18 @@
 import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
-import UserPost from '../../models/social/UserPost.js';
 import mongoose from "mongoose";
 
+
+import UserPost from '../../models/social/UserPost.js';
 import PostLike from '../../models/social/PostLikes.js';
 import UserComment from '../../models/social/UserComment.js';
+
+
+import BlogPost from '../../models/social/BlogPost.js';
+import BlogPostLike from '../../models/social/BlogPostLikes.js';
+import BlogPostComment from '../../models/social/BlogPostComment.js';
+
 
 import { getUserFriends } from "../auth/user.controllers.js";
 
@@ -225,7 +232,7 @@ const getProfileBlogPosts = async (req, res) => {
         }
 
         // Fetch user's posts from the database using userId
-        const posts = await UserPost.find({ user_id: userId })
+        const posts = await BlogPost.find({ user_id: userId })
             .sort({ createdAt: -1 })
             .skip(parseInt(skip))
             .limit(limit).populate({
@@ -247,28 +254,17 @@ const getProfileBlogPosts = async (req, res) => {
             delete postObject.user_id; // Remove user_id field
 
             // Count likes and comments
-            const numLikes = await PostLike.countDocuments({ post_id: post._id });
-            const numComments = await UserComment.countDocuments({ post_id: post._id });
+            const numLikes = await BlogPostLike.countDocuments({ post_id: post._id });
+            const numComments = await BlogPostComment.countDocuments({ post_id: post._id });
 
 
-            const hasUserLiked = await PostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
+            const hasUserLiked = await BlogPostLike.exists({ post_id: post._id, user_id: req.user._id }); // Check if user has liked the post
 
             postObject.numLikes = numLikes; // Add numLikes to the post object
             postObject.numComments = numComments; // Add numComments to the post object
 
             postObject.hasUserLiked = !!hasUserLiked;
 
-            // handling polls
-            if (post.poll && Array.isArray(post.poll.options)) {
-                postObject.poll.options = post.poll.options.map((option) => {
-                    return {
-                        _id: option._id,
-                        option: option.option,
-                        numVotes: option.votedBy.length,
-                        isVotedByUser: option.votedBy.includes(req.user._id)
-                    };
-                });
-            }
 
             return postObject;
         });
