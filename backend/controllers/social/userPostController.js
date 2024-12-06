@@ -441,7 +441,7 @@ export const getPosts = async (req, res) => {
             console.log(error);
         }
 
-        formattedPosts.sort((a, b) => a.createdAt - b.createdAt);
+        formattedPosts.sort((a, b) => b.createdAt - a.createdAt);
 
         try {
             let news = [];
