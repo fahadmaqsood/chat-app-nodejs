@@ -10,7 +10,7 @@ import UserComment from '../../models/social/UserComment.js';
 
 
 import BlogPost from '../../models/social/BlogPost.js';
-import BlogPostLike from '../../models/social/BlogPostLikes.js';
+import BlogPostLike from '../../models/social/BlogPostLike.js';
 import BlogPostComment from '../../models/social/BlogPostComment.js';
 
 
