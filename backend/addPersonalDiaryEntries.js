@@ -626,7 +626,7 @@ try {
 
 
             let openAIResponse = await getChatCompletion({
-                messages: [{ role: 'system', content: `Take ${exampleDelta} as example, Use delta format like that (in json) that can be used by flutter_quill to Write a short diary entry from ${currentUserName}'s perspective based on this information: ${inputText}. You can use bold, italic, underline, strike through and all other text forms you want, You should also add headings, emojis to make the diary entry lively and beautiful. Return only json and nothing else. don't surround output with three back ticks and "json" label. directly give output as list of {"insert"}s. new lines should be a separate insert array element like '{"insert":"\\n"}' . the last element of this array should be '{"insert":"\\n"}'` }],
+                messages: [{ role: 'system', content: `Take ${exampleDelta} as example, Use delta format like that (in json) that can be used by flutter_quill to Write a short diary entry from ${currentUserName}'s perspective based on this information: ${inputText}. You can use bold, italic, underline, strike through and all other text forms you want, You should also add headings, emojis to make the diary entry lively and beautiful. Return only json and nothing else. don't surround output with three back ticks and "json" label. directly give output as list of {"insert"}s. new lines should be a separate insert array element like '{"insert":"\\n"}' . the last element of this array should be '{"insert":"\\n"}'. if any message has content like ~~forward~~ then don't add write that message in your response.` }],
                 user_message: "",
             });
 
