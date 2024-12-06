@@ -22,13 +22,14 @@ export const createComment = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Post ID and User ID are required' });
         }
 
+        let postExists;
         if (post_type == "post") {
-            const postExists = await UserPost.findById(post_id);
+            postExists = await UserPost.findById(post_id);
             if (!postExists) {
                 return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
             }
         } else {
-            const postExists = await BlogPost.findById(post_id);
+            postExists = await BlogPost.findById(post_id);
             if (!postExists) {
                 return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
             }
