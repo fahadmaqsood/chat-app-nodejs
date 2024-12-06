@@ -1,5 +1,5 @@
 import { User } from '../../models/auth/user.models.js';
-import BlogPost from '../../models/social/UserPost.js';
+import BlogPost from '../../models/social/BlogPost.js';
 import BlogPostLike from '../../models/social/BlogPostLike.js';
 import BlogPostComment from '../../models/social/BlogPostComment.js';
 
