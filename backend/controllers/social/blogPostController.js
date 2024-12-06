@@ -147,6 +147,68 @@ export const createBlogPost = async (req, res) => {
     }
 };
 
+
+export const getBlogPosts = async (req, mood, topics, limit = 10, page = 1) => {
+
+    try {
+        // Validate input
+        if (!mood) {
+            return res.status(400).json({ success: false, message: 'Mood is required' });
+        }
+
+        // Create a base query object
+        const query = { mood: mood }; // Filter by mood_status
+
+
+
+        if (topics) {
+            const allTopics = await getCachedTopicNames();
+            const topicNames = allTopics.map(topic => topic.name);
+            const topicIDs = allTopics.map(topic => topic.id);
+
+            // Check if topics is provided and is an array
+            if (topics && Array.isArray(topics)) {
+
+                const topicIdsFromRequest = topics
+                    .filter(topic => topicNames.includes(topic)) // Filter only valid topic names
+                    .map(topic => {
+                        const index = topicNames.indexOf(topic);
+                        return topicIDs[index]; // Get corresponding ID
+                    });
+
+
+                query.topics = { $in: topicIdsFromRequest }; // Filter by specific topics if provided
+            } else if (topics && typeof topics === "string") {
+                const filteredTopic = allTopics.filter((topic) => topic.name == topics);
+
+
+                if (filteredTopic.length !== 0) {
+                    query.topics = { $in: [filteredTopic[0]["id"]] };
+                }
+            }
+        }
+        let posts = await BlogPost.find(query)
+            .sort({ createdAt: -1 })
+            .skip(parseInt(limit * (page - 1)))
+            .limit(limit).exec();
+
+        // Prepare the response with numLikes and numComments
+        const postPromises = posts.map(async (post) => {
+
+            return await populateAndFormatPost(req, post);
+
+        });
+
+
+        let formattedPosts = await Promise.all(postPromises);
+
+        res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
+    } catch (err) {
+        res.status(500).json(new ApiResponse(500, {}, err.message));
+    }
+};
+
+
 async function populateAndFormatPost(req, _post) {
     let post = await BlogPost.findById(_post._id).populate({
         path: 'user_id', // The field to populate

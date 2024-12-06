@@ -3,6 +3,8 @@ import UserPost from '../../models/social/UserPost.js';
 import PostLike from '../../models/social/PostLikes.js';
 import UserComment from '../../models/social/UserComment.js';
 
+import { getBlogPosts } from "./blogPostController.js";
+
 import { PostTopics, getAllTopicNames } from '../../models/social/PostTopics.js';
 import { getChatCompletion } from "../../utils/openai.js";
 
@@ -405,6 +407,39 @@ export const getPosts = async (req, res) => {
         let formattedPosts = await Promise.all(postPromises);
 
         console.log("posts length: ", formattedPosts.length);
+
+
+        try {
+            let blogs = await getBlogPosts(req, mood, topics, 5, postsNewsPaginationPage);
+
+            // Create a new array to hold the posts and blogs in the correct pattern
+            let updatedPosts = [];
+            let blogIndex = 0;
+
+            if (formattedPosts.length < 2) {
+                formattedPosts.push(...blogs);
+            } else {
+
+                // Loop through the `formattedPosts` array
+                for (let i = 0; i < formattedPosts.length; i++) {
+                    // Add the current post
+                    updatedPosts.push(formattedPosts[i]);
+
+                    // After every two posts, insert one item from blogs (if there are still blogs items left)
+                    if ((i + 1) % 2 === 0 && blogIndex < blogs.length) {
+                        updatedPosts.push(blogs[blogIndex]);  // Insert one blogs item
+                        blogIndex++;  // Move to the next blogs item
+                    }
+                }
+
+                updatedPosts.push(...blogs.slice(blogIndex, blogs.length));
+
+                // The `updatedPosts` array now contains the interspersed posts and blogs, so we assign it to `formattedPosts`
+                formattedPosts = updatedPosts;
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
         try {
             let news = [];
