@@ -202,9 +202,10 @@ export const getBlogPosts = async (req, mood, topics, limit = 10, page = 1) => {
 
         let formattedPosts = await Promise.all(postPromises);
 
-        res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
+        return formattedPosts;
     } catch (err) {
-        res.status(500).json(new ApiResponse(500, {}, err.message));
+        console.log(error);
+        return [];
     }
 };
 
