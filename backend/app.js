@@ -231,7 +231,7 @@ app.route('/share/:linkSuffix').get((req, res) => {
   }
 
   // Pass linkSuffix to the EJS template
-  res.render('share', { decodedLinkSuffix, params: paramObject });
+  res.render('share', { decodedLinkSuffix: decodeURIComponent(decodedLinkSuffix), params: paramObject });
 });
 
 

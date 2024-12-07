@@ -69,7 +69,7 @@
             const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 
-            const appScheme = 'teen-global-connect://'; // Example custom scheme for your app
+            const appScheme = 'teen-global-connect://<%= decodedLinkSuffix %>'; // Example custom scheme for your app
             const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.teen.global.connect'; // Google Play URL
             const appStoreUrl = 'https://apps.apple.com/us/app/teen-global-connect/id123456789'; // App Store URL
 
