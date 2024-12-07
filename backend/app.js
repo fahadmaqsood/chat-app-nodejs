@@ -125,6 +125,11 @@ import playstoreRoutes from "./routes/playstore/playstore.routes.js";
 
 import personalDiaryRoutes from "./routes/personal-diary/personalDiary.routes.js";
 
+
+import shareRoutes from "./routes/share/share.routes.js";
+
+
+
 // * App apis
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat-app/chats", chatRouter);
@@ -155,6 +160,8 @@ app.use('/api/v1/playstore/', playstoreRoutes);
 
 
 app.use('/api/v1/personal-diary/', personalDiaryRoutes);
+
+app.use('/api/v1/share/', shareRoutes);
 
 
 initializeSocketIO(io);
@@ -192,6 +199,14 @@ app.get('/', (req, res) => {
 // Manually define __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+
+app.route('/share/:linkSuffix').get((req, res) => {
+  // Route to serve the HTML file
+  // Send the subscription.html file located in the "public" folder
+  res.sendFile(path.join(__dirname, 'public', 'addQuizzes.html'));
+
+});
 
 
 app.get('/add/quiz', (req, res) => {
