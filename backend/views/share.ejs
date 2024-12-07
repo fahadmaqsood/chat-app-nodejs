@@ -45,8 +45,6 @@
         <button class="btn btn-primary btn-lg mb-4" id="openAppBtn">Open in App</button>
 
 
-        <span id="navigator"></span>
-
     </div>
 
     <!-- Bootstrap and custom JS -->
@@ -56,12 +54,8 @@
         // Get the type from the EJS-rendered value
         const type = "<%= params.type %>";
 
-        // console.log(<%= params %>);
-
         // Button element
         const openAppBtn = document.getElementById('openAppBtn');
-
-        document.getElementById("navigator").innerText = navigator.userAgent;
 
         // Function to check if the app is installed and open or redirect to the store
         function checkAppInstallation() {
@@ -72,8 +66,6 @@
             const appScheme = 'teen-global-connect://open?<%= decodedLinkSuffix %>'; // Example custom scheme for your app
             const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.teen.global.connect'; // Google Play URL
             const appStoreUrl = 'https://apps.apple.com/us/app/teen-global-connect/id123456789'; // App Store URL
-
-            document.getElementById("navigator").innerText = appScheme;
 
 
             if (isIOS) {
