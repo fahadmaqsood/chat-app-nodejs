@@ -88,6 +88,11 @@
             }
         }
 
+
+        window.onload = () => {
+            checkAppInstallation();
+        };
+
         // Attach the event listener to the button
         openAppBtn.addEventListener('click', checkAppInstallation);
     </script>
