@@ -230,6 +230,9 @@ app.route('/share/:linkSuffix').get((req, res) => {
     paramObject[key] = value;
   }
 
+  // First, decode HTML entities (like &amp; into &)
+  decodedLinkSuffix = decodedLinkSuffix.replace(/&amp;/g, '&');
+
   // Pass linkSuffix to the EJS template
   res.render('share', { decodedLinkSuffix: decodeURIComponent(decodedLinkSuffix), params: paramObject });
 });
