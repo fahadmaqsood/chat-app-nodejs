@@ -93,6 +93,20 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 app.use(morganMiddleware);
+
+
+
+// Manually define __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // Views folder location
+
+
 // api routes
 import { errorHandler } from "./middlewares/error.middlewares.js";
 // * App routes
@@ -195,17 +209,29 @@ app.get('/', (req, res) => {
   res.send('Welcome to the ChatApp! testing...');
 });
 
-
-// Manually define __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
 app.route('/share/:linkSuffix').get((req, res) => {
-  // Route to serve the HTML file
-  // Send the subscription.html file located in the "public" folder
-  res.sendFile(path.join(__dirname, 'public', 'addQuizzes.html'));
+  const { linkSuffix } = req.params;  // Extract linkSuffix from URL params
 
+
+  // Decode the Base64-encoded linkSuffix
+  let decodedLinkSuffix;
+  try {
+    decodedLinkSuffix = Buffer.from(linkSuffix, 'base64').toString('utf-8');
+  } catch (error) {
+    decodedLinkSuffix = '';  // In case decoding fails, set to empty string or handle error
+  }
+
+  // Extract parameters from the decoded linkSuffix (assuming it’s in query string format like "a=b&c=d&y=5")
+  let params = new URLSearchParams(decodedLinkSuffix);
+
+  // Convert the URLSearchParams to an object
+  const paramObject = {};
+  for (const [key, value] of params.entries()) {
+    paramObject[key] = value;
+  }
+
+  // Pass linkSuffix to the EJS template
+  res.render('share', { decodedLinkSuffix, params: paramObject });
 });
 
 

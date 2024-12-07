@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= params.title %>
+    </title> <!-- Dynamic title -->
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* You can add custom styles here if needed */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #2c3e50;
+            /* Default background color */
+            background-image: url('your-default-background.jpg');
+            /* Default background image */
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f4f4f4;">
+
+    <!-- Background Image -->
+    <div class="background"></div>
+
+    <div class="text-center text-white p-4 rounded shadow-lg" style="max-width: 600px; position: relative; z-index: 1;">
+        <!-- Heading based on type -->
+        <h3 class="display-4 mb-4">View this <%= params.type %> on <br />Teen Global Connect app</h3>
+
+        <br />
+
+        <!-- Button to open in the app -->
+        <button class="btn btn-primary btn-lg mb-4" id="openAppBtn">Open in App</button>
+
+        <!-- LinkSuffix content -->
+        <!-- <p id="linkSuffixPlaceholder">
+            <%= decodedLinkSuffix %>
+        </p> -->
+    </div>
+
+    <!-- Bootstrap and custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Get the type from the EJS-rendered value
+        const type = "<%= params.type %>";
+
+        // console.log(<%= params %>);
+
+        // Button element
+        const openAppBtn = document.getElementById('openAppBtn');
+
+        // Function to check if the app is installed and open or redirect to the store
+        function checkAppInstallation() {
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            const appScheme = 'teen-global-connect://'; // Example custom scheme for your app
+            const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.teen.global.connect'; // Google Play URL
+            const appStoreUrl = 'https://apps.apple.com/us/app/teen-global-connect/id123456789'; // App Store URL
+
+            if (isIOS) {
+                // iOS-specific behavior
+                window.location.href = appScheme;
+                setTimeout(() => {
+                    window.location.href = appStoreUrl;
+                }, 1000);
+            } else if (isAndroid) {
+                // Try to open the app using a custom scheme, fallback to Play Store if not installed
+                window.location.href = appScheme;
+                setTimeout(() => {
+                    window.location.href = playStoreUrl;
+                }, 1000); // Delay for 1 second to check if the app is installed
+            } else {
+                setTimeout(() => {
+                    window.location.href = playStoreUrl;
+                }, 1000); // Delay for 1 second to check if the app is installed
+            }
+        }
+
+        // Attach the event listener to the button
+        openAppBtn.addEventListener('click', checkAppInstallation);
+    </script>
+
+</body>
+
+</html>
