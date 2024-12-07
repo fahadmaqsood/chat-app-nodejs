@@ -1,7 +1,7 @@
 
 import { User } from '../../models/auth/user.models.js'
 
-import { ShareLinks } from '../../models/social/ShareLinks.js'
+import ShareLinks from '../../models/social/ShareLinks.js'
 
 import { ApiResponse } from '../../utils/ApiResponse.js';
 
