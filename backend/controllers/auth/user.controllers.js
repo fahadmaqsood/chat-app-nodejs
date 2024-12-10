@@ -905,6 +905,20 @@ const _decreaseUserPoints = async (user_id, current_points, by_points) => {
   return updatedUser;
 }
 
+const _increaseUserPoints = async (user_id, current_points, by_points) => {
+  let after_increase = current_points + by_points;
+
+  let updatedUser = await User.findByIdAndUpdate(
+    user_id,
+    { user_points: after_increase },
+    { new: true }
+  ).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry"
+  );
+
+  return updatedUser;
+}
+
 // decrease user points
 const decreaseUserPoints = asyncHandler(async (req, res) => {
 
@@ -977,6 +991,7 @@ export {
 
 
   _decreaseUserPoints,
+  _increaseUserPoints,
 
   refreshUser,
 

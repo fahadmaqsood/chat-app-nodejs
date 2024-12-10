@@ -2,7 +2,9 @@ import { PubSub } from '@google-cloud/pubsub';
 
 import PlayStoreTransactions from '../../models/payment/PlayStoreTransactions.js';
 
-import { User } from '../../models/auth/user.models.js'
+import { User } from '../../models/auth/user.models.js';
+
+import { _increaseUserPoints } from '../../controllers/auth/user.controllers.js';
 
 import { isAppOpenForUser, emitIndicatorsSocketEvent } from "../../socket/indicators.js";
 
@@ -43,8 +45,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 // await markPurchaseFailure(purchaseToken);
 
                 return res
-                    .status(200)
-                    .json(new ApiResponse(200, null, "Record for that purchase token not found."));
+                    .status(404)
+                    .json(new ApiResponse(404, null, "Record for that purchase token not found."));
             }
 
             // console.log("purchaseUserId: ", purchaseUserId);
@@ -120,8 +122,8 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                 console.log("Purchase for token: " + purchaseToken + " has not been recorded yet.");
 
                 return res
-                    .status(200)
-                    .json(new ApiResponse(200, null, "Record for that purchase token not found."));
+                    .status(404)
+                    .json(new ApiResponse(404, null, "Record for that purchase token not found."));
             }
 
 
@@ -145,6 +147,13 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
                     currentUser.subscription_status = "active";
 
+                    if (months == 1) {
+                        _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
+
+                        sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+                        emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                    }
+
                     break;
                 case 3: // SUBSCRIPTION_CANCELED
                 case 10: // SUBSCRIPTION_PAUSED
@@ -166,6 +175,13 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
                     currentUser.last_renew_date = new Date();
                     currentUser.subscription_type = months == 1 ? 'monthly' : 'yearly';
                     currentUser.next_billing_date = calculateNextBillingDate(months);
+
+                    if (months == 1) {
+                        _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
+
+                        sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+                        emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                    }
 
 
                     emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
