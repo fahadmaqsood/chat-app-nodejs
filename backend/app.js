@@ -209,8 +209,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to the ChatApp! testing...');
 });
 
-app.route('/share/:linkSuffix').get((req, res) => {
-  const { linkSuffix } = req.params;  // Extract linkSuffix from URL params
+app.route('/share/*').get((req, res) => {
+  // const { linkSuffix } = req.params;  // Extract linkSuffix from URL params
+  const linkSuffix = req.params[0]; // Everything after "/share/"
 
 
   // Decode the Base64-encoded linkSuffix
