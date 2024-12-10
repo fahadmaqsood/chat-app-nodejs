@@ -241,6 +241,84 @@ const getSessionDetails = async (req, res) => {
 
 
 
+
+
+const editSession = async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+
+        if (!sessionId) {
+            return res.status(400).json(new ApiResponse(400, {}, "sessionId is required"));
+        }
+
+        const { title, description, participants, startTime, endTime, sendMessageToParticipants } = req.body;
+        const currentUserId = req.user._id; // Get the current user from the request
+
+        if (!startTime || !endTime) {
+            return res.status(400).json(new ApiResponse(400, {}, "startTime and endTime are required"));
+        }
+
+        // Find the existing session by sessionId
+        const session = await UserSchedule.findById(sessionId);
+
+        if (!session) {
+            return res.status(404).json(new ApiResponse(404, {}, "Session not found"));
+        }
+
+        // Update session details (only the fields provided in the request body)
+        session.title = title || session.title;
+        session.description = description || session.description;
+        session.startTime = new Date(startTime) || session.startTime;
+        session.endTime = new Date(endTime) || session.endTime;
+
+        // Ensure participants list is updated, adding current user if not present
+        session.participants = [...new Set([...session.participants, ...participants, currentUserId])]; // Avoid duplicates
+        session.organizer = currentUserId; // Ensure the organizer is the current user
+
+        // Save the updated session
+        await session.save();
+
+        if (sendMessageToParticipants) {
+            // Send messages to the conversation where only userId and participantId are included
+            let chatIds = await getChatsForReceivers(req.user._id.toString(), participants);
+            await sendMessageToMany(chatIds, `~~forward~~/session/?name=${title}&description=${description}&startTime=${startTime}&endTime=${endTime}`);
+        }
+
+        // Populate participant details and return the updated session
+        const populatedSession = await UserSchedule.findById(sessionId)
+            .populate('participants', 'name username email avatar')
+            .populate('userId', 'name username email avatar') // Populate the creator's info
+            .lean();
+
+        return res.status(200).json(new ApiResponse(200, { session: populatedSession }, "Session details updated successfully"));
+
+    } catch (error) {
+        console.error("Error in editSession:", error);
+        return res.status(500).json(new ApiResponse(500, {}, 'An error occurred while updating session details'));
+    }
+};
+
+
+const deleteSession = async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+
+        if (!sessionId) {
+            return res.status(400).json(new ApiResponse(400, {}, "sessionId is required"));
+        }
+
+        // Delete the session
+        await UserSchedule.findByIdAndDelete(sessionId);
+
+        return res.status(200).json(new ApiResponse(200, {}, "Session deleted successfully"));
+    } catch (error) {
+        console.error("Error in deleteSession:", error);
+        return res.status(500).json(new ApiResponse(500, {}, 'An error occurred while deleting the session'));
+    }
+};
+
+
+
 // Get currently scheduled sessions
 const getCurrentSessions = async (req, res) => {
     try {
@@ -272,4 +350,4 @@ const getCurrentSessions = async (req, res) => {
 };
 
 
-export { scheduleSession, getSessionsByDate, getSessionDetails, getCurrentSessions };
+export { scheduleSession, getSessionsByDate, getSessionDetails, getCurrentSessions, editSession, deleteSession };

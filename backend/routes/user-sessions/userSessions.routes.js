@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { scheduleSession, getSessionsByDate, getSessionDetails } from '../../controllers/user-sessions/userSessions.controllers.js';
+import { scheduleSession, getSessionsByDate, getSessionDetails, editSession, deleteSession } from '../../controllers/user-sessions/userSessions.controllers.js';
 
 import { sendMessage } from '../../controllers/chat-app/message.controllers.js';
 
@@ -17,6 +17,11 @@ router.get('/get-sessions-by-date', validateTokensMiddleware, getSessionsByDate)
 
 // Route to retrieve the referral code by subscription code
 router.get('/details/:sessionId', getSessionDetails);
+
+
+router.post('/edit/:sessionId', editSession);
+
+router.delete('/delete/:sessionId', deleteSession);
 
 
 export default router;
