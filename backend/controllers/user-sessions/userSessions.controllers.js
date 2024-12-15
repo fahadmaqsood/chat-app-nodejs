@@ -285,12 +285,12 @@ const editSession = async (req, res) => {
         }
 
         // Populate participant details and return the updated session
-        const populatedSession = await UserSchedule.findById(sessionId)
-            .populate('participants', 'name username email avatar')
-            .populate('userId', 'name username email avatar') // Populate the creator's info
-            .lean();
+        // const populatedSession = await UserSchedule.findById(sessionId)
+        //     .populate('participants', 'name username email avatar')
+        //     .populate('userId', 'name username email avatar') // Populate the creator's info
+        //     .lean();
 
-        return res.status(200).json(new ApiResponse(200, { session: populatedSession }, "Session details updated successfully"));
+        return res.status(200).json(new ApiResponse(200, {}, "Session details updated successfully"));
 
     } catch (error) {
         console.error("Error in editSession:", error);
