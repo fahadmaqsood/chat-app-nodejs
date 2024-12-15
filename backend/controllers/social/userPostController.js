@@ -450,7 +450,7 @@ export const getPosts = async (req, res) => {
 
 
                 let searchTerms;
-                if (topics) {
+                if (topics && Array.isArray(topics)) {
                     searchTerms = topics;
                 } else {
                     searchTerms = ["celebrity", "news", "fashion", "tech"];
@@ -466,7 +466,7 @@ export const getPosts = async (req, res) => {
 
 
                 let searchTerms;
-                if (topics) {
+                if (topics && Array.isArray(topics)) {
                     searchTerms = topics;
                 } else {
                     searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
