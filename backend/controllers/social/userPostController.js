@@ -449,7 +449,12 @@ export const getPosts = async (req, res) => {
             if (mood == "happy" || mood == "laughing" || mood == "rofl") {
 
 
-                let searchTerms = ["celebrity", "news", "fashion", "tech"];
+                let searchTerms;
+                if (topics) {
+                    searchTerms = topics;
+                } else {
+                    searchTerms = ["celebrity", "news", "fashion", "tech"];
+                }
 
                 console.log(searchTerms.join("|"));
 
@@ -459,7 +464,13 @@ export const getPosts = async (req, res) => {
             } else {
 
 
-                let searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
+
+                let searchTerms;
+                if (topics) {
+                    searchTerms = topics;
+                } else {
+                    searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
+                }
 
                 console.log(searchTerms.join("|"));
 
