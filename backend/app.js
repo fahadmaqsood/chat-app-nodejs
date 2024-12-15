@@ -142,6 +142,8 @@ import personalDiaryRoutes from "./routes/personal-diary/personalDiary.routes.js
 
 import shareRoutes from "./routes/share/share.routes.js";
 
+import { resolveLink } from './controllers/share/shareController.js';
+
 
 
 // * App apis
@@ -209,17 +211,15 @@ app.get('/', (req, res) => {
   res.send('Welcome to the ChatApp! testing...');
 });
 
-app.route('/share/*').get((req, res) => {
+app.route('/share/*').get(async (req, res) => {
   // const { linkSuffix } = req.params;  // Extract linkSuffix from URL params
   const linkSuffix = req.params[0]; // Everything after "/share/"
 
 
-  // Decode the Base64-encoded linkSuffix
-  let decodedLinkSuffix;
-  try {
-    decodedLinkSuffix = Buffer.from(linkSuffix, 'base64').toString('utf-8');
-  } catch (error) {
-    decodedLinkSuffix = '';  // In case decoding fails, set to empty string or handle error
+  let decodedLinkSuffix = await resolveLink(linkSuffix);
+
+  if (decodedLinkSuffix == null) {
+    return res.status(400).send("Couldn't resolve this link");
   }
 
   // Extract parameters from the decoded linkSuffix (assuming it’s in query string format like "a=b&c=d&y=5")

@@ -11,21 +11,25 @@ import mongoose from 'mongoose';
 export const generateLink = async (req, res) => {
     try {
 
-        const { type, data } = req.body;
+        const { data } = req.body;
 
-        if (!type || !data) {
-            return res.status(400).json({ success: false, message: 'Missing required fields' });
+        if (!data) {
+            return res.status(400).json({ success: false, message: 'Missing required field "data"' });
         }
 
-        const shareExists = await ShareLinks.exists({ type: type, data: data });
+        const shareExists = await ShareLinks.exists({ data: data });
         if (shareExists) {
-            res.status(200).json(new ApiResponse(201, newNotification, "link generated"));
+            res.status(200).json(new ApiResponse(201, { "linkSuffix": shareExists._id }, "link generated"));
         }
 
 
 
-        res.status(201).json(new ApiResponse(201, newNotification, "Notification created successfully"));
+        // If it doesn't exist, create a new entry
+        const newShareLink = new ShareLinks({ data });
+        await newShareLink.save();
 
+        // Return the _id of the new entry
+        res.status(201).json(new ApiResponse(201, { "linkSuffix": newShareLink._id }, "Link generated successfully"));
 
     } catch (error) {
         console.error('Error processing message:', error);
@@ -34,3 +38,24 @@ export const generateLink = async (req, res) => {
 
     }
 }
+
+
+export const resolveLink = async (linkSuffix) => {
+    try {
+        if (!linkSuffix) {
+            return res.status(400).json({ success: false, message: 'Missing required field "linkSuffix"' });
+        }
+
+        const shareExists = await ShareLinks.findById(linkSuffix);
+        if (shareExists) {
+            return shareExists.data;
+        }
+
+
+        return null;
+
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
