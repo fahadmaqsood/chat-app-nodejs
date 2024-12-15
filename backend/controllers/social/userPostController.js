@@ -446,14 +446,22 @@ export const getPosts = async (req, res) => {
         try {
             let news = [];
 
-            const searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
-
-            console.log(searchTerms.join("|"));
-
             if (mood == "happy" || mood == "laughing" || mood == "rofl") {
+
+
+                let searchTerms = ["celebrity", "news", "fashion", "tech"];
+
+                console.log(searchTerms.join("|"));
+
+
+
                 news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
             } else {
 
+
+                let searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
+
+                console.log(searchTerms.join("|"));
 
                 // const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
                 let searchResponse = await bingWebSearch(searchTerms.join("|"), postsNewsPaginationPage);
