@@ -194,7 +194,7 @@ const getSessionsByDate = async (req, res) => {
             date: { $gte: startOfDay, $lte: endOfDay },
             $or: [
                 { organizer: currentUserId }, // Check if currentUserId is the organizer
-                { participants: currentUserId } // Check if currentUserId is in participants
+                { participants: { $in: [currentUserId] } } // Check if currentUserId is in participants
             ]
         })
             .populate('participants', 'name username avatar email') // Populate participant details
