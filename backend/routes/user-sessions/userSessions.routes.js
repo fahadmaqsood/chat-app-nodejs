@@ -19,9 +19,9 @@ router.get('/get-sessions-by-date', validateTokensMiddleware, getSessionsByDate)
 router.get('/details/:sessionId', getSessionDetails);
 
 
-router.post('/edit/:sessionId', editSession);
+router.post('/edit/:sessionId', validateTokensMiddleware, editSession);
 
-router.delete('/delete/:sessionId', deleteSession);
+router.delete('/delete/:sessionId', validateTokensMiddleware, deleteSession);
 
 
 export default router;
