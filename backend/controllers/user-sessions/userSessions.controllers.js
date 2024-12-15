@@ -197,7 +197,7 @@ const getSessionsByDate = async (req, res) => {
                 { participants: { $in: [currentUserId] } } // Check if currentUserId is in participants
             ]
         })
-            .populate('participants', 'name username avatar email') // Populate participant details
+            // .populate('participants', 'name username avatar email') // Populate participant details
             .lean();
 
 
