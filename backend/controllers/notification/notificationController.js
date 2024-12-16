@@ -335,7 +335,11 @@ export const getNotifications = async (req, res) => {
             .skip(parseInt(start_from))
             .limit(limit)
             .sort({ created_at: -1 })
-            .populate('payload.doer', 'name username avatar');
+            .populate({
+                path: 'payload.doer',
+                select: 'name username avatar',  // Fields you want to populate
+                match: { _id: { $ne: null } }    // Ensure only valid `doer` references are populated
+            });
 
         res.status(201).json(new ApiResponse(201, { notifications }, ""));
 
