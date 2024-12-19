@@ -137,7 +137,7 @@ const searchAvailableUsers = asyncHandler(async (req, res) => {
 
 
 
-const getUserMessagingFriends = async () => {
+const getUserMessagingFriends = async (req) => {
   const userId = req.user._id; // Get the logged-in user's ID
 
   const participantIds = await Chat.aggregate([
@@ -202,7 +202,7 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
       .json(new ApiResponse(400, null, "You don't have enough coins to use this feature."));
   }
 
-  const userMessagingFriends = getUserMessagingFriends();
+  const userMessagingFriends = await getUserMessagingFriends(req);
 
   console.log(userMessagingFriends);
 
