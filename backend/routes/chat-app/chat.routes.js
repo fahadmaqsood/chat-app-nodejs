@@ -13,6 +13,7 @@ import {
   renameGroupChat,
   searchAvailableUsers,
   findMatchingFriends,
+  dontSuggestUserAsFriendAgain,
 } from "../../controllers/chat-app/chat.controllers.js";
 import { verifyJWT } from "../../middlewares/auth.middlewares.js";
 import {
@@ -34,6 +35,7 @@ router.route("/").get(validateTokensMiddleware, getAllChats);
 router.route("/users").get(searchAvailableUsers);
 
 router.route("/find-random-friends").get(validateTokensMiddleware, findMatchingFriends);
+router.route("/dont-suggest-find-friends-user-again").post(validateTokensMiddleware, dontSuggestUserAsFriendAgain);
 
 router.route("/get-user-chats").post(validateTokensMiddleware, getListOfUserChats);
 

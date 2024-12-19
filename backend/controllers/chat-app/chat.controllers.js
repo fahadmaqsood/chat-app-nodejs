@@ -3,6 +3,7 @@ import { ChatEventEnum } from "../../constants.js";
 import { User } from "../../models/auth/user.models.js";
 import { Chat } from "../../models/chat-app/chat.models.js";
 import { ChatMessage } from "../../models/chat-app/message.models.js";
+import { DontSuggestUserAgain } from "../../models/chat-app/DontSuggestUserAgain.models.js";
 import { emitSocketEvent } from "../../socket/index.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
@@ -188,6 +189,25 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
       .json(new ApiResponse(404, null, "No users found matching the given criteria."));
   }
 
+
+  // Find users that should not be suggested to the current user
+  const dontSuggestIds = await DontSuggestUserAgain.find({
+    dontSuggestTo: currentUser._id,
+  }).select("dontSuggestWho");
+
+  // Create a set of user IDs that should not be suggested
+  const dontSuggestUserIds = new Set(dontSuggestIds.map((record) => record.dontSuggestWho.toString()));
+
+  // Filter out the users that are in the "dont suggest" list
+  const filteredUsers = users.filter((user) => !dontSuggestUserIds.has(user._id.toString()));
+
+  // Handle the case where all users are filtered out
+  if (!filteredUsers.length) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, [], "No users available after filtering out the ones you don't want to suggest."));
+  }
+
   // Deduct 1 point for the search and save the user
   currentUser.user_points -= 1;
   await currentUser.save();
@@ -196,6 +216,43 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, users, "Matching users fetched successfully"));
+});
+
+
+// don't suggest this same user again in find friends feature.
+const dontSuggestUserAsFriendAgain = asyncHandler(async (req, res) => {
+  const { dontSuggestWho } = req.body;
+
+  //const age = calculateAge(date_of_birth);
+
+
+  try {
+
+    const dontSuggestTo = req.user._id;
+
+    // Check if both fields are provided
+    if (!dontSuggestTo || !dontSuggestWho) {
+      return res.status(400).json({ error: "Both 'dontSuggestTo' and 'dontSuggestWho' are required." });
+    }
+
+    // Create a new record
+    const newRecord = new DontSuggestUserAgain({
+      dontSuggestTo,
+      dontSuggestWho
+    });
+
+    // Save the record to the database
+    await newRecord.save();
+
+    // Send a success response
+    return res.status(201).json({ message: "Record successfully added", data: newRecord });
+
+
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 
@@ -845,4 +902,5 @@ export {
   renameGroupChat,
   searchAvailableUsers,
   findMatchingFriends,
+  dontSuggestUserAsFriendAgain,
 };
