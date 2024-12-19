@@ -208,6 +208,8 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, [], "No users available after filtering out the ones you don't want to suggest."));
   }
 
+  filteredUsers.sort(() => Math.random() - 0.5);
+
   // Deduct 1 point for the search and save the user
   currentUser.user_points -= 1;
   await currentUser.save();
@@ -215,7 +217,7 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
   // Return matching users
   return res
     .status(200)
-    .json(new ApiResponse(200, users, "Matching users fetched successfully"));
+    .json(new ApiResponse(200, filteredUsers, "Matching users fetched successfully"));
 });
 
 
