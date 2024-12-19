@@ -162,7 +162,9 @@ const getUserMessagingFriends = async (req) => {
       $unwind: "$participantIds", // Flatten the array of participant IDs
     },
     {
-      $replaceRoot: { newRoot: "$participantIds" }, // Replace the root with the participant ID
+      $replaceRoot: {
+        newRoot: { _id: "$participantIds" } // Wrap the participant ID in an object
+      }
     },
   ]);
 
