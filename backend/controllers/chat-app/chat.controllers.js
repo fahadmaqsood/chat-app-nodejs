@@ -207,7 +207,7 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
 
   const userMessagingFriends = await getUserMessagingFriends(req);
 
-  console.log(userMessagingFriends);
+  // console.log(userMessagingFriends);
 
   // Build the query object dynamically based on provided parameters
   const query = {
