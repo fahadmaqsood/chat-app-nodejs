@@ -168,7 +168,8 @@ const getUserMessagingFriends = async (req) => {
     },
   ]);
 
-  return participantIds;
+  // Return the array of ObjectIds
+  return participantIds.map(participant => participant._id);
 }
 
 
