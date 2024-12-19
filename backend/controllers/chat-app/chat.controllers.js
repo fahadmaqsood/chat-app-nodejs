@@ -135,6 +135,57 @@ const searchAvailableUsers = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, users, "Users fetched successfully"));
 });
 
+
+
+const getUserMessagingFriends = async () => {
+  const userId = req.user._id; // Get the logged-in user's ID
+
+  const participantIds = await Chat.aggregate([
+    {
+      $match: {
+        participants: { $elemMatch: { $eq: new mongoose.Types.ObjectId(userId.toString()) } }, // User must be a participant
+        isGroupChat: false, // Only one-on-one chats
+      },
+    },
+    {
+      $project: {
+        participantIds: {
+          $filter: {
+            input: "$participants", // Filter participants
+            as: "participant",
+            cond: { $ne: ["$$participant", userId] }, // Exclude the current user
+          },
+        },
+      },
+    },
+    {
+      $unwind: "$participantIds", // Flatten the array of participant IDs
+    },
+    {
+      $replaceRoot: { newRoot: "$participantIds" }, // Replace the root with the participant ID
+    },
+  ]);
+
+  return participantIds;
+}
+
+
+// Function to calculate the start and end dates for a given age
+const getAgeDateRange = (age) => {
+  const currentDate = new Date();
+  const startOfYear = new Date(currentDate.getFullYear(), 0, 1); // January 1st of the current year
+  const endOfYear = new Date(currentDate.getFullYear(), 11, 31); // December 31st of the current year
+
+  // Calculate the birthdate range for the given age
+  const ageStartDate = new Date(startOfYear);
+  ageStartDate.setFullYear(startOfYear.getFullYear() - age);
+
+  const ageEndDate = new Date(endOfYear);
+  ageEndDate.setFullYear(endOfYear.getFullYear() - age);
+
+  return { ageStartDate, ageEndDate };
+};
+
 // find frineds based on religion, age, country, language
 const findMatchingFriends = asyncHandler(async (req, res) => {
   const { religion, age, country, language } = req.query;
@@ -151,18 +202,29 @@ const findMatchingFriends = asyncHandler(async (req, res) => {
       .json(new ApiResponse(400, null, "You don't have enough coins to use this feature."));
   }
 
+  const userMessagingFriends = getUserMessagingFriends();
+
+  console.log(userMessagingFriends);
+
   // Build the query object dynamically based on provided parameters
   const query = {
     _id: {
       $ne: currentUser._id,
-      $nin: [...currentUser.followers, ...currentUser.following]
+      $nin: [...currentUser.followers, ...currentUser.following, ...userMessagingFriends]
     }
   }; // Exclude the current user
 
   if (religion) query.religion = religion;
-  if (age) query.age = parseInt(age); // Parse age as an integer
+  // if (age) query.age = parseInt(age); // Parse age as an integer
   if (country) query.country = country;
   if (language) query.language = language;
+
+
+  // If age is provided, calculate the date range for the user's birthdate
+  if (age) {
+    const { ageStartDate, ageEndDate } = getAgeDateRange(parseInt(age));
+    query.date_of_birth = { $gte: ageStartDate, $lte: ageEndDate }; // Filter users by date_of_birth range
+  }
 
   // Perform the search query with the dynamically built filters
   const users = await User.aggregate([
