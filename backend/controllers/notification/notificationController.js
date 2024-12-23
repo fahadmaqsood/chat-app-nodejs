@@ -67,6 +67,7 @@ async function sendNotificationToMany(deviceTokens, title, message, payload, isC
             data: payload,
             tokens: deviceTokens, // Pass multiple device tokens
             priority: "high",
+            click_action: 'FLUTTER_NOTIFICATION_CLICK'
         };
     } else {
         message_data = {
