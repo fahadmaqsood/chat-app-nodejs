@@ -8,17 +8,19 @@ import UserReport from "../../models/reports/userReports.models.js";
 // Report a user
 const reportUser = async (req, res) => {
     try {
-        const { reportedId, additionalContext } = req.body;
+        const { reportedId, reportReason, reportReasonDescription, additionalContext } = req.body;
         const reporterId = req.user._id; // Get the current user from the request
 
-        if (!reportedId || !additionalContext) {
-            return res.status(400).json(new ApiResponse(400, {}, "reportedId and additionalContext are required"));
+        if (!reportedId || !reportReason || !reportReasonDescription || !additionalContext) {
+            return res.status(400).json(new ApiResponse(400, {}, "reportedId, reportReason, reportReasonDescription, and additionalContext are required"));
         }
 
         // Create new user report
         const newUserReport = new UserReport({
             reporterId,
             reportedId,
+            reportReason,
+            reportReasonDescription,
             additionalContext,
             reportStatus: 'in review', // Default report status
         });

@@ -11,6 +11,14 @@ const userReportSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    reportReason: {
+        type: String,
+        required: true
+    },
+    reportReasonDescription: {
+        type: String,
+        required: true
+    },
     additionalContext: {
         type: String,
         required: true
