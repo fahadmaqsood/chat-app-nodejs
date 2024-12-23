@@ -144,6 +144,8 @@ import shareRoutes from "./routes/share/share.routes.js";
 
 import { resolveLink } from './controllers/share/shareController.js';
 
+import reportRoutes from './routes/reports/report.routes.js';
+
 
 
 // * App apis
@@ -178,6 +180,8 @@ app.use('/api/v1/playstore/', playstoreRoutes);
 app.use('/api/v1/personal-diary/', personalDiaryRoutes);
 
 app.use('/api/v1/share/', shareRoutes);
+
+app.use('/api/v1/reports', reportRoutes);
 
 
 initializeSocketIO(io);
