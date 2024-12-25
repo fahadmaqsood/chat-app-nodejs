@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 
 import UserReport from "../../models/reports/userReports.models.js";
+import Complaint from "../../models/reports/Complaint.models.js";
 
 // Report a user
 const reportUser = async (req, res) => {
@@ -33,6 +34,40 @@ const reportUser = async (req, res) => {
         return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
     }
 };
+
+
+const fileAComplaint = async (req, res) => {
+    try {
+        const { rating, ratingDescription, complaintCategories, actualComplaint } = req.body;
+        const reporterId = req.user._id; // Get the current user from the request
+
+        // Validate the incoming data
+        if (rating === undefined || !ratingDescription || !complaintCategories || !actualComplaint) {
+            return res.status(400).json(new ApiResponse(400, {}, "rating, ratingDescription, complaintCategories, and actualComplaint are required"));
+        }
+
+        // Create a new complaint record
+        const newComplaint = new Complaint({
+            reporterId,
+            rating,
+            ratingDescription,
+            complaintCategories,
+            actualComplaint,
+            complaintStatus: 'in review', // Default complaint status
+        });
+
+        // Save the complaint to the database
+        await newComplaint.save();
+
+        return res.status(201).json(new ApiResponse(201, { complaint: newComplaint }, "Complaint filed successfully"));
+    } catch (error) {
+        console.error("Error in fileAComplaint:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+
 
 // Get all reports for a user
 const getReportsByUser = async (req, res) => {
@@ -89,4 +124,4 @@ const updateReportStatus = async (req, res) => {
     }
 };
 
-export { reportUser, getReportsByUser, updateReportStatus };
+export { reportUser, fileAComplaint, getReportsByUser, updateReportStatus };
