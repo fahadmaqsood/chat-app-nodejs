@@ -5,6 +5,8 @@ import QuizTopics from "../../models/quiz/QuizTopics.js";
 import QuizResult from "../../models/quiz/QuizResult.js";
 import Quiz from "../../models/quiz/Quiz.js";
 
+import { getUserMessagingFriends } from "../../controllers/chat-app/chat.controllers.js";
+
 import moment from "moment"; // For easier date manipulation
 
 import mongoose from "mongoose";
@@ -527,8 +529,10 @@ export const getFriendsByScore = async (req, res) => {
             return followingIds.has(follower._id.toString());
         });
 
-        if (mutualFriends.length === 0) {
-            return res.status(200).json(new ApiResponse(200, [], 'No mutual friends found.'));
+        const userMessagingFriends = await getUserMessagingFriends(req);
+
+        if (mutualFriends.length === 0 && userMessagingFriends.length == 0) {
+            return res.status(200).json(new ApiResponse(200, [], 'No friends found.'));
         }
 
         // Get mutual friend IDs
@@ -536,7 +540,7 @@ export const getFriendsByScore = async (req, res) => {
 
         const friendsLeaderboard = await User.aggregate([
             {
-                $match: { _id: { $in: mutualFriendIds } } // Match mutual friends
+                $match: { _id: { $in: [...mutualFriendIds, ...userMessagingFriends] } } // Match mutual friends
             },
             {
                 $lookup: {

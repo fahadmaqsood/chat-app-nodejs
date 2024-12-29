@@ -970,4 +970,5 @@ export {
   searchAvailableUsers,
   findMatchingFriends,
   dontSuggestUserAsFriendAgain,
+  getUserMessagingFriends
 };
