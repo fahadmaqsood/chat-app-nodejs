@@ -105,6 +105,7 @@ const userSchema = new Schema(
     firebaseToken: {
       type: String
     },
+    blocklist: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     followers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     following: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     closeFriends: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },

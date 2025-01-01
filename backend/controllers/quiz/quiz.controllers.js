@@ -535,6 +535,8 @@ export const getFriendsByScore = async (req, res) => {
             return res.status(200).json(new ApiResponse(200, [], 'No friends found.'));
         }
 
+        console.log("userMessagingFriends: " + userMessagingFriends);
+
         // Get mutual friend IDs
         const mutualFriendIds = mutualFriends.map(friend => friend._id);
 
