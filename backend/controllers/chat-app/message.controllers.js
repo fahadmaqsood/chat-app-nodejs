@@ -8,6 +8,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 
 import { User } from '../../models/auth/user.models.js';
+import ReportedMessage from '../../models/reports/ReportedMessage.models.js';
 
 import { sendNotification } from "../notification/notificationController.js";
 
@@ -395,4 +396,52 @@ const deleteMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, message, "Message deleted successfully"));
 });
 
-export { chatMessageCommonAggregation, getAllMessages, sendMessage, getSpecificMessage, sendMessageToMany, deleteMessage };
+
+
+const reportMessage = asyncHandler(async (req, res) => {
+  // Controller to report a message
+
+  const { messageId } = req.params;
+  const { reportReason, reportReasonDescription, additionalContext } = req.body;
+  const reporterId = req.user._id; // Get the current user from the request
+
+
+  // Find the message based on message id
+  const message = await ChatMessage.findOne({
+    _id: new mongoose.Types.ObjectId(messageId),
+  });
+
+  if (!message) {
+    throw new ApiError(404, "Message does not exist");
+  }
+
+  // Check if the user has already reported this message
+  const alreadyReported = await ReportedMessage.findOne({
+    reportedBy: req.user._id,
+    reportedMessage: message._id,
+  });
+
+  if (alreadyReported) {
+    throw new ApiError(400, "You have already reported this message");
+  }
+
+  // Create a new report for the message
+  const report = new ReportedMessage({
+    reportedBy: req.user._id,
+    reportedMessage: message._id,
+    reportReason: reportReason,
+    reportReasonDescription: reportReasonDescription,
+    additionalContext: additionalContext,
+  });
+
+  await report.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Message reported successfully"));
+});
+
+
+
+
+export { chatMessageCommonAggregation, getAllMessages, sendMessage, getSpecificMessage, sendMessageToMany, deleteMessage, reportMessage };

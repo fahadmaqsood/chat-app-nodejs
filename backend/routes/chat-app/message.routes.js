@@ -4,7 +4,8 @@ import {
   getAllMessages,
   sendMessage,
   sendMessageToMany,
-  getSpecificMessage
+  getSpecificMessage,
+  reportMessage
 } from "../../controllers/chat-app/message.controllers.js";
 import { validateTokensMiddleware } from "../../middlewares/auth.middlewares.js";
 import { upload } from "../../middlewares/multer.middlewares.js";
@@ -59,5 +60,14 @@ router
     validate,
     deleteMessage
   );
+
+router
+  .route("/report/:messageId")
+  .post(
+    mongoIdPathVariableValidator("messageId"),
+    validate,
+    reportMessage
+  );
+
 
 export default router;
