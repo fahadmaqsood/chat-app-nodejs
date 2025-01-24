@@ -2,6 +2,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { UserLoginType, UserRolesEnum } from "../../constants.js";
 import { User } from "../../models/auth/user.models.js";
+import { ScheduledAccountDeletion } from "../../models/auth/ScheduledAccountDeletion.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
@@ -352,15 +353,6 @@ const checkPasswordIsCorrect = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, {}, "Password is correct"));
 });
 
-
-import { ScheduledAccountDeletion } from "../models/ScheduledAccountDeletion"; // Adjust path if necessary
-import { User } from "../models/User"; // Adjust path if necessary
-import asyncHandler from "express-async-handler"; // Assuming you're using this for async error handling
-import ApiError from "../utils/ApiError"; // Adjust path if necessary
-import ApiResponse from "../utils/ApiResponse"; // Adjust path if necessary
-import dotenv from "dotenv"; // To load environment variables
-
-dotenv.config(); // Load environment variables
 
 const scheduleAccountDeletion = asyncHandler(async (req, res) => {
   // Get the deletion wait period from the environment file or use a default value of 7 days
