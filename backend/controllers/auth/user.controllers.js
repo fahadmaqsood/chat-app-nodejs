@@ -352,6 +352,61 @@ const checkPasswordIsCorrect = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, {}, "Password is correct"));
 });
 
+
+import { ScheduledAccountDeletion } from "../models/ScheduledAccountDeletion"; // Adjust path if necessary
+import { User } from "../models/User"; // Adjust path if necessary
+import asyncHandler from "express-async-handler"; // Assuming you're using this for async error handling
+import ApiError from "../utils/ApiError"; // Adjust path if necessary
+import ApiResponse from "../utils/ApiResponse"; // Adjust path if necessary
+import dotenv from "dotenv"; // To load environment variables
+
+dotenv.config(); // Load environment variables
+
+const scheduleAccountDeletion = asyncHandler(async (req, res) => {
+  // Get the deletion wait period from the environment file or use a default value of 7 days
+  const deletionWaitPeriod = parseInt(process.env.DELETION_WAIT_PERIOD, 10) || 7;
+
+  // Ensure the DELETION_WAIT_PERIOD is a valid number
+  if (isNaN(deletionWaitPeriod) || deletionWaitPeriod <= 0) {
+    throw new ApiError(500, "Invalid DELETION_WAIT_PERIOD environment variable", []);
+  }
+
+  // Calculate the deletion date by adding the wait period (in days) to today's date
+  const deletionDate = new Date();
+  deletionDate.setDate(deletionDate.getDate() + deletionWaitPeriod);
+
+  // Fetch the user from the database
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new ApiError(404, "User does not exist", []);
+  }
+
+  // Check if the user already has a scheduled deletion
+  const existingScheduledDeletion = await ScheduledAccountDeletion.findOne({
+    user: user._id,
+  });
+
+  if (existingScheduledDeletion) {
+    throw new ApiError(400, "Account deletion already scheduled", []);
+  }
+
+  // Create a new scheduled account deletion entry
+  const scheduledDeletion = new ScheduledAccountDeletion({
+    user: user._id,
+    deletionDate: deletionDate, // Set the dynamically calculated deletion date
+  });
+
+  await scheduledDeletion.save();
+
+  // Return a response to the client
+  return res.status(200).json(
+    new ApiResponse(200, { deletionDate: scheduledDeletion.deletionDate }, "Account deletion scheduled successfully")
+  );
+});
+
+
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password, firebaseToken } = req.body;
 
@@ -994,6 +1049,7 @@ export {
   verifyForgottenPasswordOtp,
   getCurrentUser,
   handleSocialLogin,
+  scheduleAccountDeletion,
   checkPasswordIsCorrect,
   loginUser,
   logoutUser,

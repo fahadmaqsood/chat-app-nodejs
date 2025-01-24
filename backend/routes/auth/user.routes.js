@@ -8,6 +8,7 @@ import {
   verifyForgottenPasswordOtp,
   getCurrentUser,
   handleSocialLogin,
+  scheduleAccountDeletion,
   checkPasswordIsCorrect,
   loginUser,
   logoutUser,
@@ -52,6 +53,7 @@ const router = Router();
 router.route("/register").post(userRegisterValidator(), validate, registerUser);
 router.route("/login").post(userLoginValidator(), validate, loginUser);
 
+router.route("/schedule-account-deletion").post(validateTokensMiddleware, scheduleAccountDeletion);
 router.route("/check-password-is-correct").post(validateTokensMiddleware, checkPasswordIsCorrect);
 
 router.route("/refresh-token").post(refreshAccessToken);
