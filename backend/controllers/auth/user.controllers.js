@@ -333,6 +333,25 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 });
 
+const checkPasswordIsCorrect = asyncHandler(async (req, res) => {
+  const { password } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new ApiError(404, "User does not exists", []);
+  }
+
+  // Compare the incoming password with hashed password
+  const isPasswordValid = await user.isPasswordCorrect(password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(404, "Invalid user credentials");
+  }
+
+  return res.status(200).json(new ApiResponse(200, {}, "Password is correct"));
+});
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password, firebaseToken } = req.body;
 
@@ -975,6 +994,7 @@ export {
   verifyForgottenPasswordOtp,
   getCurrentUser,
   handleSocialLogin,
+  checkPasswordIsCorrect,
   loginUser,
   logoutUser,
   refreshAccessToken,
