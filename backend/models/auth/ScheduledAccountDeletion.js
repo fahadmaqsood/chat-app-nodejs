@@ -16,6 +16,11 @@ const scheduledAccountDeletionSchema = new Schema(
             type: Date,
             default: Date.now, // The date when the deletion was scheduled
         },
+        status: {
+            type: String,
+            enum: ['scheduled', 'deleted'],
+            default: "scheduled", // The status of the scheduled deletion
+        },
     },
     { timestamps: true }
 );

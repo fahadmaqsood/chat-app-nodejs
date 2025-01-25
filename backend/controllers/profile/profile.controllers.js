@@ -13,6 +13,8 @@ import BlogPost from '../../models/social/BlogPost.js';
 import BlogPostLike from '../../models/social/BlogPostLike.js';
 import BlogPostComment from '../../models/social/BlogPostComment.js';
 
+import { ScheduledAccountDeletion } from '../../models/auth/ScheduledAccountDeletion.js';
+
 
 import { getUserFriends } from "../auth/user.controllers.js";
 
@@ -130,6 +132,11 @@ const getProfileInfo = async (req, res) => {
 
 
         // user.friends = await getUserFriends(userId);
+
+
+        // Check if the user's account is scheduled for deletion
+        const scheduledDeletion = await ScheduledAccountDeletion.findOne({ user: userId }).lean();
+        user.isScheduledForDeletion = scheduledDeletion ? scheduledDeletion.status === 'scheduled' : false;
 
 
         return res
