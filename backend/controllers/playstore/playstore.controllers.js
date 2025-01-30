@@ -30,7 +30,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         const messageData = Buffer.from(req.body.message.data, 'base64').toString();
         const messageJson = JSON.parse(messageData);
 
-        // console.log(messageJson);
+        console.log(messageJson);
 
         if (Object.keys(messageJson).includes("oneTimeProductNotification")) {
 
