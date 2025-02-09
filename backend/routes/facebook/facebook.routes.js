@@ -25,7 +25,7 @@ import { getChatCompletion } from "../../utils/openai.js";
 
 
 // core logic for processing message
-export const processChatMessage = async ({ message }) => {
+export const processChatMessage = async ({ from, message }) => {
     if (!message) {
         throw new Error("message is required");
     }
@@ -36,7 +36,7 @@ export const processChatMessage = async ({ message }) => {
     };
 
     // Fetch the last two message records from the `WhatsappMessage` table
-    const recentRecords = await WhatsappMessage.find({ from: userId }) // Filter by user ID or sender's phone number
+    const recentRecords = await WhatsappMessage.find({ from: from }) // Filter by user ID or sender's phone number
         .sort({ createdAt: -1 }) // Sort by creation date in descending order
         .limit(2) // Fetch only the last two records
         .exec();
@@ -111,7 +111,7 @@ router.post('/webhook', (req, res) => {
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
                         // Generate bot reply
-                        const botReply = processChatMessage({ message: text });
+                        const botReply = processChatMessage({ from: from, message: text });
 
                         // Save to MongoDB
                         try {
