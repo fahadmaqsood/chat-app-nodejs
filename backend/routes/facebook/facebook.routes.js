@@ -21,7 +21,7 @@ const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema)
 
 
 
-import { getChatCompletion } from "../utils/openai.js";
+import { getChatCompletion } from "../../utils/openai.js";
 
 
 // core logic for processing message
