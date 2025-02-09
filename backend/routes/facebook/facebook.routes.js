@@ -55,7 +55,7 @@ router.post('/webhook', (req, res) => {
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
                         // Generate bot reply
-                        const botReply = `Hello ${name}, you said: "${text}"`;
+                        const botReply = text;
 
                         // Save to MongoDB
                         try {
