@@ -1,5 +1,5 @@
 import express from 'express';
-const axios = require("axios");
+import axios from "axios";
 
 
 const router = express.Router();
