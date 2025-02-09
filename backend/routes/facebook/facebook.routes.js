@@ -25,7 +25,7 @@ import { getChatCompletion } from "../../utils/openai.js";
 
 
 // core logic for processing message
-export const processChatMessage = async ({ from, message }) => {
+const processChatMessage = async ({ from, message }) => {
     if (!message) {
         throw new Error("message is required");
     }
@@ -87,7 +87,7 @@ const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;      // Replace with your W
 
 
 
-router.post('/webhook', (req, res) => {
+router.post('/webhook', async (req, res) => {
     const body = req.body;
 
     // Log the incoming webhook event
@@ -111,7 +111,7 @@ router.post('/webhook', (req, res) => {
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
                         // Generate bot reply
-                        const botReply = processChatMessage({ from: from, message: text });
+                        const botReply = await processChatMessage({ from: from, message: text });
 
                         // Save to MongoDB
                         try {
