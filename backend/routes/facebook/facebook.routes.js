@@ -150,7 +150,7 @@ router.post('/webhook', async (req, res) => {
                         }
 
                         translate(text, null, 'en').then(async inputRes => {
-                            console.log(inputRes.translation);
+                            console.log("Input in english: " + inputRes.translation);
 
                             // Generate bot reply
                             const botReply = await processChatMessage({ from: from, message: inputRes.translation });
