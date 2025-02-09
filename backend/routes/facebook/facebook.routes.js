@@ -1,7 +1,7 @@
 import express from 'express';
 import axios from "axios";
 // import translate from 'google-translate-api-x';
-import translate from 'bing-translate-api';
+import { translate } from 'bing-translate-api';
 
 
 const router = express.Router();
