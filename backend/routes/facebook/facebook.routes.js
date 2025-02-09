@@ -135,6 +135,10 @@ router.post('/webhook', async (req, res) => {
 
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
+                        if (text === undefined) {
+                            return;
+                        }
+
                         if (text == "*//delete-all-my-messages") {
                             await deleteMessagesBySender({ from });
                             await sendMessage(from, "done.");
