@@ -21,6 +21,62 @@ const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema)
 
 
 
+import { getChatCompletion } from "../utils/openai.js";
+
+
+// core logic for processing message
+export const processChatMessage = async ({ message }) => {
+    if (!message) {
+        throw new Error("message is required");
+    }
+
+    const instructionMessage = {
+        role: 'system',
+        content: `You are a helpful assistant. You have to answer anything you are asked in a polite manner and your responses should be as short as possible. Your name is Siyańoon Sindhi (سياڻون سنڌي). As your name suggests you are intelligent and you know everything, however even greatest minds sometimes don't know something so you are allowed to say I don't know for the things you really don't know. Flis Technologies created you. It is a software house based in Hyderabad, Sindh.`,
+    };
+
+    // Fetch the last two message records from the `WhatsappMessage` table
+    const recentRecords = await WhatsappMessage.find({ from: userId }) // Filter by user ID or sender's phone number
+        .sort({ createdAt: -1 }) // Sort by creation date in descending order
+        .limit(2) // Fetch only the last two records
+        .exec();
+
+    // Separate user messages and bot replies, and prepare for OpenAI API
+    const chatMessages = [];
+    recentRecords.reverse().forEach((record) => {
+        // Add user message
+        chatMessages.push({
+            role: 'user',
+            content: record.text,
+        });
+
+        // Add bot reply, if exists
+        if (record.botReply) {
+            chatMessages.push({
+                role: 'assistant',
+                content: record.botReply,
+            });
+        }
+    });
+
+    // Get response from OpenAI API
+    let openAIResponse;
+
+    try {
+        openAIResponse = await getChatCompletion({
+            messages: [instructionMessage, ...chatMessages],
+            user_message: message,
+        });
+
+    } catch (e) {
+        throw new ApiResponse(500, {}, e.message);
+    }
+
+    return openAIResponse;
+};
+
+
+
 // Your verify token
 const VERIFY_TOKEN = process.env.FACEBOOK_VERIFY_TOKEN;
 
@@ -55,7 +111,7 @@ router.post('/webhook', (req, res) => {
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
                         // Generate bot reply
-                        const botReply = text;
+                        const botReply = processChatMessage({ message: text });
 
                         // Save to MongoDB
                         try {
