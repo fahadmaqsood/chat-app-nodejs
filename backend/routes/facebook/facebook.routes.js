@@ -118,7 +118,7 @@ router.post('/webhook', async (req, res) => {
     const body = req.body;
 
     // Log the incoming webhook event
-    console.log("Webhook event received:", JSON.stringify(body, null, 2));
+    // console.log("Webhook event received:", JSON.stringify(body, null, 2));
 
 
     // Check if this is a WhatsApp Business Account event
@@ -150,30 +150,32 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
 
-                        await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' }).then(async res => {
-                            // Save to MongoDB
-                            try {
-                                const botReplySindhi = res.text;
-                                console.log(`Reply in Sindhi: ${botReplySindhi}`);
-                                const newMessage = new WhatsappMessage({
-                                    from,
-                                    name,
-                                    messageId,
-                                    timestamp,
-                                    text,
-                                    botReply,
-                                    botReplySindhi,
-                                });
+                        const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
 
-                                await newMessage.save();
-                                console.log("Message saved to database:", newMessage);
-                            } catch (error) {
-                                console.error("Error saving message to database:", error.message);
-                            }
+                        console.log(res);
 
-                            // Send reply via WhatsApp API
-                            await sendMessage(from, botReplySindhi);
-                        });
+                        // Save to MongoDB
+                        try {
+                            const botReplySindhi = res.text;
+                            console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                            const newMessage = new WhatsappMessage({
+                                from,
+                                name,
+                                messageId,
+                                timestamp,
+                                text,
+                                botReply,
+                                botReplySindhi,
+                            });
+
+                            await newMessage.save();
+                            console.log("Message saved to database:", newMessage);
+                        } catch (error) {
+                            console.error("Error saving message to database:", error.message);
+                        }
+
+                        // Send reply via WhatsApp API
+                        await sendMessage(from, botReplySindhi);
 
                     }
                 }
