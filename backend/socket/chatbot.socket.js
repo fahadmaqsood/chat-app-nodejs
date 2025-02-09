@@ -16,12 +16,13 @@ const handleChatbotSocketEvents = (socket, io) => {
         try {
             const { userId, message, subject } = data;
 
-            // Process the message
-            const { incomingMessage, outgoingMessage } = await processChatMessage({ userId, message, subject });
-
             // Find the socket ID for the user
             const socketId = userSocketMap.get(`${userId}:${subject}`);
             if (socketId) {
+                // Process the message
+                const { incomingMessage, outgoingMessage } = await processChatMessage({ socket: io.to(socketId), userId, message, subject });
+
+
                 // Emit the event to the user's socket ID
                 io.to(socketId).emit('CHAT_MESSAGE_TO_SERVER', incomingMessage);
                 io.to(socketId).emit('CHAT_MESSAGE_FROM_SERVER', outgoingMessage);

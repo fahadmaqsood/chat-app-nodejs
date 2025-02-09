@@ -58,7 +58,7 @@ export const getRecentMessages = asyncHandler(async (req, res) => {
 
 
 // core logic for processing message
-export const processChatMessage = async ({ userId, message, subject }) => {
+export const processChatMessage = async ({ socket, userId, message, subject }) => {
     if (!userId || !message || !subject) {
         throw new Error("userId, message, and subject are required");
     }
@@ -98,12 +98,18 @@ export const processChatMessage = async ({ userId, message, subject }) => {
     // Get response from OpenAI API
     let openAIResponse;
 
+    socket.emit('CHATBOT_IS_TYPING', "true");
+
     try {
         openAIResponse = await getChatCompletion({
             messages: [instructionMessage, ...chatMessages],
             user_message: message,
         });
+
+        socket.emit('CHATBOT_IS_TYPING', "false");
     } catch (e) {
+
+        socket.emit('CHATBOT_IS_TYPING', "false");
         throw new ApiResponse(500, {}, e.message);
     }
 
