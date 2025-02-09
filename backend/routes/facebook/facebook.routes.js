@@ -149,38 +149,46 @@ router.post('/webhook', async (req, res) => {
                             return;
                         }
 
-                        // Generate bot reply
-                        const botReply = await processChatMessage({ from: from, message: text });
+                        translate(text, null, 'en').then(async inputRes => {
+                            console.log(inputRes.translation);
 
-                        translate(botReply, 'en', 'sd').then(async res => {
-                            console.log(res.translation);
+                            // Generate bot reply
+                            const botReply = await processChatMessage({ from: from, message: inputRes.translation });
 
-                            const botReplySindhi = res.translation;
-                            console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                            translate(botReply, 'en', 'sd').then(async res => {
+                                console.log(res.translation);
 
-                            // Save to MongoDB
-                            try {
-                                const newMessage = new WhatsappMessage({
-                                    from,
-                                    name,
-                                    messageId,
-                                    timestamp,
-                                    text,
-                                    botReply,
-                                    botReplySindhi,
-                                });
+                                const botReplySindhi = res.translation;
+                                console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                                await newMessage.save();
-                                console.log("Message saved to database:", newMessage);
-                            } catch (error) {
-                                console.error("Error saving message to database:", error.message);
-                            }
+                                // Save to MongoDB
+                                try {
+                                    const newMessage = new WhatsappMessage({
+                                        from,
+                                        name,
+                                        messageId,
+                                        timestamp,
+                                        text,
+                                        botReply,
+                                        botReplySindhi,
+                                    });
 
-                            // Send reply via WhatsApp API
-                            await sendMessage(from, botReplySindhi);
+                                    await newMessage.save();
+                                    console.log("Message saved to database:", newMessage);
+                                } catch (error) {
+                                    console.error("Error saving message to database:", error.message);
+                                }
+
+                                // Send reply via WhatsApp API
+                                await sendMessage(from, botReplySindhi);
+                            }).catch(async err => {
+                                await sendMessage(from, botReply);
+                            });
+
+
                         }).catch(async err => {
-                            await sendMessage(from, botReply);
-                        });
+                            await sendMessage(from, "الاهي ٽريفڪ جي ڪري مسئلا پيا اچن، بيهر ڪوشش ڪجو.");
+                        });;
 
                         // const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
 
