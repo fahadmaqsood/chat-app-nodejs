@@ -76,6 +76,31 @@ const processChatMessage = async ({ from, message }) => {
 };
 
 
+// Function to delete all messages for a given sender
+const deleteMessagesBySender = async ({ from }) => {
+    if (!from) {
+        throw new Error("Parameter 'from' is required.");
+    }
+
+    try {
+        // Delete all messages with the given 'from' field
+        const deleteResult = await WhatsappMessage.deleteMany({ from });
+
+        if (deleteResult.deletedCount === 0) {
+            return {
+                message: `No messages found for the sender: ${from}.`,
+            };
+        }
+
+        return {
+            message: `${deleteResult.deletedCount} messages deleted for the sender: ${from}.`,
+        };
+    } catch (error) {
+        throw new Error(`Failed to delete messages for the sender: ${from}. Error: ${error.message}`);
+    }
+};
+
+
 
 // Your verify token
 const VERIFY_TOKEN = process.env.FACEBOOK_VERIFY_TOKEN;
@@ -109,6 +134,12 @@ router.post('/webhook', async (req, res) => {
                         const name = change.value.contacts?.[0]?.profile?.name || "Unknown"; // Sender's name
 
                         console.log(`Received message from ${name} (${from}): ${text}`);
+
+                        if (text == "*//delete-all-my-messages") {
+                            await deleteMessagesBySender({ from });
+                            await sendMessage(from, "done.");
+                            return;
+                        }
 
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
