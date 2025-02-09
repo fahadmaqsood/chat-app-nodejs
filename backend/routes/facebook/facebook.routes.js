@@ -152,7 +152,7 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
 
-                        translate('botReply', 'en', 'sd').then(async res => {
+                        translate(botReply, 'en', 'sd').then(async res => {
                             console.log(res.translation);
 
                             const botReplySindhi = res.translation;
