@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from "axios";
-import translate from 'google-translate-api-x';
+// import translate from 'google-translate-api-x';
+import translate from 'bing-translate-api';
 
 
 const router = express.Router();
@@ -151,33 +152,63 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
 
-                        const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
+                        translate('botReply', 'en', 'sd').then(async res => {
+                            console.log(res.translation);
 
-                        console.log(res);
+                            const botReplySindhi = res.translation;
+                            console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                        const botReplySindhi = res.text;
-                        console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                            // Save to MongoDB
+                            try {
+                                const newMessage = new WhatsappMessage({
+                                    from,
+                                    name,
+                                    messageId,
+                                    timestamp,
+                                    text,
+                                    botReply,
+                                    botReplySindhi,
+                                });
 
-                        // Save to MongoDB
-                        try {
-                            const newMessage = new WhatsappMessage({
-                                from,
-                                name,
-                                messageId,
-                                timestamp,
-                                text,
-                                botReply,
-                                botReplySindhi,
-                            });
+                                await newMessage.save();
+                                console.log("Message saved to database:", newMessage);
+                            } catch (error) {
+                                console.error("Error saving message to database:", error.message);
+                            }
 
-                            await newMessage.save();
-                            console.log("Message saved to database:", newMessage);
-                        } catch (error) {
-                            console.error("Error saving message to database:", error.message);
-                        }
+                            // Send reply via WhatsApp API
+                            await sendMessage(from, botReplySindhi);
+                        }).catch(async err => {
+                            await sendMessage(from, botReply);
+                        });
 
-                        // Send reply via WhatsApp API
-                        await sendMessage(from, botReplySindhi);
+                        // const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
+
+                        // console.log(res);
+
+                        // const botReplySindhi = res.text;
+                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
+
+                        // // Save to MongoDB
+                        // try {
+                        //     const newMessage = new WhatsappMessage({
+                        //         from,
+                        //         name,
+                        //         messageId,
+                        //         timestamp,
+                        //         text,
+                        //         botReply,
+                        //         botReplySindhi,
+                        //     });
+
+                        //     await newMessage.save();
+                        //     console.log("Message saved to database:", newMessage);
+                        // } catch (error) {
+                        //     console.error("Error saving message to database:", error.message);
+                        // }
+
+                        // // Send reply via WhatsApp API
+                        // await sendMessage(from, botReplySindhi);
 
                     }
                 }

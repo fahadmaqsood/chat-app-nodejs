@@ -16,6 +16,7 @@
     "@faker-js/faker": "^8.0.2",
     "@google-cloud/pubsub": "^4.8.0",
     "bcrypt": "^5.1.0",
+    "bing-translate-api": "^4.0.2",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
