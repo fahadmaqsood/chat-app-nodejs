@@ -147,6 +147,10 @@ import { resolveLink } from './controllers/share/shareController.js';
 import reportRoutes from './routes/reports/report.routes.js';
 
 
+// TODO: Remove this whole facebook code
+import facebookWhatsappApiRoutes from './routes/facebook/facebook.routes.js';
+app.use("/api/v1/facebook", facebookWhatsappApiRoutes);
+
 
 // * App apis
 app.use("/api/v1/users", userRouter);
