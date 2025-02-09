@@ -120,7 +120,7 @@ router.post('/webhook', async (req, res) => {
     const body = req.body;
 
     // Log the incoming webhook event
-    // console.log("Webhook event received:", JSON.stringify(body, null, 2));
+    console.log("Webhook event received:", JSON.stringify(body, null, 2));
 
 
     // Check if this is a WhatsApp Business Account event
@@ -151,7 +151,7 @@ router.post('/webhook', async (req, res) => {
                         }
 
                         translate(text, 'sd', 'en').then(async inputRes => {
-                            console.log("Input in english: " + inputRes.translation);
+                            // console.log("Input in english: " + inputRes.translation);
 
                             const textEnglish = inputRes.translation;
 
@@ -162,7 +162,7 @@ router.post('/webhook', async (req, res) => {
                                 console.log(res.translation);
 
                                 const botReplySindhi = res.translation;
-                                console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                                // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
                                 // Save to MongoDB
                                 try {
@@ -178,7 +178,7 @@ router.post('/webhook', async (req, res) => {
                                     });
 
                                     await newMessage.save();
-                                    console.log("Message saved to database:", newMessage);
+                                    // console.log("Message saved to database:", newMessage);
                                 } catch (error) {
                                     console.error("Error saving message to database:", error.message);
                                 }
@@ -191,7 +191,7 @@ router.post('/webhook', async (req, res) => {
 
 
                         }).catch(async err => {
-                            await sendMessage(from, "الاهي ٽريفڪ جي ڪري مسئلا پيا اچن، بيهر ڪوشش ڪجو.");
+                            await sendMessage(from, "اِلاهي ٽريفڪ جي ڪري مسئلا پيا اچن، بيهر ڪوشش ڪجو.");
                         });;
 
                         // const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
