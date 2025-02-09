@@ -16,6 +16,7 @@ const whatsappMessageSchema = new mongoose.Schema({
     messageId: { type: String, required: true }, // Unique message ID
     timestamp: { type: Date, required: true }, // Timestamp of the message
     text: { type: String, required: true }, // The actual message text
+    textEnglish: { type: String },
     botReply: { type: String }, // The bot's reply
     botReplySindhi: { type: String }, // The bot's reply in Sindhi
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
@@ -152,8 +153,10 @@ router.post('/webhook', async (req, res) => {
                         translate(text, 'sd', 'en').then(async inputRes => {
                             console.log("Input in english: " + inputRes.translation);
 
+                            const textEnglish = inputRes.translation;
+
                             // Generate bot reply
-                            const botReply = await processChatMessage({ from: from, message: inputRes.translation });
+                            const botReply = await processChatMessage({ from: from, message: textEnglish });
 
                             translate(botReply, 'en', 'sd').then(async res => {
                                 console.log(res.translation);
@@ -169,6 +172,7 @@ router.post('/webhook', async (req, res) => {
                                         messageId,
                                         timestamp,
                                         text,
+                                        textEnglish,
                                         botReply,
                                         botReplySindhi,
                                     });
