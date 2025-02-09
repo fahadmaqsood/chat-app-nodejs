@@ -4,6 +4,21 @@ const router = express.Router();
 
 
 
+import mongoose from 'mongoose';
+
+const whatsappMessageSchema = new mongoose.Schema({
+    from: { type: String, required: true }, // Sender's phone number
+    name: { type: String }, // Sender's name
+    messageId: { type: String, required: true }, // Unique message ID
+    timestamp: { type: Date, required: true }, // Timestamp of the message
+    text: { type: String, required: true }, // The actual message text
+    botReply: { type: String }, // The bot's reply
+}, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
+
+const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema);
+
+
+
 // Your verify token
 const VERIFY_TOKEN = process.env.FACEBOOK_VERIFY_TOKEN;
 
@@ -29,15 +44,36 @@ router.post('/webhook', (req, res) => {
                     const messages = change.value.messages;
 
                     for (const message of messages) {
-                        const from = message.from; // The sender's phone number
-                        const text = message.text?.body; // The message text
+                        const from = message.from; // Sender's phone number
+                        const text = message.text?.body; // Message text
+                        const timestamp = new Date(parseInt(message.timestamp) * 1000); // Convert timestamp to Date
+                        const messageId = message.id; // Unique message ID
+                        const name = change.value.contacts?.[0]?.profile?.name || "Unknown"; // Sender's name
 
-                        console.log(`Received message from ${from}: ${text}`);
+                        console.log(`Received message from ${name} (${from}): ${text}`);
 
-                        // Send the same message back to the user
-                        if (text) {
-                            await sendMessage(from, text);
+                        // Generate bot reply
+                        const botReply = `Hello ${name}, you said: "${text}"`;
+
+                        // Save to MongoDB
+                        try {
+                            const newMessage = new WhatsappMessage({
+                                from,
+                                name,
+                                messageId,
+                                timestamp,
+                                text,
+                                botReply,
+                            });
+
+                            await newMessage.save();
+                            console.log("Message saved to database:", newMessage);
+                        } catch (error) {
+                            console.error("Error saving message to database:", error.message);
                         }
+
+                        // Send reply via WhatsApp API
+                        await sendMessage(from, botReply);
                     }
                 }
             });
