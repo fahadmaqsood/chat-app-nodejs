@@ -155,10 +155,11 @@ router.post('/webhook', async (req, res) => {
 
                         console.log(res);
 
+                        const botReplySindhi = res.text;
+                        console.log(`Reply in Sindhi: ${botReplySindhi}`);
+
                         // Save to MongoDB
                         try {
-                            const botReplySindhi = res.text;
-                            console.log(`Reply in Sindhi: ${botReplySindhi}`);
                             const newMessage = new WhatsappMessage({
                                 from,
                                 name,
