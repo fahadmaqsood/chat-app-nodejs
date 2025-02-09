@@ -149,7 +149,7 @@ router.post('/webhook', async (req, res) => {
                             return;
                         }
 
-                        translate(text, null, 'en').then(async inputRes => {
+                        translate(text, 'sd', 'en').then(async inputRes => {
                             console.log("Input in english: " + inputRes.translation);
 
                             // Generate bot reply
