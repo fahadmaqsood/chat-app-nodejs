@@ -150,7 +150,7 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
 
-                        const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' }).then(async res => {
+                        await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' }).then(async res => {
                             // Save to MongoDB
                             try {
                                 const botReplySindhi = res.text;
