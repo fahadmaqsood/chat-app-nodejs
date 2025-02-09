@@ -54,7 +54,7 @@ router.post('/webhook', (req, res) => {
 
 // Function to send a reply via WhatsApp Cloud API
 async function sendMessage(to, message) {
-    const url = `https://graph.facebook.com/v16.0/${PHONE_NUMBER_ID}/messages`;
+    const url = `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`;
 
     const data = {
         messaging_product: "whatsapp",
