@@ -26,6 +26,7 @@
     "express-rate-limit": "^6.7.0",
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
+    "google-translate-api-x": "^10.7.2",
     "jsonwebtoken": "^9.0.0",
     "mailgen": "^2.0.27",
     "moment": "^2.30.1",

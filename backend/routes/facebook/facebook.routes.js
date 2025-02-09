@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from "axios";
+import translate from 'google-translate-api-x';
 
 
 const router = express.Router();
@@ -15,6 +16,7 @@ const whatsappMessageSchema = new mongoose.Schema({
     timestamp: { type: Date, required: true }, // Timestamp of the message
     text: { type: String, required: true }, // The actual message text
     botReply: { type: String }, // The bot's reply
+    botReplySindhi: { type: String }, // The bot's reply in Sindhi
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
 const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema);
@@ -148,25 +150,30 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: text });
 
-                        // Save to MongoDB
-                        try {
-                            const newMessage = new WhatsappMessage({
-                                from,
-                                name,
-                                messageId,
-                                timestamp,
-                                text,
-                                botReply,
-                            });
+                        const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' }).then(async res => {
+                            // Save to MongoDB
+                            try {
+                                const botReplySindhi = res.text;
+                                const newMessage = new WhatsappMessage({
+                                    from,
+                                    name,
+                                    messageId,
+                                    timestamp,
+                                    text,
+                                    botReply,
+                                    botReplySindhi,
+                                });
 
-                            await newMessage.save();
-                            console.log("Message saved to database:", newMessage);
-                        } catch (error) {
-                            console.error("Error saving message to database:", error.message);
-                        }
+                                await newMessage.save();
+                                console.log("Message saved to database:", newMessage);
+                            } catch (error) {
+                                console.error("Error saving message to database:", error.message);
+                            }
 
-                        // Send reply via WhatsApp API
-                        await sendMessage(from, botReply);
+                            // Send reply via WhatsApp API
+                            await sendMessage(from, botReplySindhi);
+                        });
+
                     }
                 }
             });
