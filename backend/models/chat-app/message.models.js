@@ -23,6 +23,10 @@ const chatMessageSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Chat",
     },
+    isRead: {
+      type: Boolean,
+      default: false, // New messages are unread by default
+    },
   },
   { timestamps: true }
 );

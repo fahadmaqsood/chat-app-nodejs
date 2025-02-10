@@ -385,12 +385,40 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
       },
     },
     {
+      // Count the number of unread messages for the logged-in user in each chat
+      $lookup: {
+        from: "chatmessages",
+        localField: "_id",
+        foreignField: "chat",
+        as: "unreadMessages",
+        pipeline: [
+          {
+            $match: {
+              isRead: false, // Only count unread messages
+              sender: { $ne: new mongoose.Types.ObjectId(userId.toString()) }, // Exclude messages sent by the user
+            },
+          },
+          {
+            $count: "unreadCount", // Count the number of unread messages
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        numUnread: {
+          $ifNull: [{ $arrayElemAt: ["$unreadMessages.unreadCount", 0] }, 0], // Get the unread count or default to 0
+        },
+      },
+    },
+    {
       // Optional: project only the needed fields
       $project: {
         _id: 1,
         isGroupChat: 1,
         lastMessage: 1,
         createdAt: 1,
+        numUnread: 1,
         name: 1,
         numberOfParticipants: 1,
         participantDetails: {
