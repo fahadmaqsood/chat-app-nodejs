@@ -407,14 +407,18 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
       },
     },
     {
-      $sort: {
-        // First, check if there is a lastMessage, and sort accordingly
-        $cond: {
-          if: { $eq: [{ $ifNull: ["$lastMessage", null] }, null] }, // If there's no lastMessage, use the creation timestamp
-          then: { createdAt: -1 }, // Sort by the chat creation timestamp (assuming 'createdAt' exists on the chat)
-          else: { "lastMessage.createdAt": -1 }, // Sort by the last message creation timestamp
+      $addFields: {
+        sortField: {
+          $cond: {
+            if: { $ifNull: ["$lastMessage", false] },
+            then: "$lastMessage.createdAt",
+            else: "$createdAt", // Assuming 'createdAt' exists for chats
+          },
         },
       },
+    },
+    {
+      $sort: { sortField: -1 }, // Sort by the calculated field
     },
     // Add skip and limit stages for pagination
     { $skip: parseInt(skip) },
