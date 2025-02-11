@@ -460,6 +460,47 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
 });
 
 
+const markAsRead = async (userId, chatId) => {
+  const result = await ChatMessage.updateMany(
+    {
+      chat: new mongoose.Types.ObjectId(chatId), // Match the chat ID
+      sender: { $ne: new mongoose.Types.ObjectId(userId) }, // Exclude messages sent by the user
+      isRead: false, // Only target unread messages
+    },
+    {
+      $set: { isRead: true }, // Mark as read
+    }
+  );
+
+  return result;
+}
+
+const markMessagesAsRead = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // Get the logged-in user's ID
+
+  const { chatId } = req.body; // Chat ID for which messages should be marked as read
+
+  if (!chatId) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, null, "Chat ID is required"));
+  }
+
+  try {
+    await markAsRead(userId, chatId);
+
+    return res.status(200).json(
+      new ApiResponse(200, result, `Messages marked as read successfully`)
+    );
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json(new ApiResponse(500, null, "Failed to mark messages as read"));
+  }
+});
+
+
 
 const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
@@ -996,6 +1037,8 @@ const getAllChats = asyncHandler(async (req, res) => {
 export {
   addNewParticipantInGroupChat,
   createAGroupChat,
+  markMessagesAsRead,
+  markAsRead,
   getListOfUserChats,
   createOrGetAOneOnOneChat,
   deleteGroupChat,

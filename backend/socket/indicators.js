@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 
 import { User } from "../models/auth/user.models.js";
 import { _getUnreadNotificationsCount, _changeNotificationsStatusToRead } from '../controllers/notification/notificationController.js';
-
+import { markAsRead } from "../controllers/chat-app/chat.controllers.js"
 import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
 import { ApiError } from "../utils/ApiError.js";
 
@@ -55,7 +55,16 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
         }
     };
 
-    // socket.on('READ_MESSAGES', handleReadMessagesEvent);
+
+    const handleReadMessagesEvent = async (chatId) => {
+        try {
+            await markAsRead(socket.user._id, chatId);
+        } catch (error) {
+            console.error('Error handling read messages event:', error.message);
+        }
+    };
+
+    socket.on('READ_MESSAGES', handleReadMessagesEvent);
     socket.on('READ_NOTIFICATION_EVENT', handleReadNotificationsEvent);
 };
 
