@@ -17,26 +17,58 @@ export const searchUsers = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, "Nothing was provided to search"));
         }
 
-        const searchCriteria = [
-            { name: searchText }, // Exact match
-            { username: searchText }, // Exact match
-            { email: searchText }, // Exact match
+        // Create the search criteria for exact match first
+        const exactSearchCriteria = [
+            { name: searchText },
+            { username: searchText },
+            { email: searchText },
         ];
 
-        const regexCriteria = [
+        // Create the regex search criteria
+        const regexSearchCriteria = [
             { name: { $regex: new RegExp(searchText, 'i') } },
             { username: { $regex: new RegExp(searchText, 'i') } },
             { email: { $regex: new RegExp(searchText, 'i') } },
         ];
 
-        // Use exact match first and fallback to regex if no results
-        const users = await User.aggregate([
-            { $match: { $or: searchCriteria } }, // Exact match
-            { $match: { $or: regexCriteria } },  // Regex match as fallback
-            { $project: { avatar: 1, username: 1, email: 1 } },
+        // First, try exact matches
+        let users = await User.aggregate([
+            {
+                $match: {
+                    $or: exactSearchCriteria,
+                },
+            },
+            {
+                $project: {
+                    avatar: 1,
+                    username: 1,
+                    email: 1,
+                },
+            },
             { $skip: skip },
             { $limit: limit },
         ]);
+
+        // If no results, fallback to regex search
+        if (users.length === 0) {
+            console.log("No exact matches found, falling back to regex search");
+            users = await User.aggregate([
+                {
+                    $match: {
+                        $or: regexSearchCriteria,
+                    },
+                },
+                {
+                    $project: {
+                        avatar: 1,
+                        username: 1,
+                        email: 1,
+                    },
+                },
+                { $skip: skip },
+                { $limit: limit },
+            ]);
+        }
 
         // if (!users || users.length === 0) {
         //     return res.status(404).json(new ApiResponse(404, {}, "No users found"));
