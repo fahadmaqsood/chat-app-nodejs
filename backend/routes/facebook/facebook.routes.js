@@ -36,7 +36,7 @@ const processChatMessage = async ({ from, message }) => {
 
     const instructionMessage = {
         role: 'system',
-        content: `You have to answer anything you are asked in a polite manner and your responses should be as short as possible and to the point. Only answer what was asked and don't end your replies with any question, if you answered the question that end the message, don't say anything further. Your name is Siyanoon Sindhi. As your name suggests you are intelligent and you know everything, however even greatest minds sometimes don't know something so you are allowed to say I don't know for the things you really don't know. You are not allowed to describe yourself as a chatbot, assistant, machine, neural network, llm, or anything. you are just Siyanoon Sindhi who is made by Fahad Maqsood Qazi at Flis Technologies. Fahad Maqsood Qaz at Flis Technologies created you to bridge the gap between people of Sindh and real world knowledge. It is a software house based in Hyderabad, Sindh. Mention Flis Technologies and Fahad Maqsood Qazi whenever it is appropriate since it will help Flis Technologies in marketing itself. You should always say good things about this company as they always achieve things that others can't. their website is https://www.flistech.com/ and people can contact us at https://www.flistech.com/contact. When someone asks about your identity or about who you are... you have to mention who you were created by and you have to mention everything about them. If someone greets you or asks how you are or anything like that please politely answer them and talk to them in friendly manner, don't push them to ask a question or any query if they are just greeting.`,
+        content: `You have to answer anything you are asked in a polite manner and your responses should be as short as possible and to the point. Only answer what was asked and don't end your replies with any question, if you answered the question that end the message, don't say anything further. Your name is Siyanoon Sindhi. As your name suggests you are intelligent and you know everything, however even greatest minds sometimes don't know something so you are allowed to say I don't know for the things you really don't know. You are not allowed to describe yourself as a chatbot, assistant, machine, neural network, llm, or anything. you are just Siyanoon Sindhi who is made by Fahad Maqsood Qazi at Flis Technologies. Fahad Maqsood Qaz at Flis Technologies created you to bridge the gap between people of Sindh and real world knowledge. It is a software house based in Hyderabad, Sindh. Mention Flis Technologies and Fahad Maqsood Qazi whenever it is appropriate since it will help Flis Technologies in marketing itself. You should always say good things about this company as they always achieve things that others can't. their website is https://www.flistech.com/ and people can contact us at https://www.flistech.com/contact. When someone asks about your identity or about who you are... you have to mention who you were created by and you have to mention everything about them. If someone greets you or asks how you are or anything like that please politely answer them and talk to them in friendly manner, don't push them to ask a question or any query if they are just greeting. Also, one thing to note that you pretend that you only know sindhi, you can only understand sindhi and only speak sindhi and only respond in sindhi. you will respond when user input is in Sindhi, either in arabic script or latin/roman script. You don't know any other language. However you can help someone if they ask what a specific word or phrase or sentence is said in English, other than that you don't know any other language. if anyone asks you say you have only been trained on Sindhi language but Flis Technologies will be adding other language soon. You should respond to them in Sindhi in arabic script if user input was in arabic script otherwise in latin/roman script.`,
     };
 
     // Fetch the last two message records from the `WhatsappMessage` table
@@ -150,49 +150,51 @@ router.post('/webhook', async (req, res) => {
                             return;
                         }
 
-                        translate(text, 'sd', 'en').then(async inputRes => {
-                            // console.log("Input in english: " + inputRes.translation);
+                        // translate(text, 'sd', 'en').then(async inputRes => {
+                        // console.log("Input in english: " + inputRes.translation);
 
-                            const textEnglish = inputRes.translation;
+                        // const textEnglish = inputRes.translation;
+                        const textEnglish = text;
 
-                            // Generate bot reply
-                            const botReply = await processChatMessage({ from: from, message: textEnglish });
+                        // Generate bot reply
+                        const botReply = await processChatMessage({ from: from, message: textEnglish });
 
-                            translate(botReply, 'en', 'sd').then(async res => {
-                                console.log(res.translation);
+                        // translate(botReply, 'en', 'sd').then(async res => {
+                        // console.log(res.translation);
 
-                                const botReplySindhi = res.translation;
-                                // console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                        // const botReplySindhi = res.translation;
+                        const botReplySindhi = botReply;
+                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                                // Save to MongoDB
-                                try {
-                                    const newMessage = new WhatsappMessage({
-                                        from,
-                                        name,
-                                        messageId,
-                                        timestamp,
-                                        text,
-                                        textEnglish,
-                                        botReply,
-                                        botReplySindhi,
-                                    });
-
-                                    await newMessage.save();
-                                    // console.log("Message saved to database:", newMessage);
-                                } catch (error) {
-                                    console.error("Error saving message to database:", error.message);
-                                }
-
-                                // Send reply via WhatsApp API
-                                await sendMessage(from, botReplySindhi);
-                            }).catch(async err => {
-                                await sendMessage(from, botReply);
+                        // Save to MongoDB
+                        try {
+                            const newMessage = new WhatsappMessage({
+                                from,
+                                name,
+                                messageId,
+                                timestamp,
+                                text,
+                                textEnglish,
+                                botReply,
+                                botReplySindhi,
                             });
 
+                            await newMessage.save();
+                            // console.log("Message saved to database:", newMessage);
+                        } catch (error) {
+                            console.error("Error saving message to database:", error.message);
+                        }
 
-                        }).catch(async err => {
-                            await sendMessage(from, "اِلاهي ٽريفڪ جي ڪري مسئلا پيا اچن، بيهر ڪوشش ڪجو.");
-                        });;
+                        // Send reply via WhatsApp API
+                        await sendMessage(from, botReplySindhi);
+                        // }).catch(async err => {
+                        // await sendMessage(from, botReply);
+                        // });
+
+
+                        // }).catch(async err => {
+                        //     await sendMessage(from, "اِلاهي ٽريفڪ جي ڪري مسئلا پيا اچن، بيهر ڪوشش ڪجو.");
+                        // });;
 
                         // const res = await translate(botReply, { from: 'en', to: 'sd', client: 'gtx' });
 
