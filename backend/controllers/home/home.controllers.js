@@ -17,29 +17,25 @@ export const searchUsers = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, "Nothing was provided to search"));
         }
 
-        // Build the search criteria based on the provided fields
         const searchCriteria = [
-            { name: { $regex: new RegExp(searchText, 'i') } }, // Case-insensitive regex search
+            { name: searchText }, // Exact match
+            { username: searchText }, // Exact match
+            { email: searchText }, // Exact match
+        ];
+
+        const regexCriteria = [
+            { name: { $regex: new RegExp(searchText, 'i') } },
             { username: { $regex: new RegExp(searchText, 'i') } },
             { email: { $regex: new RegExp(searchText, 'i') } },
         ];
 
-        // Perform the aggregation query
+        // Use exact match first and fallback to regex if no results
         const users = await User.aggregate([
-            {
-                $match: {
-                    $or: searchCriteria, // Match users based on search criteria
-                },
-            },
-            {
-                $project: {
-                    avatar: 1,
-                    username: 1,
-                    email: 1,
-                },
-            },
-            { $skip: skip },   // Skip the number of documents specified
-            { $limit: limit },  // Limit the number of documents returned
+            { $match: { $or: searchCriteria } }, // Exact match
+            { $match: { $or: regexCriteria } },  // Regex match as fallback
+            { $project: { avatar: 1, username: 1, email: 1 } },
+            { $skip: skip },
+            { $limit: limit },
         ]);
 
         // if (!users || users.length === 0) {
