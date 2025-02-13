@@ -49,13 +49,9 @@ const processChatMessage = async ({ from, message }) => {
         their website is https://www.flistech.com/ and people can contact them at https://www.flistech.com/contact.
         When someone asks about your identity or about who you are... you have to mention who you were created by and you have to mention everything about them.
         If someone greets you or asks how you are or anything like that please politely answer them and talk to them in friendly manner, don't push them to ask a question or any query if they are just greeting.
-        Also, one thing to note that you pretend that you only know sindhi, you can only understand sindhi and only speak sindhi and only respond in sindhi.
-        You will respond when user input is in Sindhi, either in arabic script or latin/roman script, otherwise you will apologize for not knowing what language they are speaking.
-        You don't know any other language.
-        However you can help someone if they ask what a specific word or phrase or sentence is said in English, other than that you don't know any other language and mention that Flis Technologies will be adding other languages soon.
-        If anyone asks you why you don't know other languages then say you have only been trained on Sindhi language but Flis Technologies will be adding other language soon.
-        You should respond to them in Sindhi in arabic script if user input was in arabic script otherwise in latin/roman script.
-        Use standard sindhi dialect (hyderabad's sindhi) which means use Aoon (آئون) instead of maan (مان).`,
+        You are not allowed to say anything that is not appropriate or that can be considered as a hate speech or that can be considered as a threat.
+        
+        `,
     };
 
     // Fetch the last two message records from the `WhatsappMessage` table
@@ -178,37 +174,37 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: textEnglish });
 
-                        // translate(botReply, 'en', 'sd').then(async res => {
-                        // console.log(res.translation);
+                        translate(botReply, 'en', 'sd').then(async res => {
+                            // console.log(res.translation);
 
-                        // const botReplySindhi = res.translation;
-                        const botReplySindhi = botReply;
-                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                            // const botReplySindhi = res.translation;
+                            const botReplySindhi = botReply;
+                            // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                        // Save to MongoDB
-                        try {
-                            const newMessage = new WhatsappMessage({
-                                from,
-                                name,
-                                messageId,
-                                timestamp,
-                                text,
-                                textEnglish,
-                                botReply,
-                                botReplySindhi,
-                            });
+                            // Save to MongoDB
+                            try {
+                                const newMessage = new WhatsappMessage({
+                                    from,
+                                    name,
+                                    messageId,
+                                    timestamp,
+                                    text,
+                                    textEnglish,
+                                    botReply,
+                                    botReplySindhi,
+                                });
 
-                            await newMessage.save();
-                            // console.log("Message saved to database:", newMessage);
-                        } catch (error) {
-                            console.error("Error saving message to database:", error.message);
-                        }
+                                await newMessage.save();
+                                // console.log("Message saved to database:", newMessage);
+                            } catch (error) {
+                                console.error("Error saving message to database:", error.message);
+                            }
 
-                        // Send reply via WhatsApp API
-                        await sendMessage(from, botReplySindhi);
-                        // }).catch(async err => {
-                        // await sendMessage(from, botReply);
-                        // });
+                            // Send reply via WhatsApp API
+                            await sendMessage(from, botReplySindhi);
+                        }).catch(async err => {
+                            await sendMessage(from, botReply);
+                        });
 
 
                         // }).catch(async err => {

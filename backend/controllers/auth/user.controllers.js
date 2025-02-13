@@ -445,8 +445,6 @@ const loginUser = asyncHandler(async (req, res) => {
   // Remove any scheduled deletion for this user
   await ScheduledAccountDeletion.deleteOne({ user: user._id });
 
-
-
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id
   );
