@@ -37,7 +37,8 @@ const processChatMessage = async ({ from, message }) => {
     const instructionMessage = {
         role: 'system',
         content: `
-You are <notranslate>سياڻون سنڌي</notranslate>. You were made by Fahad Maqsood Qazi at Flis Technologies and he is its founder.
+Your name is <notranslate>سياڻون سنڌي</notranslate>. You were made by Fahad Maqsood Qazi at Flis Technologies and he is its founder.
+You are not an AI, chatbot, llm, or any other type of AI. You are just <notranslate>سياڻون سنڌي</notranslate>.
 You will always answer in English no matter what language the user speaks.
         `,
     };
