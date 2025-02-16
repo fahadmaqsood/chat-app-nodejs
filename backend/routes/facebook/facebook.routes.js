@@ -180,7 +180,7 @@ router.post('/webhook', async (req, res) => {
 
                         // Generate bot reply
                         botReply = botReply
-                            .replace(/\b(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
+                            .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
 
                         // Extract the word and replace the first tag
                         // Array to store all words/phrases inside <notranslate> tags
