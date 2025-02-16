@@ -186,7 +186,7 @@ router.post('/webhook', async (req, res) => {
                             /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
                             (match, content) => {
                                 storedWords.push(content); // Store the content in the array
-                                return '<>'; // Replace with just <notranslate>
+                                return '<<>>'; // Replace with just <notranslate>
                             }
                         );
 
@@ -201,7 +201,7 @@ router.post('/webhook', async (req, res) => {
                             let finalReply = botReplySindhi;
                             if (storedWords.length > 0) {
                                 finalReply = botReplySindhi.replace(
-                                    /<>/g, // Match all <notranslate> placeholders
+                                    /<<>>/g, // Match all <notranslate> placeholders
                                     () => storedWords.shift() // Replace with the next stored word
                                 );
                             }
