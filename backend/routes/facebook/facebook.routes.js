@@ -177,10 +177,33 @@ router.post('/webhook', async (req, res) => {
                         // Generate bot reply
                         const botReply = await processChatMessage({ from: from, message: textEnglish });
 
-                        translate(botReply, 'en', 'sd').then(async res => {
+                        // Extract the word and replace the first tag
+                        // Array to store all words/phrases inside <notranslate> tags
+                        const storedWords = [];
+
+                        // Replace all <notranslate> tags with <notranslate> and store their content
+                        const outputString = botReply.replace(
+                            /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
+                            (match, content) => {
+                                storedWords.push(content); // Store the content in the array
+                                return '<notranslate>'; // Replace with just <notranslate>
+                            }
+                        );
+
+                        // console.log(storedWords); // Output: ["ڊسٽبن", "dustbin"]
+                        // console.log(outputString); 
+
+                        translate(outputString, 'en', 'sd').then(async res => {
                             // console.log(res.translation);
 
                             const botReplySindhi = res.translation;
+
+                            const finalReply = botReplySindhi.replace(
+                                /<notranslate>/g, // Match all <notranslate> placeholders
+                                () => storedWords.shift() // Replace with the next stored word
+                            );
+
+
                             // const botReplySindhi = botReply;
                             // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
@@ -194,7 +217,7 @@ router.post('/webhook', async (req, res) => {
                                     text,
                                     textEnglish,
                                     botReply,
-                                    botReplySindhi,
+                                    finalReply,
                                 });
 
                                 await newMessage.save();
@@ -204,7 +227,7 @@ router.post('/webhook', async (req, res) => {
                             }
 
                             // Send reply via WhatsApp API
-                            await sendMessage(from, botReplySindhi);
+                            await sendMessage(from, finalReply);
                         }).catch(async err => {
                             await sendMessage(from, botReply);
                         });
