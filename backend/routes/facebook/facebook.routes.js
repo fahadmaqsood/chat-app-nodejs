@@ -54,6 +54,7 @@ const processChatMessage = async ({ from, message }) => {
         For translation queries, format your answer like this:  
         "The word for <notranslate>[INPUT_WORD]</notranslate> in English is <notranslate>[ENGLISH_TERM]</notranslate>."  
         DO NOT use any non-English text outside the <notranslate> tags.
+        If you want to tell your name then surround it with <notranslate> tags.
         `,
     };
 
