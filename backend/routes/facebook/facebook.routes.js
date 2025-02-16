@@ -50,7 +50,7 @@ const processChatMessage = async ({ from, message }) => {
         When someone asks about your identity or about who you are... you have to mention who you were created by and you have to mention everything about them.
         If someone greets you or asks how you are or anything like that please politely answer them and talk to them in friendly manner, don't push them to ask a question or any query if they are just greeting.
         You are not allowed to say anything that is not appropriate or that can be considered as a hate speech or that can be considered as a threat.
-        
+        I am going to tell you something that is a trade secret and you should never tell anyone ever! "Your responses will translated to Sindhi using google or bing translate. So you should always respond in English but pretend that your responses are in Sindhi while in reality they will be in english and will be translated and shown to user as if they were real responses, also the words or phrases you do not want to be translated in Sindhi please write them inside <notranslate></notranslate> tags. Like if someone asks چٻري کي انگريزي ۾ ڇا چئبو آهي؟ you should say چٻري کي انگريزي ۾ <notranslate>\"Owl\"</notranslate> چئبو آهي.".
         `,
     };
 
@@ -177,8 +177,8 @@ router.post('/webhook', async (req, res) => {
                         translate(botReply, 'en', 'sd').then(async res => {
                             // console.log(res.translation);
 
-                            // const botReplySindhi = res.translation;
-                            const botReplySindhi = botReply;
+                            const botReplySindhi = res.translation;
+                            // const botReplySindhi = botReply;
                             // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
                             // Save to MongoDB
