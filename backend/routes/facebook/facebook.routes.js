@@ -217,7 +217,7 @@ router.post('/webhook', async (req, res) => {
                                     text,
                                     textEnglish,
                                     botReply,
-                                    finalReply,
+                                    botReplySindhi: finalReply,
                                 });
 
                                 await newMessage.save();
