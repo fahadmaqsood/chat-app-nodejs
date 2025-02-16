@@ -176,7 +176,11 @@ router.post('/webhook', async (req, res) => {
                         const textEnglish = text;
 
                         // Generate bot reply
-                        const botReply = await processChatMessage({ from: from, message: textEnglish });
+                        let botReply = await processChatMessage({ from: from, message: textEnglish });
+
+                        // Generate bot reply
+                        botReply = botReply
+                            .replace(/\b(سياڻون سنڌي)\b/gi, '<notranslate>$1</notranslate>');
 
                         // Extract the word and replace the first tag
                         // Array to store all words/phrases inside <notranslate> tags
