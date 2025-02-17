@@ -6,10 +6,17 @@ import { translate } from 'bing-translate-api';
 import { Chroma } from "@langchain/community/vectorstores/chroma";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
+import { ChromaClient } from 'chromadb';
+
 
 
 // Path to ChromaDB
 const CHROMA_DB_PATH = "../../chromadb";
+
+// Initialize ChromaDB with a persistent directory
+const client = new ChromaClient({
+    persistDirectory: '/path/to/your/database'  // Specify your desired path
+});
 
 // Initialize ChromaDB
 var vectorstore = null;
@@ -91,7 +98,7 @@ Your responses might get translated by external services therefore surround the 
             vectorstore = await Chroma.fromExistingCollection(
                 new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
                 {
-                    url: "http://localhost:8000", // URL of the Chroma server
+                    url: "http://138.197.231.101:8000/", // URL of the Chroma server
                 }
             );
         }
