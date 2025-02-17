@@ -3,6 +3,22 @@ import axios from "axios";
 // import translate from 'google-translate-api-x';
 import { translate } from 'bing-translate-api';
 
+import { Chroma } from "@langchain/community/vectorstores/chroma";
+import { OpenAIEmbeddings } from "@langchain/openai";
+
+
+
+// Path to ChromaDB
+const CHROMA_DB_PATH = "../../chromadb";
+
+// Initialize ChromaDB
+const vectorstore = await Chroma.fromExistingCollection(
+    new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
+    {
+        url: "http://localhost:8000", // URL of the Chroma server
+    }
+);
+
 
 const router = express.Router();
 
@@ -72,6 +88,27 @@ Your responses might get translated by external services therefore surround the 
             });
         }
     });
+
+
+
+    // **Retrieve relevant texts from ChromaDB**
+    let relevantDocs = [];
+    try {
+        const results = await vectorstore.similaritySearch(message, 3);
+        relevantDocs = results.map(doc => doc.pageContent);
+    } catch (err) {
+        console.error("Error retrieving from ChromaDB:", err);
+    }
+
+    // Add relevant text to context
+    if (relevantDocs.length > 0) {
+        chatMessages.push({
+            role: 'system',
+            content: `Here is some relevant information:\n\n${relevantDocs.join("\n\n")}`
+        });
+    }
+
+    console.log(chatMessages);
 
     // Get response from OpenAI API
     let openAIResponse;
