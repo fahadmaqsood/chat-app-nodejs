@@ -99,6 +99,7 @@ Your responses might get translated by external services therefore surround the 
                 new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
                 {
                     url: "http://138.197.231.101:8000/", // URL of the Chroma server
+                    collectionName: "default",
                 }
             );
         }
