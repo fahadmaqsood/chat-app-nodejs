@@ -12,12 +12,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 const CHROMA_DB_PATH = "../../chromadb";
 
 // Initialize ChromaDB
-// const vectorstore = await Chroma.fromExistingCollection(
-//     new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
-//     {
-//         url: "http://localhost:8000", // URL of the Chroma server
-//     }
-// );
+var vectorstore = null;
 
 
 const router = express.Router();
@@ -90,29 +85,38 @@ Your responses might get translated by external services therefore surround the 
     });
 
 
-    // try {
+    try {
 
-    //     // **Retrieve relevant texts from ChromaDB**
-    //     let relevantDocs = [];
-    //     try {
-    //         const results = await vectorstore.similaritySearch(message, 3);
-    //         relevantDocs = results.map(doc => doc.pageContent);
-    //     } catch (err) {
-    //         console.error("Error retrieving from ChromaDB:", err);
-    //     }
+        if (vectorstore === null) {
+            vectorstore = await Chroma.fromExistingCollection(
+                new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
+                {
+                    url: "http://localhost:8000", // URL of the Chroma server
+                }
+            );
+        }
 
-    //     // Add relevant text to context
-    //     if (relevantDocs.length > 0) {
-    //         chatMessages.push({
-    //             role: 'system',
-    //             content: `Here is some relevant information:\n\n${relevantDocs.join("\n\n")}`
-    //         });
-    //     }
+        // **Retrieve relevant texts from ChromaDB**
+        let relevantDocs = [];
+        try {
+            const results = await vectorstore.similaritySearch(message, 3);
+            relevantDocs = results.map(doc => doc.pageContent);
+        } catch (err) {
+            console.error("Error retrieving from ChromaDB:", err);
+        }
 
-    //     console.log(chatMessages);
-    // } catch (e) {
-    //     console.log("chromadb error: " + e);
-    // }
+        // Add relevant text to context
+        if (relevantDocs.length > 0) {
+            chatMessages.push({
+                role: 'system',
+                content: `Here is some relevant information:\n\n${relevantDocs.join("\n\n")}`
+            });
+        }
+
+        console.log(chatMessages);
+    } catch (e) {
+        console.log("chromadb error: " + e);
+    }
 
     // Get response from OpenAI API
     let openAIResponse;
