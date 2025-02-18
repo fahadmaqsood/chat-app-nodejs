@@ -236,66 +236,67 @@ router.post('/webhook', async (req, res) => {
                         let botReply = await processChatMessage({ from: from, message: textEnglish });
 
                         // Generate bot reply
-                        botReply = botReply
-                            .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
+                        // botReply = botReply
+                        //     .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
 
                         // Extract the word and replace the first tag
                         // Array to store all words/phrases inside <notranslate> tags
-                        const storedWords = [];
+                        // const storedWords = [];
 
-                        // Replace all <notranslate> tags with <notranslate> and store their content
-                        const outputString = botReply.replace(
-                            /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
-                            (match, content) => {
-                                storedWords.push(content); // Store the content in the array
-                                return '<<>>'; // Replace with just <notranslate>
-                            }
-                        );
+                        // // Replace all <notranslate> tags with <notranslate> and store their content
+                        // const outputString = botReply.replace(
+                        //     /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
+                        //     (match, content) => {
+                        //         storedWords.push(content); // Store the content in the array
+                        //         return '<<>>'; // Replace with just <notranslate>
+                        //     }
+                        // );
 
                         // console.log(storedWords); // Output: ["ڊسٽبن", "dustbin"]
                         // console.log(outputString); 
 
-                        translate(outputString, 'en', 'sd').then(async res => {
-                            // console.log(res.translation);
+                        // translate(outputString, 'en', 'sd').then(async res => {
+                        // console.log(res.translation);
 
-                            const botReplySindhi = res.translation;
+                        // const botReplySindhi = res.translation;
 
-                            let finalReply = botReplySindhi;
-                            if (storedWords.length > 0) {
-                                finalReply = botReplySindhi.replace(
-                                    /<<>>/g, // Match all <notranslate> placeholders
-                                    () => storedWords.shift() // Replace with the next stored word
-                                );
-                            }
+                        // let finalReply = botReplySindhi;
+                        let finalReply = botReply;
+                        if (storedWords.length > 0) {
+                            finalReply = botReplySindhi.replace(
+                                /<<>>/g, // Match all <notranslate> placeholders
+                                () => storedWords.shift() // Replace with the next stored word
+                            );
+                        }
 
 
-                            // const botReplySindhi = botReply;
-                            // console.log(`Reply in Sindhi: ${botReplySindhi}`);
+                        // const botReplySindhi = botReply;
+                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                            // Save to MongoDB
-                            try {
-                                const newMessage = new WhatsappMessage({
-                                    from,
-                                    name,
-                                    messageId,
-                                    timestamp,
-                                    text,
-                                    textEnglish,
-                                    botReply,
-                                    botReplySindhi: finalReply,
-                                });
+                        // Save to MongoDB
+                        try {
+                            const newMessage = new WhatsappMessage({
+                                from,
+                                name,
+                                messageId,
+                                timestamp,
+                                text,
+                                textEnglish,
+                                botReply,
+                                botReplySindhi: finalReply,
+                            });
 
-                                await newMessage.save();
-                                // console.log("Message saved to database:", newMessage);
-                            } catch (error) {
-                                console.error("Error saving message to database:", error.message);
-                            }
+                            await newMessage.save();
+                            // console.log("Message saved to database:", newMessage);
+                        } catch (error) {
+                            console.error("Error saving message to database:", error.message);
+                        }
 
-                            // Send reply via WhatsApp API
-                            await sendMessage(from, finalReply);
-                        }).catch(async err => {
-                            await sendMessage(from, botReply);
-                        });
+                        // Send reply via WhatsApp API
+                        await sendMessage(from, finalReply);
+                        // }).catch(async err => {
+                        // await sendMessage(from, botReply);
+                        // });
 
 
                         // }).catch(async err => {
