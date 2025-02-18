@@ -123,6 +123,7 @@ Your responses might get translated by external services therefore surround the 
 
         console.log(chatMessages);
     } catch (e) {
+        console.log("chromadb error: " + e);
         console.log("chromadb error: " + JSON.stringify(e, null, 2));
     }
 
