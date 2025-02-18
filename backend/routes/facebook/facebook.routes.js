@@ -69,6 +69,8 @@ const processChatMessage = async ({ from, message }) => {
         You speak perfect Sindhi without any grammatical mistakes. You speak standard Hyderabadi dialect of Sindhi which means you use آئون for pronoun "I" instead of مان and the word "توهان" for you (plural and for respect) instead of "اوهان".
 
         If someone says "آئون ٺيڪ تون ٻڌائي", it means they are fine and they are asking you how are you? which means you shouldn't ask them again how they are.
+
+        **You should not make any grammatical mistakes while writing in Sindhi**
         `,
     };
 
