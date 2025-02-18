@@ -92,26 +92,31 @@ Your responses might get translated by external services therefore surround the 
         try {
             let k = 5;
 
-            if (message.split(" ").length < 5)
-                k = 3  // Short query → fewer documents
+            let messageLength = message.split(" ").length;
 
-            const results = await collection.query({
-                queryEmbeddings: await embeddingsProvider.embedQuery(message),
-                nResults: k,
-            });
+            if (messageLength == 1) {
 
+                if (messageLength < 5)
+                    k = 3  // Short query → fewer documents
 
-            relevantDocs = results.metadatas[0]
-                // .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
-                // .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
-                .map((metadata, index) => {
-                    const metadataText = Object.entries(metadata)
-                        .filter(([key]) => key !== "book_id") // Exclude book_id
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join("\n");
-
-                    return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
+                const results = await collection.query({
+                    queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                    nResults: k,
                 });
+
+
+                relevantDocs = results.metadatas[0]
+                    // .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
+                    // .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
+                    .map((metadata, index) => {
+                        const metadataText = Object.entries(metadata)
+                            .filter(([key]) => key !== "book_id") // Exclude book_id
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join("\n");
+
+                        return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
+                    });
+            }
         } catch (err) {
             console.error("Error retrieving from ChromaDB:", err);
         }
