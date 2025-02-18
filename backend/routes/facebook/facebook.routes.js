@@ -91,10 +91,11 @@ Your responses might get translated by external services therefore surround the 
         let relevantDocs = [];
         try {
             let k = 5;
+            const similarityThreshold = 0.25; // Adjust this value based on your needs
 
             let messageLength = message.split(" ").length;
 
-            if (messageLength == 1) {
+            if (messageLength > 1) {
 
                 if (messageLength < 5)
                     k = 3  // Short query → fewer documents
@@ -106,8 +107,8 @@ Your responses might get translated by external services therefore surround the 
 
 
                 relevantDocs = results.metadatas[0]
-                    // .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
-                    // .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
+                    .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
+                    .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
                     .map((metadata, index) => {
                         const metadataText = Object.entries(metadata)
                             .filter(([key]) => key !== "book_id") // Exclude book_id

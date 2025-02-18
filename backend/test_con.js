@@ -22,7 +22,7 @@ let relevantDocs = [];
 try {
     let message = "شاه عبدالطيف ڪهڙي قسم جي شائري ڪندو هو";
     let k = 5;
-    // const similarityThreshold = 0.25; // Adjust this value based on your needs
+    const similarityThreshold = 0.25; // Adjust this value based on your needs
 
     if (message.split(" ").length < 5)
         k = 3  // Short query → fewer documents
@@ -35,8 +35,8 @@ try {
     });
     console.log(results);
     relevantDocs = results.metadatas[0]
-        // .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
-        // .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
+        .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
+        .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
         .map((metadata, index) => {
             const metadataText = Object.entries(metadata)
                 .filter(([key]) => key !== "book_id") // Exclude book_id
