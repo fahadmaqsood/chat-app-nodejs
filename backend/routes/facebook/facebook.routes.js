@@ -3,23 +3,17 @@ import axios from "axios";
 // import translate from 'google-translate-api-x';
 import { translate } from 'bing-translate-api';
 
-import { Chroma } from "@langchain/community/vectorstores/chroma";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { ChromaClient } from 'chromadb';
 
 
 
-// Path to ChromaDB
-const CHROMA_DB_PATH = "../../chromadb";
+const embeddingsProvider = new OpenAIEmbeddings({ apiKey: process.env.OPENAI_API_KEY });
 
-// Initialize ChromaDB with a persistent directory
-const client = new ChromaClient({
-    persistDirectory: '/path/to/your/database'  // Specify your desired path
-});
+const chroma = new ChromaClient({ path: "http://138.197.231.101:8000" });
 
-// Initialize ChromaDB
-var vectorstore = null;
+const collection = await chroma.getOrCreateCollection({ name: "langchain" });
 
 
 const router = express.Router();
@@ -93,22 +87,31 @@ Your responses might get translated by external services therefore surround the 
 
 
     try {
-
-        if (vectorstore === null) {
-            vectorstore = await Chroma.fromExistingCollection(
-                new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }),
-                {
-                    url: "http://138.197.231.101:8000/", // URL of the Chroma server
-                    collectionName: "langchain",
-                }
-            );
-        }
-
         // **Retrieve relevant texts from ChromaDB**
         let relevantDocs = [];
         try {
-            const results = await vectorstore.similaritySearch(message, 3);
-            relevantDocs = results.map(doc => doc.pageContent);
+            let k = 5;
+
+            if (message.split(" ").length < 5)
+                k = 3  // Short query → fewer documents
+
+            const results = await collection.query({
+                queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                nResults: k,
+            });
+
+
+            relevantDocs = results.metadatas[0]
+                // .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
+                // .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
+                .map((metadata, index) => {
+                    const metadataText = Object.entries(metadata)
+                        .filter(([key]) => key !== "book_id") // Exclude book_id
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join("\n");
+
+                    return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
+                });
         } catch (err) {
             console.error("Error retrieving from ChromaDB:", err);
         }
@@ -117,7 +120,7 @@ Your responses might get translated by external services therefore surround the 
         if (relevantDocs.length > 0) {
             chatMessages.push({
                 role: 'system',
-                content: `Here is some relevant information:\n\n${relevantDocs.join("\n\n")}`
+                content: `Here is some relevant information, if you choose to use it then reference the books:\n\n${relevantDocs.join("\n\n")}`
             });
         }
 
