@@ -107,16 +107,19 @@ Your responses might get translated by external services therefore surround the 
 
 
                 relevantDocs = results.metadatas[0]
-                    .map((metadata, index) => ({ metadata, document: results.documents[0][index], distance: results.distances[0][index] }))
-                    .filter(({ distance }) => distance <= similarityThreshold) // Exclude low similarity documents
                     .map((metadata, index) => {
+
+                        if (results.distances[0][index] > similarityThreshold) {
+                            return null;
+                        }
+
                         const metadataText = Object.entries(metadata)
                             .filter(([key]) => key !== "book_id") // Exclude book_id
                             .map(([key, value]) => `${key}: ${value}`)
                             .join("\n");
 
                         return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
-                    });
+                    }).filter(Boolean);
             }
         } catch (err) {
             console.error("Error retrieving from ChromaDB:", err);
