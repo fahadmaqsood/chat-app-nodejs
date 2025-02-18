@@ -1035,6 +1035,7 @@ const getAllChats = asyncHandler(async (req, res) => {
 });
 
 export {
+  deleteCascadeChatMessages,
   addNewParticipantInGroupChat,
   createAGroupChat,
   markMessagesAsRead,
