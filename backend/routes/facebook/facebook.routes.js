@@ -36,6 +36,8 @@ const whatsappMessageSchema = new mongoose.Schema({
 const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema);
 
 
+const TRANSLATE_OUTPUTS = false; // Set to true to enable translation of bot replies
+
 
 import { getChatCompletion } from "../../utils/openai.js";
 
@@ -252,69 +254,76 @@ router.post('/webhook', async (req, res) => {
 
                         // Generate bot reply
                         let botReply = await processChatMessage({ from: from, message: textEnglish });
+                        let finalReply = botReply;
 
-                        // Generate bot reply
-                        botReply = botReply
-                            .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
+                        if (TRANSLATE_OUTPUTS) {
 
-                        // Extract the word and replace the first tag
-                        // Array to store all words/phrases inside <notranslate> tags
-                        const storedWords = [];
+                            // Generate bot reply
+                            botReply = botReply
+                                .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
 
-                        // Replace all <notranslate> tags with <notranslate> and store their content
-                        const outputString = botReply.replace(
-                            /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
-                            (match, content) => {
-                                storedWords.push(content); // Store the content in the array
-                                return '<<>>'; // Replace with just <notranslate>
-                            }
-                        );
+                            // Extract the word and replace the first tag
+                            // Array to store all words/phrases inside <notranslate> tags
+                            const storedWords = [];
 
-                        console.log(storedWords); // Output: ["ڊسٽبن", "dustbin"]
-                        console.log(outputString);
+                            // Replace all <notranslate> tags with <notranslate> and store their content
+                            const outputString = botReply.replace(
+                                /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
+                                (match, content) => {
+                                    storedWords.push(content); // Store the content in the array
+                                    return '<<>>'; // Replace with just <notranslate>
+                                }
+                            );
 
-                        translate(outputString, 'en', 'sd').then(async res => {
+                            console.log(storedWords); // Output: ["ڊسٽبن", "dustbin"]
+                            console.log(outputString);
+
+
+
+                            const res = await translate(outputString, 'en', 'sd');
                             console.log(res.translation);
 
                             const botReplySindhi = res.translation;
 
-                            let finalReply = botReplySindhi;
-                            // let finalReply = botReply;
+
+                            finalReply = botReplySindhi;
+
+
                             if (storedWords.length > 0) {
                                 finalReply = botReplySindhi.replace(
                                     /<<>>/g, // Match all <notranslate> placeholders
                                     () => storedWords.shift() // Replace with the next stored word
                                 );
                             }
+                        }
 
 
-                            // const botReplySindhi = botReply;
-                            // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                            // Save to MongoDB
-                            try {
-                                const newMessage = new WhatsappMessage({
-                                    from,
-                                    name,
-                                    messageId,
-                                    timestamp,
-                                    text,
-                                    textEnglish,
-                                    botReply,
-                                    botReplySindhi: finalReply,
-                                });
+                        // const botReplySindhi = botReply;
+                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
-                                await newMessage.save();
-                                // console.log("Message saved to database:", newMessage);
-                            } catch (error) {
-                                console.error("Error saving message to database:", error.message);
-                            }
+                        // Save to MongoDB
+                        try {
+                            const newMessage = new WhatsappMessage({
+                                from,
+                                name,
+                                messageId,
+                                timestamp,
+                                text,
+                                textEnglish,
+                                botReply,
+                                botReplySindhi: finalReply,
+                            });
 
-                            // Send reply via WhatsApp API
-                            await sendMessage(from, finalReply);
-                        }).catch(async err => {
-                            await sendMessage(from, botReply);
-                        });
+                            await newMessage.save();
+                            // console.log("Message saved to database:", newMessage);
+                        } catch (error) {
+                            console.error("Error saving message to database:", error.message);
+                        }
+
+                        // Send reply via WhatsApp API
+                        await sendMessage(from, finalReply);
+
 
 
                         // }).catch(async err => {
