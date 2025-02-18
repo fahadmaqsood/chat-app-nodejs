@@ -262,12 +262,12 @@ router.post('/webhook', async (req, res) => {
 
                         // let finalReply = botReplySindhi;
                         let finalReply = botReply;
-                        if (storedWords.length > 0) {
-                            finalReply = botReplySindhi.replace(
-                                /<<>>/g, // Match all <notranslate> placeholders
-                                () => storedWords.shift() // Replace with the next stored word
-                            );
-                        }
+                        // if (storedWords.length > 0) {
+                        //     finalReply = botReplySindhi.replace(
+                        //         /<<>>/g, // Match all <notranslate> placeholders
+                        //         () => storedWords.shift() // Replace with the next stored word
+                        //     );
+                        // }
 
 
                         // const botReplySindhi = botReply;
