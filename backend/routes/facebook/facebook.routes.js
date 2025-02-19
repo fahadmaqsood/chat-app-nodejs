@@ -42,6 +42,29 @@ const TRANSLATE_OUTPUTS = false; // Set to true to enable translation of bot rep
 import { getChatCompletion } from "../../utils/openai.js";
 
 
+let smallTalk = [
+    "ڪهڙا حال آهن؟",
+    "توهان ڪيئن آهيو؟",
+    "توهان ڪينئن آهيو؟",
+    "ڪهڙا حال اٿئي؟",
+    "هيلو",
+    "هيلو!",
+    "هيلو, ڪيئن آهيو؟",
+    "خوش چاڪ چڱون ڀلو",
+    "اسلام عليڪم",
+    "وعليڪم اسلام",
+    "وعليڪم اسلام!",
+    "سلام",
+    "سلام!",
+    "سلام, ڪيئن آهيو؟",
+    "اڇا",
+    "اچها",
+    "اڇا!",
+    "اچها!",
+    "اڇها",
+];
+
+
 // core logic for processing message
 const processChatMessage = async ({ from, message }) => {
     if (!message) {
@@ -122,58 +145,59 @@ const processChatMessage = async ({ from, message }) => {
         }
     });
 
-
-    try {
-        // **Retrieve relevant texts from ChromaDB**
-        let relevantDocs = [];
+    if (!smallTalk.includes(message)) {
         try {
-            let k = 5;
-            const similarityThreshold = 0.25; // Adjust this value based on your needs
+            // **Retrieve relevant texts from ChromaDB**
+            let relevantDocs = [];
+            try {
+                let k = 5;
+                const similarityThreshold = 0.25; // Adjust this value based on your needs
 
-            let messageLength = message.split(" ").length;
+                let messageLength = message.split(" ").length;
 
-            if (messageLength > 1) {
+                if (messageLength > 1) {
 
-                if (messageLength < 5)
-                    k = 3  // Short query → fewer documents
+                    if (messageLength < 5)
+                        k = 3  // Short query → fewer documents
 
-                const results = await collection.query({
-                    queryEmbeddings: await embeddingsProvider.embedQuery(message),
-                    nResults: k,
-                });
+                    const results = await collection.query({
+                        queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                        nResults: k,
+                    });
 
 
-                relevantDocs = results.metadatas[0]
-                    .map((metadata, index) => {
+                    relevantDocs = results.metadatas[0]
+                        .map((metadata, index) => {
 
-                        if (results.distances[0][index] > similarityThreshold) {
-                            return null;
-                        }
+                            if (results.distances[0][index] > similarityThreshold) {
+                                return null;
+                            }
 
-                        const metadataText = Object.entries(metadata)
-                            .filter(([key]) => key !== "book_id") // Exclude book_id
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join("\n");
+                            const metadataText = Object.entries(metadata)
+                                .filter(([key]) => key !== "book_id") // Exclude book_id
+                                .map(([key, value]) => `${key}: ${value}`)
+                                .join("\n");
 
-                        return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
-                    }).filter(Boolean);
+                            return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
+                        }).filter(Boolean);
+                }
+            } catch (err) {
+                console.error("Error retrieving from ChromaDB:", err);
             }
-        } catch (err) {
-            console.error("Error retrieving from ChromaDB:", err);
-        }
 
-        // Add relevant text to context
-        if (relevantDocs.length > 0) {
-            chatMessages.push({
-                role: 'system',
-                content: `Here is some relevant information, if you choose to use it then reference the books:\n\n${relevantDocs.join("\n\n")}`
-            });
-        }
+            // Add relevant text to context
+            if (relevantDocs.length > 0) {
+                chatMessages.push({
+                    role: 'system',
+                    content: `Here is some relevant information, if you choose to use it then reference the books:\n\n${relevantDocs.join("\n\n")}`
+                });
+            }
 
-        console.log(chatMessages);
-    } catch (e) {
-        console.log("chromadb error: " + e);
-        console.log("chromadb error: " + JSON.stringify(e, null, 2));
+            console.log(chatMessages);
+        } catch (e) {
+            console.log("chromadb error: " + e);
+            console.log("chromadb error: " + JSON.stringify(e, null, 2));
+        }
     }
 
     // Get response from OpenAI API
@@ -251,6 +275,9 @@ router.post('/webhook', async (req, res) => {
                         const name = change.value.contacts?.[0]?.profile?.name || "Unknown"; // Sender's name
 
                         console.log(`Received message from ${name} (${from}): ${text}`);
+
+
+                        await markMessageAsSeen(messageId);
 
                         if (text === undefined) {
                             return;
@@ -409,6 +436,31 @@ async function sendMessage(to, message) {
         console.log(`Message sent to ${to}: ${response.data}`);
     } catch (error) {
         console.error(`Failed to send message to ${to}:`, error.response?.data || error.message);
+    }
+}
+
+
+
+// Function to mark a message as seen via WhatsApp Cloud API
+async function markMessageAsSeen(messageId) {
+    const url = `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`;
+
+    const data = {
+        messaging_product: "whatsapp",
+        status: "read",
+        message_id: messageId,  // ID of the message to mark as read
+    };
+
+    const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${WHATSAPP_API_TOKEN}`,
+    };
+
+    try {
+        const response = await axios.post(url, data, { headers });
+        console.log(`Marked message ${messageId} as seen:`, response.data);
+    } catch (error) {
+        console.error(`Failed to mark message ${messageId} as seen:`, error.response?.data || error.message);
     }
 }
 
