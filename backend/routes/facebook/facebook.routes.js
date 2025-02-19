@@ -176,6 +176,8 @@ const processChatMessage = async ({ from, message }) => {
 
                             const metadataText = Object.entries(metadata)
                                 .filter(([key]) => key !== "book_id") // Exclude book_id
+                                .filter(([key]) => key !== "filename") // Exclude book_id
+                                .filter(([key]) => key !== "author_id") // Exclude book_id
                                 .map(([key, value]) => `${key}: ${value}`)
                                 .join("\n");
 
@@ -190,7 +192,7 @@ const processChatMessage = async ({ from, message }) => {
             if (relevantDocs.length > 0) {
                 chatMessages.push({
                     role: 'system',
-                    content: `Here is some relevant information, if you choose to use it then reference the books:\n\n${relevantDocs.join("\n\n")}`
+                    content: `Here is some relevant information, if you choose to use it then reference the sources:\n\n${relevantDocs.join("\n\n")}`
                 });
             }
 
