@@ -152,7 +152,7 @@ const processChatMessage = async ({ from, message }) => {
             let relevantDocs = [];
             try {
                 let k = 5;
-                const similarityThreshold = 0.25; // Adjust this value based on your needs
+                // const similarityThreshold = 0.25; // Adjust this value based on your needs
 
                 let messageLength = message.split(" ").length;
 
@@ -170,9 +170,9 @@ const processChatMessage = async ({ from, message }) => {
                     relevantDocs = results.metadatas[0]
                         .map((metadata, index) => {
 
-                            if (results.distances[0][index] > similarityThreshold) {
-                                return null;
-                            }
+                            // if (results.distances[0][index] > similarityThreshold) {
+                            //     return null;
+                            // }
 
                             const metadataText = Object.entries(metadata)
                                 .filter(([key]) => key !== "book_id") // Exclude book_id
