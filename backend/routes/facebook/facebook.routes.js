@@ -9,7 +9,7 @@ import { ChromaClient } from 'chromadb';
 
 
 
-const embeddingsProvider = new OpenAIEmbeddings({ apiKey: process.env.OPENAI_API_KEY });
+const embeddingsProvider = new OpenAIEmbeddings({ apiKey: process.env.OPENAI_API_KEY, model: "text-embedding-3-small" });
 
 const chroma = new ChromaClient({ path: "http://138.197.231.101:8000" });
 
