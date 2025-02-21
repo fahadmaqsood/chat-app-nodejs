@@ -72,7 +72,7 @@ const generateAlternateMessages = async ({ history, message }) => {
     const instructionMessage = {
         role: 'system',
         content: `You are a helpful assistant that generates multiple search queries based on a user query (and messages history if provided). \n
-        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and each line should be in format "Meta data phrase:Question" and there should be no extra text in your response. \n\n`
+        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and there should be no extra text in your response. \n\n`
     };
 
 
@@ -148,6 +148,8 @@ const findSimilarInformation = async ({ message }) => {
         console.log("chromadb error: " + e);
         console.log("chromadb error: " + JSON.stringify(e, null, 2));
     }
+
+    return [];
 }
 
 
@@ -235,12 +237,12 @@ const processChatMessage = async ({ from, message }) => {
     if (!smallTalk.includes(message)) {
         const alternateMessages = await generateAlternateMessages({ history: chatMessages, message });
 
-        console.log(`alternateMessages: ${alternateMessages}`);
+        console.log(`alternateMessages: ${typeof alternateMessages} ${alternateMessages}`);
 
         for (let alternateMessage of alternateMessages) {
             let relevantInformation = await findSimilarInformation({ message: alternateMessage });
 
-            console.log(`alternateMessages: ${relevantInformation}`);
+            console.log(`relevantInformation: ${relevantInformation}`);
         }
     }
 
