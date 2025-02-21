@@ -72,7 +72,7 @@ const generateAlternateMessages = async ({ history, message }) => {
     const instructionMessage = {
         role: 'system',
         content: `You are a helpful assistant that generates multiple search queries based on a user query (and messages history if provided). \n
-        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and there should be no extra text in your response. \n\n`
+        Generate 5 search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and there should be no extra text in your response. \n\n`
     };
 
 
@@ -88,6 +88,9 @@ const generateAlternateMessages = async ({ history, message }) => {
     } catch (e) {
         throw new ApiResponse(500, {}, e.message);
     }
+
+
+    console.log(openAIResponse.split("\\n"));
 
     return openAIResponse.split("\\n");
 };
