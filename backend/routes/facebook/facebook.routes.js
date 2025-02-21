@@ -72,7 +72,7 @@ const generateAlternateMessages = async ({ history, message }) => {
     const instructionMessage = {
         role: 'system',
         content: `You are a helpful assistant that generates multiple search queries based on a user query (and messages history if provided). \n
-        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines. \n\n`
+        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and each line should be in format "Meta data phrase:Question" and there should be no extra text in your response. \n\n`
     };
 
 
@@ -89,8 +89,66 @@ const generateAlternateMessages = async ({ history, message }) => {
         throw new ApiResponse(500, {}, e.message);
     }
 
-    return openAIResponse;
+    return openAIResponse.split("\\n");
 };
+
+const findSimilarInformation = async ({ message }) => {
+    try {
+        // **Retrieve relevant texts from ChromaDB**
+        let relevantDocs = [];
+        try {
+            let k = 5;
+            // const similarityThreshold = 0.25; // Adjust this value based on your needs
+
+            let messageLength = message.split(" ").length;
+
+
+            if (messageLength < 5)
+                k = 3  // Short query → fewer documents
+
+            const results = await collection.query({
+                queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                nResults: k,
+            });
+
+
+            relevantDocs = results.metadatas[0]
+                .map((metadata, index) => {
+
+                    // if (results.distances[0][index] > similarityThreshold) {
+                    //     return null;
+                    // }
+
+                    const metadataText = Object.entries(metadata)
+                        .filter(([key]) => key !== "book_id") // Exclude book_id
+                        .filter(([key]) => key !== "filename") // Exclude book_id
+                        .filter(([key]) => key !== "author_id") // Exclude book_id
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join("\n");
+
+                    return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
+                }).filter(Boolean);
+
+        } catch (err) {
+            console.error("Error retrieving from ChromaDB:", err);
+        }
+
+        return relevantDocs;
+
+        // // Add relevant text to context
+        // if (relevantDocs.length > 0) {
+        //     chatMessages.push({
+        //         role: 'system',
+        //         content: `Here is some relevant information, if you choose to use it then reference the sources:\n\n${relevantDocs.join("\n\n")}`
+        //     });
+        // }
+
+        // console.log(chatMessages);
+    } catch (e) {
+        console.log("chromadb error: " + e);
+        console.log("chromadb error: " + JSON.stringify(e, null, 2));
+    }
+}
 
 
 // core logic for processing message
@@ -178,61 +236,14 @@ const processChatMessage = async ({ from, message }) => {
         const alternateMessages = await generateAlternateMessages({ history: chatMessages, message });
 
         console.log(`alternateMessages: ${alternateMessages}`);
-        try {
-            // **Retrieve relevant texts from ChromaDB**
-            let relevantDocs = [];
-            try {
-                let k = 5;
-                // const similarityThreshold = 0.25; // Adjust this value based on your needs
 
-                let messageLength = message.split(" ").length;
+        for (let alternateMessage of alternateMessages) {
+            let relevantInformation = await findSimilarInformation({ message: alternateMessage });
 
-                if (messageLength > 1) {
-
-                    if (messageLength < 5)
-                        k = 3  // Short query → fewer documents
-
-                    const results = await collection.query({
-                        queryEmbeddings: await embeddingsProvider.embedQuery(message),
-                        nResults: k,
-                    });
-
-
-                    relevantDocs = results.metadatas[0]
-                        .map((metadata, index) => {
-
-                            // if (results.distances[0][index] > similarityThreshold) {
-                            //     return null;
-                            // }
-
-                            const metadataText = Object.entries(metadata)
-                                .filter(([key]) => key !== "book_id") // Exclude book_id
-                                .filter(([key]) => key !== "filename") // Exclude book_id
-                                .filter(([key]) => key !== "author_id") // Exclude book_id
-                                .map(([key, value]) => `${key}: ${value}`)
-                                .join("\n");
-
-                            return `${metadataText}\nDocumentText: ${results.documents[0][index]}\n`;
-                        }).filter(Boolean);
-                }
-            } catch (err) {
-                console.error("Error retrieving from ChromaDB:", err);
-            }
-
-            // Add relevant text to context
-            if (relevantDocs.length > 0) {
-                chatMessages.push({
-                    role: 'system',
-                    content: `Here is some relevant information, if you choose to use it then reference the sources:\n\n${relevantDocs.join("\n\n")}`
-                });
-            }
-
-            console.log(chatMessages);
-        } catch (e) {
-            console.log("chromadb error: " + e);
-            console.log("chromadb error: " + JSON.stringify(e, null, 2));
+            console.log(`alternateMessages: ${relevantInformation}`);
         }
     }
+
 
     // Get response from OpenAI API
     let openAIResponse;
