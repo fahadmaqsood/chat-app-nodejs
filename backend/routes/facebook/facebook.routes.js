@@ -64,6 +64,34 @@ let smallTalk = [
     "اڇها",
 ];
 
+const generateAlternateMessages = async ({ history, message }) => {
+    if (!history || !message) {
+        throw new Error("history and message is required");
+    }
+
+    const instructionMessage = {
+        role: 'system',
+        content: `You are a helpful assistant that generates multiple search queries based on a user query (and messages history if provided). \n
+        Generate multiple search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines. \n\n`
+    };
+
+
+    // Get response from OpenAI API
+    let openAIResponse;
+
+    try {
+        openAIResponse = await getChatCompletion({
+            messages: [instructionMessage, ...history],
+            user_message: message,
+        });
+
+    } catch (e) {
+        throw new ApiResponse(500, {}, e.message);
+    }
+
+    return openAIResponse;
+};
+
 
 // core logic for processing message
 const processChatMessage = async ({ from, message }) => {
@@ -75,21 +103,21 @@ const processChatMessage = async ({ from, message }) => {
         role: 'system',
         content: `
         
-        Your name is <notranslate>سياڻون سنڌي</notranslate>.
-        You are not an AI, chatbot, llm, or any other type of AI. You are just <notranslate>سياڻون سنڌي</notranslate>.
+        Your name is < notranslate > سياڻون سنڌي</notranslate >.
+        You are not an AI, chatbot, llm, or any other type of AI.You are just < notranslate > سياڻون سنڌي</notranslate >.
 
         About you:
-        Name: <notranslate>سياڻون سنڌي</notranslate>,
-        Creator: Fahad Maqsood Qazi - Founder of Flis Technologies (فلس ٽيڪنالاجيز) - at Flis Technologies a software house in Hyderabad,
-        Creator's Website: https://flistech.com/,
+    Name: <notranslate>سياڻون سنڌي</notranslate>,
+        Creator: Fahad Maqsood Qazi - Founder of Flis Technologies(فلس ٽيڪنالاجيز) - at Flis Technologies a software house in Hyderabad,
+            Creator's Website: https://flistech.com/,
         Creator's Contact: https://www.flistech.com/contact.
         Languages you know: only Sindhi.
         Reason about your existence: Sindh's literacy rate is only 61% and therefore you are made to bridge knowledge gap in Sindh as you support voice messages from users and can respond in voice messages too.
-        Behavior: 
-        1) You refuse to talk in other languages other than Sindhi.
+    Behavior:
+    1) You refuse to talk in other languages other than Sindhi.
         2) You can only do translation for words or phrases or sentences but you are not allowed to inherently speak in any other language.
         3) You shouldn't say you are not allowed to speak in another language. You should just say you can only speak in Sindhi because you only know Sindhi.
-        4) You do not engage in any inappropriate or harmful behavior.
+    4) You do not engage in any inappropriate or harmful behavior.
         5) Your conversation skills are playful and you use emojis somewhat moderately.
         6) You are not allowed to engage in any political or religious discussions.
         7) You are not allowed to engage in any discussions that are not suitable for children.
@@ -147,6 +175,9 @@ const processChatMessage = async ({ from, message }) => {
     });
 
     if (!smallTalk.includes(message)) {
+        const alternateMessages = await generateAlternateMessages({ history: chatMessages, message });
+
+        console.log(`alternateMessages: ${alternateMessages}`);
         try {
             // **Retrieve relevant texts from ChromaDB**
             let relevantDocs = [];
