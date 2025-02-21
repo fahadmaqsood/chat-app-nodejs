@@ -64,6 +64,46 @@ let smallTalk = [
     "اڇها",
 ];
 
+
+
+const generateMetaDataTopic = async ({ alternateMessages }) => {
+    if (!alternateMessages) {
+        throw new Error("alternateMessages are required");
+    }
+
+    if (Array.isArray(alternateMessages)) {
+        alternateMessages = alternateMessages.join("\n");
+    }
+
+    const instructionMessage = {
+        role: 'system',
+        content: `
+            You are a helpful assistant that extracts a concise topic from multiple input text messages. Each message appears on a separate line. Identify the main topic using only nouns, ensuring it is relevant for querying a vector database. \n\n
+            Messages: ${alternateMessages}
+        `
+    };
+
+
+    // Get response from OpenAI API
+    let openAIResponse;
+
+    try {
+        openAIResponse = await getChatCompletion({
+            messages: [instructionMessage],
+            user_message: null,
+        });
+
+    } catch (e) {
+        throw new ApiResponse(500, {}, e.message);
+    }
+
+
+    console.log(openAIResponse.split("\n"));
+
+    return openAIResponse.split("\n");
+};
+
+
 const generateAlternateMessages = async ({ history, message }) => {
     if (!history || !message) {
         throw new Error("history and message is required");
@@ -95,19 +135,19 @@ const generateAlternateMessages = async ({ history, message }) => {
     return openAIResponse.split("\n");
 };
 
-const findSimilarInformation = async ({ message }) => {
+const findSimilarInformation = async ({ metadataTopic, message }) => {
     try {
         // **Retrieve relevant texts from ChromaDB**
         let relevantDocs = [];
         try {
-            let k = 5;
+            let k = 3;
             // const similarityThreshold = 0.25; // Adjust this value based on your needs
 
-            let messageLength = message.split(" ").length;
+            // let messageLength = message.split(" ").length;
 
 
-            if (messageLength < 5)
-                k = 3  // Short query → fewer documents
+            // if (messageLength < 5)
+            //     k = 3  // Short query → fewer documents
 
             const results = await collection.query({
                 queryEmbeddings: await embeddingsProvider.embedQuery(message),
@@ -137,14 +177,6 @@ const findSimilarInformation = async ({ message }) => {
         }
 
         return relevantDocs;
-
-        // // Add relevant text to context
-        // if (relevantDocs.length > 0) {
-        //     chatMessages.push({
-        //         role: 'system',
-        //         content: `Here is some relevant information, if you choose to use it then reference the sources:\n\n${relevantDocs.join("\n\n")}`
-        //     });
-        // }
 
         // console.log(chatMessages);
     } catch (e) {
@@ -242,12 +274,29 @@ const processChatMessage = async ({ from, message }) => {
 
         console.log(`alternateMessages: ${typeof alternateMessages} ${alternateMessages}`);
 
+        const metadataTopic = await generateMetaDataTopic({ alternateMessages });
+
+        console.log(`metadataTopic: ${metadataTopic}`);
+
+        let relevantTexts = [];
+
         for (let alternateMessage of alternateMessages) {
-            let relevantInformation = await findSimilarInformation({ message: alternateMessage });
+            let relevantInformation = await findSimilarInformation({ metadataTopic, message: alternateMessage });
 
             console.log(`relevantInformation: ${relevantInformation}`);
+
+            relevantTexts = [...relevantTexts, ...relevantInformation];
+        }
+
+        // Add relevant text to context
+        if (relevantTexts.length > 0) {
+            chatMessages.push({
+                role: 'system',
+                content: `Here is some information that could be relevant to user query:\n\n${relevantTexts.join("\n\n")}`
+            });
         }
     }
+
 
 
     // Get response from OpenAI API

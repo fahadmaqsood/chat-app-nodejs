@@ -14,7 +14,10 @@ export const getChatCompletion = async ({ messages, user_message, model = "gpt-4
             });
         }
 
-        let allMessages = [...messages, { role: 'user', content: user_message }];
+        let allMessages = [...messages];
+        if (user_message !== null) {
+            allMessages.push({ role: 'user', content: user_message });
+        }
         let totalResponse = '';
         let finishReason = '';
 
