@@ -90,9 +90,9 @@ const generateAlternateMessages = async ({ history, message }) => {
     }
 
 
-    console.log(openAIResponse.split("\\n"));
+    console.log(openAIResponse.split("\n"));
 
-    return openAIResponse.split("\\n");
+    return openAIResponse.split("\n");
 };
 
 const findSimilarInformation = async ({ message }) => {
