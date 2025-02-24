@@ -94,6 +94,8 @@ const generateMetaDataTopic = async ({ alternateMessages, messagesHistory }) => 
             Example Input 2: قاضي مقصود 2008 ۾ ڪهڙو ڪتاب لکيو؟
             Example Output 2: قاضي مقصود
 
+            If messages list is missing important details that chat history contains like person name, book name etc... please use it from chat history.
+
             Previous Messages History: ${messagesHistory}
             
             Messages: ${alternateMessages}
@@ -129,7 +131,9 @@ const generateAlternateMessages = async ({ history, message }) => {
     const instructionMessage = {
         role: 'system',
         content: `You are a helpful assistant that generates multiple search queries based on a user query (and messages history if provided). \n
-        Generate 5 search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and there should be no extra text in your response. \n\n`
+        Generate 5 search queries related to "${message}" based on user history (if provided). Each query should be separated by new lines and there should be no extra text in your response.
+        If person name, book name or anything else in missing in the user message and messages history contains it, please use those missing details from chat history while creating alternate messages.
+        \n\n`
     };
 
 
