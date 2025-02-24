@@ -213,10 +213,9 @@ async function searchByTag(searchString) {
 
     try {
         // Search for documents where 'searchable_tags' contains the searchString
-        const results = (await SiyarnoonSindhi.find(
-            { searchable_tags: { $in: [searchString] } },
-            { projection: { id: 1 } }
-        ));
+        const results = await SiyarnoonSindhi.find(
+            { searchable_tags: { $in: [searchString] } }
+        ).select({ id: 1, _id: 0 });
 
         console.log(results);
 
