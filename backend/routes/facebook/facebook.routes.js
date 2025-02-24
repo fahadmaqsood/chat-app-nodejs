@@ -211,10 +211,10 @@ async function searchByTag(searchString) {
 
     try {
         // Search for documents where 'searchable_tags' contains the searchString
-        const results = await SiyarnoonSindhi.find(
+        const results = (await SiyarnoonSindhi.find(
             { searchable_tags: { $in: [searchString] } },
             { projection: { id: 1, _id: 0 } }
-        ).toArray();
+        )).toArray();
 
         // Extract and return the 'id' fields
         return results.map(result => arabicToLatin(result.id));
