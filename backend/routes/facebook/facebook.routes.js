@@ -91,6 +91,8 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
             Remember in our vector database, metadata topic name is only book names and author names with no other type of description.
             Example Input: تاريخ مٽياري ڪنهن لکيو
             Example Output: تاريخ مٽياري
+            Example Input 2: قاضي مقصود 2008 ۾ ڪهڙو ڪتاب لکيو؟
+            Example Output 2: قاضي مقصود
             
             Messages: ${alternateMessages}
         `
