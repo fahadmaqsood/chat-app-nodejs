@@ -219,7 +219,7 @@ async function searchByTag(searchString) {
         console.log(results);
 
         // Extract and return the 'id' fields
-        return results.map(result => arabicToLatin(result.id));
+        return results.map(result => result.id);
     } catch (error) {
         console.error("Error searching for tags:", error);
         return [];
@@ -318,7 +318,7 @@ const processChatMessage = async ({ from, message }) => {
 
         const alternatemessagesText = alternateMessages.join("\n");
 
-        const relevantTags = searchByTag(metadataTopic);
+        const relevantTags = searchByTag(arabicToLatin(metadataTopic));
 
         // let relevantTexts = [];
         let relevantTexts = await findSimilarInformation({ similar_ids: relevantTags, message: alternatemessagesText });
