@@ -319,7 +319,7 @@ const processChatMessage = async ({ from, message }) => {
         const relevantTags = searchByTag(metadataTopic);
 
         // let relevantTexts = [];
-        let relevantTexts = await findSimilarInformation({ relevantTags, message: alternatemessagesText });
+        let relevantTexts = await findSimilarInformation({ similar_ids: relevantTags, message: alternatemessagesText });
 
         // for (let alternateMessage of alternateMessages) {
         //     let relevantInformation = await findSimilarInformation({ metadataTopic, message: alternateMessage });
