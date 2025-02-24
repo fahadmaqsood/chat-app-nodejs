@@ -88,6 +88,9 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
         role: 'system',
         content: `
             You are a helpful assistant that extracts a very concise topic name from multiple input text messages. Each message appears on a separate line. Identify the main topic using only nouns, ideally only few words long, ensuring it is relevant for querying a vector database. \n\n
+            Example Input: تاريخ مٽياري ڪنهن لکيو
+            Example Output: تاريخ مٽياري
+            
             Messages: ${alternateMessages}
         `
     };
