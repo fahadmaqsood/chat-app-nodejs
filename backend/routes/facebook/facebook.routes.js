@@ -36,6 +36,15 @@ const whatsappMessageSchema = new mongoose.Schema({
 const WhatsappMessage = mongoose.model('WhatsappMessage', whatsappMessageSchema);
 
 
+const SiyarnoonSindhiSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    type: { type: String },
+    searchable_tags: { type: String, required: true },
+});
+
+const SiyarnoonSindhi = mongoose.model('siyarnoonsindhi', SiyarnoonSindhiSchema);
+
+
 const TRANSLATE_OUTPUTS = false; // Set to true to enable translation of bot replies
 
 
@@ -98,9 +107,9 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
     }
 
 
-    console.log(openAIResponse.split("\n"));
+    console.log(openAIResponse);
 
-    return openAIResponse.split("\n");
+    return openAIResponse;
 };
 
 
@@ -135,7 +144,7 @@ const generateAlternateMessages = async ({ history, message }) => {
     return openAIResponse.split("\n");
 };
 
-const findSimilarInformation = async ({ metadataTopic, message }) => {
+const findSimilarInformation = async ({ similar_ids, message }) => {
     try {
         // **Retrieve relevant texts from ChromaDB**
         let relevantDocs = [];
@@ -149,10 +158,19 @@ const findSimilarInformation = async ({ metadataTopic, message }) => {
             // if (messageLength < 5)
             //     k = 3  // Short query → fewer documents
 
-            const results = await collection.query({
-                queryEmbeddings: await embeddingsProvider.embedQuery(message),
-                nResults: k,
-            });
+            let results = null;
+            if (similar_ids.length > 0) {
+                results = await collection.query({
+                    queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                    nResults: k,
+                    where: { id: { "$in": similar_ids } },
+                });
+            } else {
+                results = await collection.query({
+                    queryEmbeddings: await embeddingsProvider.embedQuery(message),
+                    nResults: k,
+                });
+            }
 
 
             relevantDocs = results.metadatas[0]
@@ -187,6 +205,24 @@ const findSimilarInformation = async ({ metadataTopic, message }) => {
     return [];
 }
 
+
+
+async function searchByTag(searchString) {
+
+    try {
+        // Search for documents where 'searchable_tags' contains the searchString
+        const results = await SiyarnoonSindhi.find(
+            { searchable_tags: { $in: [searchString] } },
+            { projection: { id: 1, _id: 0 } }
+        ).toArray();
+
+        // Extract and return the 'id' fields
+        return results.map(result => arabicToLatin(result.id));
+    } catch (error) {
+        console.error("Error searching for tags:", error);
+        return [];
+    }
+}
 
 // core logic for processing message
 const processChatMessage = async ({ from, message }) => {
@@ -278,15 +314,20 @@ const processChatMessage = async ({ from, message }) => {
 
         console.log(`metadataTopic: ${metadataTopic}`);
 
-        let relevantTexts = [];
+        const alternatemessagesText = alternateMessages.join("\n");
 
-        for (let alternateMessage of alternateMessages) {
-            let relevantInformation = await findSimilarInformation({ metadataTopic, message: alternateMessage });
+        const relevantTags = searchByTag(metadataTopic);
 
-            console.log(`relevantInformation: ${relevantInformation}`);
+        // let relevantTexts = [];
+        let relevantTexts = await findSimilarInformation({ relevantTags, message: alternatemessagesText });
 
-            relevantTexts = [...relevantTexts, ...relevantInformation];
-        }
+        // for (let alternateMessage of alternateMessages) {
+        //     let relevantInformation = await findSimilarInformation({ metadataTopic, message: alternateMessage });
+
+        //     console.log(`relevantInformation: ${relevantInformation}`);
+
+        //     relevantTexts = [...relevantTexts, ...relevantInformation];
+        // }
 
         // Add relevant text to context
         if (relevantTexts.length > 0) {
@@ -339,6 +380,19 @@ const deleteMessagesBySender = async ({ from }) => {
         throw new Error(`Failed to delete messages for the sender: ${from}. Error: ${error.message}`);
     }
 };
+
+
+
+function arabicToLatin(text) {
+    text = text.replace(/[زذظض]/g, "z");
+    text = text.replace(/[سصث]/g, "s");
+    text = text.replace(/[تط]/g, "ẗ");
+    text = text.replace(/[قڪ]/g, "k");
+    text = text.replace(/[ھهحہھ]/g, "h");
+    text = text.replace(/[کخ]/g, "kh");
+
+    return text;
+}
 
 
 
