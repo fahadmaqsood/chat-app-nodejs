@@ -209,6 +209,8 @@ const findSimilarInformation = async ({ similar_ids, message }) => {
 
 async function searchByTag(searchString) {
 
+    console.log("searchString: " + searchString);
+
     try {
         // Search for documents where 'searchable_tags' contains the searchString
         const results = (await SiyarnoonSindhi.find(
