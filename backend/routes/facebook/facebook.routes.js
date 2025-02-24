@@ -319,7 +319,7 @@ const processChatMessage = async ({ from, message }) => {
 
         const alternatemessagesText = alternateMessages.join("\n");
 
-        const relevantTags = searchByTag(arabicToLatin(metadataTopic));
+        const relevantTags = await searchByTag(arabicToLatin(metadataTopic));
 
         console.log("relevantTags: " + relevantTags);
 
