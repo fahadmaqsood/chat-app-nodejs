@@ -321,6 +321,8 @@ const processChatMessage = async ({ from, message }) => {
 
         const relevantTags = searchByTag(arabicToLatin(metadataTopic));
 
+        console.log("relevantTags: " + relevantTags);
+
         // let relevantTexts = [];
         let relevantTexts = await findSimilarInformation({ similar_ids: relevantTags, message: alternatemessagesText });
 
