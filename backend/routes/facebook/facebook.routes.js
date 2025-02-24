@@ -75,7 +75,7 @@ let smallTalk = [
 
 
 
-const generateMetaDataTopic = async ({ alternateMessages }) => {
+const generateMetaDataTopic = async ({ alternateMessages, messagesHistory }) => {
     if (!alternateMessages) {
         throw new Error("alternateMessages are required");
     }
@@ -93,6 +93,8 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
             Example Output: تاريخ مٽياري
             Example Input 2: قاضي مقصود 2008 ۾ ڪهڙو ڪتاب لکيو؟
             Example Output 2: قاضي مقصود
+
+            Previous Messages History: ${messagesHistory}
             
             Messages: ${alternateMessages}
         `
@@ -319,7 +321,7 @@ const processChatMessage = async ({ from, message }) => {
 
         console.log(`alternateMessages: ${typeof alternateMessages} ${alternateMessages}`);
 
-        const metadataTopic = await generateMetaDataTopic({ alternateMessages });
+        const metadataTopic = await generateMetaDataTopic({ alternateMessages, chatMessages });
 
         console.log(`metadataTopic: ${metadataTopic}`);
 
