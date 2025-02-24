@@ -42,7 +42,7 @@ const SiyarnoonSindhiSchema = new mongoose.Schema({
     searchable_tags: { type: String, required: true },
 });
 
-const SiyarnoonSindhi = mongoose.model('siyarnoonsindhi', SiyarnoonSindhiSchema);
+const SiyarnoonSindhi = mongoose.model('siyarnoonsindhi', SiyarnoonSindhiSchema, "siyarnoonsindhi");
 
 
 const TRANSLATE_OUTPUTS = false; // Set to true to enable translation of bot replies
