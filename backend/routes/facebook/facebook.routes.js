@@ -87,7 +87,7 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
     const instructionMessage = {
         role: 'system',
         content: `
-            You are a helpful assistant that extracts a very concise topic name from multiple input text messages. Each message appears on a separate line. Identify the main topic using only nouns, ideally only few words long, ensuring it is relevant for querying a vector database. \n\n
+            You are a helpful assistant that extracts a very concise topic name from multiple input text messages. Each message appears on a separate line. Topic name can only be person name or book name, ensure it is relevant for querying a vector database. \n\n
             Remember in our vector database, metadata topic name is only book names and author names with no other type of description.
             Example Input: تاريخ مٽياري ڪنهن لکيو
             Example Output: تاريخ مٽياري
