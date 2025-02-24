@@ -214,7 +214,9 @@ async function searchByTag(searchString) {
         const results = (await SiyarnoonSindhi.find(
             { searchable_tags: { $in: [searchString] } },
             { projection: { id: 1 } }
-        )).toArray();
+        ));
+
+        console.log(results);
 
         // Extract and return the 'id' fields
         return results.map(result => arabicToLatin(result.id));
