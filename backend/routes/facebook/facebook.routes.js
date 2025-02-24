@@ -87,7 +87,7 @@ const generateMetaDataTopic = async ({ alternateMessages }) => {
     const instructionMessage = {
         role: 'system',
         content: `
-            You are a helpful assistant that extracts a concise topic from multiple input text messages. Each message appears on a separate line. Identify the main topic using only nouns, ensuring it is relevant for querying a vector database. \n\n
+            You are a helpful assistant that extracts a very concise topic name from multiple input text messages. Each message appears on a separate line. Identify the main topic using only nouns, ideally only few words long, ensuring it is relevant for querying a vector database. \n\n
             Messages: ${alternateMessages}
         `
     };
