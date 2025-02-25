@@ -461,7 +461,7 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
 
 
 
-export const getTotalUnreadMessages = async (userId) => {
+const getTotalUnreadMessages = async (userId) => {
   try {
     const result = await Chat.aggregate([
       {
