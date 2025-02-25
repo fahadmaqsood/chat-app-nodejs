@@ -1,5 +1,6 @@
 import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
+import mongoose from "mongoose";
 
 import { PostTopics } from "../../models/social/PostTopics.js";
 
