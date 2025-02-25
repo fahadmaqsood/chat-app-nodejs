@@ -37,6 +37,7 @@ export const searchUsers = async (req, res) => {
             {
                 $match: {
                     $or: exactSearchCriteria,
+                    _id: { $ne: new mongoose.Types.ObjectId(req.user._id) }, // Exclude current user
                 },
             },
             {
@@ -57,6 +58,7 @@ export const searchUsers = async (req, res) => {
                 {
                     $match: {
                         $or: regexSearchCriteria,
+                        _id: { $ne: new mongoose.Types.ObjectId(req.user._id) }, // Exclude current user
                     },
                 },
                 {
