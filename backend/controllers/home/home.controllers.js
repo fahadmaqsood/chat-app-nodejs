@@ -37,7 +37,6 @@ export const searchUsers = async (req, res) => {
             {
                 $match: {
                     $or: exactSearchCriteria,
-                    _id: { $ne: req.user._id }, // Exclude current user
                 },
             },
             {
