@@ -85,7 +85,7 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 router
   .route("/change-password")
   .post(
-    verifyJWT,
+    validateTokensMiddleware,
     userChangeCurrentPasswordValidator(),
     validate,
     changeCurrentPassword

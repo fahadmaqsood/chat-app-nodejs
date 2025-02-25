@@ -405,6 +405,7 @@ function arabicToLatin(text) {
     text = text.replace(/[سصث]/g, "s");
     text = text.replace(/[تط]/g, "ẗ");
     text = text.replace(/[قڪ]/g, "k");
+    text = text.replace(/[غگ]/g, "g");
     text = text.replace(/[ھهحہھ]/g, "h");
     text = text.replace(/[کخ]/g, "kh");
 
