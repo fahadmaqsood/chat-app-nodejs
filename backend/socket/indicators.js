@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 
 import { User } from "../models/auth/user.models.js";
 import { _getUnreadNotificationsCount, _changeNotificationsStatusToRead } from '../controllers/notification/notificationController.js';
-import { markAsRead } from "../controllers/chat-app/chat.controllers.js"
+import { markAsRead, getTotalUnreadMessages } from "../controllers/chat-app/chat.controllers.js"
 import { validateAndRefreshTokens } from '../controllers/auth/user.controllers.js';
 import { ApiError } from "../utils/ApiError.js";
 
@@ -44,6 +44,13 @@ const handleIndicatorsSocketEvents = async (socket, io) => {
     console.log(`notificationsCount: ${notificationsCount}`);
     if (notificationsCount != false) {
         emitIndicatorsSocketEvent(socket.user._id, "INITIAL_NOTIFICATIONS_COUNT_EVENT", notificationsCount);
+    }
+
+
+    const messagesCount = await getTotalUnreadMessages(socket.user._id);
+    console.log(`messagesCount: ${messagesCount}`);
+    if (messagesCount != false) {
+        emitIndicatorsSocketEvent(socket.user._id, "INITIAL_MESSAGES_COUNT_EVENT", messagesCount);
     }
 
 

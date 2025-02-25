@@ -460,6 +460,61 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
 });
 
 
+
+export const getTotalUnreadMessages = async (userId) => {
+  try {
+    const result = await Chat.aggregate([
+      {
+        $match: {
+          participants: { $elemMatch: { $eq: new mongoose.Types.ObjectId(userId.toString()) } },
+        },
+      },
+      {
+        // Count unread messages per chat
+        $lookup: {
+          from: "chatmessages",
+          localField: "_id",
+          foreignField: "chat",
+          as: "unreadMessages",
+          pipeline: [
+            {
+              $match: {
+                isRead: false,
+                sender: { $ne: new mongoose.Types.ObjectId(userId.toString()) }, // Exclude self-sent messages
+              },
+            },
+            {
+              $count: "unreadCount",
+            },
+          ],
+        },
+      },
+      {
+        // Extract unread count and default to 0 if empty
+        $addFields: {
+          numUnread: {
+            $ifNull: [{ $arrayElemAt: ["$unreadMessages.unreadCount", 0] }, 0],
+          },
+        },
+      },
+      {
+        // Sum up unread counts across all chats
+        $group: {
+          _id: null,
+          totalUnread: { $sum: "$numUnread" },
+        },
+      },
+    ]);
+
+    return result.length > 0 ? result[0].totalUnread : 0;
+  } catch (err) {
+    console.error("Error fetching total unread messages count:", err);
+    return 0;
+  }
+};
+
+
+
 const markAsRead = async (userId, chatId) => {
   const result = await ChatMessage.updateMany(
     {
@@ -1052,5 +1107,6 @@ export {
   searchAvailableUsers,
   findMatchingFriends,
   dontSuggestUserAsFriendAgain,
-  getUserMessagingFriends
+  getUserMessagingFriends,
+  getTotalUnreadMessages
 };
