@@ -200,6 +200,53 @@ export const voteInPoll = async (req, res) => {
 };
 
 
+export const getPollVoters = async (req, res) => {
+    const { postId } = req.params; // Extract postId from URL params
+    let { limit = 10, skip = 0 } = req.query; // Default limit: 10, skip: 0
+
+    // Convert query params to integers
+    limit = parseInt(limit);
+    skip = parseInt(skip);
+
+    try {
+        // Find the post and populate the voters
+        const post = await UserPost.findOne(
+            { _id: postId },
+            {
+                "poll.options": {
+                    $slice: [skip, limit] // Apply skip and limit at MongoDB query level
+                }
+            }
+        ).populate({
+            path: "poll.options.votedBy",
+            select: "name username avatar", // Fetch only relevant user fields
+            options: { limit, skip } // Apply pagination at population level
+        });
+
+        if (!post) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+        }
+
+        if (!post.poll || !post.poll.options.length) {
+            return res.status(404).json(new ApiResponse(404, {}, 'Poll not found'));
+        }
+
+        // // Structure the response with pagination
+        // const pollOptions = post.poll.options.map(option => ({
+        //     _id: option._id,
+        //     option: option.option,
+        //     totalVoters: option.votedBy.length,
+        //     voters: option.votedBy.slice(skip, skip + limit) // Apply pagination
+        // }));
+
+        return res.status(200).json(new ApiResponse(200, { pollOptions }, 'Voters retrieved successfully'));
+    } catch (err) {
+        return res.status(500).json(new ApiResponse(500, {}, 'Server error', err.message));
+    }
+};
+
+
+
 async function populateAndFormatPost(req, _post) {
     let post = await UserPost.findById(_post._id).populate({
         path: 'user_id', // The field to populate
