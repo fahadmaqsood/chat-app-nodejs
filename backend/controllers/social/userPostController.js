@@ -202,48 +202,54 @@ export const voteInPoll = async (req, res) => {
 
 export const getPollVoters = async (req, res) => {
     const { postId } = req.params; // Extract postId from URL params
-    let { limit = 10, skip = 0 } = req.query; // Default limit: 10, skip: 0
+    let { limit = 10, skip = 0 } = req.query; // Default: limit 10, skip 0
 
     // Convert query params to integers
     limit = parseInt(limit);
     skip = parseInt(skip);
 
     try {
-        // Find the post and populate the voters
-        const post = await UserPost.findOne(
-            { _id: postId },
-            {
-                "poll.options": {
-                    $slice: [skip, limit] // Apply skip and limit at MongoDB query level
-                }
-            }
-        ).populate({
+        // Fetch the post with voters populated
+        const post = await UserPost.findById(postId).populate({
             path: "poll.options.votedBy",
             select: "name username avatar", // Fetch only relevant user fields
-            options: { limit, skip } // Apply pagination at population level
         });
 
         if (!post) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Post not found'));
+            return res.status(404).json(new ApiResponse(404, {}, "Post not found"));
         }
 
         if (!post.poll || !post.poll.options.length) {
-            return res.status(404).json(new ApiResponse(404, {}, 'Poll not found'));
+            return res.status(404).json(new ApiResponse(404, {}, "Poll not found"));
         }
 
-        // // Structure the response with pagination
-        // const pollOptions = post.poll.options.map(option => ({
-        //     _id: option._id,
-        //     option: option.option,
-        //     totalVoters: option.votedBy.length,
-        //     voters: option.votedBy.slice(skip, skip + limit) // Apply pagination
-        // }));
+        // Define option letters (A, B, C, ...)
+        const optionLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        return res.status(200).json(new ApiResponse(200, { pollOptions }, 'Voters retrieved successfully'));
+        // Extract voters and map them to the required structure
+        let votersList = [];
+        post.poll.options.forEach((option, index) => {
+            const voteLetter = optionLabels[index] || "?"; // Assign letter or fallback
+            option.votedBy.forEach(user => {
+                votersList.push({
+                    _id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    avatar: user.avatar,
+                    vote: voteLetter
+                });
+            });
+        });
+
+        // Apply pagination on the final user list
+        const paginatedVoters = votersList.slice(skip, skip + limit);
+
+        return res.status(200).json(new ApiResponse(200, { voters: paginatedVoters, totalVoters: votersList.length }, "Voters retrieved successfully"));
     } catch (err) {
-        return res.status(500).json(new ApiResponse(500, {}, 'Server error', err.message));
+        return res.status(500).json(new ApiResponse(500, {}, "Server error", err.message));
     }
 };
+
 
 
 
