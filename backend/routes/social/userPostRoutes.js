@@ -33,7 +33,7 @@ router.get('/get/:postId', validateTokensMiddleware, getSpecificPost);
 // poll
 router.post('/vote-in-poll', validateTokensMiddleware, voteInPoll);
 
-router.get('/get-poll-voters', validateTokensMiddleware, getPollVoters);
+router.get('/get-poll-voters/:postId', validateTokensMiddleware, getPollVoters);
 
 // Route to like a post
 router.post('/like-post', validateTokensMiddleware, likePost);
