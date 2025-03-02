@@ -104,10 +104,11 @@ const generateMetaDataTopic = async ({ alternateMessages, messagesHistory }) => 
         openAIResponse = await getChatCompletion({
             messages: [instructionMessage],
             user_message: null,
+            model: "gpt-4-turbo"
         });
 
     } catch (e) {
-        throw new ApiResponse(500, {}, e.message);
+        return "none";
     }
 
 
