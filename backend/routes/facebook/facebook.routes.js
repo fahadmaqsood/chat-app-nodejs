@@ -447,14 +447,13 @@ router.post('/webhook', async (req, res) => {
                         console.log(`Received message from ${name} (${from}): ${text}`);
 
 
-                        await markMessageAsSeen(messageId);
-
                         if (text === undefined) {
                             return;
                         }
 
                         // Delete all messages from the sender
                         if (text == "*//delete-all-my-messages") {
+                            await markMessageAsSeen(messageId);
                             await deleteMessagesBySender({ from });
                             await sendMessage(from, "done.");
                             return;
@@ -465,6 +464,9 @@ router.post('/webhook', async (req, res) => {
 
                         // const textEnglish = inputRes.translation;
                         const textEnglish = text;
+
+
+                        await markMessageAsSeen(messageId);
 
                         // Generate bot reply
                         let botReply = await processChatMessage({ from: from, message: textEnglish });
