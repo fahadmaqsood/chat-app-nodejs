@@ -65,6 +65,24 @@ const mountSendCallEvent = (socket) => {
   });
 };
 
+const mountCallEndedEvent = (socket) => {
+  socket.on(ChatEventEnum.OUTGOING_CALL_ENDED_EVENT, (roomId, chatId, participants, isVideoCall) => {
+    // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+    console.log("Calling: ", participants, "isVideoCall: ", isVideoCall);
+
+    for (let participant of participants) {
+      emitCallsSocketEvent(participant, ChatEventEnum.INCOMING_CALL_ENDED_EVENT, {
+        chatId: chatId,
+        callerName: socket.user.nameElseUsername,
+        callerId: socket.user._id,
+        isVideoCall: isVideoCall
+      });
+    }
+
+
+  });
+};
+
 /**
  *
  * @param {Server<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>} io
@@ -117,6 +135,7 @@ const initializeSocketIO = (io) => {
       mountParticipantTypingEvent(socket);
       mountParticipantStoppedTypingEvent(socket);
       mountSendCallEvent(socket);
+      mountCallEndedEvent(socket);
 
       socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
         console.log("user has disconnected 🚫. userId: " + socket.user?._id);
