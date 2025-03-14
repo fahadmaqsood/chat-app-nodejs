@@ -83,6 +83,32 @@ const initializeCallsSocket = (io) => {
 
 
         });
+
+
+        socket.on(ChatEventEnum.INCOMING_CALL_DECLINED_EVENT, (roomId, chatId, callerId, isVideoCall) => {
+            // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+            console.log("Call DECLINED: ", chatId, "isVideoCall: ", isVideoCall);
+
+
+            emitSocketEvent(null, roomId, ChatEventEnum.OUTGOING_CALL_DECLINED_EVENT, {
+                chatId: chatId,
+                callerId: callerId,
+                isVideoCall: isVideoCall
+            });
+        });
+
+
+        socket.on(ChatEventEnum.INCOMING_CALL_RINGING_EVENT, (roomId, chatId, callerId, isVideoCall) => {
+            // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
+            console.log("Call DECLINED: ", chatId, "isVideoCall: ", isVideoCall);
+
+
+            emitSocketEvent(null, roomId, ChatEventEnum.OUTGOING_CALL_RINGING_EVENT, {
+                chatId: chatId,
+                callerId: callerId,
+                isVideoCall: isVideoCall
+            });
+        });
     });
 };
 
