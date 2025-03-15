@@ -10,6 +10,7 @@ import { emitCallsSocketEvent } from "../socket/calls.js";
 import { emitIndicatorsSocketEvent } from "./indicators.js";
 
 import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
+import { _sendCallSocketNotification } from "../controllers/notification/notificationController.js";
 
 let InputOutput;
 
@@ -52,14 +53,25 @@ const mountSendCallEvent = (socket) => {
     // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
     console.log("Calling: ", participants, "isVideoCall: ", isVideoCall);
 
-    for (let participant of participants) {
-      emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+
+    _sendCallSocketNotification(
+      {
+        receiverIds: participants,
         chatId: chatId,
-        callerName: socket.user.nameElseUsername,
-        callerId: socket.user._id,
-        isVideoCall: isVideoCall
-      });
-    }
+        isVideoCall: isVideoCall,
+
+      },
+      socket.user,
+    );
+
+    // for (let participant of participants) {
+    // emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+    //   chatId: chatId,
+    //   callerName: socket.user.nameElseUsername,
+    //   callerId: socket.user._id,
+    //   isVideoCall: isVideoCall
+    // });
+    // }
 
 
   });

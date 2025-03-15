@@ -185,6 +185,48 @@ export const sendCallNotification = async (req, res) => {
 };
 
 
+export const _sendCallSocketNotification = async (body, user) => {
+    try {
+        const receiverIds = body.receiverIds;
+        const callerId = user._id;
+        const chatId = body.chatId;
+        const isVideoCall = body.isVideoCall;
+
+        if (!receiverIds || receiverIds.length == 0) {
+            res.status(400).json({ success: false, message: 'receiverIds must be defined' });
+        }
+        if (!chatId) {
+            res.status(400).json({ success: false, message: 'chatId must be defined' });
+        }
+
+        console.log(receiverIds);
+
+        for (let participant of receiverIds) {
+            if (canEmit(participant)) {
+                emitCallsSocketEvent(participant, ChatEventEnum.CALL_EVENT, {
+                    chatId: chatId,
+                    callerName: user.nameElseUsername,
+                    callerId: user._id,
+                    isVideoCall: isVideoCall
+                });
+            } else {
+                await addNotificationForMany([participant], null, null, {
+                    "isCall": "true",
+                    "callerName": `${user.nameElseUsername}`,
+                    "callerId": `${user._id}`,
+                    "chatId": `${chatId}`,
+                    "isVideoCall": `${isVideoCall}`
+                }, true);
+            }
+        }
+
+        return true
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
 export const sendCallSocketNotification = async (req, res) => {
     try {
         const receiverIds = req.body.receiverIds;
