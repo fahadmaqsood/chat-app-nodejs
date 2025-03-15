@@ -68,7 +68,7 @@ const mountSendCallEvent = (socket) => {
 const mountCallEndedEvent = (socket) => {
   socket.on(ChatEventEnum.OUTGOING_CALL_ENDED_EVENT, (roomId, chatId, participants, isVideoCall) => {
     // socket.in(chatId).emit(ChatEventEnum.STOP_TYPING_EVENT, chatId);
-    console.log("Calling: ", participants, "isVideoCall: ", isVideoCall);
+    console.log("Ending call: ", participants, "isVideoCall: ", isVideoCall);
 
     for (let participant of participants) {
       emitCallsSocketEvent(participant, ChatEventEnum.INCOMING_CALL_ENDED_EVENT, {
