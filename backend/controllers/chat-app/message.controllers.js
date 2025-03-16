@@ -166,6 +166,9 @@ const sendMessage = asyncHandler(async (req, res) => {
     if (participantObjectId.toString() !== req.user._id.toString()) {
       if (canEmit(req, `${chat._id}/${participantObjectId.toString()}`)) {
       } else {
+        if (/^~~info~~\/call\?type=(video|audio)$/.test(content)) {
+          return;
+        }
         let user = await User.findById(participantObjectId.toString());
         try {
           await sendNotification(user.firebaseToken, `New message from ${req.user.nameElseUsername}`, content || "", {
