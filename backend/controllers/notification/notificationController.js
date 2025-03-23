@@ -38,8 +38,8 @@ export async function sendNotification(deviceToken, title, message, payload) {
             title: title,
             body: message
         },
-        data: {
-            type: payload["type"] || ""
+        data: payload || {
+            type: ""
         },
         token: deviceToken
     };
