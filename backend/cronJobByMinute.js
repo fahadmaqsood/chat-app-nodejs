@@ -45,7 +45,7 @@ try {
             console.log(notification);
 
 
-            const participantIds = session.participants.map(participant => participant._id.toString());
+            const participantIds = session.participants.map(participant => participant._id.toString()).filter(id => id !== organizer_id.toString());
 
             console.log("adding notification for participants");
 
