@@ -172,7 +172,10 @@ const sendMessage = asyncHandler(async (req, res) => {
         let user = await User.findById(participantObjectId.toString());
         try {
           await sendNotification(user.firebaseToken, `New message from ${req.user.nameElseUsername}`, content || "", {
-            "type": "message"
+            "type": "message",
+            "chatType": chat.isGroupChat ? "group" : "individual",
+            "sender": req.user._id.toString(),
+            "chatId": chat._id.toString(),
           });
         } catch (error) {
           console.log(error);
