@@ -268,40 +268,42 @@ const editSession = async (req, res) => {
             return res.status(404).json(new ApiResponse(404, {}, "Session not found"));
         }
 
-        // Update session details (only the fields provided in the request body)
-        session.title = title || session.title;
-        session.description = description || session.description;
-        session.startTime = new Date(startTime) || session.startTime;
-        session.endTime = new Date(endTime) || session.endTime;
+        // // Update session details (only the fields provided in the request body)
+        // session.title = title || session.title;
+        // session.description = description || session.description;
+        // session.startTime = new Date(startTime) || session.startTime;
+        // session.endTime = new Date(endTime) || session.endTime;
 
-        console.log(session.startTime);
-        console.log(session.endTime);
+        // console.log(session.startTime);
+        // console.log(session.endTime);
 
-        // Ensure participants list is updated, adding current user if not present
-        session.participants = [...new Set([...session.participants, ...participants, currentUserId])]; // Avoid duplicates
-        session.organizer = currentUserId; // Ensure the organizer is the current user
+        // // Ensure participants list is updated, adding current user if not present
+        // session.participants = [...new Set([...session.participants, ...participants, currentUserId])]; // Avoid duplicates
+        // session.organizer = currentUserId; // Ensure the organizer is the current user
 
-        session.markModified('startTime');
-        session.markModified('endTime');
+        // session.markModified('startTime');
+        // session.markModified('endTime');
 
-        // Save the updated session
-        await session.save();
+        // // Save the updated session
+        // await session.save();
 
 
-        // await UserSchedule.findByIdAndUpdate(
-        //     sessionId,
-        //     {
-        //         $set: {
-        //             title: title || session.title,
-        //             description: description || session.description,
-        //             startTime: new Date(startTime),
-        //             endTime: new Date(endTime),
-        //             organizer: currentUserId,
-        //         },
-        //         $addToSet: { participants: { $each: [...participants, currentUserId] } }
-        //     },
-        //     { new: true }
-        // );
+        let updatedSession = await UserSchedule.findByIdAndUpdate(
+            sessionId,
+            {
+                $set: {
+                    title: title || session.title,
+                    description: description || session.description,
+                    startTime: new Date(startTime) || session.startTime,
+                    endTime: new Date(endTime) || session.startTime,
+                    organizer: currentUserId,
+                    participants: Array.from(new Set([...session.participants, ...participants, currentUserId]))
+                },
+            },
+            { new: true }
+        );
+
+        console.log(updatedSession);
 
 
         if (sendMessageToParticipants) {
