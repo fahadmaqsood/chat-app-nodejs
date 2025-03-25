@@ -294,7 +294,7 @@ const editSession = async (req, res) => {
                 $set: {
                     title: title || session.title,
                     description: description || session.description,
-                    startTime: new Date(startTime) || session.startTime,
+                    date: new Date(startTime) || session.startTime,
                     endTime: new Date(endTime) || session.startTime,
                     organizer: currentUserId,
                     participants: Array.from(new Set([...session.participants, ...participants, currentUserId]))
