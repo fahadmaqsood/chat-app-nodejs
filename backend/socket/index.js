@@ -154,6 +154,7 @@ const initializeSocketIO = (io) => {
 
       const handleReadMessagesEvent = async (chatId) => {
         try {
+          console.log("handling read messages event");
           await markAsRead(socket.user._id, chatId);
         } catch (error) {
           console.error('Error handling read messages event:', error.message);
