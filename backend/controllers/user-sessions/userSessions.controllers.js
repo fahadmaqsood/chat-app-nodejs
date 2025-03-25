@@ -254,6 +254,9 @@ const editSession = async (req, res) => {
         const { title, description, participants, startTime, endTime, sendMessageToParticipants } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
+        console.log(startTime);
+        console.log(endTime);
+
         if (!startTime || !endTime) {
             return res.status(400).json(new ApiResponse(400, {}, "startTime and endTime are required"));
         }
