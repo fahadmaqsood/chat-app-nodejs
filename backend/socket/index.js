@@ -159,9 +159,9 @@ const initializeSocketIO = (io) => {
 
           const messagesCount = await getTotalUnreadMessages(socket.user._id);
           console.log(`messagesCount: ${messagesCount}`);
-          if (messagesCount != false) {
-            emitIndicatorsSocketEvent(socket.user._id, "INITIAL_MESSAGES_COUNT_EVENT", messagesCount);
-          }
+
+          emitIndicatorsSocketEvent(socket.user._id, "INITIAL_MESSAGES_COUNT_EVENT", messagesCount);
+
         } catch (error) {
           console.error('Error handling read messages event:', error.message);
         }
