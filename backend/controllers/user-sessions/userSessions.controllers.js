@@ -274,6 +274,9 @@ const editSession = async (req, res) => {
         session.startTime = new Date(startTime) || session.startTime;
         session.endTime = new Date(endTime) || session.endTime;
 
+        console.log(session.startTime);
+        console.log(session.endTime);
+
         // Ensure participants list is updated, adding current user if not present
         session.participants = [...new Set([...session.participants, ...participants, currentUserId])]; // Avoid duplicates
         session.organizer = currentUserId; // Ensure the organizer is the current user
