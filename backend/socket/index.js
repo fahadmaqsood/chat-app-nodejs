@@ -9,6 +9,8 @@ import { emitCallsSocketEvent } from "../socket/calls.js";
 
 import { emitIndicatorsSocketEvent } from "./indicators.js";
 
+import { markAsRead, getTotalUnreadMessages } from "../controllers/chat-app/chat.controllers.js"
+
 import { validateAndRefreshTokens } from "../controllers/auth/user.controllers.js";
 import { _sendCallSocketNotification } from "../controllers/notification/notificationController.js";
 
@@ -148,6 +150,17 @@ const initializeSocketIO = (io) => {
       mountParticipantStoppedTypingEvent(socket);
       mountSendCallEvent(socket);
       mountCallEndedEvent(socket);
+
+
+      const handleReadMessagesEvent = async (chatId) => {
+        try {
+          await markAsRead(socket.user._id, chatId);
+        } catch (error) {
+          console.error('Error handling read messages event:', error.message);
+        }
+      };
+
+      socket.on('MARK_ALL_MESSAGES_AS_READ', handleReadMessagesEvent);
 
       socket.on(ChatEventEnum.DISCONNECT_EVENT, () => {
         console.log("user has disconnected 🚫. userId: " + socket.user?._id);
