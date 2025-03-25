@@ -288,6 +288,13 @@ const editSession = async (req, res) => {
         // await session.save();
 
 
+        // Ensure participants are unique before updating
+        const uniqueParticipants = Array.from(
+            new Set([...session.participants.map(id => id.toString()), ...participants.map(id => id.toString()), currentUserId.toString()])
+        ).map(id => new mongoose.Types.ObjectId(id));
+
+
+
         let updatedSession = await UserSchedule.findByIdAndUpdate(
             sessionId,
             {
@@ -297,7 +304,7 @@ const editSession = async (req, res) => {
                     date: new Date(startTime) || session.startTime,
                     endTime: new Date(endTime) || session.startTime,
                     organizer: currentUserId,
-                    participants: Array.from(new Set([...session.participants, ...participants, currentUserId]))
+                    participants: uniqueParticipants
                 },
             },
             { new: true }
