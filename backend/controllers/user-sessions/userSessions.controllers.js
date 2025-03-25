@@ -254,8 +254,8 @@ const editSession = async (req, res) => {
         const { title, description, participants, startTime, endTime, sendMessageToParticipants } = req.body;
         const currentUserId = req.user._id; // Get the current user from the request
 
-        console.log(startTime);
-        console.log(endTime);
+        console.log(new Date(startTime));
+        console.log(new Date(endTime));
 
         if (!startTime || !endTime) {
             return res.status(400).json(new ApiResponse(400, {}, "startTime and endTime are required"));
@@ -286,6 +286,23 @@ const editSession = async (req, res) => {
 
         // Save the updated session
         await session.save();
+
+
+        // await UserSchedule.findByIdAndUpdate(
+        //     sessionId,
+        //     {
+        //         $set: {
+        //             title: title || session.title,
+        //             description: description || session.description,
+        //             startTime: new Date(startTime),
+        //             endTime: new Date(endTime),
+        //             organizer: currentUserId,
+        //         },
+        //         $addToSet: { participants: { $each: [...participants, currentUserId] } }
+        //     },
+        //     { new: true }
+        // );
+
 
         if (sendMessageToParticipants) {
             // Send messages to the conversation where only userId and participantId are included
