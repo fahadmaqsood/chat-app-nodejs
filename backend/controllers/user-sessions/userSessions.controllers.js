@@ -281,6 +281,9 @@ const editSession = async (req, res) => {
         session.participants = [...new Set([...session.participants, ...participants, currentUserId])]; // Avoid duplicates
         session.organizer = currentUserId; // Ensure the organizer is the current user
 
+        session.markModified('startTime');
+        session.markModified('endTime');
+
         // Save the updated session
         await session.save();
 
