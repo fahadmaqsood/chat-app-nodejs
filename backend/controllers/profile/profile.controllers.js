@@ -176,9 +176,15 @@ const getProfilePosts = async (req, res) => {
         }
 
 
-        const privacyFilter = isUserHisFriend
-            ? { $in: ['public', 'friends'] }
-            : 'public';
+        const isOwnProfile = req.user._id.toString() === userId.toString();
+
+        const privacyFilter = isOwnProfile
+            ? { $in: ['public', 'friends', 'private'] } // Can view all their own posts
+            : isUserHisFriend
+                ? { $in: ['public', 'friends'] } // Friends can see public and friends-only posts
+                : 'public'; // Others can only see public posts
+
+
 
         // Fetch user's posts from the database using userId
         const posts = await UserPost.find({
