@@ -18,6 +18,11 @@ const userPostSchema = new mongoose.Schema({
             );
         }
     },
+    postPrivacy: {
+        type: String,
+        enum: ['public', "friends", 'private'],
+        required
+    },
     attachments: [{  // Array of URLs for attachments
         type: String
     }],

@@ -65,7 +65,7 @@ const moodRecognitionInstructionMsg = (topics, text) => {
 
 
 export const createUserPost = async (req, res) => {
-    let { content, attachments, mood, poll } = req.body;
+    let { content, attachments, postPrivacy, mood, poll } = req.body;
 
     const user_id = req.user._id;
 
@@ -145,6 +145,7 @@ export const createUserPost = async (req, res) => {
             user_id: user_id,
             content: content,
             attachments: attachments,
+            postPrivacy: postPrivacy,
             mood: mood,
             topics: topicIds, // Add references to related topics
             poll: pollData
