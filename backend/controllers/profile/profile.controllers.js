@@ -163,8 +163,28 @@ const getProfilePosts = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, "userId is required"));
         }
 
+        let user = await User.findById(userId).lean().select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
+
+        if (!user) {
+            return res.status(404).json(new ApiResponse(404, {}, "User not found"));
+        }
+
+        let isUserHisFriend = false;
+
+        if (user.followers.map(id => id.toString()).includes(req.user._id.toString()) && user.following.map(id => id.toString()).includes(req.user._id.toString())) {
+            isUserHisFriend = true;
+        }
+
+
+        const privacyFilter = isUserHisFriend
+            ? { $in: ['public', 'friends'] }
+            : 'public';
+
         // Fetch user's posts from the database using userId
-        const posts = await UserPost.find({ user_id: userId })
+        const posts = await UserPost.find({
+            user_id: userId,
+            postPrivacy: privacyFilter
+        })
             .sort({ createdAt: -1 })
             .skip(parseInt(skip))
             .limit(limit).populate({
