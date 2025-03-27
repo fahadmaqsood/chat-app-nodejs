@@ -317,6 +317,39 @@ const fetchNews = async (searchTerms, limit, page = 1) => {
     return news.data.map((arr) => { arr["type"] = "news"; return arr; });
 }
 
+
+
+
+const getUserFriendsAndFollowing = async (userId) => {
+    const user = await User.findById(userId)
+        .populate("followers", "_id")
+        .populate("following", "_id")
+        .lean()
+        .exec();
+
+    if (!user) throw new ApiError(404, "User not found");
+
+    const followingIds = new Set(user.following.map((f) => f._id.toString()));
+    const friends = user.followers
+        .filter((follower) => followingIds.has(follower._id.toString()))
+        .map((friend) => friend._id);
+
+    return { friends, following: user.following.map((f) => f._id) };
+};
+
+
+const scorePost = (post) => {
+    const engagement = post.likes.length * 3 + post.comments.length * 2 + post.shares.length * 5;
+    const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
+    const timeDecay = Math.pow(0.9, hoursSinceCreation);
+    let priority = 0;
+
+    if (friends.includes(post.user.toString())) priority += 1000; // Highest priority for friends
+    else if (following.includes(post.user.toString())) priority += 500; // Medium priority for followings
+
+    return engagement * timeDecay + priority;
+};
+
 export const getPosts = async (req, res) => {
     const { mood, topics, start_from = 0, postsNewsPaginationPage = 1 } = req.query;
     const limit = 10;
@@ -329,8 +362,22 @@ export const getPosts = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Mood is required' });
         }
 
+
+        const userId = req.user.id; // Assuming authenticated user
+        const { friends, following } = await getUserFriendsAndFollowing(userId);
+
+
+
         // Create a base query object
-        const query = { mood: mood }; // Filter by mood_status
+        const query = {
+            mood: mood,
+
+            $or: [
+                { postPrivacy: "public" },
+                { postPrivacy: "friends", user: { $in: friends } },
+                { postPrivacy: "private", user: userId },
+            ],
+        }; // Filter by mood_status and post privacy
 
 
 
@@ -360,10 +407,19 @@ export const getPosts = async (req, res) => {
                 }
             }
         }
+
+        // Fetch posts with priority for friends and following
         let posts = await UserPost.find(query)
             .sort({ createdAt: -1 })
             .skip(parseInt(start_from))
-            .limit(limit).exec();
+            .limit(100) // Fetch a larger pool to rank by engagement later
+            .lean()
+            .exec();
+
+
+
+        // Rank posts based on the calculated score
+        posts.sort((a, b) => scorePost(b) - scorePost(a));
 
 
         // If we have fewer posts than requested, try to fill in with related moods
@@ -450,8 +506,10 @@ export const getPosts = async (req, res) => {
         // }
 
 
+
+
         // Prepare the response with numLikes and numComments
-        const postPromises = posts.map(async (post) => {
+        const postPromises = posts.slice(0, limit).map(async (post) => {
 
             return await populateAndFormatPost(req, post);
 
