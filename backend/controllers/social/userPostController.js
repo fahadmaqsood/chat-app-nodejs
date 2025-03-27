@@ -338,17 +338,6 @@ const getUserFriendsAndFollowing = async (userId) => {
 };
 
 
-const scorePost = (post) => {
-    const engagement = post.likeCount * 3 + post.commentCount * 2;
-    const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
-    const timeDecay = Math.pow(0.9, hoursSinceCreation);
-    let priority = 0;
-
-    if (friends.includes(post.user.toString())) priority += 1000; // Highest priority for friends
-    else if (following.includes(post.user.toString())) priority += 500; // Medium priority for followings
-
-    return engagement * timeDecay + priority;
-};
 
 export const getPosts = async (req, res) => {
     const { mood, topics, start_from = 0, postsNewsPaginationPage = 1 } = req.query;
@@ -453,6 +442,19 @@ export const getPosts = async (req, res) => {
 
         console.log(posts);
 
+
+
+        const scorePost = (post, friends) => {
+            const engagement = post.likeCount * 3 + post.commentCount * 2;
+            const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
+            const timeDecay = Math.pow(0.9, hoursSinceCreation);
+            let priority = 0;
+
+            if (friends.includes(post.user.toString())) priority += 1000; // Highest priority for friends
+            else if (following.includes(post.user.toString())) priority += 500; // Medium priority for followings
+
+            return engagement * timeDecay + priority;
+        };
 
 
         // Rank posts based on the calculated score
