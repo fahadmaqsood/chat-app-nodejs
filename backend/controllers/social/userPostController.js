@@ -339,7 +339,7 @@ const getUserFriendsAndFollowing = async (userId) => {
 
 
 const scorePost = (post) => {
-    const engagement = post.likes.length * 3 + post.comments.length * 2;// + post.shares.length * 5;
+    const engagement = post.likeCount * 3 + post.commentCount * 2;
     const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
     const timeDecay = Math.pow(0.9, hoursSinceCreation);
     let priority = 0;
@@ -408,15 +408,48 @@ export const getPosts = async (req, res) => {
             }
         }
 
-        // Fetch posts with priority for friends and following
-        let posts = await UserPost.find(query)
-            .sort({ createdAt: -1 })
-            .skip(parseInt(start_from))
-            .limit(100) // Fetch a larger pool to rank by engagement later
-            .populate("PostLike", "_id") // Populate likes
-            .populate("UserComment", "_id") // Populate comments
-            .lean()
-            .exec();
+        let posts = await UserPost.aggregate([
+            { $match: query }, // Filter by query
+            { $sort: { createdAt: -1 } },
+            { $skip: parseInt(start_from) },
+            { $limit: 100 }, // Fetch a larger pool for better ranking
+
+            // Step 2: Lookup likes count
+            {
+                $lookup: {
+                    from: "postlikes",
+                    localField: "_id",
+                    foreignField: "post_id",
+                    as: "likes"
+                }
+            },
+
+            // Step 3: Lookup comments count
+            {
+                $lookup: {
+                    from: "usercomments",
+                    localField: "_id",
+                    foreignField: "post_id",
+                    as: "comments"
+                }
+            },
+
+            // Step 4: Add like and comment counts
+            {
+                $addFields: {
+                    likeCount: { $size: "$likes" },
+                    commentCount: { $size: "$comments" }
+                }
+            },
+
+            // Step 5: Only return required fields
+            {
+                $project: {
+                    likes: 0,
+                    comments: 0 // Remove full arrays to save memory
+                }
+            }
+        ]);
 
         console.log(posts);
 
