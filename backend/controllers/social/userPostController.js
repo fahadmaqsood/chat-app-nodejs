@@ -339,7 +339,7 @@ const getUserFriendsAndFollowing = async (userId) => {
 
 
 const scorePost = (post) => {
-    const engagement = post.likes.length * 3 + post.comments.length * 2 + post.shares.length * 5;
+    const engagement = post.likes.length * 3 + post.comments.length * 2;// + post.shares.length * 5;
     const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
     const timeDecay = Math.pow(0.9, hoursSinceCreation);
     let priority = 0;
