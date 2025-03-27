@@ -497,78 +497,78 @@ export const getPosts = async (req, res) => {
 
         formattedPosts.sort((a, b) => b.createdAt - a.createdAt);
 
-        try {
-            let news = [];
+        // try {
+        //     let news = [];
 
-            if (mood == "happy" || mood == "laughing" || mood == "rofl") {
-
-
-                let searchTerms;
-                if (topics && Array.isArray(topics)) {
-                    searchTerms = topics;
-                } else {
-                    searchTerms = ["celebrity", "news", "fashion", "tech"];
-                }
-
-                console.log(searchTerms.join("|"));
+        //     if (mood == "happy" || mood == "laughing" || mood == "rofl") {
 
 
+        //         let searchTerms;
+        //         if (topics && Array.isArray(topics)) {
+        //             searchTerms = topics;
+        //         } else {
+        //             searchTerms = ["celebrity", "news", "fashion", "tech"];
+        //         }
 
-                news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
-            } else {
+        //         console.log(searchTerms.join("|"));
 
 
 
-                let searchTerms;
-                if (topics && Array.isArray(topics)) {
-                    searchTerms = topics;
-                } else {
-                    searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
-                }
-
-                console.log(searchTerms.join("|"));
-
-                // const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
-                let searchResponse = await bingWebSearch(searchTerms.join("|"), postsNewsPaginationPage);
-
-                let webPages = getWebPages(searchResponse);
-                let images = getImages(searchResponse);
-                let videos = getVideos(searchResponse);
-
-                news = [...webPages, ...images, ...videos];
-
-                news.sort(() => Math.random() - 0.5);
-            }
+        //         news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
+        //     } else {
 
 
-            // Create a new array to hold the posts and news in the correct pattern
-            let updatedPosts = [];
-            let newsIndex = 0;
 
-            if (formattedPosts.length < 2) {
-                formattedPosts.push(...news);
-            } else {
+        //         let searchTerms;
+        //         if (topics && Array.isArray(topics)) {
+        //             searchTerms = topics;
+        //         } else {
+        //             searchTerms = ["happy", "funny", "peace", "motivational", "inspirational"];
+        //         }
 
-                // Loop through the `formattedPosts` array
-                for (let i = 0; i < formattedPosts.length; i++) {
-                    // Add the current post
-                    updatedPosts.push(formattedPosts[i]);
+        //         console.log(searchTerms.join("|"));
 
-                    // After every two posts, insert one item from news (if there are still news items left)
-                    if ((i + 1) % 2 === 0 && newsIndex < news.length) {
-                        updatedPosts.push(news[newsIndex]);  // Insert one news item
-                        newsIndex++;  // Move to the next news item
-                    }
-                }
+        //         // const news = await fetchNews(searchTerms.join("|"), 5, getRandomInt(parseInt(postsNewsPaginationPage), parseInt(postsNewsPaginationPage) + 100));
+        //         let searchResponse = await bingWebSearch(searchTerms.join("|"), postsNewsPaginationPage);
 
-                updatedPosts.push(...news.slice(newsIndex, news.length));
+        //         let webPages = getWebPages(searchResponse);
+        //         let images = getImages(searchResponse);
+        //         let videos = getVideos(searchResponse);
 
-                // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
-                formattedPosts = updatedPosts;
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        //         news = [...webPages, ...images, ...videos];
+
+        //         news.sort(() => Math.random() - 0.5);
+        //     }
+
+
+        //     // Create a new array to hold the posts and news in the correct pattern
+        //     let updatedPosts = [];
+        //     let newsIndex = 0;
+
+        //     if (formattedPosts.length < 2) {
+        //         formattedPosts.push(...news);
+        //     } else {
+
+        //         // Loop through the `formattedPosts` array
+        //         for (let i = 0; i < formattedPosts.length; i++) {
+        //             // Add the current post
+        //             updatedPosts.push(formattedPosts[i]);
+
+        //             // After every two posts, insert one item from news (if there are still news items left)
+        //             if ((i + 1) % 2 === 0 && newsIndex < news.length) {
+        //                 updatedPosts.push(news[newsIndex]);  // Insert one news item
+        //                 newsIndex++;  // Move to the next news item
+        //             }
+        //         }
+
+        //         updatedPosts.push(...news.slice(newsIndex, news.length));
+
+        //         // The `updatedPosts` array now contains the interspersed posts and news, so we assign it to `formattedPosts`
+        //         formattedPosts = updatedPosts;
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
     } catch (err) {
