@@ -373,7 +373,7 @@ export const getPosts = async (req, res) => {
             mood: mood,
 
             $or: [
-                { postPrivacy: "public" },
+                { postPrivacy: { $in: ["public", undefined] } }, // Treat missing as public
                 { postPrivacy: "friends", user: { $in: friends } },
                 { postPrivacy: "private", user: userId },
             ],
