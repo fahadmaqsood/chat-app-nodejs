@@ -179,10 +179,10 @@ const getProfilePosts = async (req, res) => {
         const isOwnProfile = req.user._id.toString() === userId.toString();
 
         const privacyFilter = isOwnProfile
-            ? { $in: ['public', 'friends', 'private'] } // Can view all their own posts
+            ? { $in: ['public', undefined, 'friends', 'private'] } // Can view all their own posts
             : isUserHisFriend
-                ? { $in: ['public', 'friends'] } // Friends can see public and friends-only posts
-                : 'public'; // Others can only see public posts
+                ? { $in: ['public', 'friends', undefined] } // Friends can see public and friends-only posts
+                : { $in: ['public', undefined] }; // Others can only see public posts
 
 
 
@@ -291,10 +291,10 @@ const getProfileBlogPosts = async (req, res) => {
         const isOwnProfile = req.user._id.toString() === userId.toString();
 
         const privacyFilter = isOwnProfile
-            ? { $in: ['public', 'friends', 'private'] } // Can view all their own posts
+            ? { $in: ['public', undefined, 'friends', 'private'] } // Can view all their own posts
             : isUserHisFriend
-                ? { $in: ['public', 'friends'] } // Friends can see public and friends-only posts
-                : 'public'; // Others can only see public posts
+                ? { $in: ['public', 'friends', undefined] } // Friends can see public and friends-only posts
+                : { $in: ['public', undefined] }; // Others can only see public posts
 
 
 
