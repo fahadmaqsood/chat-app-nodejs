@@ -413,6 +413,8 @@ export const getPosts = async (req, res) => {
             .sort({ createdAt: -1 })
             .skip(parseInt(start_from))
             .limit(100) // Fetch a larger pool to rank by engagement later
+            .populate("PostLike", "_id") // Populate likes
+            .populate("UserComment", "_id") // Populate comments
             .lean()
             .exec();
 
