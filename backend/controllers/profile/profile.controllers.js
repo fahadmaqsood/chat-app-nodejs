@@ -239,8 +239,10 @@ const getProfilePosts = async (req, res) => {
 
             postObject.type = "post";
 
+            if (postObject.postPrivacy == null) {
+                postObject.postPrivacy = "public";
+            }
 
-            postObject.postPrivacy = postObject.postPrivacy;
 
 
 
@@ -333,7 +335,10 @@ const getProfileBlogPosts = async (req, res) => {
 
             postObject.type = "blog_post";
 
-            postObject.postPrivacy = postObject.postPrivacy;
+
+            if (postObject.postPrivacy == null) {
+                postObject.postPrivacy = "public";
+            }
 
 
             return postObject;
