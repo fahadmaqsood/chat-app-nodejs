@@ -8,6 +8,7 @@ import { SentimentAnalysis } from "./SentimentAnalysis.js";
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url); // Get the current file's path
 const __dirname = dirname(__filename); // Get the directory of the current file
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
         cb(null, uploadPath); // Specify your upload directory
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${req.userIdForFileName}-${file.originalname}`);
+        cb(null, `${Date.now()}-${req.userIdForFileName}-${uuidv4()}`);
     }
 });
 
