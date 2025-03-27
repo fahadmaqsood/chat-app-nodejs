@@ -416,6 +416,8 @@ export const getPosts = async (req, res) => {
             .lean()
             .exec();
 
+        console.log(posts);
+
 
 
         // Rank posts based on the calculated score
