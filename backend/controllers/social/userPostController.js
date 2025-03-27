@@ -421,7 +421,10 @@ export const getPosts = async (req, res) => {
 
 
         // Rank posts based on the calculated score
-        posts.sort((a, b) => scorePost(b) - scorePost(a));
+        posts.sort((a, b) => {
+            console.log(`${scorePost(b)} ${scorePost(a)}`);
+            return scorePost(b) - scorePost(a)
+        });
 
         console.log("posts after sorting: ");
         console.log(posts);
