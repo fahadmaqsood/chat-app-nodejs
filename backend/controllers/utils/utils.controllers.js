@@ -9,6 +9,8 @@ import { SentimentAnalysis } from "./SentimentAnalysis.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+import crypto from 'crypto';
+
 const __filename = fileURLToPath(import.meta.url); // Get the current file's path
 const __dirname = dirname(__filename); // Get the directory of the current file
 
