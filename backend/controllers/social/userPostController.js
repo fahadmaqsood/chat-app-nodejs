@@ -444,7 +444,7 @@ export const getPosts = async (req, res) => {
 
 
 
-        const scorePost = (post, friends) => {
+        const scorePost = (post) => {
             const engagement = post.likeCount * 3 + post.commentCount * 2;
             const hoursSinceCreation = (Date.now() - new Date(post.createdAt)) / (1000 * 60 * 60);
             const timeDecay = Math.pow(0.9, hoursSinceCreation);
