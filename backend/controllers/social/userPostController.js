@@ -403,6 +403,17 @@ export const getPosts = async (req, res) => {
             { $skip: parseInt(start_from) },
             { $limit: 100 }, // Fetch a larger pool for better ranking
 
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user_id", // Ensure this matches your schema field
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            { $unwind: "$user" }, // Convert user array to an object
+
+
             // Step 2: Lookup likes count
             {
                 $lookup: {
