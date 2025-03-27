@@ -673,6 +673,7 @@ export const getPosts = async (req, res) => {
 
         res.status(200).json(new ApiResponse(200, { posts: formattedPosts }));
     } catch (err) {
+        console.error(err.message);
         res.status(500).json(new ApiResponse(500, {}, err.message));
     }
 };
