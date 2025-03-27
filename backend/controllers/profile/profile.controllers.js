@@ -240,6 +240,9 @@ const getProfilePosts = async (req, res) => {
             postObject.type = "post";
 
 
+            postObject.postPrivacy = postObject.postPrivacy;
+
+
 
             return postObject;
         });
@@ -329,6 +332,8 @@ const getProfileBlogPosts = async (req, res) => {
             postObject.hasUserLiked = !!hasUserLiked;
 
             postObject.type = "blog_post";
+
+            postObject.postPrivacy = postObject.postPrivacy;
 
 
             return postObject;
