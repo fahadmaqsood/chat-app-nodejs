@@ -423,6 +423,9 @@ export const getPosts = async (req, res) => {
         // Rank posts based on the calculated score
         posts.sort((a, b) => scorePost(b) - scorePost(a));
 
+        console.log("posts after sorting: ");
+        console.log(posts);
+
 
         // If we have fewer posts than requested, try to fill in with related moods
         // if (posts.length < limit) {
