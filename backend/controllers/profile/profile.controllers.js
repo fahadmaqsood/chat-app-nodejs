@@ -270,8 +270,32 @@ const getProfileBlogPosts = async (req, res) => {
             return res.status(400).json(new ApiResponse(400, "userId is required"));
         }
 
+        let user = await User.findById(userId).lean().select('-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry'); // Exclude sensitive info
+
+        if (!user) {
+            return res.status(404).json(new ApiResponse(404, {}, "User not found"));
+        }
+
+        let isUserHisFriend = false;
+
+        if (user.followers.map(id => id.toString()).includes(req.user._id.toString()) && user.following.map(id => id.toString()).includes(req.user._id.toString())) {
+            isUserHisFriend = true;
+        }
+
+
+        const isOwnProfile = req.user._id.toString() === userId.toString();
+
+        const privacyFilter = isOwnProfile
+            ? { $in: ['public', 'friends', 'private'] } // Can view all their own posts
+            : isUserHisFriend
+                ? { $in: ['public', 'friends'] } // Friends can see public and friends-only posts
+                : 'public'; // Others can only see public posts
+
+
+
+
         // Fetch user's posts from the database using userId
-        const posts = await BlogPost.find({ user_id: userId })
+        const posts = await BlogPost.find({ user_id: userId, postPrivacy: privacyFilter })
             .sort({ createdAt: -1 })
             .skip(parseInt(skip))
             .limit(limit).populate({

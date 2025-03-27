@@ -63,7 +63,7 @@ const moodRecognitionInstructionMsg = (topics, text) => {
 
 
 export const createBlogPost = async (req, res) => {
-    let { title, content, mood } = req.body;
+    let { title, content, postPrivacy, mood } = req.body;
 
     const user_id = req.user._id;
 
@@ -133,6 +133,7 @@ export const createBlogPost = async (req, res) => {
             title: title,
             content: content,
             mood: mood,
+            postPrivacy: postPrivacy,
             topics: topicIds, // Add references to related topics
         });
 

@@ -19,6 +19,11 @@ const blogPostSchema = new mongoose.Schema({
     mood: {
         type: String
     },
+    postPrivacy: {
+        type: String,
+        enum: ['public', "friends", 'private'],
+        required: true,
+    },
     topics: [{  // Array of references to related topics
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PostTopic'
