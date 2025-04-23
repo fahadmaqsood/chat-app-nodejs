@@ -43,7 +43,7 @@ const sendEmail = async (options) => {
 
   // Configure the transporter with Gmail's SMTP server
   let transporter = nodemailer.createTransport({
-    service: 'smtp.gmail.com',
+    host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
