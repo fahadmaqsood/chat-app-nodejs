@@ -38,6 +38,9 @@ const sendEmail = async (options) => {
   //   },
   // });
 
+  console.log(process.env.SENDER_EMAIL, process.env.SENDER_EMAIL_PASSWORD);
+
+
   // Configure the transporter with Gmail's SMTP server
   let transporter = nodemailer.createTransport({
     service: 'gmail',
