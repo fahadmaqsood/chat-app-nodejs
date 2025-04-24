@@ -146,6 +146,17 @@ import { resolveLink } from './controllers/share/shareController.js';
 
 import reportRoutes from './routes/reports/report.routes.js';
 
+import adminRoutes from './routes/admin/admin.routes.js';
+
+import { Admin } from "./models/auth/admin.models.js";
+import { User } from "./models/auth/user.models.js";
+import ReportedMessage from "./models/reports/ReportedMessage.models.js";
+import Complaint from "./models/reports/Complaint.models.js";
+import UserReport from "./models/reports/userReports.models.js";
+
+
+import jwt from "jsonwebtoken";
+
 
 // TODO: Remove this whole facebook code
 import facebookWhatsappApiRoutes from './routes/facebook/facebook.routes.js';
@@ -186,6 +197,9 @@ app.use('/api/v1/personal-diary/', personalDiaryRoutes);
 app.use('/api/v1/share/', shareRoutes);
 
 app.use('/api/v1/reports', reportRoutes);
+
+app.use('/api/v1/admin', adminRoutes);
+
 
 
 initializeSocketIO(io);
@@ -245,6 +259,274 @@ app.route('/share/*').get(async (req, res) => {
   // Pass linkSuffix to the EJS template
   res.render('share', { decodedLinkSuffix: decodeURIComponent(decodedLinkSuffix), params: paramObject });
 });
+
+
+
+app.route('/admin').get(async (req, res) => {
+  // Pass linkSuffix to the EJS template
+  res.render('admin-login', {});
+});
+
+
+app.get('/admin/dashboard', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    // All good — redirect to main dashboard
+    return res.redirect('/admin/dashboard/main');
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+const getUserDistributionByCountry = async () => {
+  try {
+    const raw = await User.aggregate([
+      {
+        $project: {
+          country: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$country", "US"] }, then: "United States" },
+                { case: { $eq: ["$country", "UK"] }, then: "United Kingdom" },
+                { case: { $eq: ["$country", "Sindh"] }, then: "Pakistan" },
+              ],
+              default: "$country"
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: { $ifNull: ["$country", ""] },
+          count: { $sum: 1 },
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+    const formatted = [['Country', 'Users']];
+
+    raw.forEach(item => {
+      if (item._id && item._id.trim() !== '') {
+        formatted.push([item._id.trim(), item.count]);
+      }
+    });
+
+    // console.log("User distribution by country:", formatted);
+    return formatted;
+  } catch (err) {
+    console.error("Error getting user distribution by country:", err);
+    return [];
+  }
+};
+
+
+app.route('/admin/dashboard/main').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    const totalUsers = await User.countDocuments({});
+
+    // users who joined this month
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0); // Start of the day
+
+    const endOfMonth = new Date(); // Now
+
+    const usersJoinedThisMonth = await User.countDocuments({
+      account_creation_date: { $gte: startOfMonth, $lte: endOfMonth }
+    });
+
+
+    // Users who joined today
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0); // Today at 00:00:00
+
+    const endOfDay = new Date(); // Current time
+
+    const usersJoinedToday = await User.countDocuments({
+      account_creation_date: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+
+    // for user distribution by country
+    const userDistributionByCountry = await getUserDistributionByCountry();
+
+    const activeSubscriptions = await User.countDocuments({ subscription_status: 'active' });
+
+
+    const [userReports, messageReports, complaints] = await Promise.all([
+      UserReport.countDocuments({ reportStatus: 'in review' }),
+      ReportedMessage.countDocuments({ reportStatus: 'in review' }),
+      Complaint.countDocuments({ complaintStatus: 'in review' })
+    ]);
+
+    const totalActiveReports = userReports + messageReports + complaints;
+
+
+    // All good
+    // Pass linkSuffix to the EJS template
+    res.render('dashboard', { adminName: user.name, totalUsers, usersJoinedThisMonth, userDistributionByCountry: JSON.stringify(userDistributionByCountry), activeSubscriptions, totalActiveReports, usersJoinedToday });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/main:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+app.route('/admin/dashboard/users').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+
+    // Pagination and search logic
+    const searchQuery = req.query.search || '';
+    const currentPage = parseInt(req.query.page) || 1;
+    const itemsPerPage = 10;
+
+    // Define search query filter
+    const searchFilter = searchQuery ? {
+      $or: [
+        { username: { $regex: searchQuery, $options: 'i' } },
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } }
+      ]
+    } : {};
+
+    // Get users with pagination and search filter
+    const totalUsers = await User.countDocuments(searchFilter);
+    const totalPages = Math.ceil(totalUsers / itemsPerPage);
+
+    const users = await User.find(searchFilter)
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage);
+
+
+    res.render('admin-users', {
+      users,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+      searchQuery // Pass search query to retain in the search bar
+    });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/users:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
 
 
 app.get('/add/quiz', (req, res) => {

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body.light-mode {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+        }
+
+
+        .card {
+            border: none;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Dark Mode Toggle -->
+    <div class="position-absolute top-0 end-0 p-3">
+        <button class="btn btn-outline-secondary btn-sm" id="toggle-dark">🌙</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card p-4 shadow rounded-4" style="width: 100%; max-width: 400px;">
+            <h3 class="text-center mb-4">Admin Login</h3>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="admin@example.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="********" required
+                        minlength="6">
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill">Login</button>
+            </form>
+            <div id="loginMsg" class="text-center mt-2"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dark Mode & Form Script -->
+    <script>
+        const toggleBtn = document.getElementById('toggle-dark');
+        const body = document.body;
+        const card = document.querySelector('.card');
+
+        // Function to apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                body.classList.remove('light-mode');
+                card.classList.add('bg-dark', 'text-white');
+            } else {
+                body.classList.add('light-mode');
+                body.classList.remove('dark-mode');
+                card.classList.remove('bg-dark', 'text-white');
+            }
+        }
+
+        // On load: set theme from localStorage or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+
+        // On toggle: switch theme and save it
+        toggleBtn.addEventListener('click', () => {
+            const newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Login form submission
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const msg = document.getElementById("loginMsg");
+
+            if (!email || !password || password.length < 6) {
+                msg.textContent = "Please enter valid credentials.";
+                msg.className = "text-danger";
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/v1/admin/login/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    msg.textContent = "Login successful!";
+                    msg.className = "text-success";
+
+                    // Wait a second for UX, then redirect
+                    setTimeout(() => {
+                        window.location.href = "/admin/dashboard"; // Change this URL to wherever you want to go
+                    }, 1000);
+                } else {
+                    msg.textContent = data.message || "Login failed.";
+                    msg.className = "text-danger";
+                }
+            } catch (err) {
+                msg.textContent = "Server error. Try again later.";
+                msg.className = "text-danger";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
