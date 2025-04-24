@@ -654,6 +654,7 @@ app.route('/admin/dashboard/admins').get(async (req, res) => {
     res.render('admin-admins', {
       admins,
       userRole: user.role,
+      userId: user._id,
       currentPage: page,
       totalPages: Math.ceil(totalUsers / limit),
       searchQuery // Pass search query to retain in the search bar

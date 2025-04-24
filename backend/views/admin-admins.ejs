@@ -146,7 +146,9 @@
                                                     Demote to Reports Manager
                                                 </button>
                                                 <button class="btn btn-danger btn-sm"
-                                                    onclick="confirmAction('remove', '<%= admin.email %>', '<%= admin.name %>')">
+                                                    onclick="event.stopPropagation();if (!this.disabled) confirmAction('remove', '<%= admin.email %>', '<%= admin.name %>')"
+                                                    <%=admin._id.toString()==userId.toString()
+                                                    ? 'disabled title="You cannot remove yourself"' : '' %>>
                                                     Remove
                                                 </button>
                                                 <% } else if (admin.role==='reports manager' && userRole==='admin' ) {
@@ -215,6 +217,7 @@
     <script>
         // Confirmation dialog function
         function confirmAction(action, email, name) {
+
             let actionText = '';
             let actionUrl = '';
 
