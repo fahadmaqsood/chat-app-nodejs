@@ -30,7 +30,14 @@ const userSchema = new Schema(
             lowercase: true,
             trim: true,
         },
-        became_admin_date: {
+
+        role: {
+            type: String,
+            enum: ["admin", "reports manager"],
+            default: "admin",
+            required: true,
+        },
+        dateAdded: {
             type: Date,
             default: Date.now
         },

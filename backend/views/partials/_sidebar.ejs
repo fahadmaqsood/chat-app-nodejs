@@ -1,0 +1,35 @@
+<nav class="col-md-2 sidebar d-flex flex-column position-fixed top-0 start-0 h-100" id="sidebar">
+    <div class="text-white text-center py-3 fs-5 fw-bold border-bottom">Admin Panel</div>
+    <a href="/admin/dashboard/main" class="active"><i class="bi bi-house me-2"></i>Main</a>
+    <a href="/admin/dashboard/users"><i class="bi bi-people me-2"></i>Users</a>
+    <a href="/admin/dashboard/user-reports"><i class="bi bi-flag me-2"></i>User Reports</a>
+    <a href="/admin/dashboard/message-reports"><i class="bi bi-exclamation-diamond me-2"></i>Message
+        Reports</a>
+    <a href="/admin/dashboard/message-reports"><i class="bi bi-megaphone me-2"></i>Complaints</a>
+    <a href="/admin/dashboard/vouchers"><i class="bi bi-ticket-perforated me-2"></i>Vouchers</a>
+    <a href="/admin/dashboard/admins"><i class="bi bi-person-check-fill me-2"></i>Admins</a>
+    <a href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+</nav>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        if (!sidebar) return;
+
+        const currentPath = window.location.pathname;
+        const links = sidebar.querySelectorAll('a[href]');
+
+        links.forEach(link => {
+            const linkPath = link.getAttribute('href');
+
+            // Exact match or starts with (for nested routes)
+            if (currentPath === linkPath ||
+                (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    });
+</script>

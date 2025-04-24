@@ -528,6 +528,147 @@ app.route('/admin/dashboard/users').get(async (req, res) => {
 });
 
 
+app.route('/admin/dashboard/user/:username').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    // Extract the username from the URL parameter
+    const { username } = req.params;
+
+    // console.log("Username from URL:", username);
+
+    // Find the user by their username
+    const targetUser = await User.findOne({ username: username });
+    if (!targetUser) throw new Error("User not found");
+
+    // Pass the target user data to the view
+    res.render('admin-user', { user: targetUser });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/users:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+app.route('/admin/dashboard/admins').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+
+    // Pagination and search logic
+    const searchQuery = req.query.search || '';
+    const currentPage = parseInt(req.query.page) || 1;
+    const itemsPerPage = 10;
+
+    // Define search query filter
+    const searchFilter = searchQuery ? {
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } }
+      ]
+    } : {};
+
+    // Get users with pagination and search filter
+    const totalUsers = await Admin.countDocuments(searchFilter);
+    const totalPages = Math.ceil(totalUsers / itemsPerPage);
+
+    const admins = await Admin.find(searchFilter)
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage);
+
+
+    res.render('admin-admins', {
+      admins,
+      userRole: user.role,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+      searchQuery // Pass search query to retain in the search bar
+    });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/users:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
 
 app.get('/add/quiz', (req, res) => {
   // Route to serve the HTML file

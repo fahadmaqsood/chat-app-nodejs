@@ -78,67 +78,83 @@
             <%- include('partials/_sidebar') %>
 
                 <!-- Main Content -->
-                <!-- Main Content for Users Page -->
+                <!-- Main Content for Admins Page -->
                 <main class="col-md-10 offset-md-2 px-3 px-md-4 content" id="mainContent">
                     <!-- Mobile Hamburger -->
                     <button class="btn btn-outline-secondary d-md-none mt-3" id="toggleSidebar">
                         <i class="bi bi-list"></i>
                     </button>
 
-                    <h2 class="mt-4">All Users</h2>
-                    <p class="text-muted">Click on a user row to view detailed information about their profile.</p>
+                    <h2 class="mt-4">All Admins</h2>
+                    <p class="text-muted">Click on an admin row to view detailed information about their profile.</p>
 
+                    <!-- Button to add a new admin -->
+                    <div class="mb-3">
+                        <a href="/admin/dashboard/admins/add" class="btn btn-primary">
+                            <i class="bi bi-person-plus me-2"></i>Add New Admin
+                        </a>
+                    </div>
 
                     <!-- Search Bar -->
-                    <form method="GET" action="/admin/dashboard/users" class="mb-3">
+                    <form method="GET" action="/admin/dashboard/admins" class="mb-3">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control"
-                                placeholder="Search by username, full name, or email" value="<%= searchQuery %>">
+                            <input type="text" name="search" class="form-control" placeholder="Search by name or email"
+                                value="<%= searchQuery %>">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
                     </form>
 
-
+                    <!-- Admins Table -->
                     <div class="table-responsive mt-4">
                         <table class="table table-bordered table-hover bg-white">
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>Username</th>
-                                    <th>Full Name</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Date Joined</th>
-                                    <th>Subscription Status</th>
+                                    <th>Added</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% users.forEach((user, index)=> { %>
+                                <% admins.forEach((admin, index)=> { %>
                                     <tr style="cursor: pointer;"
-                                        onclick="window.location.href='/admin/dashboard/user/<%= user.username %>'">
+                                        onclick="window.location.href='/admin/dashboard/admin/<%= admin.email %>'">
                                         <td>
                                             <%= index + 1 %>
                                         </td>
                                         <td>
-                                            <%= user.username %>
-                                        </td>
-                                        <td title="<%= user.name %>" class="text-truncate" style="max-width: 150px;">
-                                            <%= user.name %>
+                                            <%= admin.name %>
                                         </td>
                                         <td>
-                                            <%= user.email %>
+                                            <%= admin.email %>
                                         </td>
                                         <td>
-                                            <%= user.account_creation_date.toDateString() %>
+                                            <%= admin.dateAdded.toDateString() %>
                                         </td>
                                         <td>
-                                            <% if (user.subscription_status=="active" ) { %>
-                                                <span class="badge bg-success">Active</span>
-                                                <% } else { %>
-                                                    <span class="badge bg-secondary">
-                                                        Inactive
-                                                    </span>
+                                            <%= admin.role %>
+                                        </td>
+                                        <td>
+                                            <!-- Admin Actions -->
+                                            <% if (admin.role==='admin' && userRole==='admin' ) { %>
+                                                <button class="btn btn-warning btn-sm"
+                                                    onclick="confirmAction('demote', '<%= admin.email %>', '<%= admin.name %>')">
+                                                    Demote to Reports Manager
+                                                </button>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="confirmAction('remove', '<%= admin.email %>', '<%= admin.name %>')">
+                                                    Remove
+                                                </button>
+                                                <% } else if (admin.role==='reports manager' && userRole==='admin' ) {
+                                                    %>
+                                                    <button class="btn btn-primary btn-sm"
+                                                        onclick="confirmAction('promote', '<%= admin.email %>', '<%= admin.name %>')">
+                                                        Promote to Admin
+                                                    </button>
                                                     <% } %>
                                         </td>
                                     </tr>
@@ -148,7 +164,7 @@
                     </div>
 
                     <!-- Pagination Block -->
-                    <nav aria-label="User page navigation" class="mt-4">
+                    <nav aria-label="Admins page navigation" class="mt-4">
                         <ul class="pagination justify-content-center">
                             <% if (currentPage> 1) { %>
                                 <li class="page-item">
@@ -194,6 +210,46 @@
             sidebar.classList.remove('active');
             overlay.classList.add('d-none');
         });
+    </script>
+
+    <script>
+        // Confirmation dialog function
+        function confirmAction(action, email, name) {
+            let actionText = '';
+            let actionUrl = '';
+
+            // Set appropriate text and URL based on action
+            switch (action) {
+                case 'promote':
+                    actionText = `promote ${name} to Admin`;
+                    actionUrl = `/admin/dashboard/admin/promote/${email}`;
+                    break;
+                case 'demote':
+                    actionText = `demote ${name} to Reports Manager`;
+                    actionUrl = `/admin/dashboard/admin/promote/${email}`;
+                    break;
+                case 'remove':
+                    actionText = `remove ${name} from admin team`;
+                    actionUrl = `/admin/dashboard/admin/remove/${email}`;
+                    break;
+            }
+
+            // Show confirmation dialog
+            if (confirm(`Are you sure you want to ${actionText}?`)) {
+                // For demo purposes - just show what would happen
+                alert(`Would normally ${action} ${name} (${email}) by calling: ${actionUrl}`);
+
+                // In a real implementation, you would make an AJAX call or form submission:
+                // fetch(actionUrl, { method: 'POST' })
+                //     .then(response => {
+                //         if (response.ok) {
+                //             window.location.reload();
+                //         } else {
+                //             alert('Action failed');
+                //         }
+                //     });
+            }
+        }
     </script>
 </body>
 
