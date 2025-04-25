@@ -105,7 +105,7 @@
                             </thead>
                             <tbody>
                                 <% reports.forEach((report, index)=> { %>
-                                    <tr onclick="window.location.href='/admin/reports/<%= report._id %>'"
+                                    <tr onclick="window.location.href='/admin/dashboard/user-reports/<%= report._id %>'"
                                         style="cursor: pointer;">
                                         <td>
                                             <%= index + 1 %>
