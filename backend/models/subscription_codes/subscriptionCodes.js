@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 const subscriptionCodesSchema = new mongoose.Schema({
     paypal_subscription_id: {
         type: String,
-        unique: true,
-        required: true
+        unique: false,
+        // required: true
     }, // subscription id received from paypal
 
 
@@ -18,8 +18,8 @@ const subscriptionCodesSchema = new mongoose.Schema({
 
     referral_code: {
         type: String,
-        unique: true,
-        required: true
+        unique: false,
+        // required: true
     },
 
 
@@ -39,7 +39,7 @@ const subscriptionCodesSchema = new mongoose.Schema({
 
     price_paid: {
         type: String,
-        required: true // Make it a required field
+        // required: true // Make it a required field
     }, // Price paid for the subscription
 
     isUsed: {
@@ -60,12 +60,12 @@ const subscriptionCodesSchema = new mongoose.Schema({
 
     subscription_date: {
         type: Date,
-        required: true
+        // required: true
     },
 
     next_billing_date: {
         type: Date,
-        required: true
+        // required: true
     },
 
 

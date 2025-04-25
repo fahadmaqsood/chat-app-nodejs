@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 1rem;
+        }
+
+        .sidebar a {
+            color: #ddd;
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+
+        .stat-card {
+            border-left: 5px solid #0d6efd;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive Sidebar */
+        @media (max-width: 767.98px) {
+            #sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 1050;
+                background-color: #343a40;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #mainContent {
+                padding-left: 8 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay for closing sidebar -->
+    <div id="sidebarOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none"
+        style="z-index: 1040; background-color: rgba(0,0,0,0.5);"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <%- include('partials/_sidebar') %>
+
+                <!-- Main Content -->
+                <!-- Main Content for Vouchers Page -->
+                <main class="col-md-10 offset-md-2 px-3 px-md-4 content" id="mainContent">
+                    <!-- Mobile Hamburger -->
+                    <button class="btn btn-outline-secondary d-md-none mt-3" id="toggleSidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <h2 class="mt-4">Voucher Management</h2>
+                    <p class="text-muted">Manage all the subscription vouchers created for users.</p>
+
+                    <!-- Button for Creating New Voucher -->
+                    <button class="btn btn-primary my-3" id="createVoucherBtn">Create New Voucher</button>
+
+                    <!-- Vouchers Table -->
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered table-hover bg-white">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Subscription Code</th>
+                                    <th>Months</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% vouchers.forEach((voucher, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.subscription_code %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.months %>
+                                        </td>
+                                        <td>
+                                            <% if (voucher.isUsed) { %>
+                                                <span class="badge bg-secondary">Used</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-success">Active</span>
+                                                    <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (!voucher.isUsed) { %>
+                                                <button class="btn btn-danger btn-sm delete-voucher"
+                                                    data-voucher-id="<%= voucher._id %>"
+                                                    data-voucher-code="<%= voucher.subscription_code %>">
+                                                    <i class="bi bi-trash me-2"></i>Delete Voucher
+                                                </button>
+                                                <% } else { %>
+                                                    <span class="text-muted">N/A</span>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Block -->
+                    <nav aria-label="Voucher page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <% if (currentPage> 1) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                                </li>
+                                <% } %>
+
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                            <a class="page-link" href="?page=<%= i %>">
+                                                <%= i %>
+                                            </a>
+                                        </li>
+                                        <% } %>
+
+                                            <% if (currentPage < totalPages) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                                                </li>
+                                                <% } %>
+                        </ul>
+                    </nav>
+                </main>
+
+
+
+                <!-- Modal for Creating New Voucher -->
+                <div class="modal fade" id="createVoucherModal" tabindex="-1" aria-labelledby="createVoucherModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createVoucherModalLabel">Create New Voucher</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Updated form to only ask for months -->
+                                <form id="createVoucherForm">
+                                    <div class="mb-3">
+                                        <label for="months" class="form-label">Free Months</label>
+                                        <input type="number" class="form-control" id="months" required>
+                                    </div>
+                                    <!-- Info message about the months -->
+                                    <div class="mb-3">
+                                        <small class="form-text text-muted">
+                                            The subscription period will begin upon the redemption of the subscription
+                                            code.
+                                        </small>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create Voucher</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('d-none');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.add('d-none');
+        });
+
+
+
+
+        // Open Create Voucher Modal
+        document.getElementById('createVoucherBtn').addEventListener('click', function () {
+            const modal = new bootstrap.Modal(document.getElementById('createVoucherModal'));
+            modal.show();
+        });
+
+        // Handle Form Submission
+        document.getElementById('createVoucherForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Gather form data
+            const data = {
+                months: document.getElementById('months').value
+            };
+
+            // Make AJAX request using Fetch API
+            fetch('/api/v1/subscription-codes/generate-from-admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.statusCode === 201) {
+                        alert('Voucher created successfully!');
+                        // Hide the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('createVoucherModal'));
+                        modal.hide();
+                        window.location.reload();  // Reload the vouchers table
+                    } else {
+                        alert('Error creating voucher: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error creating voucher. Please try again later.');
+                });
+        });
+
+
+
+
+
+
+        // Handle Voucher Deletion
+        document.querySelectorAll('.delete-voucher').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const voucherId = this.dataset.voucherId;
+                const voucherCode = this.dataset.voucherCode;
+
+                if (confirm(`Are you sure you want to delete voucher ${voucherCode}? This action cannot be undone.`)) {
+                    // Disable button during processing
+                    this.disabled = true;
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...';
+
+                    fetch(`/api/v1/subscription-codes/delete/${voucherId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Add CSRF token if needed
+                            // 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the row from the table
+                                this.closest('tr').remove();
+                                // Optionally show a success message
+                                alert('Voucher deleted successfully!');
+                            } else {
+                                throw new Error(data.message || 'Failed to delete voucher');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error deleting voucher: ' + error.message);
+                            // Re-enable button
+                            this.disabled = false;
+                            this.innerHTML = '<i class="bi bi-trash me-2"></i>Delete Voucher';
+                        });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

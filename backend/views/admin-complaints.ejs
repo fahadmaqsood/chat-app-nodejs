@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 1rem;
+        }
+
+        .sidebar a {
+            color: #ddd;
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+
+        .stat-card {
+            border-left: 5px solid #0d6efd;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive Sidebar */
+        @media (max-width: 767.98px) {
+            #sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 1050;
+                background-color: #343a40;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #mainContent {
+                padding-left: 8 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay for closing sidebar -->
+    <div id="sidebarOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none"
+        style="z-index: 1040; background-color: rgba(0,0,0,0.5);"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <%- include('partials/_sidebar') %>
+
+                <!-- Main Content -->
+                <main class="col-md-10 offset-md-2 px-3 px-md-4 content" id="mainContent">
+                    <!-- Mobile Hamburger -->
+                    <button class="btn btn-outline-secondary d-md-none mt-3" id="toggleSidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <h2 class="mt-4">Complaints</h2>
+                    <p class="text-muted">All complaints submitted by users will be listed below.</p>
+
+                    <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Reporter</th>
+                                <th>Rating</th>
+                                <th>Rating Description</th>
+                                <th>Categories</th>
+                                <th>Actual Complaint</th>
+                                <th>Status</th>
+                                <th>Closed By</th>
+                                <th>Reviewer Remarks</th>
+                                <th>Submitted At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% complaints.forEach((complaint, index)=> { %>
+                                <tr onclick="window.location.href='/admin/dashboard/complaints/<%= complaint._id %>'"
+                                    style="cursor: pointer;">
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= complaint.reporterId?.username || 'N/A' %>
+                                    </td>
+                                    <td>
+                                        <%= complaint.rating %>
+                                    </td>
+                                    <td>
+                                        <%= complaint.ratingDescription %>
+                                    </td>
+                                    <td>
+                                        <%= complaint.complaintCategories.join(', ') %></td>
+            <td><%= complaint.actualComplaint %></td>
+            <td>
+                <span class="badge <%= complaint.complaintStatus === ' closed' ? 'bg-success' : 'bg-warning text-dark'
+                                            %>">
+                                            <%= complaint.complaintStatus %>
+                                                </span>
+                                    </td>
+                                    <td>
+                                        <%= complaint.complaintClosedBy?.name || '—' %>
+                                    </td>
+                                    <td>
+                                        <%= complaint.reviewerRemarks || '—' %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(complaint.createdAt).toDateString() %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+
+
+
+        </div>
+
+
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination">
+                    <% if (currentPage> 1) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                        </li>
+                        <% } else { %>
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                            <% } %>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+                                        <% if (currentPage < totalPages) { %>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                                            </li>
+                                            <% } else { %>
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">Next</span>
+                                                </li>
+                                                <% } %>
+                </ul>
+            </nav>
+        </div>
+
+
+
+        </main>
+
+
+
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('d-none');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.add('d-none');
+        });
+    </script>
+</body>
+
+</html>

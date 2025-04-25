@@ -2,6 +2,7 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 
 import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes.js';
 import { User } from "../../models/auth/user.models.js";
+import mongoose from "mongoose";
 
 export const generateUniqueCode = async (prefix) => {
     let code;
@@ -12,6 +13,48 @@ export const generateUniqueCode = async (prefix) => {
         isUnique = !(await SubscriptionCodes.exists({ subscription_code: code }) || await SubscriptionCodes.exists({ referral_code: code }));
     }
     return code;
+};
+
+
+
+// Generate Subscription Code
+export const generateSubscriptionCodeAdmin = async (req, res) => {
+    try {
+        const { months } = req.body;
+
+        // Validate months
+        if (!months) {
+            return res.status(400).json(new ApiResponse(400, {}, "Missing 'months' parameter"));
+        }
+
+
+        const parsedMonths = parseInt(months, 10);
+        if (isNaN(parsedMonths) || parsedMonths <= 0) {
+            return res.status(400).json(new ApiResponse(400, {}, "Invalid or missing 'months' parameter"));
+        }
+
+
+        const user_subscription_code = await generateUniqueCode('SB'); // Generate unique subscription code
+
+        // Create new subscription code
+        const newSubscription = new SubscriptionCodes({
+            subscription_code: user_subscription_code,
+            months: parsedMonths,
+        });
+
+
+        // Save to database
+        await newSubscription.save();
+
+        // Output the generated subscription and referral code
+        res.status(201).json(new ApiResponse(201, {
+            subscription_code: newSubscription.subscription_code
+        }, "Subscription code generated successfully."));
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(new ApiResponse(500, {}, 'Server error while generating subscription code'));
+    }
 };
 
 
@@ -217,5 +260,28 @@ export const redeemSubscriptionCode = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json(new ApiResponse(500, {}, 'Server error while redeeming subscription code'));
+    }
+};
+
+
+
+export const deleteSubscriptionCode = async (req, res) => {
+    const { voucherId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(voucherId)) {
+        return res.status(400).json(new ApiResponse(400, {}, "Invalid voucher ID"));
+    }
+
+    try {
+        const deletedCode = await SubscriptionCodes.findByIdAndDelete(voucherId);
+
+        if (!deletedCode) {
+            return res.status(404).json(new ApiResponse(404, {}, "Subscription code not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, {}, "Subscription code deleted successfully"));
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(new ApiResponse(500, {}, "Failed to delete subscription code"));
     }
 };

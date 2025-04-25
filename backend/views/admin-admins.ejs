@@ -90,9 +90,9 @@
 
                     <!-- Button to add a new admin -->
                     <div class="mb-3">
-                        <a href="/admin/dashboard/admins/add" class="btn btn-primary">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAdminModal">
                             <i class="bi bi-person-plus me-2"></i>Add New Admin
-                        </a>
+                        </button>
                     </div>
 
                     <!-- Search Bar -->
@@ -116,13 +116,15 @@
                                     <th>Email</th>
                                     <th>Added</th>
                                     <th>Role</th>
+                                    <th>User Reports Closed</th>
+                                    <th>Message Reports Closed</th>
+                                    <th>Complaints Answered</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% admins.forEach((admin, index)=> { %>
-                                    <tr style="cursor: pointer;"
-                                        onclick="window.location.href='/admin/dashboard/admin/<%= admin.email %>'">
+                                    <tr>
                                         <td>
                                             <%= index + 1 %>
                                         </td>
@@ -139,10 +141,21 @@
                                             <%= admin.role %>
                                         </td>
                                         <td>
+                                            <%= admin.closedReports %>
+                                        </td>
+                                        <td>
+                                            <%= admin.closedMessageReports %>
+                                        </td>
+                                        <td>
+                                            <%= admin.closedComplaints %>
+                                        </td>
+                                        <td>
                                             <!-- Admin Actions -->
                                             <% if (admin.role==='admin' && userRole==='admin' ) { %>
                                                 <button class="btn btn-warning btn-sm"
-                                                    onclick="confirmAction('demote', '<%= admin.email %>', '<%= admin.name %>')">
+                                                    onclick="event.stopPropagation();if (!this.disabled) confirmAction('demote', '<%= admin.email %>', '<%= admin.name %>')"
+                                                    <%=admin._id.toString()==userId.toString()
+                                                    ? 'disabled title="You cannot remove yourself"' : '' %>>
                                                     Demote to Reports Manager
                                                 </button>
                                                 <button class="btn btn-danger btn-sm"
@@ -157,7 +170,20 @@
                                                         onclick="confirmAction('promote', '<%= admin.email %>', '<%= admin.name %>')">
                                                         Promote to Admin
                                                     </button>
+
+                                                    <button class="btn btn-danger btn-sm"
+                                                        onclick="event.stopPropagation();if (!this.disabled) confirmAction('remove', '<%= admin.email %>', '<%= admin.name %>')">
+                                                        Remove
+                                                    </button>
                                                     <% } %>
+
+
+                                                        <% if (userRole==='admin' ) { %>
+                                                            <button class="btn btn-primary btn-sm"
+                                                                onclick="confirmAction('reset-password', '<%= admin.email %>', '<%= admin.name %>')">
+                                                                Reset Password
+                                                            </button>
+                                                            <% } %>
                                         </td>
                                     </tr>
                                     <% }) %>
@@ -193,6 +219,84 @@
                     </nav>
                 </main>
 
+
+                <!-- Add Admin Modal -->
+                <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form id="addAdminForm" class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addAdminModalLabel">Add New Admin</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="adminName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="adminName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adminEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="adminEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adminPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" id="adminPassword"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adminRole" class="form-label">Role</label>
+                                    <select class="form-select" name="role" id="adminRole" required>
+                                        <option value="admin">Admin</option>
+                                        <option value="reports manager">Reports Manager</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Add Admin</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- Reset Password Modal -->
+                <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form id="resetPasswordForm" class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resetPasswordModalLabel">Reset Password</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="resetEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="resetEmail" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="resetName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="resetName" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" minlength="6" required>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Reset Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
         </div>
     </div>
 
@@ -215,42 +319,149 @@
     </script>
 
     <script>
-        // Confirmation dialog function
-        function confirmAction(action, email, name) {
+        document.getElementById("addAdminForm").addEventListener("submit", async function (e) {
+            e.preventDefault(); // Prevent default form submission
 
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const data = {
+                name: formData.get("name"),
+                email: formData.get("email"),
+                password: formData.get("password"),
+                role: formData.get("role")
+            };
+
+            try {
+                const res = await fetch("/api/v1/admin/add-admin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert("✅ " + result.message);
+                    form.reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("addAdminModal"));
+                    modal.hide();
+                    // optionally refresh the admin list here
+
+                    window.location.reload(); // Reload the page to see the new admin
+                } else {
+                    alert("❌ " + result.message || "Failed to add admin.");
+                }
+            } catch (error) {
+                alert("❌ Error: " + error.message);
+            }
+        });
+    </script>
+
+    <script>
+        // Handle reset password action
+        function confirmAction(action, email, name) {
             let actionText = '';
             let actionUrl = '';
+            let body = { email: email };  // Prepare the body for the request
 
             // Set appropriate text and URL based on action
             switch (action) {
+                case 'reset-password':
+                    actionText = `reset ${name}'s password`;
+                    actionUrl = '/api/v1/admin/reset-password';  // URL for reset password API
+                    break;
                 case 'promote':
                     actionText = `promote ${name} to Admin`;
-                    actionUrl = `/admin/dashboard/admin/promote/${email}`;
+                    actionUrl = '/api/v1/admin/change-role';
+                    body.role = 'admin';  // Set the new role in the body
                     break;
                 case 'demote':
                     actionText = `demote ${name} to Reports Manager`;
-                    actionUrl = `/admin/dashboard/admin/promote/${email}`;
+                    actionUrl = '/api/v1/admin/change-role';
+                    body.role = 'reports manager';  // Set the new role in the body
                     break;
                 case 'remove':
                     actionText = `remove ${name} from admin team`;
-                    actionUrl = `/admin/dashboard/admin/remove/${email}`;
+                    actionUrl = '/api/v1/admin/remove-admin';  // API endpoint for removing admin
                     break;
             }
 
             // Show confirmation dialog
-            if (confirm(`Are you sure you want to ${actionText}?`)) {
-                // For demo purposes - just show what would happen
-                alert(`Would normally ${action} ${name} (${email}) by calling: ${actionUrl}`);
+            if (action === 'reset-password') {
+                // Populate modal with admin's email and name
+                document.getElementById('resetEmail').value = email;
+                document.getElementById('resetName').value = name;
 
-                // In a real implementation, you would make an AJAX call or form submission:
-                // fetch(actionUrl, { method: 'POST' })
-                //     .then(response => {
-                //         if (response.ok) {
-                //             window.location.reload();
-                //         } else {
-                //             alert('Action failed');
-                //         }
-                //     });
+                // Show the modal for resetting password
+                const modal = new bootstrap.Modal(document.getElementById('resetPasswordModal'));
+                modal.show();
+
+                // Reset the form and submit password reset
+                document.getElementById('resetPasswordForm').onsubmit = async function (e) {
+                    e.preventDefault();
+                    const newPassword = document.getElementById('newPassword').value;
+
+                    if (!newPassword) {
+                        alert("❌ Please enter a new password.");
+                        return;
+                    }
+
+                    // Send the POST request to reset the password
+                    const resetData = {
+                        email: email,
+                        newPassword: newPassword
+                    };
+
+                    try {
+                        const res = await fetch(actionUrl, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(resetData)
+                        });
+
+                        const result = await res.json();
+
+                        if (res.ok) {
+                            alert("✅ Password reset successfully!");
+                            const modalInstance = bootstrap.Modal.getInstance(document.getElementById('resetPasswordModal'));
+                            modalInstance.hide();
+                            window.location.reload(); // Reload to see updated details
+                        } else {
+                            alert("❌ " + result.message || "Failed to reset password.");
+                        }
+                    } catch (error) {
+                        alert("❌ Error: " + error.message);
+                    }
+                };
+            } else {
+                // For other actions like promote, demote, remove, etc.
+                if (confirm(`Are you sure you want to ${actionText}?`)) {
+                    fetch(actionUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(body)  // Send the email to identify the admin to remove or promote
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log(result);  // Log the result for debugging
+                            if (result.success) {
+                                alert(`✅ ${result.message}`);
+                                window.location.reload();  // Reload the page to reflect changes
+                            } else {
+                                alert(`❌ ${result.message || "Failed to process action."}`);
+                            }
+                        })
+                        .catch(error => {
+                            alert(`❌ Error: ${error.message}`);
+                        });
+                }
             }
         }
     </script>

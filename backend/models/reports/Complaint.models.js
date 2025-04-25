@@ -29,7 +29,15 @@ const complaintSchema = new mongoose.Schema({
     },
     reviewerRemarks: {
         type: String, // Remarks from the reviewer once the complaint is reviewed
-    }
+    },
+    complaintClosedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin'
+    },
+    closedDate: {
+        type: Date,
+        default: null // Date when the complaint was closed
+    },
 }, { timestamps: true });
 
 const Complaint = mongoose.model('Complaint', complaintSchema);

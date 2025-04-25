@@ -153,6 +153,10 @@ import { User } from "./models/auth/user.models.js";
 import ReportedMessage from "./models/reports/ReportedMessage.models.js";
 import Complaint from "./models/reports/Complaint.models.js";
 import UserReport from "./models/reports/userReports.models.js";
+import { ChatMessage } from "./models/chat-app/message.models.js";
+
+
+import subscriptionCodes from "./models/subscription_codes/subscriptionCodes.js";
 
 
 import jwt from "jsonwebtoken";
@@ -651,6 +655,89 @@ app.route('/admin/dashboard/admins').get(async (req, res) => {
       .limit(itemsPerPage);
 
 
+    const adminIds = admins.map(admin => admin._id);
+
+    const closedReportsByAdmin = await UserReport.aggregate([
+      {
+        $match: {
+          reportStatus: 'closed',
+          reportClosedBy: { $in: adminIds }
+        }
+      },
+      {
+        $group: {
+          _id: '$reportClosedBy',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const closedCountMap = {};
+    closedReportsByAdmin.forEach(item => {
+      closedCountMap[item._id.toString()] = item.count;
+    });
+
+    admins.forEach(admin => {
+      const idStr = admin._id.toString();
+      admin.closedReports = closedCountMap[idStr] || 0;
+    });
+
+
+    const closedMessageReportsByAdmin = await ReportedMessage.aggregate([
+      {
+        $match: {
+          reportStatus: 'closed',
+          reportClosedBy: { $in: adminIds }
+        }
+      },
+      {
+        $group: {
+          _id: '$reportClosedBy',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+
+    const closedMessageMap = {};
+    closedMessageReportsByAdmin.forEach(item => {
+      closedMessageMap[item._id.toString()] = item.count;
+    });
+
+    admins.forEach(admin => {
+      const idStr = admin._id.toString();
+      admin.closedMessageReports = closedMessageMap[idStr] || 0;
+    });
+
+
+
+    const closedComplaintsByAdmin = await Complaint.aggregate([
+      {
+        $match: {
+          complaintStatus: 'closed',
+          complaintClosedBy: { $in: adminIds }
+        }
+      },
+      {
+        $group: {
+          _id: '$complaintClosedBy',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+
+    const closedComplaintMap = {};
+    closedComplaintsByAdmin.forEach(item => {
+      closedComplaintMap[item._id.toString()] = item.count;
+    });
+
+    admins.forEach(admin => {
+      const idStr = admin._id.toString();
+      admin.closedComplaints = closedComplaintMap[idStr] || 0;
+    });
+
+
     res.render('admin-admins', {
       admins,
       userRole: user.role,
@@ -669,7 +756,494 @@ app.route('/admin/dashboard/admins').get(async (req, res) => {
   }
 });
 
+app.route('/admin/logout').get(async (req, res) => {
+  try {
+    // Clear all cookies
+    Object.keys(req.cookies).forEach(cookieName => {
+      // For each cookie, clear it (both HttpOnly and non-HttpOnly)
+      res.clearCookie(cookieName, { httpOnly: true, path: '/' });
+    });
 
+    // Optionally, you can clear cookies with specific paths or domains if needed.
+    // res.clearCookie('auth_token', { httpOnly: true, path: '/' });
+    // res.clearCookie('other_cookie_name', { path: '/' });
+
+    // Redirect to the login page after successful logout
+    res.redirect('/admin');
+  } catch (error) {
+    console.error("Error during logout:", error);
+    res.status(500).send('Something went wrong while logging out.');
+  }
+});
+
+
+
+app.route('/admin/dashboard/vouchers').get(async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 10;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken();
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    const totalVouchers = await subscriptionCodes.countDocuments();
+    const totalPages = Math.ceil(totalVouchers / limit);
+
+    const vouchers = await subscriptionCodes.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.render('vouchers', {
+      vouchers,
+      currentPage: page,
+      totalPages,
+      userRole: user.role,
+      userId: user._id
+    });
+
+  } catch (error) {
+    console.error("Error in /admin/dashboard/vouchers:", error);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+app.get('/admin/dashboard/user-reports', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken();
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+
+    const totalReports = await UserReport.countDocuments();
+    const totalPages = Math.ceil(totalReports / limit);
+
+    const reports = await UserReport.find()
+      .populate('reporterId', 'username')
+      .populate('reportedId', 'username')
+      .populate('reportClosedBy', 'name')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.render('admin-userReports', {
+      reports,
+      userRole: user.role,
+      userId: user._id,
+      currentPage: page,
+      totalPages
+    });
+
+  } catch (error) {
+    console.error("Error in /admin/dashboard/user-reports:", error);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+
+
+app.get('/admin/dashboard/message-reports', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken();
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+
+    const totalReports = await ReportedMessage.countDocuments();
+    const totalPages = Math.ceil(totalReports / limit);
+
+    const messageReports = await ReportedMessage.find()
+      .populate('reportedBy', 'username')
+      .populate('reportedMessage')
+      .populate('reportClosedBy', 'name')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.render('admin-messageReports', {
+      messageReports,
+      userRole: user.role,
+      userId: user._id,
+      currentPage: page,
+      totalPages
+    });
+
+  } catch (error) {
+    console.error("Error in /admin/dashboard/message-reports:", error);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+
+app.route('/admin/dashboard/message-reports/:messageId').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    // Extract the username from the URL parameter
+    const { messageId } = req.params;
+
+
+    // Find the user by their username
+    const complaint = await ReportedMessage.findById(messageId)
+      .populate('reportedMessage')
+      .populate('reportedBy', 'username')
+      .populate('reportClosedBy', 'name');
+
+    if (!complaint) throw new Error("complaint not found");
+
+
+    if (complaint?.reportedMessage) {
+      const targetMsg = await complaint.reportedMessage.populate('sender', 'username');
+
+      const previousMessages = await ChatMessage.find({
+        chat: targetMsg.chat,
+        createdAt: { $lt: targetMsg.createdAt }
+      })
+        .populate('sender', 'username')
+        .sort({ createdAt: -1 })
+        .limit(3)
+        .lean(); // optional: speeds up queries
+
+      // Include reportedMessage in the msgs array, but ensure it's at the end
+      complaint.messages = [...previousMessages.reverse(), targetMsg];
+    }
+
+    // Pass the target user data to the view
+    res.render('admin-message-report-info', { report: complaint });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/complaints/:complaintId:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+
+app.route('/admin/dashboard/user-reports/:reportId').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    // Extract the username from the URL parameter
+    const { reportId } = req.params;
+
+
+    // Find the user by their username
+    const complaint = await UserReport.findById(reportId)
+      .populate('reporterId', 'username')
+      .populate('reportedId', 'username')
+      .populate('reportClosedBy', 'name');
+
+    if (!complaint) throw new Error("complaint not found");
+
+    // Pass the target user data to the view
+    res.render('admin-user-report-info', { report: complaint });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/complaints/:complaintId:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+
+
+app.get('/admin/dashboard/complaints', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken();
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+
+    const totalReports = await Complaint.countDocuments();
+    const totalPages = Math.ceil(totalReports / limit);
+
+    const complaints = await Complaint.find()
+      .populate('reporterId', 'username')
+      .populate('complaintClosedBy', 'name')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.render('admin-complaints', {
+      complaints,
+      userRole: user.role,
+      userId: user._id,
+      currentPage: page,
+      totalPages
+    });
+
+  } catch (error) {
+    console.error("Error in /admin/dashboard/complaints:", error);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
+
+
+
+app.route('/admin/dashboard/complaints/:complaintId').get(async (req, res) => {
+
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+
+
+  try {
+    if (!accessToken || !refreshToken) throw new Error("Tokens missing");
+
+    const decodedAccessToken = jwt.decode(accessToken);
+    const decodedRefreshToken = jwt.decode(refreshToken);
+    if (!decodedAccessToken || !decodedRefreshToken) throw new Error("Invalid token(s)");
+
+    const user = await Admin.findById(decodedAccessToken._id);
+    if (!user || user.refreshToken !== refreshToken) throw new Error("Invalid or mismatched tokens");
+
+    try {
+      // Try to verify access token
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        // Access token expired, verify and refresh
+        const validRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (validRefresh._id !== decodedAccessToken._id) throw new Error("Invalid refresh token");
+
+        const newAccessToken = user.generateAccessToken(); // Your model method
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 // 1 hour
+        });
+      } else {
+        throw new Error("Invalid access token");
+      }
+    }
+
+    // Extract the username from the URL parameter
+    const { complaintId } = req.params;
+
+
+    // Find the user by their username
+    const complaint = await Complaint.findById(complaintId)
+      .populate('reporterId')
+      .populate('complaintClosedBy', 'name');
+
+    if (!complaint) throw new Error("complaint not found");
+
+
+    // Rename reporterId to user
+    const complaintData = {
+      ...complaint.toObject(),
+      complainedBy: complaint.reporterId
+    };
+    delete complaintData.reporterId;
+
+    // Pass the target user data to the view
+    res.render('admin-complaint-info', { complaint: complaintData });
+
+
+  } catch (err) {
+    console.error("Error in /admin/dashboard/complaints/:complaintId:", err);
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.redirect('/admin/');
+  }
+});
 
 app.get('/add/quiz', (req, res) => {
   // Route to serve the HTML file

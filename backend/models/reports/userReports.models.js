@@ -27,6 +27,10 @@ const userReportSchema = new mongoose.Schema({
         type: String,
         enum: ['in review', 'closed']
     },
+    reportClosedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin'
+    },
     reviewerRemarks: {
         type: String
     }

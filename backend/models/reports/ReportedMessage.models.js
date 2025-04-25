@@ -33,6 +33,15 @@ const reportedMessageSchema = new mongoose.Schema(
         reviewerRemarks: {
             type: String, // Remarks from the reviewer when the report is resolved
         },
+        reportClosedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Admin'
+        },
+
+        closedDate: {
+            type: Date,
+            default: null // Date when the complaint was closed
+        },
     },
     { timestamps: true } // Automatically add createdAt and updatedAt fields
 );

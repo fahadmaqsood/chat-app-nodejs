@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 1rem;
+        }
+
+        .sidebar a {
+            color: #ddd;
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+
+        .stat-card {
+            border-left: 5px solid #0d6efd;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive Sidebar */
+        @media (max-width: 767.98px) {
+            #sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 1050;
+                background-color: #343a40;
+                width: 250px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #mainContent {
+                padding-left: 8 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay for closing sidebar -->
+    <div id="sidebarOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none"
+        style="z-index: 1040; background-color: rgba(0,0,0,0.5);"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <%- include('partials/_sidebar') %>
+
+                <!-- Main Content -->
+                <!-- Main Content for User Page -->
+                <main class="col-md-10 offset-md-2 px-3 px-md-4 content" id="mainContent">
+                    <!-- Mobile Hamburger -->
+                    <button class="btn btn-outline-secondary d-md-none mt-3" id="toggleSidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+
+                    <h2 class="mt-4">User Profile Report</h2>
+
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+
+                            <div class="mt-4">
+                                <h5>Reported Person</h5>
+                                <p>
+                                    <a href="/admin/dashboard/user/<%= report.reportedId.username %>" target="_blank">
+                                        <%= report.reportedId.username %>
+                                    </a>
+                                    (Also check their profile on the app for their posts and other relevant activity
+                                    based on the report)
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <h5>Report By</h5>
+                                <p>
+                                    <a href="/admin/dashboard/user/<%= report.reporterId.username %>" target="_blank">
+                                        <%= report.reporterId.username %>
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <h5>Report Reason</h5>
+                                <p>
+                                    <%= report.reportReason || 'No reason provided.' %>
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <h5>Report Reason Description</h5>
+                                <p>
+                                    <%= report.reportReasonDescription || 'No report reason description provided.' %>
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <h5>Additional Context</h5>
+                                <p>
+                                    <%= report.additionalContext || 'No additional context provided.' %>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% if (report.status !=='closed' ) { %>
+                        <div class="mt-4 d-flex flex-column gap-2">
+                            <h5>Actions</h5>
+
+                            <button class="btn btn-danger w-100"
+                                onclick="terminateUserAndCloseReport('<%= report._id %>')">
+                                <i class="bi bi-person-x"></i> Terminate User & Close Report
+                            </button>
+
+                            <button class="btn btn-success w-100" onclick="markAsNotViolation('<%= report._id %>')">
+                                <i class="bi bi-check-circle"></i> Does Not Violate Our Guidelines
+                            </button>
+
+                            <div class="text-center">OR</div>
+
+                            <div>
+                                <textarea id="closureMessage" class="form-control mb-2" rows="3"
+                                    placeholder="Write a message for closure..."></textarea>
+                                <button class="btn btn-secondary w-100"
+                                    onclick="closeReportWithMessage('<%= report._id %>')">
+                                    <i class="bi bi-envelope-check"></i> Close Report with Message
+                                </button>
+                            </div>
+                        </div>
+                        <% } else { %>
+                            <div class="mt-4">
+                                <h5>Report Closed</h5>
+                                <p>
+                                    Closed by:
+                                    <%= report.closedBy?.username || 'Unknown' %>
+                                        on <%= new Date(report.closedAt).toLocaleString() %>
+                                </p>
+
+                                <% if (report.closureMessage) { %>
+                                    <h6>Closure Remarks</h6>
+                                    <p>
+                                        <%= report.closureMessage %>
+                                    </p>
+                                    <% } else { %>
+                                        <p><em>No closure remarks provided.</em></p>
+                                        <% } %>
+                            </div>
+                            <% } %>
+
+                                <div class="mb-3"></div>
+
+
+                </main>
+
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        async function deleteMessageAndCloseReport(reportId) {
+            const confirmed = confirm("Are you sure you want to delete the message and close the report?");
+            if (!confirmed) return;
+
+            const res = await fetch(`/admin/reports/${reportId}/delete-and-close`, { method: 'POST' });
+            if (res.ok) location.reload();
+            else alert("Failed to delete message and close report.");
+        }
+
+        async function terminateUserAndCloseReport(reportId) {
+            const confirmed = confirm("Are you sure you want to terminate the user and close the report?");
+            if (!confirmed) return;
+
+            const res = await fetch(`/admin/reports/${reportId}/terminate-user`, { method: 'POST' });
+            if (res.ok) location.reload();
+            else alert("Failed to terminate user and close report.");
+        }
+
+
+        async function markAsNotViolation(reportId) {
+            const confirmed = confirm("Mark this report as not a violation and close it?");
+            if (!confirmed) return;
+
+            const res = await fetch(`/admin/reports/${reportId}/not-violation`, { method: 'POST' });
+            if (res.ok) location.reload();
+            else alert("Failed to mark as not a violation.");
+        }
+
+        async function closeReportWithMessage(reportId) {
+            const message = document.getElementById("closureMessage").value.trim();
+            if (!message) return alert("Please enter a message.");
+
+            const res = await fetch(`/admin/reports/${reportId}/close-with-message`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+
+            if (res.ok) location.reload();
+            else alert("Failed to close report with message.");
+        }
+    </script>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('d-none');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.add('d-none');
+        });
+    </script>
+</body>
+
+</html>
