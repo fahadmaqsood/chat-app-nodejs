@@ -518,7 +518,7 @@ app.route('/admin/dashboard/users').get(async (req, res) => {
 
     res.render('admin-users', {
       users,
-      currentPage: page,
+      page: page,
       totalPages: Math.ceil(totalUsers / limit),
       searchQuery // Pass search query to retain in the search bar
     });
