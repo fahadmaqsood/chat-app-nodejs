@@ -137,7 +137,7 @@ const getProfileInfo = async (req, res) => {
         // Check if the user's account is scheduled for deletion
         const scheduledDeletion = await ScheduledAccountDeletion.findOne({ user: userId }).lean();
         user.isScheduledForDeletion = scheduledDeletion ? scheduledDeletion.status === 'scheduled' : false;
-
+        user.isAccountTerminated = user.account_termination_date ? new Date(user.account_termination_date) < new Date() : false;
 
         return res
             .status(200)
