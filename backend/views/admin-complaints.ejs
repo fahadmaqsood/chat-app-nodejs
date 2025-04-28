@@ -122,8 +122,8 @@
                                         <%= complaint.complaintCategories.join(', ') %></td>
             <td><%= complaint.actualComplaint %></td>
             <td>
-                <span class="badge <%= complaint.complaintStatus === ' closed' ? 'bg-success' : 'bg-warning text-dark'
-                                            %>">
+                <span 
+                class="badge <%= complaint.complaintStatus === "closed" ? ' bg-success' : 'bg-warning text-dark' %>">
                                             <%= complaint.complaintStatus %>
                                                 </span>
                                     </td>

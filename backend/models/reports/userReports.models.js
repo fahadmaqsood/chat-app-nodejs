@@ -33,7 +33,11 @@ const userReportSchema = new mongoose.Schema({
     },
     reviewerRemarks: {
         type: String
-    }
+    },
+    closedDate: {
+        type: Date,
+        default: null // Date when the complaint was closed
+    },
 }, { timestamps: true });
 
 const UserReport = mongoose.model('UserReport', userReportSchema);

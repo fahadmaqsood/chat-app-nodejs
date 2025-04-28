@@ -131,7 +131,7 @@
                         </div>
                     </div>
 
-                    <% if (report.status !=='closed' ) { %>
+                    <% if (report.reportStatus !=='closed' ) { %>
                         <div class="mt-4 d-flex flex-column gap-2">
                             <h5>Actions</h5>
 
@@ -144,7 +144,7 @@
                                 <i class="bi bi-check-circle"></i> Does Not Violate Our Guidelines
                             </button>
 
-                            <div class="text-center">OR</div>
+                            <!--<div class="text-center">OR</div>
 
                             <div>
                                 <textarea id="closureMessage" class="form-control mb-2" rows="3"
@@ -153,21 +153,21 @@
                                     onclick="closeReportWithMessage('<%= report._id %>')">
                                     <i class="bi bi-envelope-check"></i> Close Report with Message
                                 </button>
-                            </div>
+                            </div>-->
                         </div>
                         <% } else { %>
                             <div class="mt-4">
                                 <h5>Report Closed</h5>
                                 <p>
                                     Closed by:
-                                    <%= report.closedBy?.username || 'Unknown' %>
-                                        on <%= new Date(report.closedAt).toLocaleString() %>
+                                    <%= report.reportClosedBy?.name || 'Unknown' %>
+                                        on <%= new Date(report.closedDate).toLocaleString() %>
                                 </p>
 
-                                <% if (report.closureMessage) { %>
+                                <% if (report.reviewerRemarks) { %>
                                     <h6>Closure Remarks</h6>
                                     <p>
-                                        <%= report.closureMessage %>
+                                        <%= report.reviewerRemarks %>
                                     </p>
                                     <% } else { %>
                                         <p><em>No closure remarks provided.</em></p>
@@ -175,7 +175,7 @@
                             </div>
                             <% } %>
 
-                                <div class="mb-3"></div>
+                                <div class="mb-5"></div>
 
 
                 </main>
@@ -202,7 +202,17 @@
             const confirmed = confirm("Are you sure you want to terminate the user and close the report?");
             if (!confirmed) return;
 
-            const res = await fetch(`/admin/reports/${reportId}/terminate-user`, { method: 'POST' });
+            const res = await fetch(`/api/v1/admin/terminate-user-close-report`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    terminationReason: "<%= report.reportReasonDescription %>",
+                    userId: "<%= report.reportedId._id %>",
+                })
+            });
             if (res.ok) location.reload();
             else alert("Failed to terminate user and close report.");
         }
@@ -212,7 +222,17 @@
             const confirmed = confirm("Mark this report as not a violation and close it?");
             if (!confirmed) return;
 
-            const res = await fetch(`/admin/reports/${reportId}/not-violation`, { method: 'POST' });
+            const res = await fetch(`/api/v1/admin/update-report-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    reportStatus: "closed",
+                    reviewerRemarks: "We have thoroughly reviewed your report regarding this user and found no violation of our Terms of Service."
+                })
+            });
             if (res.ok) location.reload();
             else alert("Failed to mark as not a violation.");
         }

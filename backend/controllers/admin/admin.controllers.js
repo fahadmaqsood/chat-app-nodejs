@@ -1,6 +1,11 @@
 import { Admin } from "../../models/auth/admin.models.js";
+import { User } from "../../models/auth/user.models.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import { ChatMessage } from "../../models/chat-app/message.models.js";
+import UserReport from "../../models/reports/userReports.models.js";
+import Complaint from "../../models/reports/Complaint.models.js";
+import ReportedMessage from "../../models/reports/ReportedMessage.models.js";
 import mongoose from "mongoose";
 
 
@@ -220,4 +225,227 @@ const resetPassword = async (req, res) => {
         return res.status(500).json(new ApiResponse(500, {}, "Failed to reset password"));
     }
 };
-export { loginAdmin, addAdmin, removeAdmin, changeRole, resetPassword };
+
+
+
+// Change the status of a report (e.g., mark as closed)
+const updateUserReportStatus = async (req, res) => {
+    try {
+        const { reportId, reportStatus, reviewerRemarks } = req.body;
+
+        // Ensure report status is valid
+        if (!['in review', 'closed'].includes(reportStatus)) {
+            return res.status(400).json(new ApiResponse(400, {}, "Invalid report status"));
+        }
+
+        // Find and update the report
+        const updatedReport = await UserReport.findByIdAndUpdate(
+            reportId,
+            { reportStatus, reviewerRemarks, reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+
+// Change the status of a report (e.g., mark as closed)
+const updateMessageReportStatus = async (req, res) => {
+    try {
+        const { reportId, reportStatus, reviewerRemarks } = req.body;
+
+        // Ensure report status is valid
+        if (!['in review', 'closed'].includes(reportStatus)) {
+            return res.status(400).json(new ApiResponse(400, {}, "Invalid report status"));
+        }
+
+        // Find and update the report
+        const updatedReport = await ReportedMessage.findByIdAndUpdate(
+            reportId,
+            { reportStatus, reviewerRemarks, reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateMessageReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+// Change the status of a report (e.g., mark as closed)
+const terminateUserCloseReport = async (req, res) => {
+    try {
+        const { reportId, terminationReason, userId } = req.body;
+
+        if (!reportId || !terminationReason || !userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "Report ID, termination reason, and user ID are required"));
+        }
+
+        const reportedUser = await User.findByIdAndUpdate(
+            userId,
+            { account_termination_date: new Date(), account_termination_reason: terminationReason },
+            { new: true } // Return the updated document
+        );
+
+        // Find and update the report
+        const updatedReport = await UserReport.findByIdAndUpdate(
+            reportId,
+            { reportStatus: "closed", reviewerRemarks: "We have thoroughly reviewed your report regarding this user and have taken appropriate action in accordance with our Terms of Service.", reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+// Change the status of a report (e.g., mark as closed)
+const terminateUserCloseMessageReport = async (req, res) => {
+    try {
+        const { reportId, terminationReason, userId } = req.body;
+
+        if (!reportId || !terminationReason || !userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "Report ID, termination reason, and user ID are required"));
+        }
+
+        const reportedUser = await User.findByIdAndUpdate(
+            userId,
+            { account_termination_date: new Date(), account_termination_reason: terminationReason },
+            { new: true } // Return the updated document
+        );
+
+        // Find and update the report
+        const updatedReport = await ReportedMessage.findByIdAndUpdate(
+            reportId,
+            { reportStatus: "closed", reviewerRemarks: "We have thoroughly reviewed your report regarding this user and have taken appropriate action in accordance with our Terms of Service.", reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+const closeMessageReportWithMessage = async (req, res) => {
+    try {
+        const { reportId, reviewerRemarks } = req.body;
+
+        if (!reportId || !reviewerRemarks) {
+            return res.status(400).json(new ApiResponse(400, {}, "Report ID, and reviewerRemarks are required"));
+        }
+
+        // Find and update the report
+        const updatedReport = await ReportedMessage.findByIdAndUpdate(
+            reportId,
+            { reportStatus: "closed", reviewerRemarks: reviewerRemarks, reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+const closeComplaintWithMessage = async (req, res) => {
+    try {
+        const { complaintId, complaintStatus, reviewerRemarks } = req.body;
+
+        // Validate complaint status
+        if (!['in review', 'closed'].includes(complaintStatus)) {
+            return res.status(400).json(new ApiResponse(400, {}, "Invalid complaint status"));
+        }
+
+        // Find and update the complaint
+        const updatedComplaint = await Complaint.findByIdAndUpdate(
+            complaintId,
+            {
+                complaintStatus,
+                reviewerRemarks,
+                complaintClosedBy: req.user._id,
+                closedDate: new Date()
+            },
+            { new: true }
+        );
+
+        if (!updatedComplaint) {
+            return res.status(404).json(new ApiResponse(404, {}, "Complaint not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { complaint: updatedComplaint }, "Complaint status updated successfully"));
+    } catch (error) {
+        console.error("Error in closeComplaintWithMessage:", error);
+        return res.status(error.status || error.statusCode || 500).json(
+            new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred')
+        );
+    }
+};
+
+
+
+// Change the status of a report (e.g., mark as closed)
+const deleteMessageCloseMessageReport = async (req, res) => {
+    try {
+        const { reportId, messageId } = req.body;
+
+        if (!reportId || !messageId) {
+            return res.status(400).json(new ApiResponse(400, {}, "Report ID, termination reason, and user ID are required"));
+        }
+
+
+        //deleting the message from DB
+        await ChatMessage.deleteOne({
+            _id: new mongoose.Types.ObjectId(messageId),
+        });
+
+        // Find and update the report
+        const updatedReport = await ReportedMessage.findByIdAndUpdate(
+            reportId,
+            { reportStatus: "closed", reviewerRemarks: "We have thoroughly reviewed your report regarding this user and have taken appropriate action in accordance with our Terms of Service.", reportClosedBy: req.user._id, closedDate: new Date() },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedReport) {
+            return res.status(404).json(new ApiResponse(404, {}, "Report not found"));
+        }
+
+        return res.status(200).json(new ApiResponse(200, { userReport: updatedReport }, "Report status updated successfully"));
+    } catch (error) {
+        console.error("Error in updateReportStatus:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+export { loginAdmin, addAdmin, removeAdmin, changeRole, resetPassword, deleteMessageCloseMessageReport, closeMessageReportWithMessage, updateUserReportStatus, updateMessageReportStatus, terminateUserCloseReport, closeComplaintWithMessage, terminateUserCloseMessageReport };

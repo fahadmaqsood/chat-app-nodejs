@@ -120,107 +120,115 @@
                         </div>
                     </div>
 
-                    <p class="text-muted">Three messages before the reported one.</p>
 
-                    <table class="table table-striped table-bordered align-middle">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>#</th>
-                                <th>Sender</th>
-                                <th>Message</th>
-                                <th>Attachments</th>
-                                <th>Sent At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% report.messages.forEach((msg, index)=> {
-                                const isReported = index === report.messages.length - 1;
-                                %>
-                                <tr class="<%= isReported ? 'table-warning' : '' %>">
-                                    <td>
-                                        <%= index + 1 %>
-                                            <% if (isReported) { %>
-                                                <span class="badge bg-danger ms-2">Reported</span>
-                                                <% } %>
-                                    </td>
-                                    <td>
-                                        <a href="/admin/dashboard/user/<%= msg.sender?.username %>" target="_blank">
-                                            <%= msg.sender?.username %>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <%= msg.content || '—' %>
-                                    </td>
-                                    <td>
-                                        <% if (msg.attachments.length> 0) { %>
-                                            <% msg.attachments.forEach(att=> { %>
-                                                <a href="<%= att.url %>" target="_blank">View</a><br>
-                                                <% }) %>
-                                                    <% } else { %>
-                                                        —
-                                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <%= new Date(msg.createdAt).toLocaleString() %>
-                                    </td>
+                    <% if (report.messages && report.messages.length> 0) { %>
+                        <p class="text-muted">Three messages before the reported one.</p>
+
+                        <table class="table table-striped table-bordered align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Sender</th>
+                                    <th>Message</th>
+                                    <th>Attachments</th>
+                                    <th>Sent At</th>
                                 </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-
-
-                    <% if (report.status !=='closed' ) { %>
-                        <div class="mt-4 d-flex flex-column gap-2">
-                            <h5>Actions</h5>
-
-                            <button class="btn btn-danger w-100"
-                                onclick="deleteMessageAndCloseReport('<%= report._id %>')">
-                                <i class="bi bi-trash"></i> Delete Message & Close Report
-                            </button>
-
-                            <button class="btn btn-warning w-100"
-                                onclick="terminateUserAndCloseReport('<%= report._id %>')">
-                                <i class="bi bi-person-x"></i> Terminate User & Close Report
-                            </button>
-
-                            <button class="btn btn-success w-100" onclick="markAsNotViolation('<%= report._id %>')">
-                                <i class="bi bi-check-circle"></i> Does Not Violate Our Guidelines
-                            </button>
-
-                            <div class="text-center">OR</div>
-
-                            <div>
-                                <textarea id="closureMessage" class="form-control mb-2" rows="3"
-                                    placeholder="Write a message for closure..."></textarea>
-                                <button class="btn btn-secondary w-100"
-                                    onclick="closeReportWithMessage('<%= report._id %>')">
-                                    <i class="bi bi-envelope-check"></i> Close Report with Message
-                                </button>
-                            </div>
-                        </div>
+                            </thead>
+                            <tbody>
+                                <% report.messages.forEach((msg, index)=> {
+                                    const isReported = index === report.messages.length - 1;
+                                    %>
+                                    <tr class="<%= isReported ? 'table-warning' : '' %>">
+                                        <td>
+                                            <%= index + 1 %>
+                                                <% if (isReported) { %>
+                                                    <span class="badge bg-danger ms-2">Reported</span>
+                                                    <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/dashboard/user/<%= msg.sender?.username %>" target="_blank">
+                                                <%= msg.sender?.username %>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <%= msg.content || '—' %>
+                                        </td>
+                                        <td>
+                                            <% if (msg.attachments && msg.attachments.length> 0) { %>
+                                                <% msg.attachments.forEach(att=> { %>
+                                                    <a href="<%= att.url %>" target="_blank">View</a><br>
+                                                    <% }) %>
+                                                        <% } else { %>
+                                                            —
+                                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%= new Date(msg.createdAt).toLocaleString() %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
                         <% } else { %>
-                            <div class="mt-4">
-                                <h5>Report Closed</h5>
-                                <p>
-                                    Closed by:
-                                    <a href="/admin/dashboard/user/<%= report.closedBy?.username %>" target="_blank">
-                                        <%= report.closedBy?.username || 'Unknown' %>
-                                    </a>
-                                    on <%= new Date(report.closedAt).toLocaleString() %>
-                                </p>
-
-                                <% if (report.closureMessage) { %>
-                                    <h6>Closure Remarks</h6>
-                                    <p>
-                                        <%= report.closureMessage %>
-                                    </p>
-                                    <% } else { %>
-                                        <p><em>No closure remarks provided.</em></p>
-                                        <% } %>
+                            <div class="alert alert-warning mt-4">
+                                The reported message was deleted and no related chat history is available.
                             </div>
                             <% } %>
 
-                                <div class="mb-3"></div>
+
+                                <% if (report.reportStatus !=='closed' ) { %>
+                                    <div class="mt-4 d-flex flex-column gap-2">
+                                        <h5>Actions</h5>
+
+                                        <button class="btn btn-danger w-100"
+                                            onclick="deleteMessageAndCloseReport('<%= report._id %>')">
+                                            <i class="bi bi-trash"></i> Delete Message & Close Report
+                                        </button>
+
+                                        <button class="btn btn-warning w-100"
+                                            onclick="terminateUserAndCloseReport('<%= report._id %>')">
+                                            <i class="bi bi-person-x"></i> Terminate User & Close Report
+                                        </button>
+
+                                        <button class="btn btn-success w-100"
+                                            onclick="markAsNotViolation('<%= report._id %>')">
+                                            <i class="bi bi-check-circle"></i> Does Not Violate Our Guidelines
+                                        </button>
+
+                                        <div class="text-center">OR</div>
+
+                                        <div>
+                                            <textarea id="closureMessage" class="form-control mb-2" rows="3"
+                                                placeholder="Write a message for closure..."></textarea>
+                                            <button class="btn btn-secondary w-100"
+                                                onclick="closeReportWithMessage('<%= report._id %>')">
+                                                <i class="bi bi-envelope-check"></i> Close Report with Message
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <% } else { %>
+                                        <div class="mt-4">
+                                            <h5>Report Closed</h5>
+                                            <p>
+                                                Closed by:
+
+                                                <%= report.reportClosedBy?.name || 'Unknown' %>
+
+                                                    on <%= new Date(report.closedDate).toLocaleString() %>
+                                            </p>
+
+                                            <% if (report.reviewerRemarks) { %>
+                                                <h6>Closure Remarks</h6>
+                                                <p>
+                                                    <%= report.reviewerRemarks %>
+                                                </p>
+                                                <% } else { %>
+                                                    <p><em>No closure remarks provided.</em></p>
+                                                    <% } %>
+                                        </div>
+                                        <% } %>
+
+                                            <div class="mb-3"></div>
 
 
                 </main>
@@ -238,7 +246,16 @@
             const confirmed = confirm("Are you sure you want to delete the message and close the report?");
             if (!confirmed) return;
 
-            const res = await fetch(`/admin/reports/${reportId}/delete-and-close`, { method: 'POST' });
+            const res = await fetch(`/api/v1/admin/delete-message-and-close-message-report`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    messageId: "<%= reportedMessageId %>",
+                })
+            });
             if (res.ok) location.reload();
             else alert("Failed to delete message and close report.");
         }
@@ -247,7 +264,17 @@
             const confirmed = confirm("Are you sure you want to terminate the user and close the report?");
             if (!confirmed) return;
 
-            const res = await fetch(`/admin/reports/${reportId}/terminate-user`, { method: 'POST' });
+            const res = await fetch(`/api/v1/admin/terminate-user-close-message-report`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    terminationReason: "<%= report.reportReasonDescription %>",
+                    userId: "<%= reportedMessageSenderId %>",
+                })
+            });
             if (res.ok) location.reload();
             else alert("Failed to terminate user and close report.");
         }
@@ -257,7 +284,17 @@
             const confirmed = confirm("Mark this report as not a violation and close it?");
             if (!confirmed) return;
 
-            const res = await fetch(`/admin/reports/${reportId}/not-violation`, { method: 'POST' });
+            const res = await fetch(`/api/v1/admin/update-message-report-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    reportStatus: "closed",
+                    reviewerRemarks: "We have thoroughly reviewed your report regarding this message and found no violation of our Terms of Service."
+                })
+            });
             if (res.ok) location.reload();
             else alert("Failed to mark as not a violation.");
         }
@@ -266,10 +303,15 @@
             const message = document.getElementById("closureMessage").value.trim();
             if (!message) return alert("Please enter a message.");
 
-            const res = await fetch(`/admin/reports/${reportId}/close-with-message`, {
+            const res = await fetch(`/api/v1/admin/close-message-report-with-message`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportId,
+                    reviewerRemarks: message
+                })
             });
 
             if (res.ok) location.reload();

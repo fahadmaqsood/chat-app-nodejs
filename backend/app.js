@@ -157,6 +157,7 @@ import { ChatMessage } from "./models/chat-app/message.models.js";
 
 
 import subscriptionCodes from "./models/subscription_codes/subscriptionCodes.js";
+import LoginInfo from './models/auth/LoginInfo.js';
 
 
 import jwt from "jsonwebtoken";
@@ -578,8 +579,28 @@ app.route('/admin/dashboard/user/:username').get(async (req, res) => {
     const targetUser = await User.findOne({ username: username });
     if (!targetUser) throw new Error("User not found");
 
+
+
+    // Find login history entries for this user (with pagination)
+    const page = parseInt(req.query.page) || 1;  // Get page from query params
+    const limit = 10; // Number of records per page
+
+    const loginHistory = await LoginInfo.find({ user: targetUser._id })
+      .sort({ login_time: -1 }) // Latest login first
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean(); // make it plain JS objects for EJS
+    const totalLogins = await LoginInfo.countDocuments({ user: targetUser._id });
+
+
+
     // Pass the target user data to the view
-    res.render('admin-user', { user: targetUser });
+    res.render('admin-user', {
+      user: targetUser,
+      loginHistory,
+      page,
+      totalPages: Math.ceil(totalLogins / limit)
+    });
 
 
   } catch (err) {
@@ -881,7 +902,7 @@ app.get('/admin/dashboard/user-reports', async (req, res) => {
       .populate('reporterId', 'username')
       .populate('reportedId', 'username')
       .populate('reportClosedBy', 'name')
-      .sort({ createdAt: -1 })
+      .sort({ reportStatus: -1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -947,7 +968,7 @@ app.get('/admin/dashboard/message-reports', async (req, res) => {
       .populate('reportedBy', 'username')
       .populate('reportedMessage')
       .populate('reportClosedBy', 'name')
-      .sort({ createdAt: -1 })
+      .sort({ reportStatus: -1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -1018,9 +1039,14 @@ app.route('/admin/dashboard/message-reports/:messageId').get(async (req, res) =>
 
     if (!complaint) throw new Error("complaint not found");
 
+    let reportedMessageSenderId = null;
+    let reportedMessageId = null;
 
     if (complaint?.reportedMessage) {
-      const targetMsg = await complaint.reportedMessage.populate('sender', 'username');
+      const targetMsg = await complaint.reportedMessage.populate('sender', 'username _id');
+
+      reportedMessageSenderId = targetMsg.sender._id.toString();
+      reportedMessageId = targetMsg._id.toString();
 
       const previousMessages = await ChatMessage.find({
         chat: targetMsg.chat,
@@ -1035,8 +1061,19 @@ app.route('/admin/dashboard/message-reports/:messageId').get(async (req, res) =>
       complaint.messages = [...previousMessages.reverse(), targetMsg];
     }
 
+
+    if (!complaint.reportedMessage) {
+      // If the reported message is deleted, handle gracefully
+      return res.render('admin-message-report-info', {
+        report: complaint,
+        reportedMessageSenderId: null,
+        reportedMessageId: null,
+        deletedMessage: true // pass an extra flag to the view
+      });
+    }
+
     // Pass the target user data to the view
-    res.render('admin-message-report-info', { report: complaint });
+    res.render('admin-message-report-info', { report: complaint, reportedMessageSenderId, reportedMessageId });
 
 
   } catch (err) {
@@ -1155,7 +1192,7 @@ app.get('/admin/dashboard/complaints', async (req, res) => {
     const complaints = await Complaint.find()
       .populate('reporterId', 'username')
       .populate('complaintClosedBy', 'name')
-      .sort({ createdAt: -1 })
+      .sort({ complaintStatus: -1, createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
 

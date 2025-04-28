@@ -177,7 +177,7 @@
 
 
 
-                    <% if (complaint.status !=='closed' ) { %>
+                    <% if (complaint.complaintStatus !=='closed' ) { %>
                         <div class="mt-4 d-flex flex-column gap-2">
                             <h5>Actions</h5>
 
@@ -185,25 +185,25 @@
                                 <textarea id="closureMessage" class="form-control mb-2" rows="3"
                                     placeholder="Write a message for closure..."></textarea>
                                 <button class="btn btn-secondary w-100"
-                                    onclick="closeReportWithMessage('<%= complaint._id %>')">
-                                    <i class="bi bi-envelope-check"></i> Close Report with Message
+                                    onclick="closeComplaintWithMessage('<%= complaint._id %>')">
+                                    <i class="bi bi-envelope-check"></i> Close Complaint with Message
                                 </button>
                             </div>
                         </div>
                         <% } else { %>
                             <div class="mt-4">
-                                <h5>Report Closed</h5>
+                                <h5>Complaint Closed</h5>
                                 <p>
                                     Closed by:
 
-                                    <%= complaint.closedBy?.username || 'Unknown' %>
-                                        on <%= new Date(report.closedAt).toLocaleString() %>
+                                    <%= complaint.complaintClosedBy?.name || 'Unknown' %>
+                                        on <%= new Date(complaint.closedDate).toLocaleString() %>
                                 </p>
 
-                                <% if (complaint.closureMessage) { %>
+                                <% if (complaint.reviewerRemarks) { %>
                                     <h6>Closure Remarks</h6>
                                     <p>
-                                        <%= complaint.closureMessage %>
+                                        <%= complaint.reviewerRemarks %>
                                     </p>
                                     <% } else { %>
                                         <p><em>No closure remarks provided.</em></p>
@@ -235,6 +235,31 @@
             sidebar.classList.remove('active');
             overlay.classList.add('d-none');
         });
+
+
+
+
+        async function closeComplaintWithMessage(complaintId) {
+            const message = document.getElementById("closureMessage").value.trim();
+            if (!message) return alert("Please enter a message.");
+
+            const confirmed = confirm("Close this complaint with that message?");
+            if (!confirmed) return;
+
+            const res = await fetch(`/api/v1/admin/close-complaint`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    complaintId,
+                    complaintStatus: "closed",
+                    reviewerRemarks: message
+                })
+            });
+            if (res.ok) location.reload();
+            else alert("Failed to close complaint.");
+        }
     </script>
 </body>
 
