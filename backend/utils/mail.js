@@ -41,7 +41,6 @@ const sendEmail = async (options) => {
   // Configure the transporter with Gmail's SMTP server
   let transporter = nodemailer.createTransport({
     service: 'gmail',
-    port: 1000,
     auth: {
       user: process.env.SENDER_EMAIL, // Replace with your Gmail address
       pass: process.env.SENDER_EMAIL_PASSWORD // Replace with the app-specific password
