@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resend Subscription Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h3 class="mb-4">Resend Subscription Code</h3>
+        <p>Please enter the email associated with your PayPal subscription to receive the code again.</p>
+
+        <!-- Alerts (you can control these via backend query params or template logic) -->
+        <div id="alert-container"></div>
+
+        <!-- Email Form -->
+        <form action="/resend-subscription" method="POST" id="resendForm">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your PayPal email"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Code</button>
+        </form>
+    </div>
+
+    <!-- Optional JS to parse query params and show messages -->
+    <script>
+        const form = document.getElementById('resendForm');
+        const alertContainer = document.getElementById('alert-container');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // prevent default form submission
+
+            const email = document.getElementById('email').value;
+
+            try {
+                const response = await fetch('/resend-subscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alertContainer.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                } else {
+                    alertContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                }
+            } catch (err) {
+                alertContainer.innerHTML = `<div class="alert alert-danger">An unexpected error occurred.</div>`;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

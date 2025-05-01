@@ -1305,6 +1305,15 @@ app.get('/test/subscribe', (req, res) => {
 });
 
 
+app.get('/resend-subscription-code', (req, res) => {
+  // Route to serve the HTML file
+  // Send the subscription.html file located in the "public" folder
+  res.render('resend-subscription-code', {
+  });
+
+});
+
+
 app.get('/robots.txt', (req, res) => {
   res.type('text/plain');
   res.send(`
