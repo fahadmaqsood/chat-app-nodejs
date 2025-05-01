@@ -186,7 +186,7 @@ app.use('/api/v1/utils', utilsRoutes);
 
 app.use('/api/v1/home', homeRoutes);
 
-app.use('/api/v1/subscription-codes/', subscriptionCodesRoutes);
+app.use('/api/v1/subscription-codes', subscriptionCodesRoutes);
 
 app.use('/api/v1/quiz/', quizRoutes);
 

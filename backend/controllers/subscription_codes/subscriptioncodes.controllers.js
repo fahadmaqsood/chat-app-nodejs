@@ -4,6 +4,12 @@ import SubscriptionCodes from '../../models/subscription_codes/subscriptionCodes
 import { User } from "../../models/auth/user.models.js";
 import mongoose from "mongoose";
 
+
+import {
+    sendEmail,
+    resendSubscriptionCodeMailgenContent
+} from "../../utils/mail.js";
+
 export const generateUniqueCode = async (prefix) => {
     let code;
     let isUnique = false;
@@ -131,6 +137,39 @@ export const generateSubscriptionCode = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json(new ApiResponse(500, {}, 'Server error while generating subscription code'));
+    }
+};
+
+
+
+export const resendSubscriptionCode = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json(new ApiResponse(400, {}, "Missing 'email' parameter"));
+        }
+
+        const subscription = await SubscriptionCodes.findOne({ email });
+
+        if (!subscription) {
+            return res.status(404).json(new ApiResponse(404, {}, "No such PayPal subscription exists with this email."));
+        }
+
+        await sendEmail({
+            email: email,
+            subject: "Your Subscription Code",
+            mailgenContent: resendSubscriptionCodeMailgenContent(
+                subscription.full_name,
+                subscription.subscription_code
+            ),
+        });
+
+        return res.status(200).json(new ApiResponse(200, {}, `Subscription code was sent to email: ${email}`));
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(new ApiResponse(500, {}, 'Server error while resending subscription code'));
     }
 };
 

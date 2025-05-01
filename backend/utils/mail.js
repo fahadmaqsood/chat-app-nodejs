@@ -158,10 +158,32 @@ const paypalSubscriptionCodeMailgenContent = (name, subscription_type, voucher) 
       intro: "Thank you for choosing to join Teen Global Connect! We're excited to have you on board.",
       action: {
         instructions:
-          `We've generated your unique subscription code to help you get started with your subscription. This codes will allow you to unlock your account and enjoy the benefits of your ${subscription_type} subscription plan. Use this code at signup:`,
+          `We've generated your unique subscription code to help you get started with your subscription. This code will allow you to unlock your account and enjoy the benefits of your ${subscription_type} subscription plan. Use this code at signup:`,
         button: {
           color: "#22BC66", // Optional action button color
           text: voucher,
+          link: "#",
+        },
+      },
+      outro:
+        "Need help, or have questions? email us at invasiveideas101@gmail.com and we will get back to you as soon as we can.",
+    },
+  };
+};
+
+
+
+const resendSubscriptionCodeMailgenContent = (fullname, subscription_code) => {
+  return {
+    body: {
+      name: fullname,
+      intro: "Thank you for choosing to join Teen Global Connect! We're excited to have you on board.",
+      action: {
+        instructions:
+          `Here is the subscription code to help you get started with your subscription. This code will allow you to unlock your account and enjoy the benefits of your subscription plan. Use this code at signup:`,
+        button: {
+          color: "#22BC66", // Optional action button color
+          text: subscription_code,
           link: "#",
         },
       },
@@ -220,5 +242,6 @@ export {
   forgotPasswordMailgenContent,
   forgotPasswordOTPMailgenContent,
   orderConfirmationMailgenContent,
-  paypalSubscriptionCodeMailgenContent
+  paypalSubscriptionCodeMailgenContent,
+  resendSubscriptionCodeMailgenContent
 };

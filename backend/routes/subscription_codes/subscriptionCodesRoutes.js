@@ -1,7 +1,7 @@
 import express from 'express';
 
 
-import { generateSubscriptionCode, deleteSubscriptionCode, generateSubscriptionCodeAdmin, redeemSubscriptionCode, getReferralCodeBySubscription, getReferralCountBySubscription, getReferralsBySubscription } from '../../controllers/subscription_codes/subscriptioncodes.controllers.js';
+import { generateSubscriptionCode, resendSubscriptionCode, deleteSubscriptionCode, generateSubscriptionCodeAdmin, redeemSubscriptionCode, getReferralCodeBySubscription, getReferralCountBySubscription, getReferralsBySubscription } from '../../controllers/subscription_codes/subscriptioncodes.controllers.js';
 
 import { validateTokensMiddleware } from '../../middlewares/auth.middlewares.js';
 
@@ -11,6 +11,8 @@ const router = express.Router();
 router.post('/generate', generateSubscriptionCode);
 
 router.post('/generate-from-admin', generateSubscriptionCodeAdmin);
+
+router.post('/resend-subscription-code', resendSubscriptionCode);
 
 
 // route to redeem a subscription code

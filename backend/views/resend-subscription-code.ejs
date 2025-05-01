@@ -27,20 +27,29 @@
             </div>
             <button type="submit" class="btn btn-primary">Send Code</button>
         </form>
+        <div id="spinner" class="text-center mt-3" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <!-- Optional JS to parse query params and show messages -->
     <script>
         const form = document.getElementById('resendForm');
+        const spinner = document.getElementById('spinner');
         const alertContainer = document.getElementById('alert-container');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault(); // prevent default form submission
 
+            alertContainer.innerHTML = ''; // clear previous alerts
+            spinner.style.display = 'block';
+
             const email = document.getElementById('email').value;
 
             try {
-                const response = await fetch('/resend-subscription', {
+                const response = await fetch('/api/v1/subscription-codes/resend-subscription-code', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -50,14 +59,20 @@
 
                 const data = await response.json();
 
-                if (response.ok) {
+                if (data.success) {
                     alertContainer.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
                 } else {
-                    alertContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    if (data.message) {
+                        alertContainer.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                    } else {
+                        alertContainer.innerHTML = `<div class="alert alert-danger">An unexpected error occurred.</div>`;
+                    }
                 }
             } catch (err) {
                 alertContainer.innerHTML = `<div class="alert alert-danger">An unexpected error occurred.</div>`;
             }
+
+            spinner.style.display = 'none'; // hide spinner after response
         });
     </script>
 
