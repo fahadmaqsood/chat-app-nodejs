@@ -59,51 +59,6 @@ export const whatsappAPIWebhook = async (req, res) => {
                         let botReply = await processChatMessage({ from: from, message: textEnglish });
                         let finalReply = botReply;
 
-                        if (TRANSLATE_OUTPUTS) {
-
-                            // Generate bot reply
-                            botReply = botReply
-                                .replace(/\s+(سياڻون سنڌي)/gi, '<notranslate>$1</notranslate>');
-
-                            // Extract the word and replace the first tag
-                            // Array to store all words/phrases inside <notranslate> tags
-                            const storedWords = [];
-
-                            // Replace all <notranslate> tags with <notranslate> and store their content
-                            const outputString = botReply.replace(
-                                /<notranslate>(.*?)<\/notranslate>/g, // Match ALL <notranslate> tags and their content
-                                (match, content) => {
-                                    storedWords.push(content); // Store the content in the array
-                                    return '<<>>'; // Replace with just <notranslate>
-                                }
-                            );
-
-                            console.log(storedWords); // Output: ["ڊسٽبن", "dustbin"]
-                            console.log(outputString);
-
-
-
-                            const res = await translate(outputString, 'en', 'sd');
-                            console.log(res.translation);
-
-                            const botReplySindhi = res.translation;
-
-
-                            finalReply = botReplySindhi;
-
-
-                            if (storedWords.length > 0) {
-                                finalReply = botReplySindhi.replace(
-                                    /<<>>/g, // Match all <notranslate> placeholders
-                                    () => storedWords.shift() // Replace with the next stored word
-                                );
-                            }
-                        }
-
-
-
-                        // const botReplySindhi = botReply;
-                        // console.log(`Reply in Sindhi: ${botReplySindhi}`);
 
                         // Save to MongoDB
                         try {
