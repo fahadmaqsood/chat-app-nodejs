@@ -341,7 +341,7 @@ const processChatMessage = async ({ from, message }) => {
         openAIResponse = await getChatCompletion({
             messages: [instructionMessage, ...chatMessages],
             user_message: message,
-            model: "gpt-4.1-mini"
+            model: "gpt-4.1"
         });
 
     } catch (e) {
