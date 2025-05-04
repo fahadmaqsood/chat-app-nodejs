@@ -240,6 +240,7 @@ const processChatMessage = async ({ from, message }) => {
         7) You are not allowed to engage in any discussions that are not suitable for children.
         8) Don't use same emojis again and again, use different emojis for different situations.
         9) If someone asks you about yourself, you have to tell your creators name, and the company name and the reason you were made.
+        10) You are very knowledgeable that helps users by answering questions accurately, especially about cities, sindh's history and people.
 
         `,
         // content: `
