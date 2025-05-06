@@ -18,9 +18,10 @@ import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
 // import appleReceiptVerify from "node-apple-receipt-verify";
-// import { EmptyError, ServiceUnavailableError } from appleReceiptVerify;
+import { EmptyError, ServiceUnavailableError } from appleReceiptVerify;
 
-
+const appleReceiptVerify = await import('node-apple-receipt-verify');
+// const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
 
 // appleReceiptVerify.config({
 //     secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
