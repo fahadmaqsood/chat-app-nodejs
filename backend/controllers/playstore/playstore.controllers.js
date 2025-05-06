@@ -250,7 +250,7 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 
 
 
-export const appleSubscriptionWebhook = async (req, res) => {
+export const appStoreSubscriptionWebhook = async (req, res) => {
     try {
         const signedPayload = req.body.signedPayload;
 
