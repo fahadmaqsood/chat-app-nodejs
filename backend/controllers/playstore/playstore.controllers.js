@@ -17,8 +17,8 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
-const appleReceiptVerify = require("node-apple-receipt-verify");
-const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
+import appleReceiptVerify from "node-apple-receipt-verify";
+import { EmptyError, ServiceUnavailableError } from appleReceiptVerify;
 
 
 
