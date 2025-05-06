@@ -304,7 +304,9 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
     try {
         const signedPayload = req.body.signedPayload;
 
-        const decodedPayload = jwt.decode(signedPayload, { complete: true }).payload;
+        const decodedData = jwt.decode(signedPayload, { complete: true });
+
+        const decodedPayload = decodedData.payload;
 
         const notificationType = decodedPayload.notificationType;
 
@@ -318,7 +320,19 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
 
         console.log("Apple Notification Type:", notificationType);
 
-        const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
+        // const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
+        let purchaseUserId = null;
+
+        for (const cert of decodedData.header.x5c) {
+            purchaseUserId = await getUserIdFromPurchaseToken(cert);
+            if (purchaseUserId) break;
+        }
+
+        if (!purchaseUserId) {
+            throw new Error('No matching user found from x5c certificates');
+        }
+
+        console.log("purchaseUserId: ", purchaseUserId);
         console.log("purchaseUserId: ", purchaseUserId);
         const currentUser = await User.findById(purchaseUserId);
         console.log("currentUser: ", currentUser._id);
