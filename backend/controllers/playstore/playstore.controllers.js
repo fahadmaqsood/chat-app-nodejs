@@ -17,10 +17,15 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
-// import appleReceiptVerify from "node-apple-receipt-verify";
-import { EmptyError, ServiceUnavailableError } from appleReceiptVerify;
+async function loadAppleVerify() {
+    const appleReceiptVerify = await import('node-apple-receipt-verify');
+    const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
 
-const appleReceiptVerify = await import('node-apple-receipt-verify');
+    // Use them here
+}
+await loadAppleVerify();
+
+
 // const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
 
 // appleReceiptVerify.config({
