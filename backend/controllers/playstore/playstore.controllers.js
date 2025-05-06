@@ -309,7 +309,7 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         const notificationType = decodedPayload.notificationType;
         const subtype = decodedPayload.subtype;
 
-        const data = payload.data;
+        const data = decodedPayload.data;
         const { appAppleId, bundleId, productId, originalTransactionId, purchaseDate } = data.signedTransactionInfo;
 
         console.log("Apple Notification Type:", notificationType);
