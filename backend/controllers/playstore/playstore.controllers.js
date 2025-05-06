@@ -319,7 +319,9 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         console.log("Apple Notification Type:", notificationType);
 
         const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
+        console.log("purchaseUserId: ", purchaseUserId);
         const currentUser = await User.findById(purchaseUserId);
+        console.log("currentUser: ", currentUser._id);
 
         if (!currentUser) {
             return res.status(404).json(new ApiResponse(404, null, "User not found."));
