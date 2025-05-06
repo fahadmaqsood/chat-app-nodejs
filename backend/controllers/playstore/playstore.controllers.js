@@ -310,7 +310,7 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
 
         const notificationType = decodedPayload.notificationType;
 
-        console.log(decodedPayload);
+        console.log(decodedData);
 
         const data = decodedPayload.data;
 
