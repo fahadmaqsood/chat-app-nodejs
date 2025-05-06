@@ -22,13 +22,13 @@ import { EmptyError, ServiceUnavailableError } from appleReceiptVerify;
 
 
 
-appleReceiptVerify.config({
-    secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
-    environment: ["sandbox"], // Can be 'production' or 'sandbox'
-    verbose: true, // Enables verbose logging for debugging
-    extended: true, // Provides extended information for subscriptions
-    ignoreExpired: false,
-});
+// appleReceiptVerify.config({
+//     secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
+//     environment: ["sandbox"], // Can be 'production' or 'sandbox'
+//     verbose: true, // Enables verbose logging for debugging
+//     extended: true, // Provides extended information for subscriptions
+//     ignoreExpired: false,
+// });
 
 
 
