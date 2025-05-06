@@ -17,6 +17,21 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
+const appleReceiptVerify = require("node-apple-receipt-verify");
+const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
+
+
+
+appleReceiptVerify.config({
+    secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
+    environment: ["sandbox"], // Can be 'production' or 'sandbox'
+    verbose: true, // Enables verbose logging for debugging
+    extended: true, // Provides extended information for subscriptions
+    ignoreExpired: false,
+});
+
+
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -249,24 +264,45 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
 }
 
 
+// validation handler (In this case - subscription Validation)
+export const validateAppStorePayment = async (req, res) => {
+    const receiptData = req.body.receiptData;
+    try {
+        // Validate the receipt
+        const products = await appleReceiptVerify.validate({ receipt: receiptData });
+        return res.status(200).json({
+            success: true,
+            message: "Subscription validation successful",
+            products,
+        });
+    } catch (error) {
+        if (error instanceof EmptyError) {
+            return res.status(400).json({ success: false, message: "Receipt data is empty" });
+        } else if (error instanceof ServiceUnavailableError) {
+            return res.status(503).json({
+                success: false,
+                message: "Service unavailable, try again later",
+            });
+        } else {
+            return res.status(500).json({
+                success: false,
+                message: "An error occurred during receipt validation",
+                error: error.message,
+            });
+        }
+    }
+};
+
 
 export const appStoreSubscriptionWebhook = async (req, res) => {
     try {
         const signedPayload = req.body.signedPayload;
 
-        // 1. Decode header to get key ID (kid)
-        const decodedHeader = jwt.decode(signedPayload, { complete: true });
-        const kid = decodedHeader.header.kid;
+        const decodedPayload = jwt.decode(signedPayload, { complete: true });
 
-        // 2. Fetch the public key using kid
-        const client = jwksClient({ jwksUri: 'https://api.storekit.itunes.apple.com/in-app/v1/jwks' });
-        const key = await client.getSigningKey(kid);
-        const publicKey = key.getPublicKey();
+        const notificationType = decodedPayload.notificationType;
+        const subtype = decodedPayload.subtype;
 
-        // 3. Verify the JWT
-        const payload = jwt.verify(signedPayload, publicKey, { algorithms: ['ES256'] });
-
-        const notificationType = payload.notificationType;
         const data = payload.data;
         const { appAppleId, bundleId, productId, originalTransactionId, purchaseDate } = data.signedTransactionInfo;
 
