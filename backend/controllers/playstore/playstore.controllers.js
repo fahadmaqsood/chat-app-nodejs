@@ -309,6 +309,8 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         const notificationType = decodedPayload.notificationType;
         const subtype = decodedPayload.subtype;
 
+        console.log(decodedPayload);
+
         const data = decodedPayload.data;
         const { appAppleId, bundleId, productId, originalTransactionId, purchaseDate } = data.signedTransactionInfo;
 
