@@ -304,7 +304,7 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
     try {
         const signedPayload = req.body.signedPayload;
 
-        const decodedPayload = jwt.decode(signedPayload, { complete: true });
+        const decodedPayload = jwt.decode(signedPayload, { complete: true }).payload;
 
         const notificationType = decodedPayload.notificationType;
         const subtype = decodedPayload.subtype;
