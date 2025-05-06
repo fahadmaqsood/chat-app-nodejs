@@ -307,11 +307,13 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         const decodedPayload = jwt.decode(signedPayload, { complete: true }).payload;
 
         const notificationType = decodedPayload.notificationType;
-        const subtype = decodedPayload.subtype;
 
         console.log(decodedPayload);
 
         const data = decodedPayload.data;
+
+        console.log("Transaction data:", jwt.decode(data.signedTransactionInfo));
+
         const { appAppleId, bundleId, productId, originalTransactionId, purchaseDate } = jwt.decode(data.signedTransactionInfo);
 
         console.log("Apple Notification Type:", notificationType);
