@@ -136,6 +136,7 @@ import userSessionRoutes from "./routes/user-sessions/userSessions.routes.js";
 import paypalRoutes from "./routes/paypal/paypal.routes.js";
 
 import playstoreRoutes from "./routes/playstore/playstore.routes.js";
+import appstoreRoutes from "./routes/playstore/appstore.routes.js";
 
 import personalDiaryRoutes from "./routes/personal-diary/personalDiary.routes.js";
 
@@ -195,6 +196,7 @@ app.use('/api/v1/sessions/', userSessionRoutes);
 app.use('/api/v1/paypal/', paypalRoutes);
 
 app.use('/api/v1/playstore/', playstoreRoutes);
+app.use('/api/v1/appstore/', appstoreRoutes);
 
 
 app.use('/api/v1/personal-diary/', personalDiaryRoutes);

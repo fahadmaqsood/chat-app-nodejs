@@ -14,6 +14,9 @@ import { ApiResponse } from '../../utils/ApiResponse.js';
 
 import mongoose from 'mongoose';
 
+import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
+
 const pubsub = new PubSub();
 
 // Your Google Cloud Pub/Sub subscription
@@ -244,6 +247,122 @@ export const playstoreSubscriptionWebhook = async (req, res) => {
         res.status(500).send('Error');
     }
 }
+
+
+
+export const appleSubscriptionWebhook = async (req, res) => {
+    try {
+        const signedPayload = req.body.signedPayload;
+
+        // 1. Decode header to get key ID (kid)
+        const decodedHeader = jwt.decode(signedPayload, { complete: true });
+        const kid = decodedHeader.header.kid;
+
+        // 2. Fetch the public key using kid
+        const client = jwksClient({ jwksUri: 'https://api.storekit.itunes.apple.com/in-app/v1/jwks' });
+        const key = await client.getSigningKey(kid);
+        const publicKey = key.getPublicKey();
+
+        // 3. Verify the JWT
+        const payload = jwt.verify(signedPayload, publicKey, { algorithms: ['ES256'] });
+
+        const notificationType = payload.notificationType;
+        const data = payload.data;
+        const { appAppleId, bundleId, productId, originalTransactionId, purchaseDate } = data.signedTransactionInfo;
+
+        console.log("Apple Notification Type:", notificationType);
+
+        const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
+        const currentUser = await User.findById(purchaseUserId);
+
+        if (!currentUser) {
+            return res.status(404).json(new ApiResponse(404, null, "User not found."));
+        }
+
+        switch (notificationType) {
+
+            case 'INITIAL_BUY':
+            case 'DID_REDEEM':
+            case 'CONSUMPTION_REQUEST': {
+                // One-time coin purchases (e.g., "tgc_shop_100_coins")
+                const sku = productId;
+
+                if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+                    let coins;
+                    try {
+                        let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
+                        coins = parseInt(parseValue);
+                    } catch (error) {
+                        console.log("Error parsing coins:", error);
+                        return res.status(500).send("Invalid SKU");
+                    }
+
+                    const coinsAfterUpdate = currentUser.user_points + coins;
+
+                    await User.findByIdAndUpdate(
+                        currentUser._id,
+                        { user_points: coinsAfterUpdate },
+                        { new: true }
+                    ).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry");
+
+                    emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                    emitIndicatorsSocketEvent(currentUser._id, "COIN_PURCHASE_SUCCESS");
+
+                    try {
+                        await addNotification(currentUser._id, "👛 Coin Purchase Successful!", `${coins} coins added to your account.`);
+                    } catch (error) {
+                        console.log("Couldn't send notification");
+                    }
+
+                    return res.status(200).send("Coin purchase processed");
+                }
+
+                console.log(`Unknown one-time product SKU: ${sku}`);
+                return res.status(501).send("Unsupported one-time purchase product.");
+            }
+
+
+
+            case 'DID_RENEW':
+            case 'SUBSCRIBED':
+                currentUser.subscription_status = "active";
+                currentUser.last_renew_date = new Date(Number(purchaseDate));
+                currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
+                currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
+
+                if (productId.includes("monthly")) {
+                    _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
+                    sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+                }
+
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
+                break;
+
+            case 'CANCEL':
+            case 'DID_FAIL_TO_RENEW':
+                currentUser.subscription_status = "inactive";
+                sendNotification(currentUser, "Your subscription was cancelled", "You won't be able to access premium features.");
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                break;
+
+
+
+
+            default:
+                console.log("Unhandled Apple notification:", notificationType);
+        }
+
+        await currentUser.save();
+
+        return res.status(200).send("Received Apple notification");
+    } catch (error) {
+        console.error("Error handling Apple notification:", error);
+        return res.status(500).send("Error");
+    }
+};
+
+
 
 function calculateNextBillingDate(months) {
     let next_billing_date;
