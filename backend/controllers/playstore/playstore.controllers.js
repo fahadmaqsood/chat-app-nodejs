@@ -17,24 +17,24 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
-async function loadAppleVerify() {
-    const appleReceiptVerify = await import('node-apple-receipt-verify');
-    const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
+// async function loadAppleVerify() {
+//     const appleReceiptVerify = await import('node-apple-receipt-verify');
+//     const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
 
-    // Use them here
-}
-await loadAppleVerify();
+//     // Use them here
+// }
+// await loadAppleVerify();
 
 
-// const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
+// // const { EmptyError, ServiceUnavailableError } = appleReceiptVerify;
 
-appleReceiptVerify.config({
-    secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
-    environment: ["sandbox"], // Can be 'production' or 'sandbox'
-    verbose: true, // Enables verbose logging for debugging
-    extended: true, // Provides extended information for subscriptions
-    ignoreExpired: false,
-});
+// appleReceiptVerify.config({
+//     secret: process.env.APP_STORE_APP_SHARED_KEY, // Your shared secret from App Store Connect
+//     environment: ["sandbox"], // Can be 'production' or 'sandbox'
+//     verbose: true, // Enables verbose logging for debugging
+//     extended: true, // Provides extended information for subscriptions
+//     ignoreExpired: false,
+// });
 
 
 
