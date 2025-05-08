@@ -318,7 +318,7 @@ export const verifyAppStoreReceipt = async function (req, res) {
         // Receipt is from Sandbox, retry with sandbox URL
         response = await axios.post('https://sandbox.itunes.apple.com/verifyReceipt', {
             'receipt-data': receiptData,
-            'password': 'YOUR_SHARED_SECRET',
+            'password': process.env.APP_STORE_APP_SHARED_KEY,
             'exclude-old-transactions': true
         });
     }
