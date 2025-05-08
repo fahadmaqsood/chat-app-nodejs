@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/webhook_sandbox', appStoreSubscriptionWebhook);
 
-router.post('/verify-appstore-receipt', verifyAppStoreReceipt);
+router.post('/verify-appstore-receipt', validateTokensMiddleware, verifyAppStoreReceipt);
 
 
 router.post('/add-coin-purchase', validateTokensMiddleware, addCoinPurchase);

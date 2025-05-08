@@ -323,6 +323,39 @@ export const verifyAppStoreReceipt = async function (req, res) {
         });
     }
 
+    const currentUser = req.user;
+    const sku = response.data.receipt?.in_app[0]?.product_id;
+
+    if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+        let coins;
+        try {
+            let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
+            coins = parseInt(parseValue);
+        } catch (error) {
+            console.log("Error parsing coins:", error);
+            return res.status(500).send("Invalid SKU");
+        }
+
+        const coinsAfterUpdate = currentUser.user_points + coins;
+
+        await User.findByIdAndUpdate(
+            currentUser._id,
+            { user_points: coinsAfterUpdate },
+            { new: true }
+        ).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry");
+
+        emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+        emitIndicatorsSocketEvent(currentUser._id, "COIN_PURCHASE_SUCCESS");
+
+        try {
+            await addNotification(currentUser._id, "👛 Coin Purchase Successful!", `${coins} coins added to your account.`);
+        } catch (error) {
+            console.log("Couldn't send notification");
+        }
+
+        return res.status(200).send("Coin purchase processed");
+    }
+
     return res.status(200).json(new ApiResponse(200, response.data, "AppStore recept verification"));
 }
 
