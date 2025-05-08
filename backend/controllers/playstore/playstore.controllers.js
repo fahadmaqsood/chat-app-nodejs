@@ -327,38 +327,62 @@ export const verifyAppStoreReceipt = async function (req, res) {
     const sku = response.data.receipt?.in_app[0]?.product_id;
 
     if (sku != null && sku != undefined) {
-        if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
-            let coins;
-            try {
-                let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
-                coins = parseInt(parseValue);
-            } catch (error) {
-                console.log("Error parsing coins:", error);
-                return res.status(500).send("Invalid SKU");
+        if (response.data.receipt?.in_app[0]?.type == "Consumable" && response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
+            if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+                let coins;
+                try {
+                    let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
+                    coins = parseInt(parseValue);
+                } catch (error) {
+                    console.log("Error parsing coins:", error);
+                    return res.status(500).send("Invalid SKU");
+                }
+
+                const coinsAfterUpdate = currentUser.user_points + coins;
+
+                await User.findByIdAndUpdate(
+                    currentUser._id,
+                    { user_points: coinsAfterUpdate },
+                    { new: true }
+                ).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry");
+
+                emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+                emitIndicatorsSocketEvent(currentUser._id, "COIN_PURCHASE_SUCCESS");
+
+                try {
+                    await addNotification(currentUser._id, "👛 Coin Purchase Successful!", `${coins} coins added to your account.`);
+                } catch (error) {
+                    console.log("Couldn't send notification");
+                }
+
+                return res.status(200).send("Coin purchase processed");
             }
-
-            const coinsAfterUpdate = currentUser.user_points + coins;
-
-            await User.findByIdAndUpdate(
-                currentUser._id,
-                { user_points: coinsAfterUpdate },
-                { new: true }
-            ).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry -forgotPasswordToken -forgotPasswordExpiry");
-
-            emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
-            emitIndicatorsSocketEvent(currentUser._id, "COIN_PURCHASE_SUCCESS");
-
-            try {
-                await addNotification(currentUser._id, "👛 Coin Purchase Successful!", `${coins} coins added to your account.`);
-            } catch (error) {
-                console.log("Couldn't send notification");
-            }
-
-            return res.status(200).send("Coin purchase processed");
         }
+
     }
 
     console.log("AppStore response: ", response.data);
+
+    const productId = response.data.receipt?.latest_receipt_info[0]?.product_id;
+
+    if (productId != null && productId != undefined) {
+        if (response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
+            currentUser.subscription_status = "active";
+            currentUser.last_renew_date = new Date(Number(response.data.receipt?.latest_receipt_info[0]?.purchase_date));
+            currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
+            currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
+
+            if (productId.includes("monthly")) {
+                _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
+                sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+            }
+
+            emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+            emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
+
+        }
+    }
+
 
     return res.status(200).json(new ApiResponse(200, response.data, "AppStore recept verification"));
 }
