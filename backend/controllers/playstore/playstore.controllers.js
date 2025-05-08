@@ -300,6 +300,29 @@ export const validateAppStorePayment = async (req, res) => {
 };
 
 
+
+export const verifyAppStoreReceipt = async function (req, res) {
+    const receiptData = req.body.receiptData; // Base64 encoded receipt data from the app
+    let response;
+    response = await axios.post('https://buy.itunes.apple.com/verifyReceipt', {
+        'receipt-data': receiptData,
+        'password': process.env.APP_STORE_APP_SHARED_KEY, // For subscriptions
+        'exclude-old-transactions': true
+    });
+
+    if (response.data.status === 21007) {
+        // Receipt is from Sandbox, retry with sandbox URL
+        response = await axios.post('https://sandbox.itunes.apple.com/verifyReceipt', {
+            'receipt-data': receiptData,
+            'password': 'YOUR_SHARED_SECRET',
+            'exclude-old-transactions': true
+        });
+    }
+
+    return res.status(200).json(new ApiResponse(200, response.data, "AppStore recept verification"));
+}
+
+
 export const appStoreSubscriptionWebhook = async (req, res) => {
     try {
         const signedPayload = req.body.signedPayload;
