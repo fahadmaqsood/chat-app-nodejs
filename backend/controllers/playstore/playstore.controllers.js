@@ -391,6 +391,7 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         }
 
         if (!purchaseUserId) {
+            return res.status(200).send("Received Apple notification");
             throw new Error('No matching user found from x5c certificates');
         }
 
