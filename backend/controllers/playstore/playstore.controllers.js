@@ -358,6 +358,8 @@ export const verifyAppStoreReceipt = async function (req, res) {
         }
     }
 
+    console.log("AppStore response: ", response.data);
+
     return res.status(200).json(new ApiResponse(200, response.data, "AppStore recept verification"));
 }
 
