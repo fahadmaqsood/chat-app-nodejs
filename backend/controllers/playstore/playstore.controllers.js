@@ -312,6 +312,8 @@ export const verifyAppStoreReceipt = async function (req, res) {
         'exclude-old-transactions': true
     });
 
+    console.log("AppStore response: ", response.data);
+
     if (response.data.status === 21007) {
         // Receipt is from Sandbox, retry with sandbox URL
         response = await axios.post('https://sandbox.itunes.apple.com/verifyReceipt', {
