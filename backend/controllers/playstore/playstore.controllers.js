@@ -329,12 +329,12 @@ export const verifyAppStoreReceipt = async function (req, res) {
     console.log("sku: ", sku);
 
     if (sku != null && sku != undefined) {
-        console.log("in_app: ", response.data.receipt?.in_app[0]);
-        console.log("type: ", response.data.receipt?.in_app[0]?.type);
-        console.log("in_app_ownership_type: ", response.data.receipt?.in_app[0]?.in_app_ownership_type);
+        if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+            console.log("in_app: ", response.data.receipt?.in_app[0]);
+            console.log("type: ", response.data.receipt?.in_app[0]?.type);
+            console.log("in_app_ownership_type: ", response.data.receipt?.in_app[0]?.in_app_ownership_type);
 
-        if (response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
-            if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
+            if (response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
                 let coins;
                 try {
                     let parseValue = sku.replace("tgc_shop_", "").replace("_coins", "").trim();
