@@ -324,12 +324,12 @@ export const verifyAppStoreReceipt = async function (req, res) {
     }
 
     const currentUser = req.user;
-    const sku = response.data.receipt?.in_app[0]?.product_id;
+    const sku = response.data.latest_receipt_info[0]?.product_id;
 
     console.log("sku: ", sku);
 
     if (sku != null && sku != undefined) {
-        if (response.data.receipt?.in_app[0]?.type == "Consumable" && response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
+        if (response.data.latest_receipt_info[0]?.type == "Consumable" && response.data.latest_receipt_info[0]?.inAppOwnershipType == "PURCHASED") {
             if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
                 let coins;
                 try {
