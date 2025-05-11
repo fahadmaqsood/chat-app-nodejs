@@ -329,6 +329,9 @@ export const verifyAppStoreReceipt = async function (req, res) {
     console.log("sku: ", sku);
 
     if (sku != null && sku != undefined) {
+        console.log("type: ", response.data.latest_receipt_info[0]?.type);
+        console.log("inAppOwnershipType: ", response.data.latest_receipt_info[0]?.inAppOwnershipType);
+
         if (response.data.latest_receipt_info[0]?.type == "Consumable" && response.data.latest_receipt_info[0]?.inAppOwnershipType == "PURCHASED") {
             if (sku.startsWith("tgc_shop_") && sku.endsWith("_coins")) {
                 let coins;
