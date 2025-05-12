@@ -496,6 +496,9 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
                 if (productId.includes("monthly")) {
                     _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
                     sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+                } else {
+                    _increaseUserPoints(currentUser._id, currentUser.user_points, 120);
+                    sendNotification(currentUser, "👛 You just got 120 coins!", "Enjoy your free yearly coins.");
                 }
 
                 emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
