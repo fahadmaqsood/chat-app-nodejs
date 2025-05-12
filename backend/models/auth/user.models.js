@@ -111,6 +111,11 @@ const userSchema = new Schema(
     closeFriends: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     closeFriendRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] }, // Store incoming requests
     sentCloseFriendRequests: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] }, // Outgoing requests
+
+    appleOriginalTransactionId: {
+      type: String,
+      default: null,
+    },
     subscription_type: {
       type: String,
       enum: ['monthly', 'yearly']

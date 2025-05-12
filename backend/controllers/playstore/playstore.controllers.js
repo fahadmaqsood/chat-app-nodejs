@@ -373,6 +373,14 @@ export const verifyAppStoreReceipt = async function (req, res) {
 
     if (productId != null && productId != undefined) {
         if (response.data.receipt?.in_app[0]?.in_app_ownership_type == "PURCHASED") {
+
+            // After handling subscription activation
+            const originalTransactionId = response.data.receipt?.latest_receipt_info?.[0]?.original_transaction_id;
+            if (originalTransactionId) {
+                currentUser.appleOriginalTransactionId = originalTransactionId;
+                await currentUser.save(); // Needed for S2S notification matching
+            }
+
             currentUser.subscription_status = "active";
             currentUser.last_renew_date = new Date(Number(response.data.receipt?.latest_receipt_info[0]?.purchase_date));
             currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
@@ -381,6 +389,9 @@ export const verifyAppStoreReceipt = async function (req, res) {
             if (productId.includes("monthly")) {
                 _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
                 sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+            } else {
+                _increaseUserPoints(currentUser._id, currentUser.user_points, 120);
+                sendNotification(currentUser, "👛 You just got 120 coins!", "Enjoy your free yearly coins.");
             }
 
             emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
@@ -415,25 +426,25 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
         console.log("Apple Notification Type:", notificationType);
 
         // const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
-        let purchaseUserId = null;
+        // let purchaseUserId = null;
 
-        for (const cert of decodedData.header.x5c) {
-            purchaseUserId = await getUserIdFromPurchaseToken(cert);
-            if (purchaseUserId) break;
-        }
+        // for (const cert of decodedData.header.x5c) {
+        //     purchaseUserId = await getUserIdFromPurchaseToken(cert);
+        //     if (purchaseUserId) break;
+        // }
 
-        if (!purchaseUserId) {
-            return res.status(200).send("Received Apple notification");
-            throw new Error('No matching user found from x5c certificates');
-        }
+        // if (!purchaseUserId) {
+        //     return res.status(200).send("Received Apple notification");
+        //     throw new Error('No matching user found from x5c certificates');
+        // }
 
-        console.log("purchaseUserId: ", purchaseUserId);
-        console.log("purchaseUserId: ", purchaseUserId);
-        const currentUser = await User.findById(purchaseUserId);
+        // console.log("purchaseUserId: ", purchaseUserId);
+        // console.log("purchaseUserId: ", purchaseUserId);
+        const currentUser = await User.findOne({ appleOriginalTransactionId: originalTransactionId });
         console.log("currentUser: ", currentUser._id);
 
         if (!currentUser) {
-            return res.status(404).json(new ApiResponse(404, null, "User not found."));
+            return res.status(404).json(new ApiResponse(404, null, "User not found with that apple original transaction id."));
         }
 
 
