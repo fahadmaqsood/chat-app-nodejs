@@ -375,13 +375,13 @@ export const verifyAppStoreReceipt = async function (req, res) {
         if (response.data.latest_receipt_info[0]?.in_app_ownership_type == "PURCHASED") {
 
             // After handling subscription activation
-            const originalTransactionId = response.data.receipt?.latest_receipt_info?.[0]?.original_transaction_id;
+            const originalTransactionId = response.data.latest_receipt_info[0]?.original_transaction_id;
             console.log("originalTransactionId: ", originalTransactionId);
 
             currentUser.appleOriginalTransactionId = originalTransactionId;
 
             currentUser.subscription_status = "active";
-            currentUser.last_renew_date = new Date(Number(response.data.receipt?.latest_receipt_info[0]?.purchase_date));
+            currentUser.last_renew_date = new Date(Number(response.data.latest_receipt_info[0]?.purchase_date));
             currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
             currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
             currentUser.save();
