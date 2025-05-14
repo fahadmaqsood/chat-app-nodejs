@@ -369,10 +369,10 @@ export const verifyAppStoreReceipt = async function (req, res) {
 
     console.log("AppStore response: ", response.data);
 
-    const productId = response.data.receipt?.latest_receipt_info[0]?.product_id;
+    const productId = response.data.latest_receipt_info[0]?.product_id;
 
     if (productId != null && productId != undefined) {
-        if (response.data.receipt?.latest_receipt_info[0]?.in_app_ownership_type == "PURCHASED") {
+        if (response.data.latest_receipt_info[0]?.in_app_ownership_type == "PURCHASED") {
 
             // After handling subscription activation
             const originalTransactionId = response.data.receipt?.latest_receipt_info?.[0]?.original_transaction_id;
