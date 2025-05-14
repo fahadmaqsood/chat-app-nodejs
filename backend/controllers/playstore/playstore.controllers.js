@@ -376,15 +376,15 @@ export const verifyAppStoreReceipt = async function (req, res) {
 
             // After handling subscription activation
             const originalTransactionId = response.data.receipt?.latest_receipt_info?.[0]?.original_transaction_id;
-            if (originalTransactionId) {
-                currentUser.appleOriginalTransactionId = originalTransactionId;
-                await currentUser.save(); // Needed for S2S notification matching
-            }
+            console.log("originalTransactionId: ", originalTransactionId);
+
+            currentUser.appleOriginalTransactionId = originalTransactionId;
 
             currentUser.subscription_status = "active";
             currentUser.last_renew_date = new Date(Number(response.data.receipt?.latest_receipt_info[0]?.purchase_date));
             currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
             currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
+            currentUser.save();
 
             if (productId.includes("monthly")) {
                 _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
