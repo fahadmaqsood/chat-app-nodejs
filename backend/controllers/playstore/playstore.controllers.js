@@ -381,7 +381,7 @@ export const verifyAppStoreReceipt = async function (req, res) {
             currentUser.appleOriginalTransactionId = originalTransactionId;
 
             currentUser.subscription_status = "active";
-            currentUser.last_renew_date = new Date(Number(response.data.latest_receipt_info[0]?.purchase_date));
+            currentUser.last_renew_date = new Date(Number(response.data.latest_receipt_info[0]?.purchase_date_ms));
             currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
             currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
             currentUser.save();
