@@ -34,7 +34,6 @@ const chatCommonAggregation = (req) => {
               forgotPasswordExpiry: 0,
               emailVerificationToken: 0,
               emailVerificationExpiry: 0,
-              blocklist: 1,
             },
           },
         ],
