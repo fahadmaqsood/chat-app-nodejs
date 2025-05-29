@@ -34,10 +34,35 @@ const chatCommonAggregation = (req) => {
               forgotPasswordExpiry: 0,
               emailVerificationToken: 0,
               emailVerificationExpiry: 0,
+              blocklist: 1,
             },
           },
         ],
       },
+
+    },
+    {
+      $addFields: {
+        participants: {
+          $map: {
+            input: "$participants",
+            as: "participant",
+            in: {
+              $mergeObjects: [
+                "$$participant",
+                {
+                  hasCurrentUserBlockedThem: {
+                    $in: ["$$participant._id", req.user.blocklist || []]
+                  },
+                  isCurrentUserBlockedByThem: {
+                    $in: [req.user._id, "$$participant.blocklist"]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
     },
     {
       // lookup for the group chats
@@ -69,29 +94,7 @@ const chatCommonAggregation = (req) => {
 
 
           },
-          {
-            $addFields: {
-              participants: {
-                $map: {
-                  input: "$participants",
-                  as: "participant",
-                  in: {
-                    $mergeObjects: [
-                      "$$participant",
-                      {
-                        hasCurrentUserBlockedThem: {
-                          $in: ["$$participant._id", req.user.blocklist || []]
-                        },
-                        isCurrentUserBlockedByThem: {
-                          $in: [req.user._id, "$$participant.blocklist"]
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          },
+
           {
             $addFields: {
               sender: { $first: "$sender" },
