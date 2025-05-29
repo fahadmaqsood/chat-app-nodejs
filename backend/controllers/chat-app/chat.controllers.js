@@ -16,7 +16,7 @@ import { chatMessageCommonAggregation } from '../../controllers/chat-app/message
  * @description Utility function which returns the pipeline stages to structure the chat schema with common lookups
  * @returns {mongoose.PipelineStage[]}
  */
-const chatCommonAggregation = () => {
+const chatCommonAggregation = (req) => {
   return [
     {
       // lookup for the participants present
@@ -614,7 +614,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
         },
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   console.log(chat.length);
@@ -665,7 +665,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
         _id: newChatInstance._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = { chat: createdChat[0] }; // store the aggregation result
@@ -731,7 +731,7 @@ const createAGroupChat = asyncHandler(async (req, res) => {
         _id: groupChat._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -766,7 +766,7 @@ const getGroupChatDetails = asyncHandler(async (req, res) => {
         isGroupChat: true,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const chat = groupChat[0];
@@ -815,7 +815,7 @@ const renameGroupChat = asyncHandler(async (req, res) => {
         _id: updatedGroupChat._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -853,7 +853,7 @@ const deleteGroupChat = asyncHandler(async (req, res) => {
         isGroupChat: true,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const chat = groupChat[0];
@@ -898,7 +898,7 @@ const deleteOneOnOneChat = asyncHandler(async (req, res) => {
         _id: new mongoose.Types.ObjectId(chatId),
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -964,7 +964,7 @@ const leaveGroupChat = asyncHandler(async (req, res) => {
         _id: updatedChat._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -1019,7 +1019,7 @@ const addNewParticipantInGroupChat = asyncHandler(async (req, res) => {
         _id: updatedChat._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -1077,7 +1077,7 @@ const removeParticipantFromGroupChat = asyncHandler(async (req, res) => {
         _id: updatedChat._id,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   const payload = chat[0];
@@ -1106,7 +1106,7 @@ const getAllChats = asyncHandler(async (req, res) => {
         updatedAt: -1,
       },
     },
-    ...chatCommonAggregation(),
+    ...chatCommonAggregation(req),
   ]);
 
   return res
