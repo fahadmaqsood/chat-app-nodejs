@@ -668,6 +668,9 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
     ...chatCommonAggregation(req),
   ]);
 
+
+  console.log(createdChat);
+
   const payload = { chat: createdChat[0] }; // store the aggregation result
 
   if (!payload) {
