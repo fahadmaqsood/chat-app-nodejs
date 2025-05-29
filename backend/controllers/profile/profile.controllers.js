@@ -470,7 +470,7 @@ const blockUser = async (req, res) => {
         }
 
         // Check if the current user has already blocked the target user
-        if (!currentUser.blocklist.includes(userId)) {
+        if (currentUser.blocklist.includes(userId)) {
             return res.status(400).json(new ApiResponse(400, {}, "You have already blocked this user"));
         }
 
