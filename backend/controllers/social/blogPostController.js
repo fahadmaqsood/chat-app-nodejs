@@ -245,6 +245,17 @@ export const getBlogPosts = async (req, mood, topics, limit = 10, page = 1) => {
             },
             { $unwind: "$user" }, // Convert user array to an object
 
+            {
+                $match: {
+                    "user._id": { $nin: req.user.blocklist || [] },
+                    $expr: {
+                        $not: {
+                            $in: [req.user._id, "$user.blocklist"]                // OP has NOT blocked current user
+                        }
+                    }
+                }
+            },
+
 
             // Step 2: Lookup likes count
             {
