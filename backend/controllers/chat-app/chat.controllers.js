@@ -60,10 +60,37 @@ const chatCommonAggregation = () => {
                     username: 1,
                     avatar: 1,
                     email: 1,
+                    blocklist: 1, // include blocklist to check if the current user has blocked them
                   },
                 },
               ],
             },
+
+
+
+          },
+          {
+            $addFields: {
+              participants: {
+                $map: {
+                  input: "$participants",
+                  as: "participant",
+                  in: {
+                    $mergeObjects: [
+                      "$$participant",
+                      {
+                        hasCurrentUserBlockedThem: {
+                          $in: ["$$participant._id", req.user.blocklist || []]
+                        },
+                        isCurrentUserBlockedByThem: {
+                          $in: [req.user._id, "$$participant.blocklist"]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           },
           {
             $addFields: {
