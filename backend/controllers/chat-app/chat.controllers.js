@@ -637,7 +637,7 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
       },
     ]).sort({ createdAt: 1 }).exec();
 
-    // console.log(messages);
+    console.log(messages);
 
     chat[0]["recentMessages"] = messages;
 
@@ -669,7 +669,6 @@ const createOrGetAOneOnOneChat = asyncHandler(async (req, res) => {
   ]);
 
 
-  console.log(createdChat);
 
   const payload = { chat: createdChat[0] }; // store the aggregation result
 
