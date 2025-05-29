@@ -18,6 +18,12 @@ import { ScheduledAccountDeletion } from '../../models/auth/ScheduledAccountDele
 
 import { getUserFriends } from "../auth/user.controllers.js";
 
+
+import { Chat } from "../../models/chat-app/chat.models.js";
+
+
+import { canEmit, emitSocketEvent } from "../../socket/index.js";
+
 const getSelectiveProfileInfo = async (req, res) => {
     try {
         // Extract token from headers
@@ -486,6 +492,18 @@ const blockUser = async (req, res) => {
         currentUser.blocklist.push(userId);
         await currentUser.save();
 
+
+        const chat = await Chat.findOne({
+            isGroupChat: false,
+            participants: { $all: [req.user._id, userId] },
+            $expr: { $eq: [{ $size: "$participants" }, 2] },
+        }).select("_id");
+
+
+        emitSocketEvent(req, `${chat._id}/${userId.toString()}`, "THEY_BLOCKED_ME", { "who": currentUserId.toString() });
+        emitSocketEvent(req, `${chat._id}/${req.user._id.toString()}`, "I_BLOCKED_THEM", { "who": userId.toString() });
+
+
         return res.status(200).json(new ApiResponse(200, {}, "Successfully blocked the user"));
     } catch (error) {
         console.error("Error in blockUser:", error);
@@ -525,6 +543,18 @@ const unblockUser = async (req, res) => {
         // Update the blocklist array for the current user
         currentUser.blocklist = currentUser.blocklist.filter(id => id.toString() !== userId);
         await currentUser.save();
+
+
+        const chat = await Chat.findOne({
+            isGroupChat: false,
+            participants: { $all: [req.user._id, userId] },
+            $expr: { $eq: [{ $size: "$participants" }, 2] },
+        }).select("_id");
+
+
+
+        emitSocketEvent(req, `${chat._id}/${userId.toString()}`, "THEY_BLOCKED_ME", { "who": currentUserId.toString() });
+        emitSocketEvent(req, `${chat._id}/${req.user._id.toString()}`, "I_BLOCKED_THEM", { "who": userId.toString() });
 
         return res.status(200).json(new ApiResponse(200, {}, "Successfully unblocked the user"));
     } catch (error) {
