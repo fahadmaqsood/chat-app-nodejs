@@ -139,6 +139,9 @@ const getProfileInfo = async (req, res) => {
         user.isScheduledForDeletion = scheduledDeletion ? scheduledDeletion.status === 'scheduled' : false;
         user.isAccountTerminated = user.account_termination_date ? new Date(user.account_termination_date) < new Date() : false;
 
+        user.hasCurrentUserBlockedThem = req.user.blocklist && req.user.blocklist.map(id => id.toString()).includes(userId.toString());
+        user.isCurrentUserBlockedByThem = user.blocklist && user.blocklist.map(id => id.toString()).includes(req.user._id.toString());
+
         return res
             .status(200)
             .json(new ApiResponse(200, {
@@ -444,6 +447,86 @@ const unfollowUser = async (req, res) => {
 
 
 
+const blockUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { userId } = req.body; // User ID to unfollow
+
+        if (!userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "userId is required"));
+        }
+
+        // Check if the current user is trying to unfollow themselves
+        if (currentUserId.toString() === userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "You cannot block yourself"));
+        }
+
+        // Fetch the current user and the user to be unfollowed
+        const currentUser = await User.findById(currentUserId);
+        const targetUser = await User.findById(userId);
+
+        if (!targetUser) {
+            return res.status(404).json(new ApiResponse(404, {}, "User to block not found"));
+        }
+
+        // Check if the current user has already blocked the target user
+        if (!currentUser.blocklist.includes(userId)) {
+            return res.status(400).json(new ApiResponse(400, {}, "You have already blocked this user"));
+        }
+
+        // Update the blocklist array for the current user
+        currentUser.blocklist.push(userId);
+        await currentUser.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Successfully blocked the user"));
+    } catch (error) {
+        console.error("Error in blockUser:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+
+const unblockUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id; // Current user's ID from the request
+        const { userId } = req.body; // User ID to unfollow
+
+        if (!userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "userId is required"));
+        }
+
+        // Check if the current user is trying to unfollow themselves
+        if (currentUserId.toString() === userId) {
+            return res.status(400).json(new ApiResponse(400, {}, "You cannot unblock yourself"));
+        }
+
+        // Fetch the current user and the user to be unfollowed
+        const currentUser = await User.findById(currentUserId);
+        const targetUser = await User.findById(userId);
+
+        if (!targetUser) {
+            return res.status(404).json(new ApiResponse(404, {}, "User to unblock not found"));
+        }
+
+        // Check if the current user has already blocked the target user
+        if (!currentUser.blocklist.includes(userId)) {
+            return res.status(400).json(new ApiResponse(400, {}, "This user is not blocked."));
+        }
+
+        // Update the blocklist array for the current user
+        currentUser.blocklist = currentUser.blocklist.filter(id => id.toString() !== userId);
+        await currentUser.save();
+
+        return res.status(200).json(new ApiResponse(200, {}, "Successfully unblocked the user"));
+    } catch (error) {
+        console.error("Error in unblockUser:", error);
+        return res.status(error.status || error.statusCode || 500).json(new ApiResponse(error.status || error.statusCode || 500, {}, error.message || 'An error occurred'));
+    }
+};
+
+
+
 const getFriends = async (req, res) => {
     try {
         const { userId, limit = 15, skip = 0 } = req.body;
@@ -460,4 +543,4 @@ const getFriends = async (req, res) => {
 };
 
 
-export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, getProfileBlogPosts, followUser, unfollowUser, getFriends };
+export { getProfileInfo, getSelectiveProfileInfo, getProfilePosts, getProfileBlogPosts, followUser, unfollowUser, blockUser, unblockUser, getFriends };

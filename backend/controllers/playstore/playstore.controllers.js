@@ -426,6 +426,10 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
 
         console.log("Apple Notification Type:", notificationType);
 
+        if (notificationType == "ONE_TIME_CHARGE") {
+            return res.status(200).send("Received Apple notification");
+        }
+
         // const purchaseUserId = await getUserIdFromPurchaseToken(originalTransactionId);
         // let purchaseUserId = null;
 
@@ -507,16 +511,13 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
                 emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
                 break;
 
+            case 'EXPIRED':
             case 'CANCEL':
             case 'DID_FAIL_TO_RENEW':
                 currentUser.subscription_status = "inactive";
                 sendNotification(currentUser, "Your subscription was cancelled", "You won't be able to access premium features.");
                 emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
                 break;
-
-
-
-
             default:
                 console.log("Unhandled Apple notification:", notificationType);
         }
