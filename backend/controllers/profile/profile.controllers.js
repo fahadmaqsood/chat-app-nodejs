@@ -40,6 +40,10 @@ const getSelectiveProfileInfo = async (req, res) => {
         // Define sensitive fields that should always be excluded
         const sensitiveFields = ['password', 'refreshToken', 'emailVerificationToken', 'emailVerificationExpiry', 'forgotPasswordToken', 'forgotPasswordExpiry'];
 
+
+        fields.push("blocklist"); // Ensure blocklist is always included in the fields to fetch
+
+
         // Prepare a string for .select() with fields to fetch
         let selectedFields = '';
 
@@ -86,6 +90,10 @@ const getSelectiveProfileInfo = async (req, res) => {
                 user.following = originalUser.following || [];
             }
         }
+
+        user.hasCurrentUserBlockedThem = req.user.blocklist && req.user.blocklist.map(id => id.toString()).includes(userId.toString());
+        user.isCurrentUserBlockedByThem = user.blocklist && user.blocklist.map(id => id.toString()).includes(req.user._id.toString());
+
 
 
         // Return the selective profile info
