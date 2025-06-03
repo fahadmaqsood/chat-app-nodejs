@@ -413,6 +413,19 @@ export const getPosts = async (req, res) => {
             },
             { $unwind: "$user" }, // Convert user array to an object
 
+            // ➕ Add blocked status flags
+            {
+                $addFields: {
+                    "user.hasCurrentUserBlockedThem": {
+                        $in: ["$user._id", req.user.blocklist || []]
+                    },
+                    "user.isCurrentUserBlockedByThem": {
+                        $in: [req.user._id, "$user.blocklist"]
+                    }
+                }
+            },
+
+
             {
                 $match: {
                     "user._id": { $nin: req.user.blocklist || [] },
