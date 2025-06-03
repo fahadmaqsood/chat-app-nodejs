@@ -464,10 +464,13 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
                 },
                 {
                   hasCurrentUserBlockedThem: {
-                    $in: ["$$participant._id", req.user.blocklist || []]
+                    $in: ["$$participant._id", { $ifNull: [req.user.blocklist, []] }]
                   },
                   isCurrentUserBlockedByThem: {
-                    $in: [req.user._id, "$$participant.blocklist"]
+                    $in: [
+                      req.user._id,
+                      { $ifNull: ["$$participant.blocklist", []] }
+                    ]
                   }
                 }
               ]
