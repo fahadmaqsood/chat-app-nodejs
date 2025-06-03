@@ -500,9 +500,10 @@ const blockUser = async (req, res) => {
         }).select("_id");
 
 
-        emitSocketEvent(req, `${chat._id}/${userId.toString()}`, "THEY_BLOCKED_ME", { "who": currentUserId.toString() });
-        emitSocketEvent(req, `${chat._id}/${req.user._id.toString()}`, "I_BLOCKED_THEM", { "who": userId.toString() });
-
+        if (chat) {
+            emitSocketEvent(req, `${chat._id}/${userId.toString()}`, "THEY_BLOCKED_ME", { "who": currentUserId.toString() });
+            emitSocketEvent(req, `${chat._id}/${req.user._id.toString()}`, "I_BLOCKED_THEM", { "who": userId.toString() });
+        }
 
         return res.status(200).json(new ApiResponse(200, {}, "Successfully blocked the user"));
     } catch (error) {
