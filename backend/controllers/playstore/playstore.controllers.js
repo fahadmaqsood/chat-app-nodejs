@@ -378,6 +378,18 @@ export const verifyAppStoreReceipt = async function (req, res) {
             const originalTransactionId = response.data.latest_receipt_info[0]?.original_transaction_id;
             console.log("originalTransactionId: ", originalTransactionId);
 
+            // Step 1: Remove the original_transaction_id from any other user who has it
+            await User.updateMany(
+                {
+                    _id: { $ne: currentUser._id },
+                    appleOriginalTransactionId: originalTransactionId
+                },
+                {
+                    $unset: { appleOriginalTransactionId: "" }
+                }
+            );
+
+            // Step 2: Assign the transaction ID and update subscription info
             currentUser.appleOriginalTransactionId = originalTransactionId;
 
             currentUser.subscription_status = "active";
@@ -515,6 +527,7 @@ export const appStoreSubscriptionWebhook = async (req, res) => {
             case 'CANCEL':
             case 'DID_FAIL_TO_RENEW':
                 currentUser.subscription_status = "inactive";
+                currentUser.appleOriginalTransactionId = undefined;
                 sendNotification(currentUser, "Your subscription was cancelled", "You won't be able to access premium features.");
                 emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
                 break;
