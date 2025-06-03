@@ -455,10 +455,22 @@ const getListOfUserChats = asyncHandler(async (req, res) => {
             input: "$participantDetails",
             as: "participant",
             in: {
-              _id: "$$participant._id",
-              name: "$$participant.name",
-              username: "$$participant.username",
-              avatar: "$$participant.avatar",
+              $mergeObjects: [
+                {
+                  _id: "$$participant._id",
+                  name: "$$participant.name",
+                  username: "$$participant.username",
+                  avatar: "$$participant.avatar",
+                },
+                {
+                  hasCurrentUserBlockedThem: {
+                    $in: ["$$participant._id", req.user.blocklist || []]
+                  },
+                  isCurrentUserBlockedByThem: {
+                    $in: [req.user._id, "$$participant.blocklist"]
+                  }
+                }
+              ]
             },
           },
         },
