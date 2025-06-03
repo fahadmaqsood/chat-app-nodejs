@@ -392,23 +392,23 @@ export const verifyAppStoreReceipt = async function (req, res) {
             // Step 2: Assign the transaction ID and update subscription info
             currentUser.appleOriginalTransactionId = originalTransactionId;
 
-            currentUser.subscription_status = "active";
-            currentUser.last_renew_date = new Date(Number(response.data.latest_receipt_info[0]?.purchase_date_ms));
-            currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
-            // currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
-            currentUser.next_billing_date = new Date(Number(response.data.latest_receipt_info[0]?.expires_date_ms));
+            // currentUser.subscription_status = "active";
+            // currentUser.last_renew_date = new Date(Number(response.data.latest_receipt_info[0]?.purchase_date_ms));
+            // currentUser.subscription_type = productId.includes("monthly") ? "monthly" : "yearly";
+            // // currentUser.next_billing_date = calculateNextBillingDate(productId.includes("monthly") ? 1 : 12);
+            // currentUser.next_billing_date = new Date(Number(response.data.latest_receipt_info[0]?.expires_date_ms));
             currentUser.save();
 
-            if (productId.includes("monthly")) {
-                _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
-                sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
-            } else {
-                _increaseUserPoints(currentUser._id, currentUser.user_points, 120);
-                sendNotification(currentUser, "👛 You just got 120 coins!", "Enjoy your free yearly coins.");
-            }
+            // if (productId.includes("monthly")) {
+            //     _increaseUserPoints(currentUser._id, currentUser.user_points, 10);
+            //     sendNotification(currentUser, "👛 You just got 10 coins!", "Enjoy your monthly free coins.");
+            // } else {
+            //     _increaseUserPoints(currentUser._id, currentUser.user_points, 120);
+            //     sendNotification(currentUser, "👛 You just got 120 coins!", "Enjoy your free yearly coins.");
+            // }
 
-            emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
-            emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
+            // emitIndicatorsSocketEvent(currentUser._id, "REFRESH_USER_EVENT");
+            // emitIndicatorsSocketEvent(currentUser._id, "SUBSCRIPTION_START_SUCCESS");
 
         }
     }
